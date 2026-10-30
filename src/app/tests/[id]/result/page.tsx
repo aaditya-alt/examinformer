@@ -222,6 +222,31 @@ export default function CBTResultPage({
           </p>
         </div>
 
+        {/* ── Prominent Eduquity Solution & Reattempt Terminal Launcher ── */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-blue-700 via-sky-700 to-indigo-800 text-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg text-left">
+          <div className="space-y-1 text-center sm:text-left">
+            <div className="flex items-center justify-center sm:justify-start gap-2">
+              <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-amber-400 text-slate-950">
+                Eduquity Interactive Terminal
+              </span>
+              <span className="text-xs font-bold text-sky-200">Reattempt &amp; Solutions Engine</span>
+            </div>
+            <h3 className="text-lg font-black tracking-tight text-white">
+              Launch Eduquity CBT Solution &amp; Reattempt Console
+            </h3>
+            <p className="text-xs text-sky-100 max-w-xl">
+              Open the authentic examination screen with question palette on the right. Toggle <strong>Reattempt Mode ON</strong> to solve questions without seeing spoilers, or <strong>OFF</strong> to reveal step-by-step mathematical proofs!
+            </p>
+          </div>
+          <Link
+            href={`/tests/${id}?mode=solution`}
+            className="shrink-0 px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs shadow-md transition active:scale-95 flex items-center gap-2"
+          >
+            <Sparkles className="w-4 h-4 text-slate-900" />
+            <span>Open Solution Terminal</span>
+          </Link>
+        </div>
+
         {/* High-Level Metric Tiles */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-2 max-w-3xl mx-auto">
           <div className="p-3.5 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900">

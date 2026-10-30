@@ -185,13 +185,23 @@ function TestsExplorerContent() {
                   </div>
                 </div>
 
-                <Link
-                  href={`/tests/${test.id}`}
-                  className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition"
-                >
-                  <span>Start Test (TCS iON Mode)</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
+                <div className="grid grid-cols-2 gap-2 pt-1">
+                  <Link
+                    href={`/tests/${test.id}`}
+                    className="py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95"
+                  >
+                    <BookOpen className="w-3.5 h-3.5" />
+                    <span>Start Test</span>
+                  </Link>
+
+                  <Link
+                    href={`/tests/${test.id}?mode=solution`}
+                    className="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 border border-slate-200 dark:border-slate-700 transition active:scale-95"
+                  >
+                    <span>Solutions</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
               </div>
             );
           })}

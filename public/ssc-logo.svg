@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <linearGradient id="sscRing" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="goldGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+  </defs>
+  <!-- Outer Gold Ring -->
+  <circle cx="50" cy="50" r="48" fill="none" stroke="url(#goldGlow)" stroke-width="3" />
+  <!-- Inner Blue Disk -->
+  <circle cx="50" cy="50" r="44" fill="url(#sscRing)" stroke="#fbbf24" stroke-width="1.5" />
+  <!-- Decorative Star Accents -->
+  <polygon points="50,11 51.5,14 54.5,14 52,16 53,19 50,17 47,19 48,16 45.5,14 48.5,14" fill="#fbbf24" />
+  <polygon points="50,89 51.5,86 54.5,86 52,84 53,81 50,83 47,81 48,84 45.5,86 48.5,86" fill="#fbbf24" />
+  <!-- Emblem Center Base -->
+  <ellipse cx="50" cy="62" rx="20" ry="4" fill="#d97706" />
+  <!-- Ashoka Pillar Motif Simplified -->
+  <path d="M42,61 L43,45 L40,43 L41,37 L45,35 L47,38 L48,34 L52,34 L53,38 L55,35 L59,37 L60,43 L57,45 L58,61 Z" fill="#fef08a" stroke="#d97706" stroke-width="0.8" />
+  <!-- Lion Face Profiles -->
+  <circle cx="45" cy="40" r="1.5" fill="#78350f" />
+  <circle cx="55" cy="40" r="1.5" fill="#78350f" />
+  <circle cx="50" cy="38" r="1.8" fill="#78350f" />
+  <!-- Ashoka Chakra in Center Base -->
+  <circle cx="50" cy="54" r="5" fill="#1e3a8a" stroke="#fbbf24" stroke-width="1" />
+  <line x1="50" y1="49" x2="50" y2="59" stroke="#fbbf24" stroke-width="0.7" />
+  <line x1="45" y1="54" x2="55" y2="54" stroke="#fbbf24" stroke-width="0.7" />
+  <line x1="46.5" y1="50.5" x2="53.5" y2="57.5" stroke="#fbbf24" stroke-width="0.7" />
+  <line x1="46.5" y1="57.5" x2="53.5" y2="50.5" stroke="#fbbf24" stroke-width="0.7" />
+  <!-- Curved Text Top: STAFF SELECTION COMMISSION -->
+  <path id="sscTopArc" d="M 18,50 A 32,32 0 0,1 82,50" fill="none" />
+  <text font-family="Arial, sans-serif" font-weight="900" font-size="6" fill="#fef08a" letter-spacing="1">
+    <textPath href="#sscTopArc" startOffset="50%" text-anchor="middle">
+      STAFF SELECTION COMM.
+    </textPath>
+  </text>
+  <!-- Curved Text Bottom: GOVT. OF INDIA -->
+  <path id="sscBottomArc" d="M 82,50 A 32,32 0 0,1 18,50" fill="none" />
+  <text font-family="Arial, sans-serif" font-weight="900" font-size="6" fill="#fbbf24" letter-spacing="1">
+    <textPath href="#sscBottomArc" startOffset="50%" text-anchor="middle">
+      GOVT. OF INDIA
+    </textPath>
+  </text>
+</svg>

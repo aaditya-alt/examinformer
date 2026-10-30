@@ -34,18 +34,23 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition">
-              <Sparkles className="w-5 h-5" />
+            <div className="flex items-center -space-x-2">
+              <div className="w-9 h-9 rounded-full bg-white shadow-md border border-slate-200 dark:border-slate-700 flex items-center justify-center p-0.5 overflow-hidden z-10">
+                <img src="/ssc-logo.svg" alt="SSC" className="w-full h-full object-contain" />
+              </div>
+              <div className="w-9 h-9 rounded-full bg-white shadow-md border border-slate-200 dark:border-slate-700 flex items-center justify-center p-0.5 overflow-hidden">
+                <img src="/rrb-logo.svg" alt="RRB" className="w-full h-full object-contain" />
+              </div>
             </div>
             <div>
               <div className="font-extrabold text-lg text-slate-900 dark:text-white tracking-tight flex items-center gap-1.5">
                 {BRANDING.name}
                 <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
-                  Pro
+                  Eduquity CBT
                 </span>
               </div>
               <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium -mt-1 hidden sm:block">
-                SSC &amp; Railway Exam Engine
+                SSC &amp; Railway National Assessment Portal
               </div>
             </div>
           </Link>
