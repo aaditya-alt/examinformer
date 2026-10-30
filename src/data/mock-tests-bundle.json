@@ -1,0 +1,5008 @@
+[
+  {
+    "id": "cgl-2025-12-sep-shift-3",
+    "title": "SSC CGL 2024/2025 Official Paper (12 Sep Shift 3 - Hardest Shift)",
+    "examCode": "ssc-cgl",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "durationMinutes": 60,
+    "totalMarks": 200,
+    "totalQuestions": 100,
+    "isPublished": true,
+    "sections": [
+      {
+        "id": "sec_reasoning",
+        "name": "General Intelligence and Reasoning",
+        "questions": [
+          {
+            "id": "cgl_q_1",
+            "qno": 1,
+            "questionText": ". Select the letter-cluster from among the given options that can replace the question mark (?) in the following series.<br>EIM, IMQ, MQU, QUY?",
+            "questionTextHi": "दिए गए विकल्पों में से उस अक्षर-समूह का चयन करें जो निम्नलिखित श्रृंखला में प्रश्न चिह्न (?) को प्रतिस्थापित कर सकता है।<br>EIM, IMQ, MQU, QUY?",
+            "options": [
+              {
+                "id": 1,
+                "text": "UYC",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "UKC",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "UYX",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "CJS",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_2",
+            "qno": 2,
+            "questionText": ". Select the letter-cluster from among the given options that can replace the question mark (?) in the following series.<br>EIM, IOU, MUC, QAK, ?",
+            "questionTextHi": "दिए गए विकल्पों में से उस अक्षर-समूह का चयन करें जो निम्नलिखित श्रृंखला में प्रश्न चिह्न (?) को प्रतिस्थापित कर सकता है।<br>EIM, IOU, MUC, QAK, ?",
+            "options": [
+              {
+                "id": 1,
+                "text": "QGS",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "UHS",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "UGS",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "UGD",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_3",
+            "qno": 3,
+            "questionText": ". What comes next:<br>30, 56, 90, 132, 182?",
+            "questionTextHi": "अगला पद क्या होगा:<br>30, 56, 90, 132, 182?",
+            "options": [
+              {
+                "id": 1,
+                "text": "240",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "241",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "139",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "293",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_4",
+            "qno": 4,
+            "questionText": ". What will be come at the place of the question mark?<br>1, 2, 5, ?, 677, 458330",
+            "questionTextHi": "प्रश्न चिह्न के स्थान पर क्या आएगा?<br>1, 2, 5, ?, 677, 458330",
+            "options": [
+              {
+                "id": 1,
+                "text": "26",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "25",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "27",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "24",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_5",
+            "qno": 5,
+            "questionText": ". Find the number that fits:<br>5, 10, 17, 26?",
+            "questionTextHi": "वह संख्या ज्ञात कीजिए जो उपयुक्त हो:<br>5, 10, 17, 26?",
+            "options": [
+              {
+                "id": 1,
+                "text": "37",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "35",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "36",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "38",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_6",
+            "qno": 6,
+            "questionText": ". Instruction: Identify the assumptions that must hold for the statement to be valid, then choose the correct option.<br>Statement: \"For the development of smart cities, it is important that equal emphasis be placed on citizen engagement and community empowerment, alongside technological innovations.\"<br>Assumptions:<br>I. Technological innovations alone are not sufficient for a successful smart city.<br>II. Citizen engagement creates unnecessary complexity for smart cities.<br>III. Community empowerment contributes to the long-term success of smart cities.",
+            "questionTextHi": "निर्देश: उन धारणाओं की पहचान करें जो कथन के मान्य होने के लिए आवश्यक हैं, फिर सही विकल्प चुनें।<br>कथन: \"स्मार्ट शहरों के विकास के लिए, यह महत्वपूर्ण है कि तकनीकी नवाचारों के साथ-साथ नागरिक जुड़ाव और सामुदायिक सशक्तिकरण पर समान जोर दिया जाए।\"<br>धारणाएं:<br>I. एक सफल स्मार्ट शहर के लिए केवल तकनीकी नवाचार पर्याप्त नहीं हैं।<br>II. नागरिक जुड़ाव स्मार्ट शहरों के लिए अनावश्यक जटिलता पैदा करता है।<br>III. सामुदायिक सशक्तिकरण स्मार्ट शहरों की दीर्घकालिक सफलता में योगदान देता है।",
+            "options": [
+              {
+                "id": 1,
+                "text": "Only I and II are implicit",
+                "textHi": "केवल I और II अंतर्निहित हैं"
+              },
+              {
+                "id": 2,
+                "text": "Only II and III are implicit",
+                "textHi": "केवल II और III अंतर्निहित हैं"
+              },
+              {
+                "id": 3,
+                "text": "Only I and III are implicit",
+                "textHi": "केवल I और III अंतर्निहित हैं"
+              },
+              {
+                "id": 4,
+                "text": "All are implicit",
+                "textHi": "सभी अंतर्निहित हैं"
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_7",
+            "qno": 7,
+            "questionText": ". The position of how many letters will remain unchanged if each of the letters in the word FRIENDS is arranged in alphabetical order?",
+            "questionTextHi": "यदि FRIENDS शब्द के प्रत्येक अक्षर को वर्णानुक्रम में व्यवस्थित किया जाए तो कितने अक्षरों का स्थान अपरिवर्तित रहेगा?",
+            "options": [
+              {
+                "id": 1,
+                "text": "Two",
+                "textHi": "दो"
+              },
+              {
+                "id": 2,
+                "text": "Four",
+                "textHi": "चार"
+              },
+              {
+                "id": 3,
+                "text": "Three",
+                "textHi": "तीन"
+              },
+              {
+                "id": 4,
+                "text": "Five",
+                "textHi": "पांच"
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_8",
+            "qno": 8,
+            "questionText": ". Identify the similar address:<br>No. 35, First Avenue, Raja Annamalaipuram, Chennai, Tamil Nadu - 101001",
+            "questionTextHi": "समान पते की पहचान करें:<br>No. 35, First Avenue, Raja Annamalaipuram, Chennai, Tamil Nadu - 101001",
+            "options": [
+              {
+                "id": 1,
+                "text": "No. 35, 1st Avenue, R.A. Puram, Chennai, TN 101101",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "No. 35, First Avenue, Raja Annamalaipuram, Chennai, Tamil Nadu-101001",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "35, First Avenue, Raja Annamalai Puram, Chennai, Tamil Nadu - 101011",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "No. 35/1, First Avenue, R. Annamalaipuram, Chennai, Tamil Nadu100101",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_9",
+            "qno": 9,
+            "questionText": ". From the given options, find the word which cannot be formed using the letters of the given word:<br>CONCENTRATION",
+            "questionTextHi": "दिए गए विकल्पों में से वह शब्द चुनिए जिसे दिए गए शब्द के अक्षरों का प्रयोग करके नहीं बनाया जा सकता है:<br>CONCENTRATION",
+            "options": [
+              {
+                "id": 1,
+                "text": "CANCEL",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "RATION",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "TRAIN",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "NATION",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_10",
+            "qno": 10,
+            "questionText": ". Eight persons P, Q, R, S, T, U, V and W are sitting around a circle facing the center. R is second to the right of P. T is opposite R. U is to the immediate left of T. Q is to the immediate right of P. V is to the immediate left of S. Who is sitting to the right of S?",
+            "questionTextHi": "आठ व्यक्ति P, Q, R, S, T, U, V और W केंद्र की ओर मुख करके एक वृत्त के चारों ओर बैठे हैं। R, P के दायें से दूसरे स्थान पर है। T, R के विपरीत है। U, T के ठीक बायें है। Q, P के ठीक दायें है। V, S के ठीक बायें है। S के दायें कौन बैठा है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "W",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "O",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "Q",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "U",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_11",
+            "qno": 11,
+            "questionText": ". In each of the following questions, a specific alphabetic coding pattern has been applied to the first word to form the second word. Identify the same coding logic and apply it to the third word to determine the correct answer from the given options.<br>FRXQWUB: IUATZXE:: FYBNJOF:?",
+            "questionTextHi": "निम्नलिखित प्रत्येक प्रश्न में, पहले शब्द से दूसरे शब्द को बनाने के लिए एक विशिष्ट वर्णमाला कोडिंग पैटर्न लागू किया गया है। उसी कोडिंग लॉजिक को पहचानें और दिए गए विकल्पों में से सही उत्तर निर्धारित करने के लिए इसे तीसरे शब्द पर लागू करें।<br>FRXQWUB: IUATZXE:: FYBNJOF:?",
+            "options": [
+              {
+                "id": 1,
+                "text": "IAEQMRH",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "IBEQMRI",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "IBEQLMI",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "IBEDVWB",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_12",
+            "qno": 12,
+            "questionText": ". In each of the following questions, the second word is formed by rearranging the letters of the first word using a specific transformation, such as reversal or block shifting. Identify that transformation and apply it to the third word to choose the correct option.<br>MITBAT: BATTIM :: ΤΕΝΚΟΡ:?",
+            "questionTextHi": "निम्नलिखित प्रत्येक प्रश्न में, दूसरा शब्द पहले शब्द के अक्षरों को एक विशिष्ट परिवर्तन, जैसे कि उत्क्रमण या ब्लॉक शिफ्टिंग का उपयोग करके पुनर्व्यवस्थित करके बनाया गया है। उस परिवर्तन को पहचानें और सही विकल्प चुनने के लिए इसे तीसरे शब्द पर लागू करें।<br>MITBAT: BATTIM :: ΤΕΝΚΟΡ:?",
+            "options": [
+              {
+                "id": 1,
+                "text": "KOPTEN",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "KOPNEP",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "KOPNEM",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "KOPNET",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_13",
+            "qno": 13,
+            "questionText": ". In each of the following questions, a group of three numbers/symbols is given in each option. Identify the group that does NOT follow the same pattern as the others.",
+            "questionTextHi": "निम्नलिखित प्रत्येक प्रश्न में, प्रत्येक विकल्प में तीन संख्याओं/प्रतीकों का एक समूह दिया गया है। उस समूह की पहचान करें जो अन्य के समान पैटर्न का पालन नहीं करता है।",
+            "options": [
+              {
+                "id": 1,
+                "text": "X 2#: W3@:V4$",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "Z5%: Y6^:X7&amp;",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "W1*:V2(:U3)",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "T10:S9@:R8$",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_14",
+            "qno": 14,
+            "questionText": ". Instruction: In a certain coding system:<br>'swift move build skill' is coded as 'trq, xnz, hmd, clv'<br>'move quick swift' is coded as 'trq, jkp, xnz'<br>'hope quick build swift' is coded as 'xnj, clv, jkp, trq'<br>Question: What is the code for 'build skill quick hope'?",
+            "questionTextHi": "निर्देश: एक निश्चित कोडिंग प्रणाली में:<br>'swift move build skill' को 'trq, xnz, hmd, clv' के रूप में कोडित किया गया है<br>'move quick swift' को 'trq, jkp, xnz' के रूप में कोडित किया गया है<br>'hope quick build swift' को 'xnj, clv, jkp, trq' के रूप में कोडित किया गया है<br>प्रश्न: 'build skill quick hope' के लिए कोड क्या है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "clv, hmd, jkp, xnj",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "clv, xnj, jkp, trq",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "hmd, xnz, jkp, xnj",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "hmd, clv, xnj, xnz",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_15",
+            "qno": 15,
+            "questionText": ". If x+4y=16 and x-y=9, find x.",
+            "questionTextHi": "यदि x+4y=16 और x-y=9 है, तो x का मान ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "10.35",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "10",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "10.25",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "10.4",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_16",
+            "qno": 16,
+            "questionText": ". If 5 $ 3 = 23 and 5 $ 4 = 29, then 6 $ 3 = ?",
+            "questionTextHi": "यदि 5 $ 3 = 23 और 5 $ 4 = 29 है, तो 6 $ 3 = ?",
+            "options": [
+              {
+                "id": 1,
+                "text": "26",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "27",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "28",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "25",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_17",
+            "qno": 17,
+            "questionText": ". If 'G A V E' is coded as '* 4 # 6', and 'VAGE' as '# 4 * 6' then what is the code for 'EVA G'?",
+            "questionTextHi": "यदि 'G A V E' को '* 4 # 6' के रूप में कोडित किया गया है, और 'VAGE' को '# 4 * 6' के रूप में, तो 'EVA G' के लिए कोड क्या है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "6 * 4 #",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "6 # 7 *",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "6 # 3 *",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "6 # 4 *",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_18",
+            "qno": 18,
+            "questionText": ". If the ratio of two numbers is 4: 6 and their sum is 90, find the numbers",
+            "questionTextHi": "यदि दो संख्याओं का अनुपात 4: 6 है और उनका योग 90 है, तो संख्याएँ ज्ञात कीजिए",
+            "options": [
+              {
+                "id": 1,
+                "text": "36, 54",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "35, 53",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "37, 55",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "32, 48",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_19",
+            "qno": 19,
+            "questionText": ". If 6 @ 4 = 40 and 5 @ 3 = 28, then what is 7 @ 5?",
+            "questionTextHi": "यदि 6 @ 4 = 40 और 5 @ 3 = 28 है, तो 7 @ 5 क्या है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "54",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "62",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "64",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "76",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_20",
+            "qno": 20,
+            "questionText": ". Pointing to a boy, a woman said, \"He is the son of my father's only brother.\" How is the boy related to the woman?",
+            "questionTextHi": "एक लड़के की ओर इशारा करते हुए, एक महिला ने कहा, \"वह मेरे पिता के इकलौते भाई का बेटा है।\" लड़का महिला से किस प्रकार संबंधित है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "Son",
+                "textHi": "बेटा"
+              },
+              {
+                "id": 2,
+                "text": "Nephew",
+                "textHi": "भतीजा/भांजा"
+              },
+              {
+                "id": 3,
+                "text": "Brother",
+                "textHi": "भाई"
+              },
+              {
+                "id": 4,
+                "text": "Cousin",
+                "textHi": "कजिन"
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_21",
+            "qno": 21,
+            "questionText": ". If T is the maternal uncle of U, how is U related to T's sister?",
+            "questionTextHi": "यदि T, U का मामा है, तो U, T की बहन से किस प्रकार संबंधित है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "Niece/Nephew",
+                "textHi": "भतीजी/भतीजा (या भांजी/भांजा)"
+              },
+              {
+                "id": 2,
+                "text": "Cousin",
+                "textHi": "कजिन"
+              },
+              {
+                "id": 3,
+                "text": "Son/Daughter",
+                "textHi": "बेटा/बेटी"
+              },
+              {
+                "id": 4,
+                "text": "Uncle",
+                "textHi": "चाचा/मामा"
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_22",
+            "qno": 22,
+            "questionText": ". After interchanging + &amp; x and 6 &amp; 10, which of the following equations will hold true?",
+            "questionTextHi": "+ और x तथा 6 और 10 को आपस में बदलने के बाद, निम्नलिखित में से कौन सा समीकरण सही होगा?",
+            "options": [
+              {
+                "id": 1,
+                "text": "(3+6)x10=36",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "(10+2)x6=10",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "(6+7)x10=60",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "(10+1)x6=24",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_23",
+            "qno": 23,
+            "questionText": ". If x % y = 74, where x % y = x + 2y, what is the value of x and y ?",
+            "questionTextHi": "यदि x % y = 74 है, जहाँ x % y = x + 2y है, तो x और y का मान क्या है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "50, 10",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "54, 10",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "32, 20",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "54, 20",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_24",
+            "qno": 24,
+            "questionText": ". If x = +, + = -, ÷ = x then 12 + 3 ÷ 8 x 4 = ?",
+            "questionTextHi": "यदि x = +, + = -, ÷ = x है तो 12 + 3 ÷ 8 x 4 = ?",
+            "options": [
+              {
+                "id": 1,
+                "text": "-8",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "-9",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "-7",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "16",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          },
+          {
+            "id": "cgl_q_25",
+            "qno": 25,
+            "questionText": ". In a tournament of 9 players, each player plays every other player once. How many matches are there?",
+            "questionTextHi": "9 खिलाड़ियों के एक टूर्नामेंट में, प्रत्येक खिलाड़ी प्रत्येक दूसरे खिलाड़ी के साथ एक बार खेलता है। कुल कितने मैच होंगे?",
+            "options": [
+              {
+                "id": 1,
+                "text": "36",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "45",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "46",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "37",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Intelligence and Reasoning"
+          }
+        ]
+      },
+      {
+        "id": "sec_general_awareness",
+        "name": "General Awareness",
+        "questions": [
+          {
+            "id": "cgl_q_26",
+            "qno": 26,
+            "questionText": ". Arrange the following Indian classical dance forms in the order of their earliest historical origins (from oldest to most recent):<br>1. Bharatanatyam<br>2. Kathak<br>3. Manipuri<br>4. Mohiniyattam",
+            "questionTextHi": "निम्नलिखित भारतीय शास्त्रीय नृत्य रूपों को उनके शुरुआती ऐतिहासिक मूल के क्रम में व्यवस्थित करें (पुराने से नए तक):<br>1. भरतनाट्यम<br>2. कथक<br>3. मणिपुरी<br>4. मोहिनीअट्टम",
+            "options": [
+              {
+                "id": 1,
+                "text": "1-2-3-4",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "1-3-2-4",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "2-1-4-3",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "1-4-2-3",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_27",
+            "qno": 27,
+            "questionText": ". Which of the following Temple Architecture is correctly matched with the shape of its roof?",
+            "questionTextHi": "निम्नलिखित में से कौन सी मंदिर वास्तुकला उसकी छत के आकार के साथ सही ढंग से सुमेलित है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "Phamsana - Slabs rising upwards with straight inclines",
+                "textHi": "फामसाना - सीधे झुकाव के साथ ऊपर की ओर बढ़ती स्लैब"
+              },
+              {
+                "id": 2,
+                "text": "Latina - Rectangular, wagon-shaped",
+                "textHi": "लैटिना - आयताकार, वैगन के आकार की"
+              },
+              {
+                "id": 3,
+                "text": "Valabhi - Tall and curving inward sharply",
+                "textHi": "वल्लभी - ऊँची और तेजी से अंदर की ओर मुड़ी हुई"
+              },
+              {
+                "id": 4,
+                "text": "Latina - Low and broad with stepped roofing",
+                "textHi": "लैटिना - सीढ़ीदार छत के साथ नीची और चौड़ी"
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_28",
+            "qno": 28,
+            "questionText": ". The Pongtu Festival, observed by the Tutsa tribe of Arunachal Pradesh, is celebrated to seek the blessings of which deity before the millet harvest?",
+            "questionTextHi": "अरुणाचल प्रदेश की तुत्सा जनजाति द्वारा मनाया जाने वाला पोंगटू उत्सव, बाजरे की फसल से पहले किस देवता का आशीर्वाद लेने के लिए मनाया जाता है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "Donyi - Polo",
+                "textHi": "डोन्यी - पोलो"
+              },
+              {
+                "id": 2,
+                "text": "Nyegi Nyapa",
+                "textHi": "नेगी न्यापा"
+              },
+              {
+                "id": 3,
+                "text": "Rangfraa",
+                "textHi": "रंगफ्रा"
+              },
+              {
+                "id": 4,
+                "text": "Rangkhothak",
+                "textHi": "रंगखोथक"
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_29",
+            "qno": 29,
+            "questionText": ". Fill in the blank: In Teen Taal of Hindustani Classical Music, the Khali is marked on the _ matra.",
+            "questionTextHi": "रिक्त स्थान भरें: हिंदुस्तानी शास्त्रीय संगीत के तीन ताल में, खाली को _ मात्रा पर चिह्नित किया जाता है।",
+            "options": [
+              {
+                "id": 1,
+                "text": "13",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "5",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "9",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "1",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_30",
+            "qno": 30,
+            "questionText": ". Why are the weight and circumference of a cricket ball strictly standardized in official matches ?",
+            "questionTextHi": "आधिकारिक मैचों में क्रिकेट की गेंद का वजन और परिधि कड़ाई से मानकीकृत क्यों की जाती है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "Heavier balls favor bowlers, lighter ones favor batsmen, so balance is needed",
+                "textHi": "भारी गेंदें गेंदबाजों के पक्ष में होती हैं, हल्की गेंदें बल्लेबाजों के पक्ष में होती हैं, इसलिए संतुलन की आवश्यकता होती है"
+              },
+              {
+                "id": 2,
+                "text": "Differences affect bounce, swing, and fairness on standard pitches",
+                "textHi": "अंतर मानक पिचों पर उछाल, स्विंग और निष्पक्षता को प्रभावित करते हैं"
+              },
+              {
+                "id": 3,
+                "text": "ICC regulates it mainly to reduce manufacturing costs",
+                "textHi": "ICC मुख्य रूप से विनिर्माण लागत को कम करने के लिए इसे नियंत्रित करता है"
+              },
+              {
+                "id": 4,
+                "text": "Only red balls follow these standards; white balls have separate rules",
+                "textHi": "केवल लाल गेंदें इन मानकों का पालन करती हैं; सफेद गेंदों के अलग नियम हैं"
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_31",
+            "qno": 31,
+            "questionText": ". Who became the first Indian athlete to win a Paralympic gold medal in archery at the Paris 2024 Paralympics?",
+            "questionTextHi": "पेरिस 2024 पैरालिंपिक में तीरंदाजी में पैरालिंपिक स्वर्ण पदक जीतने वाले पहले भारतीय एथलीट कौन बने?",
+            "options": [
+              {
+                "id": 1,
+                "text": "Sumit Antil",
+                "textHi": "सुमित अंतिल"
+              },
+              {
+                "id": 2,
+                "text": "Ekta Bhyan",
+                "textHi": "एकता भयान"
+              },
+              {
+                "id": 3,
+                "text": "Harvinder Singh",
+                "textHi": "हरविंदर सिंह"
+              },
+              {
+                "id": 4,
+                "text": "Pramod Bhagat",
+                "textHi": "प्रमोद भगत"
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_32",
+            "qno": 32,
+            "questionText": ". In which city was the Meeting of the BRICS Foreign Ministers held on 4 June 2018?",
+            "questionTextHi": "4 जून 2018 को ब्रिक्स (BRICS) विदेश मंत्रियों की बैठक किस शहर में आयोजित की गई थी?",
+            "options": [
+              {
+                "id": 1,
+                "text": "Pretoria, South Africa",
+                "textHi": "प्रिटोरिया, दक्षिण अफ्रीका"
+              },
+              {
+                "id": 2,
+                "text": "Moscow, Russia",
+                "textHi": "मॉस्को, रूस"
+              },
+              {
+                "id": 3,
+                "text": "Shanghai, China",
+                "textHi": "शंघाई, चीन"
+              },
+              {
+                "id": 4,
+                "text": "Goa, India",
+                "textHi": "गोवा, भारत"
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_33",
+            "qno": 33,
+            "questionText": ". What is the central theme of the book Hot Stage?",
+            "questionTextHi": "हॉट स्टेज (Hot Stage) पुस्तक का केंद्रीय विषय क्या है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "A collection of modern Indian plays on social issues",
+                "textHi": "सामाजिक मुद्दों पर आधुनिक भारतीय नाटकों का एक संग्रह"
+              },
+              {
+                "id": 2,
+                "text": "A historical account of India's independence movement",
+                "textHi": "भारत के स्वतंत्रता आंदोलन का एक ऐतिहासिक विवरण"
+              },
+              {
+                "id": 3,
+                "text": "A novel based on ancient Indian mythology",
+                "textHi": "प्राचीन भारतीय पौराणिक कथाओं पर आधारित एक उपन्यास"
+              },
+              {
+                "id": 4,
+                "text": "A travelogue describing journeys in the Himalayas",
+                "textHi": "हिमालय में यात्राओं का वर्णन करने वाला एक यात्रा वृत्तांत"
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_34",
+            "qno": 34,
+            "questionText": ". Which of the following is not generally regarded as an element of weather?",
+            "questionTextHi": "निम्नलिखित में से किसे आमतौर पर मौसम का तत्व नहीं माना जाता है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "Wind",
+                "textHi": "पवन"
+              },
+              {
+                "id": 2,
+                "text": "Temperature",
+                "textHi": "तापमान"
+              },
+              {
+                "id": 3,
+                "text": "Soil pH",
+                "textHi": "मृदा पीएच (Soil pH)"
+              },
+              {
+                "id": 4,
+                "text": "Humidity",
+                "textHi": "आर्द्रता"
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_35",
+            "qno": 35,
+            "questionText": ". Which of the following statements regarding the 61st National Chess Championship is/are correct?<br>1. Grandmaster Karthik Venkataraman clinched the title in Gurgaon and received a prize of ₹6 lakh.<br>2. International Master Neelash Saha secured the second position after losing a tiebreak game to Surya Shekhar Ganguly.",
+            "questionTextHi": "61वीं राष्ट्रीय शतरंज चैंपियनशिप के संबंध में निम्नलिखित में से कौन सा/से कथन सही है/हैं?<br>1. ग्रैंडमास्टर कार्तिक वेंकटरमन ने गुड़गांव में खिताब जीता और ₹6 लाख का पुरस्कार प्राप्त किया।<br>2. इंटरनेशनल मास्टर नीलाक्ष साहा ने सूर्य शेखर गांगुली से टाईब्रेक गेम हारने के बाद दूसरा स्थान हासिल किया।",
+            "options": [
+              {
+                "id": 1,
+                "text": "Only 1",
+                "textHi": "केवल 1"
+              },
+              {
+                "id": 2,
+                "text": "Only 2",
+                "textHi": "केवल 2"
+              },
+              {
+                "id": 3,
+                "text": "Both 1 and 2 are correct",
+                "textHi": "1 और 2 दोनों सही हैं"
+              },
+              {
+                "id": 4,
+                "text": "Neither 1 nor 2 is correct",
+                "textHi": "न तो 1 और न ही 2 सही है"
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_36",
+            "qno": 36,
+            "questionText": ". On the occasion of Electrical Safety Day 2025, which initiative was unveiled by Shri Shripad Naik, Minister of State for Power and New &amp; Renewable Energy ?",
+            "questionTextHi": "विद्युत सुरक्षा दिवस 2025 के अवसर पर, विद्युत और नवीन एवं नवीकरणीय ऊर्जा राज्य मंत्री श्री श्रीपद नाइक द्वारा किस पहल का अनावरण किया गया?",
+            "options": [
+              {
+                "id": 1,
+                "text": "Digital Grid Optimization Tool",
+                "textHi": "डिजिटल ग्रिड अनुकूलन उपकरण"
+              },
+              {
+                "id": 2,
+                "text": "Smart Meter Adoption Program",
+                "textHi": "स्मार्ट मीटर अपनाने का कार्यक्रम"
+              },
+              {
+                "id": 3,
+                "text": "Suraksha Shakti safety mascot",
+                "textHi": "सुरक्षा शक्ति सुरक्षा शुभंकर"
+              },
+              {
+                "id": 4,
+                "text": "National Fire Safety Code",
+                "textHi": "राष्ट्रीय अग्नि सुरक्षा कोड"
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_37",
+            "qno": 37,
+            "questionText": ". Read the following statements carefully and select the correct option:<br>Assertion (A): The Chotanagpur Plateau is regarded as the eastern extension of the Central Highlands.<br>Reason (R): The Chotanagpur Plateau is mainly drained by the Chambal and Betwa Rivers.",
+            "questionTextHi": "निम्नलिखित कथनों को ध्यानपूर्वक पढ़ें और सही विकल्प का चयन करें:<br>अभिकथन (A): छोटानागपुर पठार को मध्य उच्च भूमि का पूर्वी विस्तार माना जाता है।<br>कारण (R): छोटानागपुर पठार मुख्य रूप से चंबल और बेतवा नदियों द्वारा प्रवाहित होता है।",
+            "options": [
+              {
+                "id": 1,
+                "text": "A is false, but R is true",
+                "textHi": "A गलत है, लेकिन R सही है"
+              },
+              {
+                "id": 2,
+                "text": "Both A and R are true, and R is the correct explanation of A",
+                "textHi": "A और R दोनों सही हैं, और R, A की सही व्याख्या है"
+              },
+              {
+                "id": 3,
+                "text": "A is true, but R is false",
+                "textHi": "A सही है, लेकिन R गलत है"
+              },
+              {
+                "id": 4,
+                "text": "Both A and R are true, but R is not the correct explanation of A",
+                "textHi": "A और R दोनों सही हैं, लेकिन R, A की सही व्याख्या नहीं है"
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_38",
+            "qno": 38,
+            "questionText": ". The first module of the Bharatiya Antariksh Station (BAS) is planned to be launched in which year ?",
+            "questionTextHi": "भारतीय अंतरिक्ष स्टेशन (BAS) के पहले मॉड्यूल को किस वर्ष लॉन्च करने की योजना है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "2045",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "2035",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "2028",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "2030",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_39",
+            "qno": 39,
+            "questionText": ". Which of the following statements most accurately describes the importance of non-metallic minerals in India ?",
+            "questionTextHi": "निम्नलिखित में से कौन सा कथन भारत में अधात्विक खनिजों के महत्व का सबसे सटीक वर्णन करता है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "India possesses abundant reserves that are crucial for key industries.",
+                "textHi": "भारत के पास प्रचुर मात्रा में भंडार है जो प्रमुख उद्योगों के लिए महत्वपूर्ण हैं।"
+              },
+              {
+                "id": 2,
+                "text": "These minerals are primarily used as gemstones with little industrial value.",
+                "textHi": "इन खनिजों का उपयोग मुख्य रूप से रत्न के रूप में किया जाता है जिनका औद्योगिक मूल्य कम होता है।"
+              },
+              {
+                "id": 3,
+                "text": "Industrial growth in India depends only on metallic minerals.",
+                "textHi": "भारत में औद्योगिक विकास केवल धात्विक खनिजों पर निर्भर करता है।"
+              },
+              {
+                "id": 4,
+                "text": "India does not have sufficient reserves of non-metallic minerals for large-scale use.",
+                "textHi": "भारत के पास बड़े पैमाने पर उपयोग के लिए अधात्विक खनिजों का पर्याप्त भंडार नहीं है।"
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_40",
+            "qno": 40,
+            "questionText": ". Within how many months must each House of Parliament approve a Proclamation of National Emergency?",
+            "questionTextHi": "संसद के प्रत्येक सदन को कितने महीनों के भीतर राष्ट्रीय आपातकाल की उद्घोषणा को मंजूरी देनी होगी?",
+            "options": [
+              {
+                "id": 1,
+                "text": "9 months",
+                "textHi": "9 महीने"
+              },
+              {
+                "id": 2,
+                "text": "1 month",
+                "textHi": "1 महीना"
+              },
+              {
+                "id": 3,
+                "text": "6 months",
+                "textHi": "6 महीने"
+              },
+              {
+                "id": 4,
+                "text": "3 months",
+                "textHi": "3 महीने"
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_41",
+            "qno": 41,
+            "questionText": ". Read the following statements carefully and select the correct option:<br>Assertion (A): The Polar Satellite Launch Vehicle (PSLV) is often referred to as the workhorse launch vehicle of ISRO.<br>Reason (R): The PSLV is a highly versatile rocket, capable of launching different types of payloads into multiple Earth orbits including Earth Observation, Navigation, and small Geosynchronous satellites and has achieved an exceptionally high success rate across its various versions.",
+            "questionTextHi": "निम्नलिखित कथनों को ध्यानपूर्वक पढ़ें और सही विकल्प का चयन करें:<br>अभिकथन (A): पोलर सैटेलाइट लॉन्च व्हीकल (PSLV) को अक्सर ISRO का वर्कहॉर्स लॉन्च व्हीकल कहा जाता है।<br>कारण (R): PSLV एक अत्यधिक बहुमुखी रॉकेट है, जो पृथ्वी अवलोकन, नेविगेशन और छोटे भू-तुल्यकालिक उपग्रहों सहित कई पृथ्वी कक्षाओं में विभिन्न प्रकार के पेलोड लॉन्च करने में सक्षम है और इसने अपने विभिन्न संस्करणों में असाधारण रूप से उच्च सफलता दर हासिल की है।",
+            "options": [
+              {
+                "id": 1,
+                "text": "Both A and R are true, and R is the correct explanation of A",
+                "textHi": "A और R दोनों सही हैं, और R, A की सही व्याख्या है"
+              },
+              {
+                "id": 2,
+                "text": "Both A and R are true, but R is not the correct explanation of A",
+                "textHi": "A और R दोनों सही हैं, लेकिन R, A की सही व्याख्या नहीं है"
+              },
+              {
+                "id": 3,
+                "text": "A is true, but R is false",
+                "textHi": "A सही है, लेकिन R गलत है"
+              },
+              {
+                "id": 4,
+                "text": "A is false, but R is true",
+                "textHi": "A गलत है, लेकिन R सही है"
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_42",
+            "qno": 42,
+            "questionText": ". Which of the following statements correctly describes the status of Anglo-Indian representation in State Legislative Assemblies?",
+            "questionTextHi": "निम्नलिखित में से कौन सा कथन राज्य विधानसभाओं में आंग्ल-भारतीय प्रतिनिधित्व की स्थिति का सही वर्णन करता है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "The Governor still nominates one Anglo-Indian member to the Assembly.",
+                "textHi": "राज्यपाल अभी भी विधानसभा में एक आंग्ल-भारतीय सदस्य को नामित करते हैं।"
+              },
+              {
+                "id": 2,
+                "text": "The provision was abolished by the 42nd Constitutional Amendment.",
+                "textHi": "इस प्रावधान को 42वें संविधान संशोधन द्वारा समाप्त कर दिया गया था।"
+              },
+              {
+                "id": 3,
+                "text": "The provision was abolished by the 104th Constitutional Amendment.",
+                "textHi": "इस प्रावधान को 104वें संविधान संशोधन द्वारा समाप्त कर दिया गया था।"
+              },
+              {
+                "id": 4,
+                "text": "Anglo-Indian members are elected through proportional representation.",
+                "textHi": "आंग्ल-भारतीय सदस्य आनुपातिक प्रतिनिधित्व के माध्यम से चुने जाते हैं।"
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_43",
+            "qno": 43,
+            "questionText": ". Which major procedural reform has been introduced under the Bharatiya Nagarik Suraksha Samhita (BNSS), 2023?",
+            "questionTextHi": "भारतीय नागरिक सुरक्षा संहिता (BNSS), 2023 के तहत कौन सा प्रमुख प्रक्रियात्मक सुधार पेश किया गया है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "Scrapping of all bail rights",
+                "textHi": "सभी जमानत अधिकारों को समाप्त करना"
+              },
+              {
+                "id": 2,
+                "text": "Introduction of video-recorded confessions",
+                "textHi": "वीडियो-रिकॉर्डेड इकबालिया बयान की शुरुआत"
+              },
+              {
+                "id": 3,
+                "text": "Replacement of all IPC sections",
+                "textHi": "सभी IPC धाराओं का प्रतिस्थापन"
+              },
+              {
+                "id": 4,
+                "text": "Establishment of presumption of guilt",
+                "textHi": "अपराध की धारणा की स्थापना"
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_44",
+            "qno": 44,
+            "questionText": ". Which of the following schemes enables the delivery of financial services through postmen?",
+            "questionTextHi": "निम्नलिखित में से कौन सी योजना डाकियों के माध्यम से वित्तीय सेवाओं की सुपुर्दगी को सक्षम बनाती है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "PRAGATI",
+                "textHi": "प्रगति"
+              },
+              {
+                "id": 2,
+                "text": "PMJAY",
+                "textHi": "पीएमजेएवाई (PMJAY)"
+              },
+              {
+                "id": 3,
+                "text": "NSAP",
+                "textHi": "एनएसएपी (NSAP)"
+              },
+              {
+                "id": 4,
+                "text": "IPPB",
+                "textHi": "आईपीपीबी (IPPB)"
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_45",
+            "qno": 45,
+            "questionText": ". Fill in the blank: The traditional Kalbelia dance of the Rajasthan artistically imitates movements of _.",
+            "questionTextHi": "रिक्त स्थान भरें: राजस्थान का पारंपरिक कालबेलिया नृत्य कलात्मक रूप से _ की गतिविधियों की नकल करता है।",
+            "options": [
+              {
+                "id": 1,
+                "text": "Horses",
+                "textHi": "घोड़े"
+              },
+              {
+                "id": 2,
+                "text": "Cows",
+                "textHi": "गाय"
+              },
+              {
+                "id": 3,
+                "text": "Camels",
+                "textHi": "ऊंट"
+              },
+              {
+                "id": 4,
+                "text": "Snakes",
+                "textHi": "सांप"
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_46",
+            "qno": 46,
+            "questionText": ". As per the IMD World Competitiveness Ranking 2025, in which dimension has Switzerland retained the 1st position for both 2024 and 2025?",
+            "questionTextHi": "IMD विश्व प्रतिस्पर्धात्मकता रैंकिंग 2025 के अनुसार, स्विट्जरलैंड ने 2024 और 2025 दोनों के लिए किस आयाम में पहला स्थान बरकरार रखा है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "Economic Performance",
+                "textHi": "आर्थिक प्रदर्शन"
+              },
+              {
+                "id": 2,
+                "text": "Employment",
+                "textHi": "रोजगार"
+              },
+              {
+                "id": 3,
+                "text": "Infrastructure",
+                "textHi": "बुनियादी ढांचा"
+              },
+              {
+                "id": 4,
+                "text": "Business Efficiency",
+                "textHi": "व्यावसायिक दक्षता"
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_47",
+            "qno": 47,
+            "questionText": ". The 'Mangrove Cell' initiative, aimed at conserving coastal ecosystems, is primarily associated with which Indian state in 2025?",
+            "questionTextHi": "तटीय पारिस्थितिक तंत्र के संरक्षण के उद्देश्य से 'मैंग्रोव सेल' पहल मुख्य रूप से 2025 में किस भारतीय राज्य से जुड़ी है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "West Bengal",
+                "textHi": "पश्चिम बंगाल"
+              },
+              {
+                "id": 2,
+                "text": "Maharashtra",
+                "textHi": "महाराष्ट्र"
+              },
+              {
+                "id": 3,
+                "text": "Bihar",
+                "textHi": "बिहार"
+              },
+              {
+                "id": 4,
+                "text": "Andhra Pradesh",
+                "textHi": "आंध्र प्रदेश"
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_48",
+            "qno": 48,
+            "questionText": ". Read the following statements carefully and select the correct option:<br>Assertion (A): The iron and steel industry is categorized as a heavy industry.<br>Reason (R): It uses lightweight raw materials such as cotton and rubber.",
+            "questionTextHi": "निम्नलिखित कथनों को ध्यानपूर्वक पढ़ें और सही विकल्प का चयन करें:<br>अभिकथन (A): लोहा और इस्पात उद्योग को भारी उद्योग के रूप में वर्गीकृत किया गया है।<br>कारण (R): यह कपास और रबर जैसे हल्के कच्चे माल का उपयोग करता है।",
+            "options": [
+              {
+                "id": 1,
+                "text": "Both A and R are true, and R is the correct explanation of A",
+                "textHi": "A और R दोनों सही हैं, और R, A की सही व्याख्या है"
+              },
+              {
+                "id": 2,
+                "text": "Both A and R are true, but R is not the correct explanation of A",
+                "textHi": "A और R दोनों सही हैं, लेकिन R, A की सही व्याख्या नहीं है"
+              },
+              {
+                "id": 3,
+                "text": "A is true, but R is false",
+                "textHi": "A सही है, लेकिन R गलत है"
+              },
+              {
+                "id": 4,
+                "text": "A is false, but R is true",
+                "textHi": "A गलत है, लेकिन R सही है"
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_49",
+            "qno": 49,
+            "questionText": ". Consider the following statements regarding the MISHTI Scheme:<br>1. It aims to promote mangrove plantation through scientific methods.<br>2. It was announced in the Union Budget 2023-24.<br>3. It involves the commercial leasing of mangrove forests.",
+            "questionTextHi": "मिष्टी (MISHTI) योजना के संबंध में निम्नलिखित कथनों पर विचार करें:<br>1. इसका उद्देश्य वैज्ञानिक तरीकों से मैंग्रोव वृक्षारोपण को बढ़ावा देना है।<br>2. इसकी घोषणा केंद्रीय बजट 2023-24 में की गई थी।<br>3. इसमें मैंग्रोव वनों का व्यावसायिक पट्टा (Leasing) शामिल है।",
+            "options": [
+              {
+                "id": 1,
+                "text": "Only 1 and 2 are correct",
+                "textHi": "केवल 1 और 2 सही हैं"
+              },
+              {
+                "id": 2,
+                "text": "Only 2 and 3 are correct",
+                "textHi": "केवल 2 और 3 सही हैं"
+              },
+              {
+                "id": 3,
+                "text": "Only 1 and 3 are correct",
+                "textHi": "केवल 1 और 3 सही हैं"
+              },
+              {
+                "id": 4,
+                "text": "All 1, 2 and 3 are correct",
+                "textHi": "सभी 1, 2 और 3 सही हैं"
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          },
+          {
+            "id": "cgl_q_50",
+            "qno": 50,
+            "questionText": ". Through which constitutional mechanism was Article 370, granting special status to Jammu and Kashmir, abrogated?",
+            "questionTextHi": "किस संवैधानिक तंत्र के माध्यम से जम्मू और कश्मीर को विशेष दर्जा देने वाले अनुच्छेद 370 को निरस्त किया गया था?",
+            "options": [
+              {
+                "id": 1,
+                "text": "Presidential Order under Article 370(3)",
+                "textHi": "अनुच्छेद 370(3) के तहत राष्ट्रपति का आदेश"
+              },
+              {
+                "id": 2,
+                "text": "Amendment by Parliament under Article 368",
+                "textHi": "अनुच्छेद 368 के तहत संसद द्वारा संशोधन"
+              },
+              {
+                "id": 3,
+                "text": "Ordinance issued by the President",
+                "textHi": "राष्ट्रपति द्वारा जारी अध्यादेश"
+              },
+              {
+                "id": 4,
+                "text": "Order under Article 356",
+                "textHi": "अनुच्छेद 356 के तहत आदेश"
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "General Awareness"
+          }
+        ]
+      },
+      {
+        "id": "sec_math",
+        "name": "Quantitative Aptitude",
+        "questions": [
+          {
+            "id": "cgl_q_51",
+            "qno": 51,
+            "questionText": "If 50% of A = 0.4 of B = 1/8 of C. find A: B: C",
+            "questionTextHi": "यदि A का 50% = B का 0.4 = C का 1/8 है, तो A: B: C ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "4:5:16",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "16:10:4",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "6:3:10",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "10:4:16",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_52",
+            "qno": 52,
+            "questionText": "A car travels 0.687 km in 1 minute. How far does it travel in 1 hour 45 minutes?",
+            "questionTextHi": "एक कार 1 मिनट में 0.687 किमी की यात्रा करती है। 1 घंटे 45 मिनट में यह कितनी दूर जाएगी?",
+            "options": [
+              {
+                "id": 1,
+                "text": "72.135 km",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "71.575 km",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "75.135 km",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "70.135 km",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_53",
+            "qno": 53,
+            "questionText": "Simplify: (1/(5+√3)) + (1/(5-√3)) - (10/(87-65))",
+            "questionTextHi": "सरल कीजिए: (1/(5+√3)) + (1/(5-√3)) - (10/(87-65))",
+            "options": [
+              {
+                "id": 1,
+                "text": "2",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "1",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "0",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "√3",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_54",
+            "qno": 54,
+            "questionText": "A family's expenditures on food, medicine, and entertainment are in the ratio 4: 6: 7. In the coming year, the cost of food is expected to increase by 25%, the cost of medicine to increase by 33.33%, and the cost of entertainment to decrease by 10%. What is the percentage change (increase or decrease) in total household expenditure?",
+            "questionTextHi": "एक परिवार का भोजन, दवा और मनोरंजन पर खर्च 4: 6: 7 के अनुपात में है। आने वाले वर्ष में, भोजन की लागत में 25% की वृद्धि, दवा की लागत में 33.33% की वृद्धि और मनोरंजन की लागत में 10% की कमी होने की उम्मीद है। कुल घरेलू खर्च में प्रतिशत परिवर्तन (वृद्धि या कमी) क्या है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "12.55% decrease",
+                "textHi": "12.55% की कमी"
+              },
+              {
+                "id": 2,
+                "text": "13.53% increase",
+                "textHi": "13.53% की वृद्धि"
+              },
+              {
+                "id": 3,
+                "text": "13.53% decrease",
+                "textHi": "13.53% की कमी"
+              },
+              {
+                "id": 4,
+                "text": "12.55% increase",
+                "textHi": "12.55% की वृद्धि"
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_55",
+            "qno": 55,
+            "questionText": "A and B invested ₹1,40,000 and 1,80,000 respectively. A remained for 10 months and B for 7 months. What is the total profit if B's share is ₹15,201 ?",
+            "questionTextHi": "A और B ने क्रमशः ₹1,40,000 और 1,80,000 का निवेश किया। A 10 महीने तक और B 7 महीने तक रहा। यदि B का हिस्सा ₹15,201 है तो कुल लाभ क्या है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "₹32,800",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "₹32,091",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "₹30,201",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "₹31,091",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_56",
+            "qno": 56,
+            "questionText": "Two friends, Sachin and Kuldeep, rent a stable. Sachin rents 21 horses for 6 months and 15 cows for 2 months. Kuldeep rents 15 cows for 6 months and 40 sheep for 7.5 months. If 3 horses eat as much food as 5 cows, and 6 cows eat as much as 10 sheep, what share of the rent should Sachin pay?",
+            "questionTextHi": "दो दोस्त, सचिन और कुलदीप, एक अस्तबल किराए पर लेते हैं। सचिन 6 महीने के लिए 21 घोड़े और 2 महीने के लिए 15 गायें किराए पर लेता है। कुलदीप 6 महीने के लिए 15 गायें और 7.5 महीने के लिए 40 भेड़ें किराए पर लेता है। यदि 3 घोड़े उतना ही खाना खाते हैं जितना 5 गायें, और 6 गायें उतना ही खाती हैं जितना 10 भेड़ें, तो सचिन को किराए का कितना हिस्सा देना चाहिए?",
+            "options": [
+              {
+                "id": 1,
+                "text": "8/17",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "18/17",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "21/17",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "2/17",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_57",
+            "qno": 57,
+            "questionText": "Two individuals, A and B, rent a pasture. A uses 18 cows for a period of 3 months and 20 sheep for 4 months, and B uses 35 sheep for 6 months. If 3 cows are equal to 6 sheep, determine A's share of the rent.",
+            "questionTextHi": "दो व्यक्ति, A और B, एक चरागाह किराए पर लेते हैं। A 3 महीने की अवधि के लिए 18 गायों और 4 महीने के लिए 20 भेड़ों का उपयोग करता है, और B 6 महीने के लिए 35 भेड़ों का उपयोग करता है। यदि 3 गायें 6 भेड़ों के बराबर हैं, तो किराए में A का हिस्सा निर्धारित करें।",
+            "options": [
+              {
+                "id": 1,
+                "text": "94/189",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "94/199",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "94/197",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "98/199",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_58",
+            "qno": 58,
+            "questionText": "The average ages of three groups of artisans are 18, 30, and 22. If the ratio of the number of artisans in the three groups is 3: 2: 5, what is the overall average age?",
+            "questionTextHi": "कारीगरों के तीन समूहों की औसत आयु 18, 30 और 22 है। यदि तीनों समूहों में कारीगरों की संख्या का अनुपात 3: 2: 5 है, तो कुल औसत आयु क्या है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "22.1",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "22.4",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "15.6",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "22.6",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_59",
+            "qno": 59,
+            "questionText": "The average of 21 numbers is 69. If the average of the first ten is 66 and the average of the last ten is 72, find the 11th number.",
+            "questionTextHi": "21 संख्याओं का औसत 69 है। यदि पहली दस का औसत 66 है और अंतिम दस का औसत 72 है, तो 11वीं संख्या ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "72",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "74",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "69",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "76",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_60",
+            "qno": 60,
+            "questionText": "What is the average of all integers between 200 and 350 that are exactly divisible by 13?",
+            "questionTextHi": "200 और 350 के बीच के उन सभी पूर्णांकों का औसत क्या है जो 13 से पूर्णतः विभाज्य हैं?",
+            "options": [
+              {
+                "id": 1,
+                "text": "277",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "263",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "287",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "273",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_61",
+            "qno": 61,
+            "questionText": "Evaluate: 12(1/2)% of 480 km + 66(2/3)% of 270 km",
+            "questionTextHi": "मूल्यांकन करें: 480 किमी का 12(1/2)% + 270 किमी का 66(2/3)%",
+            "options": [
+              {
+                "id": 1,
+                "text": "240 km",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "230 km",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "320 km",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "450 km",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_62",
+            "qno": 62,
+            "questionText": "A salesman earns a 2% commission on a shirt sold for ₹600 and a 12% commission on a tie sold for ₹150. If he sells 3 shirts and 4 ties per day, what will be his total commission in 60 days?",
+            "questionTextHi": "एक सेल्समैन ₹600 में बेची गई शर्ट पर 2% कमीशन और ₹150 में बेची गई टाई पर 12% कमीशन कमाता है। यदि वह प्रतिदिन 3 शर्ट और 4 टाई बेचता है, तो 60 दिनों में उसका कुल कमीशन कितना होगा?",
+            "options": [
+              {
+                "id": 1,
+                "text": "₹6450",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "₹6440",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "₹6480",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "₹6200",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_63",
+            "qno": 63,
+            "questionText": "A fruit seller sells apples at a loss of 10% on the cost price but uses a weight that is 25% less than the actual weight. Find his total profit percentage.",
+            "questionTextHi": "एक फल विक्रेता सेब को क्रय मूल्य पर 10% की हानि पर बेचता है लेकिन ऐसे वजन का उपयोग करता है जो वास्तविक वजन से 25% कम है। उसका कुल लाभ प्रतिशत ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "16.626%",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "16.257%",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "20%",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "18.757%",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_64",
+            "qno": 64,
+            "questionText": "The profit made on an item sold for 2200 is equal to the loss incurred when it is sold for 1800. What will be the profit or loss percentage if the item is sold for 2150?",
+            "questionTextHi": "2200 में बेची गई वस्तु पर हुआ लाभ, 1800 में बेची गई वस्तु पर हुई हानि के बराबर है। यदि वस्तु को 2150 में बेचा जाता है, तो लाभ या हानि प्रतिशत क्या होगा?",
+            "options": [
+              {
+                "id": 1,
+                "text": "Profit of 7.25%",
+                "textHi": "7.25% का लाभ"
+              },
+              {
+                "id": 2,
+                "text": "Loss of 5.5%",
+                "textHi": "5.5% की हानि"
+              },
+              {
+                "id": 3,
+                "text": "Profit of 7.5%",
+                "textHi": "7.5% का लाभ"
+              },
+              {
+                "id": 4,
+                "text": "Loss of 5.25%",
+                "textHi": "5.25% की हानि"
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_65",
+            "qno": 65,
+            "questionText": "A mobile phone retailer sells a phone for P and makes a profit of 30%. For a special festive offer, he sells the same phone for ₹1.5P. He offers a 10% discount on the offer. What percentage profit will he make during the festive offer?",
+            "questionTextHi": "एक मोबाइल फोन रिटेलर P में एक फोन बेचता है और 30% का लाभ कमाता है। एक विशेष उत्सव प्रस्ताव के लिए, वह उसी फोन को ₹1.5P में बेचता है। वह प्रस्ताव पर 10% की छूट देता है। उत्सव प्रस्ताव के दौरान वह कितने प्रतिशत लाभ कमाएगा?",
+            "options": [
+              {
+                "id": 1,
+                "text": "70.5%",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "72.5%",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "75.5%",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "78.5%",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_66",
+            "qno": 66,
+            "questionText": "A shopkeeper marked an item 20% above its cost price. During a sale, he offered a discount of 10%. What was his profit percentage?",
+            "questionTextHi": "एक दुकानदार ने एक वस्तु पर उसके क्रय मूल्य से 20% अधिक मूल्य अंकित किया। बिक्री के दौरान, उसने 10% की छूट दी। उसका लाभ प्रतिशत क्या था?",
+            "options": [
+              {
+                "id": 1,
+                "text": "10%",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "8%",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "15%",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "17.5%",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_67",
+            "qno": 67,
+            "questionText": "A shopkeeper marks his goods at 50% above the cost price. He allows a discount of 20% on the marked price. If he also gives an additional cash discount of ₹300, and still makes a profit of 14% on the cost price, what is the cost price of the goods?",
+            "questionTextHi": "एक दुकानदार अपने माल पर क्रय मूल्य से 50% अधिक मूल्य अंकित करता है। वह अंकित मूल्य पर 20% की छूट देता है। यदि वह ₹300 की अतिरिक्त नकद छूट भी देता है, और फिर भी क्रय मूल्य पर 14% का लाभ कमाता है, तो माल का क्रय मूल्य क्या है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "₹5500",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "₹5000",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "₹3000",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "₹3500",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_68",
+            "qno": 68,
+            "questionText": "Approximately how many kg of pulses costing 45 per kg should be mixed with 24 kg of pulses costing 32 per kg so as to make a profit of 15% by selling the mixture at 43.70 per kg?",
+            "questionTextHi": "43.70 प्रति किलोग्राम पर मिश्रण बेचकर 15% का लाभ प्राप्त करने के लिए 45 प्रति किलोग्राम की कितनी किलोग्राम दाल को 32 प्रति किलोग्राम की 24 किलोग्राम दाल के साथ मिलाया जाना चाहिए?",
+            "options": [
+              {
+                "id": 1,
+                "text": "17.3 kg",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "22.4 kg",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "20.5 kg",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "15.2 kg",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_69",
+            "qno": 69,
+            "questionText": "A right circular cone has a diameter of 14 cm and a height of 24 cm. What is the slant height ?",
+            "questionTextHi": "एक लंब वृत्तीय शंकु का व्यास 14 सेमी और ऊंचाई 24 सेमी है। तिर्यक ऊंचाई क्या है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "25 cm",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "30 cm",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "35 cm",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "40 cm",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_70",
+            "qno": 70,
+            "questionText": "Sunil lent ₹5,000 to Sudhir for 2 years and ₹3,000 to Vinod for 4 years at the same simple interest rate. In total, he received ₹4,400 as interest from both borrowers. What is the rate of interest per annum?",
+            "questionTextHi": "सुनील ने सुधीर को 2 साल के लिए ₹5,000 और विनोद को 4 साल के लिए ₹3,000 समान साधारण ब्याज दर पर उधार दिए। कुल मिलाकर, उसे दोनों उधारकर्ताओं से ब्याज के रूप में ₹4,400 प्राप्त हुए। प्रति वर्ष ब्याज की दर क्या है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "17%",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "12%",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "15%",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "20%",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_71",
+            "qno": 71,
+            "questionText": "A triangular prism has base area of 25 cm² If height is increased by 25%, what is the new volume (original height was 16 cm) ?",
+            "questionTextHi": "एक त्रिकोणीय प्रिज्म का आधार क्षेत्रफल 25 cm² है। यदि ऊंचाई 25% बढ़ा दी जाती है, तो नया आयतन क्या है (मूल ऊंचाई 16 सेमी थी)?",
+            "options": [
+              {
+                "id": 1,
+                "text": "50 cm³",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "575 cm³",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "500 cm³",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "225 cm³",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_72",
+            "qno": 72,
+            "questionText": "A circular disc's radius is decreased by 20% What is the percentage decrease in its area?",
+            "questionTextHi": "एक वृत्ताकार डिस्क की त्रिज्या में 20% की कमी की जाती है। इसके क्षेत्रफल में प्रतिशत कमी क्या है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "20%",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "38%",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "36%",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "30%",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_73",
+            "qno": 73,
+            "questionText": "A man has 160 m of fencing wire. He can use this wire to enclose a circular garden or a square garden. If he wants to maximize the enclosed area, what is the approximate ratio of the area of the largest possible circular garden to the area of the largest possible square garden, using the entire 160 m of wire ?",
+            "questionTextHi": "एक आदमी के पास बाड़ लगाने वाला 160 मीटर तार है। वह इस तार का उपयोग एक गोलाकार बगीचे या एक चौकोर बगीचे को घेरने के लिए कर सकता है। यदि वह घेरे गए क्षेत्र को अधिकतम करना चाहता है, तो पूरे 160 मीटर तार का उपयोग करके सबसे बड़े संभव गोलाकार बगीचे के क्षेत्रफल और सबसे बड़े संभव वर्गाकार बगीचे के क्षेत्रफल का अनुमानित अनुपात क्या है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "1.3:1",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "1.27: 1",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "1.7:1",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "1.6:1",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_74",
+            "qno": 74,
+            "questionText": "A vertical cylindrical container is filled with oil. A solid hemispherical stone of radius 6 cm is immersed completely, and the oil level rises by 2.5 cm. What is the radius of the cylinder?",
+            "questionTextHi": "एक ऊर्ध्वाधर बेलनाकार कंटेनर तेल से भरा है। 6 सेमी त्रिज्या का एक ठोस अर्धगोलाकार पत्थर पूरी तरह से डुबोया जाता है, और तेल का स्तर 2.5 सेमी बढ़ जाता है। बेलन की त्रिज्या क्या है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "6.29 cm.",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "7.59 cm",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "8.79 cm",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "11.41 cm",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          },
+          {
+            "id": "cgl_q_75",
+            "qno": 75,
+            "questionText": "A sector of a circle has a central angle of 135 and a radius of 9 cm. Another sector of the same circle has a central angle of 3π/4 radians. What is the ratio of the area of the first sector to the area of the second sector?",
+            "questionTextHi": "एक वृत्त के एक खंड का केंद्रीय कोण 135 और त्रिज्या 9 सेमी है। उसी वृत्त के दूसरे खंड का केंद्रीय कोण 3π/4 रेडियन है। पहले खंड के क्षेत्रफल का दूसरे खंड के क्षेत्रफल से अनुपात क्या है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "4:3",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "5:4",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "1:1",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "6:7",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "Quantitative Aptitude"
+          }
+        ]
+      },
+      {
+        "id": "sec_english",
+        "name": "English Comprehension",
+        "questions": [
+          {
+            "id": "cgl_q_76",
+            "qno": 76,
+            "questionText": "Select the most appropriate synonym of the given word:<br>Vague",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "Stable",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "Precise",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "Nebulous",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "Obvious",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_77",
+            "qno": 77,
+            "questionText": "Select the most appropriate antonym of the word given in brackets to complete the sentence.<br>He had very little formal education and remained largely ____(erudite) despite years of experience.",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "Intellectual",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "Uninformed",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "Educated",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "Scholarly",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_78",
+            "qno": 78,
+            "questionText": "Select the most appropriate meaning of the highlighted idiom in the given sentence.<br>The manager *flew off the handle* when he discovered that the report had been submitted with serious errors.",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "React with sudden and uncontrolled anger",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "Leave the place without being noticed",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "Disappear rapidly from a situation",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "Deal with the problem in a clever way",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_79",
+            "qno": 79,
+            "questionText": "Select the most appropriate antonym of the given word.<br>Panegyric",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "Homage",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "Encomium",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "Praise",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "Castigation",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_80",
+            "qno": 80,
+            "questionText": "Spot the incorrect spelling.",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "Trinket",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "Trissomy",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "Trisomic",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "Trifold",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_81",
+            "qno": 81,
+            "questionText": "Choose the correct one-word substitute for: The state of being unaware or unconscious of what is happening around one.",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "Highjack",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "Oblivion",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "Interregnum",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "Desuetude",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_82",
+            "qno": 82,
+            "questionText": "Select the correct option:<br>So intricate ______ the machinery that even experts took hours to assemble it.",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "is",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "was",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "are",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "were",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_83",
+            "qno": 83,
+            "questionText": "Select the correct option:<br>His explanation was ______ than confusing; it was a tangled mess of ideas.",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "less",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "more",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "other",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "rather",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_84",
+            "qno": 84,
+            "questionText": "Select the correct option:<br>The measures, though seemingly justified by fiscal constraints, were in reality a masked effort to ____opposition under the guise of austerity.",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "quell",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "grow",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "repel",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "impulse",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_85",
+            "qno": 85,
+            "questionText": "Find the part of the sentence that contains an error:<br>The committee's objectives included (1)/ increasing membership, improving communication channels, and (2)/ to foster a sense of community (3)/ among its diverse members. (4)",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "(1)",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "(2)",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "(3)",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "(4)",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_86",
+            "qno": 86,
+            "questionText": "Find the part of the sentence that contains an error:<br>The unique challenges of the project, including its remote location (1)/ and the unpredictable weather patterns, (2)/ makes its successful completion (3)/ a testament to the team's resilience. (4)",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "(1)",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "(2)",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "(3)",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "(4)",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_87",
+            "qno": 87,
+            "questionText": "Change the following from active to passive:<br>Why did the committee reject the proposed amendments?",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "Why were the proposed amendments rejected by the committee?",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "Why have the proposed amendments been rejected by the committee?",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "Why are the proposed amendments being rejected by the committee?",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "Why did the proposed amendments be rejected by the committee?",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_88",
+            "qno": 88,
+            "questionText": "Select the option that contains the homonym of the highlighted word.<br>A thick *bailey* shielded the villagers from harm.",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "The stone bailey stood firm against the attack.",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "Guards patrolled the perimeter of the outer bailey.",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "Horses rested quietly within the stone bailey.",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "The knights gathered in the castle bailey.",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_89",
+            "qno": 89,
+            "questionText": "Convert the sentence provided below from its passive voice structure to an active voice structure:<br>It is believed that the ancient scrolls were hidden by the monks in a secret chamber.",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "The monks hid the ancient scrolls in a secret chamber.",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "The monks are believed to have hidden the ancient scrolls in a secret chamber.",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "The ancient scrolls were hiding the monks in a secret chamber.",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "In a secret chamber, the monks had hidden the ancient scrolls.",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_90",
+            "qno": 90,
+            "questionText": "Read this passage for BELOW QUESTION<br>The symbiotic relationship between flowering plants and their pollinators is a cornerstone of global biodiversity and ecosystem stability. Pollinators, primarily insects like bees, butterflies, and moths, but also birds and bats, play a crucial role in the reproduction of over 80% of the world's flowering plants, including many food crops essential for human sustenance. As these animals visit flowers to feed on nectar or pollen, they inadvertently transfer pollen grains from one flower to another, enabling fertilization. This intricate dance has evolved over millions of years, leading to highly specialized adaptations in both plants and pollinators. For instance, some flowers have evolved specific shapes, colors, or scents to attract particular pollinators, while pollinators have developed specialized mouthparts or behaviors to access the rewards offered by these flowers. However, this vital relationship is under severe threat from various anthropogenic factors. Habitat loss due to urbanization and agriculture, pesticide use (especially neonicotinoids), climate change altering bloom times, and the spread of diseases and invasive species are collectively contributing to a dramatic decline in pollinator populations worldwide. The consequences of this decline are far-reaching. Beyond the ecological impact on wild plant reproduction, there are significant economic implications for agriculture. Many fruits, vegetables, and nuts rely heavily on animal pollination, and a reduction in pollinator services can lead to lower yields, reduced quality, and increased food costs. Scientists are actively researching solutions, from promoting pollinator-friendly farming practices and creating urban pollinator gardens to developing less harmful pest management strategies and conserving natural habitats. Understanding and protecting these unsung heroes of our ecosystems is paramount for food security and the health of our planet.<br><br><br>What is the central role of pollinators in ecosystems, as described in the passage?",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "Encouraging deforestation",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "To facilitate plant reproduction.",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "Promoting pollinator-friendly farming practices",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "Reducing global trade",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_91",
+            "qno": 91,
+            "questionText": "Read this passage for BELOW QUESTION<br>The symbiotic relationship between flowering plants and their pollinators is a cornerstone of global biodiversity and ecosystem stability. Pollinators, primarily insects like bees, butterflies, and moths, but also birds and bats, play a crucial role in the reproduction of over 80% of the world's flowering plants, including many food crops essential for human sustenance. As these animals visit flowers to feed on nectar or pollen, they inadvertently transfer pollen grains from one flower to another, enabling fertilization. This intricate dance has evolved over millions of years, leading to highly specialized adaptations in both plants and pollinators. For instance, some flowers have evolved specific shapes, colors, or scents to attract particular pollinators, while pollinators have developed specialized mouthparts or behaviors to access the rewards offered by these flowers. However, this vital relationship is under severe threat from various anthropogenic factors. Habitat loss due to urbanization and agriculture, pesticide use (especially neonicotinoids), climate change altering bloom times, and the spread of diseases and invasive species are collectively contributing to a dramatic decline in pollinator populations worldwide. The consequences of this decline are far-reaching. Beyond the ecological impact on wild plant reproduction, there are significant economic implications for agriculture. Many fruits, vegetables, and nuts rely heavily on animal pollination, and a reduction in pollinator services can lead to lower yields, reduced quality, and increased food costs. Scientists are actively researching solutions, from promoting pollinator-friendly farming practices and creating urban pollinator gardens to developing less harmful pest management strategies and conserving natural habitats. Understanding and protecting these unsung heroes of our ecosystems is paramount for food security and the health of our planet.<br><br><br>What type of adaptations have plants developed to attract pollinators?",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "Root structures",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "Specific shapes, colors, or scents",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "Photosynthetic efficiency",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "Drought resistance",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_92",
+            "qno": 92,
+            "questionText": "Read this passage for BELOW QUESTION<br>The symbiotic relationship between flowering plants and their pollinators is a cornerstone of global biodiversity and ecosystem stability. Pollinators, primarily insects like bees, butterflies, and moths, but also birds and bats, play a crucial role in the reproduction of over 80% of the world's flowering plants, including many food crops essential for human sustenance. As these animals visit flowers to feed on nectar or pollen, they inadvertently transfer pollen grains from one flower to another, enabling fertilization. This intricate dance has evolved over millions of years, leading to highly specialized adaptations in both plants and pollinators. For instance, some flowers have evolved specific shapes, colors, or scents to attract particular pollinators, while pollinators have developed specialized mouthparts or behaviors to access the rewards offered by these flowers. However, this vital relationship is under severe threat from various anthropogenic factors. Habitat loss due to urbanization and agriculture, pesticide use (especially neonicotinoids), climate change altering bloom times, and the spread of diseases and invasive species are collectively contributing to a dramatic decline in pollinator populations worldwide. The consequences of this decline are far-reaching. Beyond the ecological impact on wild plant reproduction, there are significant economic implications for agriculture. Many fruits, vegetables, and nuts rely heavily on animal pollination, and a reduction in pollinator services can lead to lower yields, reduced quality, and increased food costs. Scientists are actively researching solutions, from promoting pollinator-friendly farming practices and creating urban pollinator gardens to developing less harmful pest management strategies and conserving natural habitats. Understanding and protecting these unsung heroes of our ecosystems is paramount for food security and the health of our planet.<br><br><br>Which of the following is NOT listed as a threat to pollinator populations?",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "Habitat loss",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "Pesticide use",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "Increased rainfall",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "Climate change",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_93",
+            "qno": 93,
+            "questionText": "Read this passage for BELOW QUESTION<br>The symbiotic relationship between flowering plants and their pollinators is a cornerstone of global biodiversity and ecosystem stability. Pollinators, primarily insects like bees, butterflies, and moths, but also birds and bats, play a crucial role in the reproduction of over 80% of the world's flowering plants, including many food crops essential for human sustenance. As these animals visit flowers to feed on nectar or pollen, they inadvertently transfer pollen grains from one flower to another, enabling fertilization. This intricate dance has evolved over millions of years, leading to highly specialized adaptations in both plants and pollinators. For instance, some flowers have evolved specific shapes, colors, or scents to attract particular pollinators, while pollinators have developed specialized mouthparts or behaviors to access the rewards offered by these flowers. However, this vital relationship is under severe threat from various anthropogenic factors. Habitat loss due to urbanization and agriculture, pesticide use (especially neonicotinoids), climate change altering bloom times, and the spread of diseases and invasive species are collectively contributing to a dramatic decline in pollinator populations worldwide. The consequences of this decline are far-reaching. Beyond the ecological impact on wild plant reproduction, there are significant economic implications for agriculture. Many fruits, vegetables, and nuts rely heavily on animal pollination, and a reduction in pollinator services can lead to lower yields, reduced quality, and increased food costs. Scientists are actively researching solutions, from promoting pollinator-friendly farming practices and creating urban pollinator gardens to developing less harmful pest management strategies and conserving natural habitats. Understanding and protecting these unsung heroes of our ecosystems is paramount for food security and the health of our planet.<br><br><br>What are the economic implications of declining pollinator populations mentioned in the passage?",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "Increased timber production",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "Lower crop yields and higher food costs",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "Decreased demand for agricultural labor",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "Greater reliance on fossil fuels",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_94",
+            "qno": 94,
+            "questionText": "Read this passage for BELOW QUESTION<br>The symbiotic relationship between flowering plants and their pollinators is a cornerstone of global biodiversity and ecosystem stability. Pollinators, primarily insects like bees, butterflies, and moths, but also birds and bats, play a crucial role in the reproduction of over 80% of the world's flowering plants, including many food crops essential for human sustenance. As these animals visit flowers to feed on nectar or pollen, they inadvertently transfer pollen grains from one flower to another, enabling fertilization. This intricate dance has evolved over millions of years, leading to highly specialized adaptations in both plants and pollinators. For instance, some flowers have evolved specific shapes, colors, or scents to attract particular pollinators, while pollinators have developed specialized mouthparts or behaviors to access the rewards offered by these flowers. However, this vital relationship is under severe threat from various anthropogenic factors. Habitat loss due to urbanization and agriculture, pesticide use (especially neonicotinoids), climate change altering bloom times, and the spread of diseases and invasive species are collectively contributing to a dramatic decline in pollinator populations worldwide. The consequences of this decline are far-reaching. Beyond the ecological impact on wild plant reproduction, there are significant economic implications for agriculture. Many fruits, vegetables, and nuts rely heavily on animal pollination, and a reduction in pollinator services can lead to lower yields, reduced quality, and increased food costs. Scientists are actively researching solutions, from promoting pollinator-friendly farming practices and creating urban pollinator gardens to developing less harmful pest management strategies and conserving natural habitats. Understanding and protecting these unsung heroes of our ecosystems is paramount for food security and the health of our planet.<br><br><br>What is suggested as a solution to protect pollinators ?",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "To decompose organic matter.",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "To regulate water cycles.",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "Promoting pollinator-friendly farming practices",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "To control pest populations.",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_95",
+            "qno": 95,
+            "questionText": "Choose the most suitable option to replace the highlighted part of the sentence:<br>They proposed *us to consider a different approach*.",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "that we consider a different approach",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "us considering a different approach",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "to consider a different approach by us",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "that we considered a different approach",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_96",
+            "qno": 96,
+            "questionText": "Choose the most suitable option to replace the highlighted part of the sentence:<br>I wonder *what is the reason for her sudden departure*.",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "what the reason is for her sudden departure",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "what the reason for her sudden departure is",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "what is the reason her sudden departure",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "the reason for her sudden departure is what",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_97",
+            "qno": 97,
+            "questionText": "A sentence is provided in direct speech. From the four given options, choose the one that most accurately conveys the sentence in its corresponding indirect speech.<br>The teacher said, \"The Earth revolves around the Sun.\"",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "The teacher said that the Earth revolved around the Sun.",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "The teacher said that the Earth had revolved around the Sun.",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "The teacher said that the Earth revolves around the Sun.",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "The teacher said that the Earth is revolving around the Sun.",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_98",
+            "qno": 98,
+            "questionText": "A sentence is provided in indirect speech. From the four given options, choose the one that most accurately conveys the sentence in its corresponding direct speech.<br>She asked him if he could help her with the project the next day.",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "\"Can you help me with the project tomorrow?\" she asked him.",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "\"Could you help me with the project the next day?\" she asked him.",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "\"Will you help me with the project tomorrow?\" she asked him.",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "\"Help me with the project tomorrow,\" she asked him.",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_99",
+            "qno": 99,
+            "questionText": "Rearrange the following sentences in correct order to make a logical passage:<br>1. This new approach significantly boosted employee morale.<br>2. The company decided to implement a flexible work-from-home policy.<br>3. Initially, some managers expressed concerns about productivity.<br>4. However, careful monitoring showed no dip in output.",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "2-3-4-1",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "1-2-3-4",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "3-4-2-1",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "2-1-3-4",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          },
+          {
+            "id": "cgl_q_100",
+            "qno": 100,
+            "questionText": "Rearrange the following sentences to form a coherent paragraph:<br>1. This allows the bird to remain almost perfectly still relative to the flower.<br>2. The hummingbird's wings beat at an incredibly high frequency, often over 50 times per second.<br>3. This unique ability enables them to efficiently extract nectar while hovering in mid-air.<br>4. Such rapid wing movements create a stable platform, counteracting any air currents.",
+            "questionTextHi": "",
+            "options": [
+              {
+                "id": 1,
+                "text": "2, 4, 1, 3",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "1, 3, 2, 4",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "3, 2, 4, 1",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "2, 1, 4, 3",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 2,
+            "negativeMarks": 0.5,
+            "sectionName": "English Comprehension"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-2025-math-top-mock-1",
+    "title": "RRB NTPC Graduate 2025 — Mathematics Top 50 Questions Mock",
+    "examCode": "rrb-ntpc",
+    "examFamily": "rrb",
+    "type": "live",
+    "durationMinutes": 45,
+    "totalMarks": 50,
+    "totalQuestions": 50,
+    "isPublished": true,
+    "sections": [
+      {
+        "id": "sec_ntpc_math",
+        "name": "Mathematics",
+        "questions": [
+          {
+            "id": "ntpc_q_1",
+            "qno": 1,
+            "questionText": "Three numbers are in the ratio 2 : 14 : 3, and their LCM is 4116. Their HCF is:",
+            "questionTextHi": "तीन संख्याएँ 2 : 14 : 3 के अनुपात में हैं, और उनका LCM, 4116 है। उनका HCF ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "98",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "100",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "108",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "95",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_2",
+            "qno": 2,
+            "questionText": "When 1063, 2815 and 3451 are divided by the greatest number x, the remainder in each case is y. What is the value of (3x − 14y)?",
+            "questionTextHi": "जब 1063, 2815 और 3451 को सबसे बड़ी संख्या x से विभाजित किया जाता है, तो प्रत्येक स्थिति में शेषफल y होता है। (3x − 14y) का मान ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "−65",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "−60",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "−62",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "−66",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_3",
+            "qno": 3,
+            "questionText": "Manoj has 200 litres of Oil A and 274 litres of Oil B. He fills a number of identical containers with the two types of oil in a manner that each container has only one type of oil, and all containers are completely filled. What can be the maximum volume (in litres) of each container that Manoj uses, so that all the oil that Manoj has, of both the types, can be poured into these containers?",
+            "questionTextHi": "मनोज के पास 200 लीटर तेल A और 274 लीटर तेल B है। वह कई समान कंटेनरों को दो प्रकार के तेल से इस तरह भरता है कि प्रत्येक कंटेनर में केवल एक प्रकार का तेल होता है, और सभी कंटेनर पूरी तरह से भरे होते हैं। मनोज द्वारा उपयोग किए जाने वाले प्रत्येक कंटेनर का आयतन (लीटर में) कितना हो सकता है, ताकि मनोज के पास मौजूद दोनों प्रकार के संपूर्ण तेल को इन कंटेनरों में डाला जा सके?",
+            "options": [
+              {
+                "id": 1,
+                "text": "2",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "10",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "8",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "3",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_4",
+            "qno": 4,
+            "questionText": "Two positive numbers differ by 2858. When the greater number is divided by the smaller number, the quotient is 5 and the remainder is 178. What is the HCF of the greater of the two given numbers and 3828?",
+            "questionTextHi": "दो धनात्मक संख्याओं के बीच 2858 का अंतर है। जब बड़ी संख्या को छोटी संख्या से विभाजित किया जाता है, तो भागफल 5 होता है और शेषफल 178 होता है। दी गई दो संख्याओं में से बड़ी संख्या और 3828 का HCF कितना है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "17",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "13",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "12",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "11",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_5",
+            "qno": 5,
+            "questionText": "If the ratio of two numbers is 3 : 16 and the product of their LCM and their HCF is 432, then the sum of the reciprocals of the LCM and the HCF is:",
+            "questionTextHi": "यदि दो संख्याओं का अनुपात 3 : 16 है तथा उनके लघुत्तम समापवर्त्य (LCM) और महत्तम समापवर्तक (HCF) का गुणनफल 432 है, तो उनके LCM तथा HCF के व्युत्क्रमों का योगफल ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "$$\\frac{49}{151}$$",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "$$\\frac{49}{145}$$",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "$$\\frac{49}{144}$$",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "$$\\frac{49}{159}$$",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_6",
+            "qno": 6,
+            "questionText": "Nandan had some marbles. When he distributed the marbles equally among 32 children, he found that 4 marbles were left. Had he distributed the marbles equally among 41 children and 48 children, he still would have had 13 and 20 marbles, respectively, left with him. But when he distributed them equally among 53 children, no marble was left. The number of marbles that Nandan initially had may lie between __________.",
+            "questionTextHi": "नंदन के पास कुछ कंचे थे। जब उसने कंचों को 32 बच्चों में बराबर-बराबर बाँटा, तो उसने पाया कि 4 कंचे शेष बच गए। यदि उसने कंचों को 41 बच्चों और 48 बच्चों में बराबर-बराबर बाँटा होता, तो भी उसके पास क्रमशः 13 और 20 कंचे शेष बचते। लेकिन जब उसने उन्हें 53 बच्चों में बराबर-बराबर बाँटा, तो एक भी कंचा शेष नहीं बचा। नंदन के पास आरंभ में जितने कंचे थे, उनकी संख्या _________ के बीच हो सकती है।",
+            "options": [
+              {
+                "id": 1,
+                "text": "7814 and 7824",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "7794 and 7804",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "7864 and 7874",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "7834 and 7854",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_7",
+            "qno": 7,
+            "questionText": "In finding the HCF of two numbers by division method, the quotients are 1, 4, and 6, respectively, and the last divisor is 29. What is the LCM of the two numbers?",
+            "questionTextHi": "विभाजन विधि द्वारा दो संख्याओं का HCF ज्ञात करने पर, भागफल क्रमशः 1, 4 और 6 प्राप्त होते हैं तथा अंतिम भाजक 29 है। दोनों संख्याओं का LCM ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "22475",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "22480",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "22470",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "22476",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_8",
+            "qno": 8,
+            "questionText": "P is any point inside the rectangle ABCD. If PA = 69 cm, PB = 27 cm and PC = 38 cm, then the length of PD (in cm) is:",
+            "questionTextHi": "P, आयत ABCD के भीतर कोई बिंदु है। यदि PA = 69 cm, PB = 27 cm और PC = 38 cm है, तो PD की लंबाई (cm में) ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "70",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "72",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "78",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "74",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_9",
+            "qno": 9,
+            "questionText": "ABCD is a quadrilateral in which AB || DC, and E and F are the mid points of the diagonals AC and BD, respectively. If AB = 14 cm, BC = 73 cm, DC = 90 cm and AD = 22 cm, then what is the length (in cm) of EF?",
+            "questionTextHi": "ABCD एक चतुर्भुज है जिसमें AB || DC है, तथा E और F क्रमशः विकर्ण AC और BD के मध्य बिंदु हैं। यदि AB = 14 cm, BC = 73 cm, DC = 90 cm और AD = 22 cm है, तो EF की लंबाई (cm में) कितनी है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "34",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "42",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "38",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "43",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_10",
+            "qno": 10,
+            "questionText": "P is a point outside a circle and is 17 cm away from its centre. A secant drawn from the point P intersects the circle at points A and B in such a way that PA = 8 cm and AB = 7 cm, where PB &gt; PA. The radius of the circle is:",
+            "questionTextHi": "P, एक वृत्त के बाहर स्थित एक बिंदु है और उसके केंद्र से 17 cm की दूरी पर है। बिंदु P से खींची गई एक छेदक रेखा, वृत्त को बिंदु A और B पर इस प्रकार काटती है कि PA = 8 cm और AB = 7 cm है, जहाँ PB &gt; PA है। वृत्त की त्रिज्या ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "13 cm",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "12 cm",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "15 cm",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "14 cm",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_11",
+            "qno": 11,
+            "questionText": "The sides of a triangle are 109 cm, 171 cm, and 100 cm. What is the length (in cm) of its altitude corresponding to the side with a length of 171 cm?",
+            "questionTextHi": "एक त्रिभुज की भुजाएँ 109 cm, 171 cm और 100 cm हैं। 171 cm लंबाई वाली भुजा के समरूप इसकी ऊँचाई की लंबाई (cm में) कितनी होगी?",
+            "options": [
+              {
+                "id": 1,
+                "text": "94",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "49",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "60",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "82",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_12",
+            "qno": 12,
+            "questionText": "ABCD is a trapezium in which BC || AD and AC = CD. If ∠ABC = 69° and ∠BAC = 23°, then what is the measure of ∠ACD?",
+            "questionTextHi": "ABCD एक समलम्ब चतुर्भुज है जिसमें BC ∥ AD तथा AC = CD है। यदि ∠ABC = 69° तथा ∠BAC = 23° है, तो ∠ACD का माप कितना होगा?",
+            "options": [
+              {
+                "id": 1,
+                "text": "4°",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "7°",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "14°",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "10°",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_13",
+            "qno": 13,
+            "questionText": "A (x, 5), B (3, −4) and C (−6, y) are the three vertices of a triangle ABC. If (3.5, 4.5) is the centroid of the triangle, find the point (x + 3, y − 4).",
+            "questionTextHi": "A (x, 5), B (3, −4) और C (−6, y), त्रिभुज ABC के तीन शीर्ष हैं। यदि (3.5, 4.5) त्रिभुज का केंद्रक है, तो बिंदु (x + 3, y − 4) ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "(16.5, 8.5)",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "(13.5, 12.5)",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "(8.5, 16.5)",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "(15.5, 9.5)",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_14",
+            "qno": 14,
+            "questionText": "The sides (in cm) of a right triangle are (x − 18), (x − 25) and x. Its area (in cm²) is:",
+            "questionTextHi": "एक समकोण त्रिभुज की भुजाएँ (cm में) (x − 18), (x − 25) और x हैं। इसका क्षेत्रफल (cm² में) ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "1329",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "1314",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "1311",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "1320",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_15",
+            "qno": 15,
+            "questionText": "In a circle, two chords, AB and CD, measuring 14 cm and 6 cm, respectively, are parallel to each other on the same side of the centre. If the distance between them is 4 cm, find the length (in cm) of the diameter of the circle.",
+            "questionTextHi": "एक वृत्त में, दो जीवाएँ AB और CD, जिनकी माप क्रमशः 14 cm और 6 cm है, जो केंद्र के एक ही तरफ हैं तथा एक दूसरे के समानांतर हैं। यदि उनके बीच की दूरी 4 cm है, तो वृत्त के व्यास की लंबाई (cm में) ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "$$2\\sqrt{29}$$",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "$$2\\sqrt{58}$$",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "$$\\sqrt{58}$$",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "$$\\sqrt{29}$$",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_16",
+            "qno": 16,
+            "questionText": "For a regular polygon, the sum of the interior angles is 250% more than the sum of its exterior angles. Each interior angle of the polygon measures x°. What is the value of x?",
+            "questionTextHi": "एक सम बहुभुज के लिए, अंतः कोणों का योगफल उसके बाह्य कोणों के योगफल से 250% अधिक है। बहुभुज के प्रत्येक अंतः कोण की माप x° है। x का मान ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "140",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "150",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "145",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "120",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_17",
+            "qno": 17,
+            "questionText": "In quadrilateral PQRS, the bisectors of ∠R and ∠S meet at point T (inside the quadrilateral), and ∠STR = 8°. If the ratio of ∠P to ∠Q is 7 : 9, then what is the difference between the measures of ∠Q and ∠P?",
+            "questionTextHi": "चतुर्भुज PQRS में, ∠R और ∠S के समद्विभाजक, बिंदु T (चतुर्भुज के अंदर) पर मिलते हैं, तथा ∠STR = 8° है। यदि ∠P और ∠Q का अनुपात 7 : 9 है, तो ∠Q और ∠P की माप के बीच कितना अंतर है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "4°",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "7°",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "2°",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "5°",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_18",
+            "qno": 18,
+            "questionText": "AB is parallel to CD. A transversal PQ intersects AB and CD at E and F, respectively, and ∠PEB = 49°. G is a point between AB and CD such that ∠BEG = 35° and ∠GFE = 16°. What is the measure of ∠EGF?",
+            "questionTextHi": "AB, CD के समांतर है। एक तिर्यक रेखा PQ, AB और CD को क्रमशः E और F पर प्रतिच्छेद करती है, तथा ∠PEB = 49° है। AB और CD के बीच स्थित एक बिंदु G इस प्रकार है कि ∠BEG = 35° और ∠GFE = 16° है। ∠EGF का माप क्या है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "57°",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "60°",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "59°",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "68°",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_19",
+            "qno": 19,
+            "questionText": "A vertical stick 14 m long, casts a shadow 5 m long on the ground. At the same time, a tower casts a shadow of 44.5 m long on the ground. The height of the tower is _____.",
+            "questionTextHi": "14 m लंबी एक ऊर्ध्वाधर छड़, जमीन पर 5 m लंबी छाया बनाती है। उसी समय, एक टॉवर जमीन पर 44.5 m लंबी छाया बनाता है। टॉवर की ऊँचाई _____ है।",
+            "options": [
+              {
+                "id": 1,
+                "text": "124.6 m",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "128.8 m",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "130.3 m",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "122.2 m",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_20",
+            "qno": 20,
+            "questionText": "When x is added to each of 22, 26, 19 and 21, then the numbers so obtained, in this order, are in proportion. Then, if 2x : y :: y : (4x − 8), and y &gt; 0, what is the value of y?",
+            "questionTextHi": "जब 22, 26, 19 और 21 में से प्रत्येक में x जोड़ा जाता है, तो इस क्रम में प्राप्त संख्याएँ समानुपात में होती हैं। तो, यदि 2x : y :: y : (4x − 8) है, और y &gt; 0 है, तो y का मान कितना होगा?",
+            "options": [
+              {
+                "id": 1,
+                "text": "48",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "37",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "46",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "54",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_21",
+            "qno": 21,
+            "questionText": "X is directly proportional to A² and A is inversely proportional to Y. If X is 97 when Y is 6, find X when Y is 2.",
+            "questionTextHi": "X, A² के समानुपाती है और A, Y के व्युत्क्रमानुपाती है। यदि Y का मान 6 होने पर X का मान 97 होता है, तो Y का मान 2 होने पर X का मान ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "873",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "871",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "872",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "875",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_22",
+            "qno": 22,
+            "questionText": "The mean proportional between (21 + 16√2) and (16 − 7√2) is:",
+            "questionTextHi": "(21 + 16√2) और (16 − 7√2) का माध्यानुपाती ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "$$17\\sqrt{7}$$",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "$$\\sqrt{112 + 109\\sqrt{2}}$$",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "$$\\sqrt{109 + 112\\sqrt{2}}$$",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "$$4\\sqrt{7}$$",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_23",
+            "qno": 23,
+            "questionText": "The sum of the present ages of a father and his son is 19 years more than 2 times the present age of the son. After 15 years, 12 times the father's age will be 17 years less than 13 times the son's age. The difference (in years) between the present ages of the father and the son is:",
+            "questionTextHi": "एक पिता और उसके पुत्र की वर्तमान आयु का योग, पुत्र की वर्तमान आयु के 2 गुने से 19 वर्ष अधिक है। 15 वर्ष बाद, पिता की आयु का 12 गुना पुत्र की आयु के 13 गुने से 17 वर्ष कम होगा। पिता और पुत्र की वर्तमान आयु के बीच अंतर (वर्ष में) कितना है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "14",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "24",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "19",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "21",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_24",
+            "qno": 24,
+            "questionText": "The ratio of incomes of Seema and Darshan is 2 : 3. They save ₹15,000 and ₹9,000, respectively. If the ratio of their expenditures is 12 : 19, then what is the total expenditure (in ₹) of Seema and Darshan?",
+            "questionTextHi": "सीमा और दर्शन की आय का अनुपात 2 : 3 है। वे क्रमशः ₹15,000 और ₹9,000 की बचत करते हैं। यदि उनके व्यय का अनुपात 12 : 19 है, तो सीमा और दर्शन का कुल व्यय (₹ में) ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "4,21,000",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "4,18,500",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "4,18,000",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "4,22,000",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_25",
+            "qno": 25,
+            "questionText": "Umesh sold an article at a loss of 22%. If he had bought the item at 5% less and had sold it for ₹935 more, then he would have gained 15%. Find the cost price (in ₹) of the article.",
+            "questionTextHi": "उमेश ने एक वस्तु को 22% की हानि पर बेचा। यदि उसने वस्तु को 5% कम में खरीदा होता और उसे ₹935 अधिक में बेचा होता, तो उसे 15% का लाभ होता। वस्तु का क्रय मूल्य (₹ में) ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "2,992",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "2,839",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "3,488",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "3,241",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_26",
+            "qno": 26,
+            "questionText": "On selling a stool for ₹8,378, the value of gain is 20% more than the value of loss incurred on selling it for ₹1,756. In order to gain 50%, find the selling price (in ₹).",
+            "questionTextHi": "एक स्टूल को ₹8,378 में बेचने पर, लाभ का मूल्य इसे ₹1,756 में बेचने पर हुई हानि के मूल्य से 20% अधिक है। 50% लाभ प्राप्त करने के लिए, विक्रय मूल्य (₹ में) ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "7,150",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "7,148",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "7,151",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "7,149",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_27",
+            "qno": 27,
+            "questionText": "If the selling price of a bed is 2-times of initial, then the profit is 7-times of initial. Find the initial profit percentage (in %).",
+            "questionTextHi": "यदि किसी बिस्तर का विक्रय मूल्य प्रारंभिक मूल्य का 2 गुना है, तो लाभ प्रारंभिक लाभ का 7 गुना होगा। प्रारंभिक लाभ प्रतिशत (% में) ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "250",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "20",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "28.57",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "350",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_28",
+            "qno": 28,
+            "questionText": "A vendor buys 42 laptop bags for ₹41,622 and sells them at 35 for ₹37,345. How many laptop bags should be bought and sold to earn a profit of ₹3,952?",
+            "questionTextHi": "एक विक्रेता ₹41,622 में 42 लैपटॉप बैग खरीदता है और उन्हें ₹37,345 में 35 लैपटॉप बैग की दर से बेचता है। ₹3,952 का लाभ अर्जित करने के लिए कितने लैपटॉप बैग खरीदे और बेचे जाने चाहिए?",
+            "options": [
+              {
+                "id": 1,
+                "text": "52",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "16",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "34",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "76",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_29",
+            "qno": 29,
+            "questionText": "A dealer sells two dryers at the rate of ₹63,000 per dryer. On one, he earns a profit of 5% and on the other he loses 30%. What is his loss percentage in the whole transaction?",
+            "questionTextHi": "एक डीलर ₹63,000 प्रति ड्रायर की दर से दो ड्रायर बेचता है। एक पर उसे 5% का लाभ होता है और दूसरे पर उसे 30% की हानि होती है। पूरे लेन-देन में उसका हानि प्रतिशत कितना है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "14%",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "17%",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "15%",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "16%",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_30",
+            "qno": 30,
+            "questionText": "The cost of 6 pens and 5 pencils is ₹259. If the cost of a pen decreases by ₹9 and the cost of a pencil increases by ₹4, then the cost of 19 pens and 2 pencils is ₹90. What is the original cost of 13 pens and 2 pencils?",
+            "questionTextHi": "6 पेन और 5 पेंसिल की कीमत ₹259 है। यदि एक पेन की कीमत ₹9 कम हो जाती है और एक पेंसिल की कीमत ₹4 बढ़ जाती है, तो 19 पेन और 2 पेंसिल की कीमत ₹90 हो जाती है। 13 पेन और 2 पेंसिल की मूल कीमत ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "₹202",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "₹199",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "₹195",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "₹197",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_31",
+            "qno": 31,
+            "questionText": "Govind bought two items at a total cost of ₹4,800. He sold one item at 34% profit and the other at 10% loss. If Govind sold both the items together for ₹5,442, then what is the difference between the cost price (in ₹) of both the items?",
+            "questionTextHi": "गोविंद ने ₹4,800 के कुल क्रय मूल्य पर दो वस्तुएँ खरीदीं। उसने एक वस्तु को 34% लाभ पर और दूसरी को 10% हानि पर बेचा। यदि गोविंद ने दोनों वस्तुओं को कुल ₹5,442 में बेचा, तो दोनों वस्तुओं के क्रय मूल्यों का अंतर (₹ में) ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "350",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "300",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "275",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "325",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_32",
+            "qno": 32,
+            "questionText": "If $$\\frac{x+1}{x}=33$$, then $$\\frac{x^2+1}{x^2}$$ is:",
+            "questionTextHi": "यदि $$\\frac{x+1}{x}=33$$ है, तो $$\\frac{x^2+1}{x^2}$$ का मान ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "1023",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "1025",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "1091",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "1089",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_33",
+            "qno": 33,
+            "questionText": "If $$a^2+b^2=168$$, $$a\\times b=27$$, and $$a&gt;b$$, find $$\\frac{a-b}{a+b}$$.",
+            "questionTextHi": "यदि $$a^2+b^2=168$$, $$a\\times b=27$$, और $$a&gt;b$$ है, तो $$\\frac{a-b}{a+b}$$ का मान ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "$$\\sqrt{\\frac{57}{111}}$$",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "$$\\sqrt{\\frac{53}{121}}$$",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "$$\\frac{57}{111}$$",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "$$\\frac{121}{55}$$",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_34",
+            "qno": 34,
+            "questionText": "If α, β and γ are the roots of the equation $$6x^3-11x^2+6x-1=0$$, find $$\\Sigma \\alpha^2\\beta\\gamma$$.",
+            "questionTextHi": "यदि समीकरण $$6x^3-11x^2+6x-1=0$$ के मूल α, β और γ हैं, तो $$\\Sigma \\alpha^2\\beta\\gamma$$ ज्ञात करें।",
+            "options": [
+              {
+                "id": 1,
+                "text": "$$\\frac{11}{6}$$",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "$$\\frac{11}{36}$$",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "$$-\\frac{11}{36}$$",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "$$-\\frac{11}{6}$$",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_35",
+            "qno": 35,
+            "questionText": "Given the cubic equation: $$x^3-3x^2+4x-12=0$$. Find the sum of the products of the roots taken two at a time.",
+            "questionTextHi": "बिघात समीकरण $$x^3-3x^2+4x-12=0$$ दिया गया है। एक समय में लिए गए दो मूलों के गुणनफल का योग ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "12",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "−3",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "4",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "3",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_36",
+            "qno": 36,
+            "questionText": "If the quadratic equations $$4x^2+bx+3=0$$ and $$8x^2+4x+c=0$$ have both the roots common, find the values for b and c, respectively.",
+            "questionTextHi": "यदि द्विघात समीकरण $$4x^2+bx+3=0$$ और $$8x^2+4x+c=0$$ में दोनों मूल समान हों, तो क्रमशः b और c के मान ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "6, 2",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "2, 4",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "4, 2",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "2, 6",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_37",
+            "qno": 37,
+            "questionText": "Factorise the polynomial $$x^4-10x^2+22$$ into product of two quadratic polynomials.",
+            "questionTextHi": "बहुपद $$x^4-10x^2+22$$ को दो द्विघात बहुपदों के गुणनफल में गुणनखंडित करें।",
+            "options": [
+              {
+                "id": 1,
+                "text": "$$(x^2-4+\\sqrt{3})(x^2-4-\\sqrt{3})$$",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "$$(x^2-3+\\sqrt{3})(x^2-3-\\sqrt{3})$$",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "$$(x^2-2+\\sqrt{3})(x^2-2-\\sqrt{3})$$",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "$$(x^2-5+\\sqrt{3})(x^2-5-\\sqrt{3})$$",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_38",
+            "qno": 38,
+            "questionText": "If the sum of three numbers a, b and c is 5, the sum of the product of two numbers at a time is −2 and the product of the numbers a, b and c is 3. Find the value of $$a^3+b^3+c^3$$.",
+            "questionTextHi": "यदि तीन संख्याओं a, b और c का योगफल 5 है, तथा एक समय पर दो संख्याओं के गुणनफल का योगफल −2 है और संख्याओं a, b और c का गुणनफल 3 है, तो $$a^3+b^3+c^3$$ का मान ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "126",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "148",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "159",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "164",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_39",
+            "qno": 39,
+            "questionText": "The product of two consecutive positive integers is 960. If the smaller of these two integers is represented by x, which of the options below will correspond to the equation for finding the value of x?",
+            "questionTextHi": "दो क्रमागत धनात्मक पूर्णांकों का गुणनफल 960 है। यदि इन दो पूर्णांकों में से छोटे पूर्णांक को x द्वारा निरूपित किया जाता है, तो नीचे दिए गए विकल्पों में से कौन-सा विकल्प x का मान ज्ञात करने के लिए समीकरण के संगत होगा?",
+            "options": [
+              {
+                "id": 1,
+                "text": "$$x^2-x+960=0$$",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "$$x^2+x-960=0$$",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "$$x^2-x-960=0$$",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "$$x^2+x+960=0$$",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_40",
+            "qno": 40,
+            "questionText": "If the equations $$x^2+3x+2=0$$ and $$ax^2+bx+c=0$$ have both roots in common, then which of the following is NOT true?",
+            "questionTextHi": "यदि समीकरण $$x^2+3x+2=0$$ और $$ax^2+bx+c=0$$ के दोनों मूल समान हैं, तो निम्न में से कौन-सा विकल्प सत्य नहीं है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "$$4a-2b+c=0$$",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "$$a-b+c=0$$",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "$$4a=2c+2b$$",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "$$a+c=b$$",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 1,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_41",
+            "qno": 41,
+            "questionText": "If the polynomial $$ax^3+4x^2+3x-4$$ and $$x^3-7x+a$$ leaves the same remainder, when divided by $$(x-2)$$, then find the value of a.",
+            "questionTextHi": "यदि बहुपद $$ax^3+4x^2+3x-4$$ और $$x^3-7x+a$$ को $$(x-2)$$ से विभाजित करने पर समान शेषफल प्राप्त होता है, तो a का मान ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "$$-\\frac{17}{5}$$",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "$$-\\frac{24}{7}$$",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "$$-\\frac{36}{5}$$",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "$$-\\frac{21}{8}$$",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_42",
+            "qno": 42,
+            "questionText": "The average weight of 10 boys is 70 kg. But later, it was found that at two places the weight 54 kg was read as 44 kg and at one place weight 35 kg was read as 40 kg. Find the correct average weight (in kg) of the 10 boys.",
+            "questionTextHi": "10 लड़कों का औसत वजन 70 kg है। लेकिन बाद में, यह पाया गया कि दो स्थानों पर वजन 54 kg को 44 kg के रूप में पढ़ा गया था और एक स्थान पर वजन 35 kg को 40 kg के रूप में पढ़ा गया था। 10 लड़कों का सही औसत वजन (kg में) ज्ञात करें।",
+            "options": [
+              {
+                "id": 1,
+                "text": "67.5",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "71.5",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "68.5",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "70.5",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_43",
+            "qno": 43,
+            "questionText": "Mohan bought 51 books at ₹1,120 per book from one shop and 48 books at ₹900 per book from another. What is the average price (rounded off to two decimal places, in ₹) he paid per book?",
+            "questionTextHi": "मोहन ने एक दुकान से ₹1,120 प्रति किताब की दर से 51 किताबें खरीदीं और दूसरी दुकान से ₹900 प्रति किताब की दर से 48 किताबें खरीदीं। उसने प्रति किताब कितनी औसत कीमत (₹ में दो दशमलव स्थानों तक पूर्णांकित) चुकाई?",
+            "options": [
+              {
+                "id": 1,
+                "text": "1,028.33",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "1,003.33",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "1,013.33",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "1,023.33",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_44",
+            "qno": 44,
+            "questionText": "The average height of 15 boys out of a class of 50 is 160 cm. If the average height of the remaining boys is 168 cm, the average height (in cm) of all the boys of the class is:",
+            "questionTextHi": "50 लड़कों की एक कक्षा में से 15 लड़कों की औसत लंबाई 160 cm है। यदि शेष लड़कों की औसत लंबाई 168 cm है, तो कक्षा के सभी लड़कों की औसत लंबाई (cm में) कितनी है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "165",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "165.6",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "166.6",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "164",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_45",
+            "qno": 45,
+            "questionText": "The marked price of a bed is ₹744, which is 31% above the cost price. If the profit percentage is 9%. Find the discount percentage. (rounded off to two decimal places)",
+            "questionTextHi": "एक बेड का अंकित मूल्य ₹744 है, जो लागत मूल्य से 31% अधिक है। यदि लाभ प्रतिशत 9% है, तो छूट प्रतिशत (दशमलव के दो स्थानों तक पूर्णांकित) ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "15.52%",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "18.65%",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "14.59%",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "16.79%",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 4,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_46",
+            "qno": 46,
+            "questionText": "Find a single discount (rounded up to two decimal places) equal to three consecutive discounts of 26%, 29% and 2%.",
+            "questionTextHi": "26%, 29% और 2% की तीन क्रमिक छूटों के बराबर एकल छूट (दशमलव के दो स्थानों तक पूर्णांकित) ज्ञात कीजिए।",
+            "options": [
+              {
+                "id": 1,
+                "text": "47.56%",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "47.12%",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "48.51%",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "48.86%",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_47",
+            "qno": 47,
+            "questionText": "A retailer offers the following discount schemes for buyers on an article.<br>I. Two successive discounts of 27%.<br>II. A discount of 36% followed by a discount of 45%.<br>III. Successive discounts of 19% and 32%.<br>IV. A discount of 34% followed by a discount of 7%.<br>Which scheme will fetch the maximum selling price?",
+            "questionTextHi": "एक खुदरा विक्रेता वस्तु पर खरीदारों के लिए निम्नलिखित छूट योजनाएँ प्रदान करता है।<br>I. 27% की दो क्रमिक छूटें।<br>II. 36% की छूट के बाद 45% की एक छूट।<br>III. 19% और 32% की क्रमिक छूटें।<br>IV. 34% की छूट के बाद 7% की एक छूट।<br>किस योजना का विक्रय मूल्य अधिकतम होगा?",
+            "options": [
+              {
+                "id": 1,
+                "text": "III",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "I",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "IV",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "II",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_48",
+            "qno": 48,
+            "questionText": "The marked price of a smartwatch set is ₹640. It sells with two successive discounts of 30% and 25%. An additional 25% discount is given on cash payment. What is the selling price (in ₹) of the smartwatch set on cash payment?",
+            "questionTextHi": "एक स्मार्टवॉच सेट का अंकित मूल्य ₹640 है। इसे 30% और 25% की दो क्रमिक छूटों पर बेचा जाता है। नकद भुगतान पर 25% की अतिरिक्त छूट दी जाती है। नकद भुगतान पर स्मार्टवॉच सेट का विक्रय मूल्य (₹ में) कितना होगा?",
+            "options": [
+              {
+                "id": 1,
+                "text": "249",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "252",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "253",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "251",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_49",
+            "qno": 49,
+            "questionText": "Rishika travels a certain distance at a speed of 52 km/hr and double the earlier distance at 39 km/hr. She then returns to the starting point through the same route. If her average speed for the entire journey is 56 km/h, then what is her speed (in km/hr) for the return journey?",
+            "questionTextHi": "ऋषिका 52 km/hr की चाल से एक निश्चित दूरी तय करती है और पहले की दूरी की दोगुनी दूरी 39 km/hr की चाल से तय करती है। फिर वह उसी मार्ग से प्रारंभिक बिंदु पर वापस आती है। यदि पूरी यात्रा के लिए उसकी औसत चाल 56 km/h है, तो वापसी यात्रा के लिए उसकी चाल (km/hr में) कितनी है?",
+            "options": [
+              {
+                "id": 1,
+                "text": "87",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "81.9",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "76",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "83.8",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 2,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          },
+          {
+            "id": "ntpc_q_50",
+            "qno": 50,
+            "questionText": "In a 2295 m circular race, Siddharth finishes one round in 85 seconds and Yash finishes one round in 45 seconds. How many different meeting points are there on the circumference if they are running in the opposite directions?",
+            "questionTextHi": "2295 m की वृत्तीय दौड़ में, सिद्धार्थ 85 सेकंड में एक चक्कर पूरा करता है और यश 45 सेकंड में एक चक्कर पूरा करता है। यदि वे विपरीत दिशाओं में दौड़ रहे हैं, तो परिधि पर वे कितने अलग-अलग बिंदुओं पर मिलेंगे?",
+            "options": [
+              {
+                "id": 1,
+                "text": "36",
+                "textHi": ""
+              },
+              {
+                "id": 2,
+                "text": "20",
+                "textHi": ""
+              },
+              {
+                "id": 3,
+                "text": "26",
+                "textHi": ""
+              },
+              {
+                "id": 4,
+                "text": "33",
+                "textHi": ""
+              }
+            ],
+            "correctOption": 3,
+            "explanation": "",
+            "marks": 1,
+            "negativeMarks": 0.33,
+            "sectionName": "Mathematics"
+          }
+        ]
+      }
+    ]
+  }
+]
