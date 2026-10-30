@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { EvaluationResult } from '@/lib/scoreService';
+import { EvaluationResult, UniqueShiftSubmission } from '@/lib/scoreService';
 import { CBTTest } from '@/lib/testService';
 import {
   ShieldCheck,
@@ -16,7 +16,9 @@ import {
   RefreshCw,
   ExternalLink,
   PlusCircle,
-  FileText
+  FileText,
+  Users,
+  Scissors
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -26,7 +28,7 @@ export default function AdminStudioPage() {
   const [authError, setAuthError] = useState('');
   const [authChecked, setAuthChecked] = useState(false);
 
-  const [submissions, setSubmissions] = useState<EvaluationResult[]>([]);
+  const [uniqueSubmissions, setUniqueSubmissions] = useState<UniqueShiftSubmission[]>([]);
   const [tests, setTests] = useState<CBTTest[]>([]);
   const [activeTab, setActiveTab] = useState<'submissions' | 'tests'>('submissions');
   const [loading, setLoading] = useState(true);
@@ -42,7 +44,6 @@ export default function AdminStudioPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Default admin access passcodes
     const validPasswords = ['admin123', 'admin@2026', 'examinformer2026', 'mockmatrix'];
     if (validPasswords.includes(passwordInput.trim())) {
       setIsAuthenticated(true);
@@ -63,12 +64,12 @@ export default function AdminStudioPage() {
   const loadData = () => {
     setLoading(true);
     Promise.all([
-      fetch('/api/score-calculator/submissions').then(r => r.json()),
+      fetch('/api/score-calculator/submissions?unique=true').then(r => r.json()),
       fetch('/api/tests').then(r => r.json())
     ])
       .then(([subJson, testJson]) => {
         if (subJson.success && subJson.data) {
-          setSubmissions(subJson.data);
+          setUniqueSubmissions(subJson.data);
         }
         if (testJson.success && testJson.data) {
           setTests(testJson.data);
@@ -83,17 +84,18 @@ export default function AdminStudioPage() {
     }
   }, [isAuthenticated]);
 
-  const handlePushToMock = async (submissionId: string) => {
+  const handlePushToMock = async (submissionId: string, splitSections: boolean = false) => {
     try {
-      setPushingId(submissionId);
+      setPushingId(`${submissionId}_${splitSections ? 'split' : 'full'}`);
       const res = await fetch('/api/admin/push-to-test', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ submissionId })
+        body: JSON.stringify({ submissionId, splitSections })
       });
       const json = await res.json();
       if (json.success) {
         confetti({ particleCount: 70, spread: 80, origin: { y: 0.5 } });
+        alert(json.message || 'Successfully published to CBT Mock Series!');
         loadData();
       } else {
         alert(json.error || 'Failed to push submission to mock test.');
@@ -135,7 +137,7 @@ export default function AdminStudioPage() {
                 required
                 value={passwordInput}
                 onChange={(e) => setPasswordInput(e.target.value)}
-                placeholder="Enter admin passcode"
+                placeholder="Enter admin passcode (e.g. admin123)"
                 className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm"
               />
             </div>
@@ -177,7 +179,7 @@ export default function AdminStudioPage() {
             Answer Key Ingestion &amp; CBT Test Studio
           </h1>
           <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-            Review scraped candidate response sheets, verify question extractions, and publish them with 1-click into the CBT Mock Test Series.
+            Deduplicated unique shift papers from student submissions. Convert response sheets into full mock tests or split them into sectional tests with 1 click.
           </p>
         </div>
 
@@ -209,7 +211,7 @@ export default function AdminStudioPage() {
           }`}
         >
           <Database className="w-4 h-4" />
-          <span>Ingested Answer Keys ({submissions.length})</span>
+          <span>Unique Shift Papers ({uniqueSubmissions.length})</span>
         </button>
         <button
           onClick={() => setActiveTab('tests')}
@@ -224,17 +226,17 @@ export default function AdminStudioPage() {
         </button>
       </div>
 
-      {/* Tab 1: Submissions Pipeline */}
+      {/* Tab 1: Deduplicated Submissions Pipeline */}
       {activeTab === 'submissions' && (
         <div className="space-y-4">
-          {submissions.length === 0 ? (
+          {uniqueSubmissions.length === 0 ? (
             <div className="p-16 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center max-w-lg mx-auto space-y-3">
               <FileText className="w-12 h-12 text-slate-400 mx-auto" />
               <h3 className="font-extrabold text-base text-slate-900 dark:text-white">
                 No Answer Keys Ingested Yet
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                When students enter their answer key URLs or paste response sheets in the Score Calculator, they will appear here ready to be published as official CBT mock tests.
+                When students enter their answer key URLs or paste response sheets in the Score Calculator, unique papers will appear here deduplicated by shift ready to be published as official CBT mock tests.
               </p>
               <div className="pt-2">
                 <Link
@@ -248,13 +250,15 @@ export default function AdminStudioPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-4">
-              {submissions.map((sub) => {
-                const isPushed = !!sub.pushedToTestId;
-                const isPushing = pushingId === sub.id;
+              {uniqueSubmissions.map((unique) => {
+                const sub = unique.representativeSubmission;
+                const isPushed = unique.isPushed;
+                const isPushingFull = pushingId === `${sub.submissionId}_full`;
+                const isPushingSplit = pushingId === `${sub.submissionId}_split`;
 
                 return (
                   <div
-                    key={sub.id}
+                    key={unique.shiftKey}
                     className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6"
                   >
                     {/* Left Meta */}
@@ -264,57 +268,72 @@ export default function AdminStudioPage() {
                           {sub.parsed.meta.examFamily}
                         </span>
                         <h3 className="font-extrabold text-base text-slate-900 dark:text-white">
-                          {sub.parsed.meta.examTitle || 'Official Response Sheet'}
+                          {unique.examTitle}
                         </h3>
+                        {unique.submissionCount > 1 && (
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                            <Users className="w-3 h-3" />
+                            <span>{unique.submissionCount} student submissions</span>
+                          </span>
+                        )}
                       </div>
 
                       <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs text-slate-500 dark:text-slate-400">
-                        <span>Candidate: <b className="text-slate-700 dark:text-slate-200">{sub.parsed.meta.candidateName || 'N/A'}</b></span>
-                        <span>Roll: <b className="font-mono text-slate-700 dark:text-slate-200">{sub.parsed.meta.rollNo || 'N/A'}</b></span>
-                        <span>Date: <b className="text-slate-700 dark:text-slate-200">{sub.parsed.meta.examDate || 'N/A'}</b></span>
-                        <span>Shift: <b className="text-slate-700 dark:text-slate-200">{sub.parsed.meta.shiftTime || 'N/A'}</b></span>
+                        <span>Date: <b className="text-slate-700 dark:text-slate-200">{unique.examDate}</b></span>
+                        <span>Shift: <b className="text-slate-700 dark:text-slate-200">{unique.shiftTime}</b></span>
+                        <span>Candidates: <b className="text-slate-700 dark:text-slate-200">{unique.candidateNames.slice(0, 3).join(', ')}{unique.candidateNames.length > 3 ? ` +${unique.candidateNames.length - 3} more` : ''}</b></span>
                       </div>
 
                       <div className="flex flex-wrap items-center gap-3 pt-1 text-xs">
                         <span className="px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold">
                           Total Questions: <b>{sub.parsed.summary.totalQuestions}</b>
                         </span>
-                        <span className="px-2 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-semibold">
-                          Candidate Score: <b>{sub.parsed.summary.finalScore}</b>
-                        </span>
-                        <span className="px-2 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-semibold">
-                          Sections: <b>{sub.parsed.sections.length}</b>
+                        <span className="px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold">
+                          Sections: <b>{sub.parsed.sections.length} ({sub.parsed.sections.map(s => s.name).join(', ')})</b>
                         </span>
                       </div>
                     </div>
 
                     {/* Right Actions */}
-                    <div className="flex items-center gap-3 flex-shrink-0">
-                      <Link
-                        href={`/score-calculator/result?id=${sub.id}`}
-                        className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition flex items-center gap-1.5"
-                      >
-                        <span>Review Paper</span>
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </Link>
-
+                    <div className="flex flex-col sm:flex-row items-center gap-2.5 shrink-0">
                       {isPushed ? (
-                        <Link
-                          href={`/tests/${sub.pushedToTestId}`}
-                          className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black flex items-center gap-1.5 shadow-sm"
-                        >
-                          <CheckCircle2 className="w-4 h-4" />
-                          <span>View Live Mock Test &rarr;</span>
-                        </Link>
+                        <div className="flex items-center gap-2">
+                          <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-xs font-bold border border-emerald-200 dark:border-emerald-800">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                            <span>Published in Tests</span>
+                          </span>
+                          {unique.pushedTestId && (
+                            <Link
+                              href={`/tests/${unique.pushedTestId}`}
+                              className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 text-xs font-bold flex items-center gap-1"
+                            >
+                              <span>View Test</span>
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </Link>
+                          )}
+                        </div>
                       ) : (
-                        <button
-                          onClick={() => handlePushToMock(sub.id)}
-                          disabled={isPushing}
-                          className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black shadow-md shadow-indigo-500/20 flex items-center gap-2 transition active:scale-95"
-                        >
-                          <Sparkles className="w-3.5 h-3.5" />
-                          <span>{isPushing ? 'Converting Questions...' : '⚡ Push to Mock Tests'}</span>
-                        </button>
+                        <>
+                          {/* 1. Push Full Mock Test */}
+                          <button
+                            onClick={() => handlePushToMock(sub.submissionId, false)}
+                            disabled={!!pushingId}
+                            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-md shadow-blue-500/20 active:scale-95 transition flex items-center justify-center gap-1.5"
+                          >
+                            <Sparkles className={`w-3.5 h-3.5 ${isPushingFull ? 'animate-spin' : ''}`} />
+                            <span>{isPushingFull ? 'Publishing...' : 'Push Full Mock'}</span>
+                          </button>
+
+                          {/* 2. Split & Push Sectional Tests */}
+                          <button
+                            onClick={() => handlePushToMock(sub.submissionId, true)}
+                            disabled={!!pushingId}
+                            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold shadow-md shadow-purple-500/20 active:scale-95 transition flex items-center justify-center gap-1.5"
+                          >
+                            <Scissors className={`w-3.5 h-3.5 ${isPushingSplit ? 'animate-spin' : ''}`} />
+                            <span>{isPushingSplit ? 'Splitting...' : 'Split & Push Sectionals'}</span>
+                          </button>
+                        </>
                       )}
                     </div>
                   </div>
@@ -325,45 +344,36 @@ export default function AdminStudioPage() {
         </div>
       )}
 
-      {/* Tab 2: Published Tests */}
+      {/* Tab 2: Published Tests List */}
       {activeTab === 'tests' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tests.map((t) => (
-            <div
-              key={t.id}
-              className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-4"
-            >
-              <div className="space-y-3">
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {tests.map((t) => (
+              <div
+                key={t.id}
+                className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3"
+              >
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
-                    {t.examCode.toUpperCase()}
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 uppercase">
+                    {t.type}
                   </span>
-                  <span className="text-[10px] font-bold text-emerald-600 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                    <span>Active in CBT</span>
-                  </span>
+                  <span className="text-xs text-slate-500">{t.durationMinutes} Mins</span>
                 </div>
-                <h3 className="font-extrabold text-base text-slate-900 dark:text-white line-clamp-2">
+                <h4 className="font-bold text-sm text-slate-900 dark:text-white line-clamp-2">
                   {t.title}
-                </h3>
-                <div className="grid grid-cols-3 gap-2 text-xs py-2 border-y border-slate-100 dark:border-slate-800 text-slate-500">
-                  <div>Q: <b>{t.totalQuestions}</b></div>
-                  <div>M: <b>{t.totalMarks}</b></div>
-                  <div>T: <b>{t.durationMinutes}m</b></div>
+                </h4>
+                <div className="text-xs text-slate-500 flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <span>{t.totalQuestions} Questions</span>
+                  <Link
+                    href={`/tests/${t.id}`}
+                    className="font-bold text-blue-600 hover:underline flex items-center gap-1"
+                  >
+                    <span>Open &rarr;</span>
+                  </Link>
                 </div>
               </div>
-
-              <div>
-                <Link
-                  href={`/tests/${t.id}`}
-                  className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm"
-                >
-                  <span>Launch Test Interface</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
     </div>

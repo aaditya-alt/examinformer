@@ -4,6 +4,6 @@ export const BRANDING = {
   shortName: 'EI',
   version: '2.0 Pro',
   supportEmail: 'support@examinformer.in',
-  telegramUrl: 'https://t.me/SSC_COMPILATIONS_2025',
-  whatsappUrl: 'https://whatsapp.com'
+  telegramUrl: 'https://t.me/Examinformer_nitesh',
+  whatsappUrl: 'https://whatsapp.com/channel/0029Vb6QbClCXC3BmLaHbT2a'
 };

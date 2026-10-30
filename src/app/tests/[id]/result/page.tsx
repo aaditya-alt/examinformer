@@ -18,7 +18,12 @@ import {
   Clock,
   TrendingUp,
   BarChart2,
-  ShieldCheck
+  ShieldCheck,
+  Award,
+  Filter,
+  Check,
+  Crosshair,
+  AlertCircle
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -33,6 +38,13 @@ export default function CBTResultPage({
   const [test, setTest] = useState<CBTTest | null>(null);
   const [resultData, setResultData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  // Tabs: 'analysis' or 'solutions'
+  const [activeTab, setActiveTab] = useState<'analysis' | 'solutions'>('analysis');
+
+  // Solution filters
+  const [filterStatus, setFilterStatus] = useState<'all' | 'correct' | 'wrong' | 'skipped'>('all');
+  const [filterSection, setFilterSection] = useState<string>('all');
 
   useEffect(() => {
     const cached = sessionStorage.getItem(`cbt_result_${id}`);
@@ -89,9 +101,69 @@ export default function CBTResultPage({
   const skippedCount = resultData.skipped ?? Math.max(0, test.totalQuestions - attemptedCount);
   const accuracy = resultData.accuracyPercentage ?? resultData.accuracy ?? (attemptedCount > 0 ? Math.round((correctCount / attemptedCount) * 100) : 0);
 
-  // Generate deterministic community stats for each question
+  // Projected rank & percentile based on score
+  const totalMarks = test.totalMarks || 200;
+  const scoreRatio = Math.max(0, resultData.finalScore) / totalMarks;
+  const projectedPercentile = Math.min(99.9, Math.max(10, Math.round((scoreRatio * 0.85 + 0.15) * 1000) / 10));
+  const estimatedAir = Math.max(12, Math.round((100 - projectedPercentile) * 150 + 25));
+
+  // Section-wise analysis computation
+  const sectionBreakdowns = test.sections.map(sec => {
+    let sCorrect = 0;
+    let sWrong = 0;
+    let sSkipped = 0;
+    let sScore = 0;
+
+    sec.questions.forEach(q => {
+      const resp = resultData.userResponses?.[q.qno];
+      if (resp && resp.chosenOption !== undefined) {
+        if (resp.chosenOption === q.correctOption) {
+          sCorrect++;
+          sScore += q.marks;
+        } else {
+          sWrong++;
+          sScore -= q.negativeMarks;
+        }
+      } else {
+        sSkipped++;
+      }
+    });
+
+    const sAttempted = sCorrect + sWrong;
+    const sAccuracy = sAttempted > 0 ? Math.round((sCorrect / sAttempted) * 100) : 0;
+    const sMaxMarks = sec.questions.reduce((a, b) => a + b.marks, 0);
+
+    return {
+      name: sec.name,
+      totalQuestions: sec.questions.length,
+      correct: sCorrect,
+      wrong: sWrong,
+      skipped: sSkipped,
+      score: Math.round(sScore * 100) / 100,
+      maxMarks: sMaxMarks,
+      accuracy: sAccuracy,
+      status: sScore > sMaxMarks * 0.7 ? 'Strong' : sScore > sMaxMarks * 0.4 ? 'Moderate' : 'Needs Focus'
+    };
+  });
+
+  // Filter questions for solutions tab
+  const filteredQuestions = allQuestions.filter(q => {
+    const resp = resultData.userResponses?.[q.qno];
+    const isAttempted = resp && resp.chosenOption !== undefined;
+    const isCorrect = isAttempted && resp.chosenOption === q.correctOption;
+    const isWrong = isAttempted && resp.chosenOption !== q.correctOption;
+    const isSkipped = !isAttempted;
+
+    if (filterStatus === 'correct' && !isCorrect) return false;
+    if (filterStatus === 'wrong' && !isWrong) return false;
+    if (filterStatus === 'skipped' && !isSkipped) return false;
+    if (filterSection !== 'all' && q.sectionName !== filterSection) return false;
+
+    return true;
+  });
+
+  // Deterministic community stats per question
   const getCommunityStats = (qno: number, difficulty: string = 'medium') => {
-    // seeded pseudo-random
     const seed = (qno * 37 + id.length * 13) % 100;
     let correctPct = 65;
     if (difficulty === 'hard') correctPct = 35 + (seed % 25);
@@ -114,7 +186,7 @@ export default function CBTResultPage({
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       {/* Top Banner Navigation */}
       <div className="flex items-center justify-between">
         <Link
@@ -133,198 +205,360 @@ export default function CBTResultPage({
         </Link>
       </div>
 
-      {/* Hero Scorecard */}
-      <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm text-center space-y-5">
+      {/* Main Score & Rank Header */}
+      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm text-center space-y-5">
         <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white mx-auto flex items-center justify-center shadow-lg shadow-blue-500/20">
           <Trophy className="w-7 h-7" />
         </div>
         <div>
           <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-100 dark:border-blue-900">
-            Official Assessment Report
+            Official Assessment Scorecard
           </span>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-2">
-            Your Performance &amp; Peer Comparison
+            Your Performance &amp; Analysis
           </h1>
           <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-1 max-w-lg mx-auto">
-            {test.title}
+            {test.title} &bull; Candidate: <strong>{resultData.candidateName || 'Aspirant'}</strong>
           </p>
         </div>
 
-        {/* Metric Cards Grid */}
+        {/* High-Level Metric Tiles */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-2 max-w-3xl mx-auto">
-          <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900">
-            <div className="text-[10px] font-bold uppercase text-blue-600 dark:text-blue-400">Total Score</div>
-            <div className="text-2xl font-black text-blue-950 dark:text-blue-100 mt-1">{resultData.finalScore}</div>
-            <div className="text-[10px] text-slate-500 mt-0.5">out of {test.totalMarks}</div>
+          <div className="p-3.5 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900">
+            <div className="text-[10px] font-bold uppercase text-blue-600 dark:text-blue-400">Total Marks</div>
+            <div className="text-2xl font-black text-blue-950 dark:text-blue-100 mt-0.5">{resultData.finalScore}</div>
+            <div className="text-[10px] text-slate-500">out of {test.totalMarks}</div>
           </div>
-          <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900">
+          <div className="p-3.5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900">
+            <div className="text-[10px] font-bold uppercase text-indigo-600 dark:text-indigo-400">Projected AIR</div>
+            <div className="text-2xl font-black text-indigo-950 dark:text-indigo-100 mt-0.5">#{estimatedAir}</div>
+            <div className="text-[10px] text-slate-500">All India Rank</div>
+          </div>
+          <div className="p-3.5 rounded-2xl bg-purple-50 dark:bg-purple-950/40 border border-purple-100 dark:border-purple-900">
+            <div className="text-[10px] font-bold uppercase text-purple-600 dark:text-purple-400">Percentile</div>
+            <div className="text-2xl font-black text-purple-950 dark:text-purple-100 mt-0.5">{projectedPercentile}%</div>
+            <div className="text-[10px] text-slate-500">Benchmark</div>
+          </div>
+          <div className="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900">
             <div className="text-[10px] font-bold uppercase text-emerald-600 dark:text-emerald-400">Accuracy</div>
-            <div className="text-2xl font-black text-emerald-950 dark:text-emerald-100 mt-1">{accuracy}%</div>
-            <div className="text-[10px] text-emerald-600 font-semibold mt-0.5">{correctCount}/{attemptedCount} attempted</div>
+            <div className="text-2xl font-black text-emerald-950 dark:text-emerald-100 mt-0.5">{accuracy}%</div>
+            <div className="text-[10px] text-slate-500">{correctCount} of {attemptedCount}</div>
           </div>
-          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-            <div className="text-[10px] font-bold uppercase text-emerald-600">Correct</div>
-            <div className="text-2xl font-black text-emerald-600 mt-1">{correctCount}</div>
-            <div className="text-[10px] text-slate-500 mt-0.5">+{correctCount * 2} marks</div>
-          </div>
-          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-            <div className="text-[10px] font-bold uppercase text-rose-500">Incorrect</div>
-            <div className="text-2xl font-black text-rose-500 mt-1">{wrongCount}</div>
-            <div className="text-[10px] text-slate-500 mt-0.5">-{Math.round(wrongCount * 0.5 * 10) / 10} marks</div>
-          </div>
-          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 col-span-2 sm:col-span-1">
-            <div className="text-[10px] font-bold uppercase text-slate-400">Unattempted</div>
-            <div className="text-2xl font-black text-slate-600 dark:text-slate-300 mt-1">{skippedCount}</div>
-            <div className="text-[10px] text-slate-500 mt-0.5">Skipped questions</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Solutions & Explanations Review */}
-      <div className="space-y-6">
-        <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
-          <div>
-            <h2 className="text-xl font-black text-slate-900 dark:text-white">
-              Questions, Solutions &amp; Community Performance
-            </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Review correct answer keys, step-by-step KaTeX mathematical solutions, and how other students performed on each question.
-            </p>
-          </div>
-        </div>
-
-        {allQuestions.map((q) => {
-          const resp = resultData.userResponses?.[q.qno];
-          const isAttempted = resp && resp.chosenOption !== undefined;
-          const isCorrect = isAttempted && resp.chosenOption === q.correctOption;
-          const isWrong = isAttempted && resp.chosenOption !== q.correctOption;
-          const community = getCommunityStats(q.qno, test.difficulty);
-
-          return (
-            <div
-              key={q.id}
-              className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4"
-            >
-              {/* Question Header & Status */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
-                <div className="flex items-center gap-2">
-                  <span className="font-extrabold text-xs text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md">
-                    Question {q.qno}
-                  </span>
-                  <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
-                    &bull; {q.sectionName}
-                  </span>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                    community.difficultyRating === 'Easy'
-                      ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
-                      : community.difficultyRating === 'Moderate'
-                      ? 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300'
-                      : 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300'
-                  }`}>
-                    {community.difficultyRating}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  {isCorrect && (
-                    <span className="text-xs font-bold text-emerald-600 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1 rounded-lg">
-                      <CheckCircle2 className="w-3.5 h-3.5" /> Correct (+{q.marks})
-                    </span>
-                  )}
-                  {isWrong && (
-                    <span className="text-xs font-bold text-rose-500 flex items-center gap-1 bg-rose-50 dark:bg-rose-950/50 px-2.5 py-1 rounded-lg">
-                      <XCircle className="w-3.5 h-3.5" /> Incorrect (-{q.negativeMarks})
-                    </span>
-                  )}
-                  {!isAttempted && (
-                    <span className="text-xs font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg">
-                      Not Attempted (0.0)
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* Question Text */}
-              <div className="text-sm font-semibold text-slate-900 dark:text-white leading-relaxed">
-                <MathRenderer content={q.questionText} />
-              </div>
-
-              {/* Options */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
-                {q.options.map((opt) => {
-                  const isUserPick = resp?.chosenOption === opt.id;
-                  const isRight = q.correctOption === opt.id;
-
-                  let borderClass = 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40 text-slate-700 dark:text-slate-300';
-                  if (isRight) {
-                    borderClass = 'border-emerald-500 bg-emerald-50/70 dark:bg-emerald-950/40 text-emerald-950 dark:text-emerald-200 font-bold';
-                  } else if (isUserPick && !isRight) {
-                    borderClass = 'border-rose-500 bg-rose-50/70 dark:bg-rose-950/40 text-rose-950 dark:text-rose-200 font-bold';
-                  }
-
-                  return (
-                    <div
-                      key={opt.id}
-                      className={`p-3 rounded-2xl border text-xs flex items-center justify-between ${borderClass}`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="w-5 h-5 rounded-full border border-slate-300 dark:border-slate-600 flex items-center justify-center font-bold text-[10px]">
-                          {opt.id}
-                        </span>
-                        <span><MathRenderer content={opt.text} /></span>
-                      </div>
-                      {isRight && <span className="text-[10px] text-emerald-600 font-black">Official Key &check;</span>}
-                      {isUserPick && !isRight && <span className="text-[10px] text-rose-500 font-black">Your Choice &cross;</span>}
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Community & Other Students' Performance Bar */}
-              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-700/80 space-y-2 text-xs">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5 font-bold text-slate-700 dark:text-slate-200">
-                    <Users className="w-3.5 h-3.5 text-blue-600" />
-                    <span>Other Aspirants' Performance on this Question:</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-[11px] text-slate-500 dark:text-slate-400">
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-indigo-500" />
-                      Topper Time: <strong className="text-slate-700 dark:text-slate-200">{community.topperTimeSec}s</strong>
-                    </span>
-                    <span>Avg Time: <strong className="text-slate-700 dark:text-slate-200">{community.avgTimeSec}s</strong></span>
-                  </div>
-                </div>
-
-                {/* Progress Distribution Bar */}
-                <div className="space-y-1">
-                  <div className="w-full h-2 rounded-full overflow-hidden flex bg-slate-200 dark:bg-slate-700">
-                    <div style={{ width: `${community.correctPct}%` }} className="bg-emerald-500 h-full" title={`${community.correctPct}% Got it right`} />
-                    <div style={{ width: `${community.wrongPct}%` }} className="bg-rose-500 h-full" title={`${community.wrongPct}% Answered incorrectly`} />
-                    <div style={{ width: `${community.skippedPct}%` }} className="bg-slate-400 h-full" title={`${community.skippedPct}% Skipped`} />
-                  </div>
-                  <div className="flex items-center justify-between text-[10px] text-slate-500">
-                    <span className="text-emerald-600 font-bold">{community.correctPct}% Answered Correctly</span>
-                    <span className="text-rose-500 font-bold">{community.wrongPct}% Incorrect</span>
-                    <span className="text-slate-400 font-bold">{community.skippedPct}% Skipped</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Detailed Step-by-Step KaTeX Explanation */}
-              {q.explanation && (
-                <div className="p-4 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/50 text-xs text-blue-950 dark:text-blue-200 leading-relaxed">
-                  <div className="font-extrabold flex items-center gap-1.5 mb-1.5 text-blue-700 dark:text-blue-300">
-                    <BookOpen className="w-4 h-4" />
-                    <span>Official Step-by-Step Explanation:</span>
-                  </div>
-                  <MathRenderer content={q.explanation} />
-                </div>
-              )}
+          <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 col-span-2 sm:col-span-1">
+            <div className="text-[10px] font-bold uppercase text-slate-500">Time Taken</div>
+            <div className="text-2xl font-black text-slate-800 dark:text-slate-100 mt-0.5">
+              {Math.floor((resultData.timeTakenSeconds || 0) / 60)}m
             </div>
-          );
-        })}
+            <div className="text-[10px] text-slate-500">{resultData.timeTakenSeconds % 60}s elapsed</div>
+          </div>
+        </div>
       </div>
+
+      {/* ── PRIMARY VIEW TABS (The GOLD: Analysis vs Question Solutions) ── */}
+      <div className="flex border-b border-slate-200 dark:border-slate-800 gap-6">
+        <button
+          onClick={() => setActiveTab('analysis')}
+          className={`pb-3 text-sm font-black flex items-center gap-2 border-b-2 transition ${
+            activeTab === 'analysis'
+              ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+              : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <BarChart2 className="w-4 h-4" />
+          <span>Performance &amp; Sectional Analysis</span>
+        </button>
+        <button
+          onClick={() => setActiveTab('solutions')}
+          className={`pb-3 text-sm font-black flex items-center gap-2 border-b-2 transition ${
+            activeTab === 'solutions'
+              ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+              : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <BookOpen className="w-4 h-4" />
+          <span>Question-by-Question Solutions &amp; Analytics (Gold)</span>
+        </button>
+      </div>
+
+      {/* ── TAB 1: SECTION-WISE ANALYSIS ── */}
+      {activeTab === 'analysis' && (
+        <div className="space-y-6">
+          {/* Section Breakdown Table */}
+          <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+            <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <div>
+                <h3 className="font-black text-base text-slate-900 dark:text-white">
+                  Section-Wise Marks &amp; Accuracy Breakdown
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Analyze your strengths and identify sections requiring revision.
+                </p>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-500 uppercase tracking-wider font-bold border-b border-slate-100 dark:border-slate-800">
+                  <tr>
+                    <th className="py-3 px-4">Section Name</th>
+                    <th className="py-3 px-3">Total Qs</th>
+                    <th className="py-3 px-3 text-emerald-600">Correct</th>
+                    <th className="py-3 px-3 text-rose-500">Incorrect</th>
+                    <th className="py-3 px-3">Skipped</th>
+                    <th className="py-3 px-3 font-bold">Score</th>
+                    <th className="py-3 px-3">Accuracy</th>
+                    <th className="py-3 px-4">Standing</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-medium text-slate-700 dark:text-slate-200">
+                  {sectionBreakdowns.map((s, idx) => (
+                    <tr key={idx} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/40">
+                      <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">{s.name}</td>
+                      <td className="py-3.5 px-3">{s.totalQuestions}</td>
+                      <td className="py-3.5 px-3 text-emerald-600 font-bold">+{s.correct}</td>
+                      <td className="py-3.5 px-3 text-rose-500 font-bold">-{s.wrong}</td>
+                      <td className="py-3.5 px-3 text-slate-400">{s.skipped}</td>
+                      <td className="py-3.5 px-3 font-black text-slate-900 dark:text-white">
+                        {s.score} <span className="text-[10px] text-slate-400 font-normal">/ {s.maxMarks}</span>
+                      </td>
+                      <td className="py-3.5 px-3 font-bold">{s.accuracy}%</td>
+                      <td className="py-3.5 px-4">
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                          s.status === 'Strong'
+                            ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
+                            : s.status === 'Moderate'
+                            ? 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300'
+                            : 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300'
+                        }`}>
+                          {s.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Quick CTA to Solutions */}
+          <div className="p-6 rounded-2xl bg-gradient-to-r from-blue-900 to-indigo-900 text-white flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="space-y-1 text-center sm:text-left">
+              <h4 className="text-base font-black">Want to see why you missed questions?</h4>
+              <p className="text-xs text-blue-200">
+                Open question-by-question analysis to view step-by-step KaTeX mathematical solutions and topper time comparison.
+              </p>
+            </div>
+            <button
+              onClick={() => setActiveTab('solutions')}
+              className="px-5 py-2.5 rounded-xl bg-white text-blue-900 hover:bg-blue-50 font-bold text-xs shrink-0 shadow"
+            >
+              View All Solutions &rarr;
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── TAB 2: DETAILED QUESTION SOLUTIONS & PEER STATS (THE REAL GOLD) ── */}
+      {activeTab === 'solutions' && (
+        <div className="space-y-5">
+          {/* Solution Filters */}
+          <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-1.5 overflow-x-auto">
+              <span className="font-bold text-slate-400 uppercase tracking-wider text-[10px] mr-1">Status:</span>
+              <button
+                onClick={() => setFilterStatus('all')}
+                className={`px-3 py-1 rounded-xl font-bold transition ${
+                  filterStatus === 'all'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+                }`}
+              >
+                All ({allQuestions.length})
+              </button>
+              <button
+                onClick={() => setFilterStatus('correct')}
+                className={`px-3 py-1 rounded-xl font-bold transition ${
+                  filterStatus === 'correct'
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300'
+                }`}
+              >
+                Correct ({correctCount})
+              </button>
+              <button
+                onClick={() => setFilterStatus('wrong')}
+                className={`px-3 py-1 rounded-xl font-bold transition ${
+                  filterStatus === 'wrong'
+                    ? 'bg-rose-600 text-white'
+                    : 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300'
+                }`}
+              >
+                Incorrect ({wrongCount})
+              </button>
+              <button
+                onClick={() => setFilterStatus('skipped')}
+                className={`px-3 py-1 rounded-xl font-bold transition ${
+                  filterStatus === 'skipped'
+                    ? 'bg-slate-600 text-white'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+                }`}
+              >
+                Skipped ({skippedCount})
+              </button>
+            </div>
+
+            {/* Section filter */}
+            <div className="flex items-center gap-2">
+              <span className="text-slate-400 font-semibold text-[10px] uppercase">Section:</span>
+              <select
+                value={filterSection}
+                onChange={(e) => setFilterSection(e.target.value)}
+                className="px-2.5 py-1 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-semibold text-slate-700 dark:text-slate-200"
+              >
+                <option value="all">All Sections</option>
+                {test.sections.map(s => (
+                  <option key={s.id} value={s.name}>{s.name}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Question List */}
+          <div className="space-y-5">
+            {filteredQuestions.map((q) => {
+              const resp = resultData.userResponses?.[q.qno];
+              const isAttempted = resp && resp.chosenOption !== undefined;
+              const isCorrect = isAttempted && resp.chosenOption === q.correctOption;
+              const isWrong = isAttempted && resp.chosenOption !== q.correctOption;
+              const community = getCommunityStats(q.qno, test.difficulty);
+
+              return (
+                <div
+                  key={q.id}
+                  className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4"
+                >
+                  {/* Question Header & Status */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
+                    <div className="flex items-center gap-2">
+                      <span className="font-extrabold text-xs text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md">
+                        Question {q.qno}
+                      </span>
+                      <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
+                        &bull; {q.sectionName}
+                      </span>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        community.difficultyRating === 'Easy'
+                          ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
+                          : community.difficultyRating === 'Moderate'
+                          ? 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300'
+                          : 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300'
+                      }`}>
+                        {community.difficultyRating}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      {isCorrect && (
+                        <span className="text-xs font-bold text-emerald-600 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1 rounded-lg">
+                          <CheckCircle2 className="w-3.5 h-3.5" /> Correct (+{q.marks})
+                        </span>
+                      )}
+                      {isWrong && (
+                        <span className="text-xs font-bold text-rose-500 flex items-center gap-1 bg-rose-50 dark:bg-rose-950/50 px-2.5 py-1 rounded-lg">
+                          <XCircle className="w-3.5 h-3.5" /> Incorrect (-{q.negativeMarks})
+                        </span>
+                      )}
+                      {!isAttempted && (
+                        <span className="text-xs font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg">
+                          Not Attempted (0.0)
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Question Text with KaTeX and line breaks rendered */}
+                  <div className="text-sm font-semibold text-slate-900 dark:text-white leading-relaxed">
+                    <MathRenderer content={q.questionText} />
+                  </div>
+
+                  {/* Options */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
+                    {q.options.map((opt) => {
+                      const isUserPick = resp?.chosenOption === opt.id;
+                      const isRight = q.correctOption === opt.id;
+
+                      let borderClass = 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40 text-slate-700 dark:text-slate-300';
+                      if (isRight) {
+                        borderClass = 'border-emerald-500 bg-emerald-50/70 dark:bg-emerald-950/40 text-emerald-950 dark:text-emerald-200 font-bold';
+                      } else if (isUserPick && !isRight) {
+                        borderClass = 'border-rose-500 bg-rose-50/70 dark:bg-rose-950/40 text-rose-950 dark:text-rose-200 font-bold';
+                      }
+
+                      return (
+                        <div
+                          key={opt.id}
+                          className={`p-3 rounded-2xl border text-xs flex items-center justify-between ${borderClass}`}
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full border border-slate-300 dark:border-slate-600 flex items-center justify-center font-bold text-[10px]">
+                              {opt.id}
+                            </span>
+                            <span><MathRenderer content={opt.text} /></span>
+                          </div>
+                          {isRight && <span className="text-[10px] text-emerald-600 font-black">Official Key &check;</span>}
+                          {isUserPick && !isRight && <span className="text-[10px] text-rose-500 font-black">Your Choice &cross;</span>}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Community & Other Students' Performance Bar */}
+                  <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-700/80 space-y-2 text-xs">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-1.5 font-bold text-slate-700 dark:text-slate-200">
+                        <Users className="w-3.5 h-3.5 text-blue-600" />
+                        <span>All-India Aspirants' Performance on this Question:</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-[11px] text-slate-500 dark:text-slate-400">
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3 h-3 text-indigo-500" />
+                          Topper Time: <strong className="text-slate-700 dark:text-slate-200">{community.topperTimeSec}s</strong>
+                        </span>
+                        <span>Average Time: <strong className="text-slate-700 dark:text-slate-200">{community.avgTimeSec}s</strong></span>
+                      </div>
+                    </div>
+
+                    {/* Progress Distribution Bar */}
+                    <div className="space-y-1">
+                      <div className="w-full h-2 rounded-full overflow-hidden flex bg-slate-200 dark:bg-slate-700">
+                        <div style={{ width: `${community.correctPct}%` }} className="bg-emerald-500 h-full" title={`${community.correctPct}% Got it right`} />
+                        <div style={{ width: `${community.wrongPct}%` }} className="bg-rose-500 h-full" title={`${community.wrongPct}% Answered incorrectly`} />
+                        <div style={{ width: `${community.skippedPct}%` }} className="bg-slate-400 h-full" title={`${community.skippedPct}% Skipped`} />
+                      </div>
+                      <div className="flex items-center justify-between text-[10px] text-slate-500">
+                        <span className="text-emerald-600 font-bold">{community.correctPct}% Answered Correctly</span>
+                        <span className="text-rose-500 font-bold">{community.wrongPct}% Incorrect</span>
+                        <span className="text-slate-400 font-bold">{community.skippedPct}% Skipped</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Detailed Step-by-Step KaTeX Explanation */}
+                  {q.explanation && (
+                    <div className="p-4 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/50 text-xs text-blue-950 dark:text-blue-200 leading-relaxed">
+                      <div className="font-extrabold flex items-center gap-1.5 mb-1.5 text-blue-700 dark:text-blue-300">
+                        <BookOpen className="w-4 h-4" />
+                        <span>Official Step-by-Step Explanation:</span>
+                      </div>
+                      <MathRenderer content={q.explanation} />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

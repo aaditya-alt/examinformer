@@ -10,6 +10,7 @@ interface MathRendererProps {
 
 /**
  * Renders text containing LaTeX math formulas (e.g. \( ... \) or $$ ... $$)
+ * and properly converts HTML line breaks (<br>, <br/>, \n) into real DOM line breaks.
  */
 export function MathRenderer({ content, className = '' }: MathRendererProps) {
   if (!content) return null;
@@ -20,6 +21,8 @@ export function MathRenderer({ content, className = '' }: MathRendererProps) {
   return (
     <span className={className}>
       {parts.map((part, index) => {
+        if (!part) return null;
+
         if (part.startsWith('\\(') && part.endsWith('\\)')) {
           const math = part.slice(2, -2);
           try {
@@ -37,7 +40,19 @@ export function MathRenderer({ content, className = '' }: MathRendererProps) {
             return <span key={index}>{part}</span>;
           }
         }
-        return <span key={index}>{part}</span>;
+
+        // Regular text: split by HTML line breaks or newlines
+        const textSegments = part.split(/(<br\s*\/?>|\r?\n)/gi);
+        return (
+          <span key={index}>
+            {textSegments.map((seg, sIdx) => {
+              if (/^<br\s*\/?>$/i.test(seg) || seg === '\n' || seg === '\r\n') {
+                return <br key={sIdx} />;
+              }
+              return seg;
+            })}
+          </span>
+        );
       })}
     </span>
   );

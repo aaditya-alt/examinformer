@@ -3,7 +3,7 @@ import { pushAnswerKeyToMockTest } from '@/lib/scoreService';
 
 export async function POST(req: Request) {
   try {
-    const { submissionId } = await req.json();
+    const { submissionId, splitSections } = await req.json();
 
     if (!submissionId) {
       return NextResponse.json(
@@ -12,7 +12,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const result = await pushAnswerKeyToMockTest(submissionId);
+    const result = await pushAnswerKeyToMockTest(submissionId, Boolean(splitSections));
     return NextResponse.json({ success: true, ...result });
   } catch (err: any) {
     console.error('Admin push-to-test error:', err);

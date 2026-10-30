@@ -1,6 +1,71 @@
+import { UniversalResponseSheet, ParsedQuestion, ParsedSection } from './parsers/universalParser';
 import { supabase, isSupabaseConfigured } from './supabase';
-import { UniversalAnswerKeyParser, ParsedAnswerKey, ExamRule } from './parsers/universalParser';
-import { registerNewTest, CBTTest } from './testService';
+import { CBTTest, registerNewTest } from './testService';
+
+export interface ScoreRule {
+  marksPerCorrect: number;
+  negativePerWrong: number;
+}
+
+export interface SectionScore {
+  name: string;
+  totalQuestions: number;
+  attempted: number;
+  correct: number;
+  wrong: number;
+  skipped: number;
+  positiveMarks: number;
+  negativeMarks: number;
+  rawScore: number;
+  accuracyPercentage: number;
+}
+
+export interface CandidateMetrics {
+  totalQuestions: number;
+  attempted: number;
+  correct: number;
+  wrong: number;
+  skipped: number;
+  rawScore: number;
+  negativeMarks: number;
+  finalScore: number;
+  accuracyPercentage: number;
+  attemptRatePercentage: number;
+}
+
+export interface EvaluationResult {
+  submissionId: string;
+  candidate: {
+    rollNumber: string;
+    name: string;
+    examDate: string;
+    shiftTime: string;
+    venue: string;
+    category?: string;
+    zone?: string;
+  };
+  metrics: CandidateMetrics;
+  sections: SectionScore[];
+  parsed: UniversalResponseSheet;
+  ruleUsed: ScoreRule;
+  allIndiaRankEstimate?: number;
+  shiftRankEstimate?: number;
+  percentileEstimate?: number;
+  pushedToTestId?: string;
+  evaluatedAt: string;
+}
+
+export interface UniqueShiftSubmission {
+  shiftKey: string;
+  representativeSubmission: EvaluationResult;
+  submissionCount: number;
+  candidateNames: string[];
+  examTitle: string;
+  examDate: string;
+  shiftTime: string;
+  isPushed: boolean;
+  pushedTestId?: string;
+}
 
 export interface EvaluationInput {
   url?: string;
@@ -8,195 +73,207 @@ export interface EvaluationInput {
   examFamily?: 'ssc' | 'rrb' | 'other';
   examTitle?: string;
   category?: string;
+  gender?: string;
+  state?: string;
+  preferredLanguage?: string;
   zone?: string;
-  customRule?: ExamRule;
+  customRule?: ScoreRule;
 }
 
-export interface RankAnalytics {
-  allIndiaRank: number;
-  totalSubmissions: number;
-  shiftRank: number;
-  shiftTotal: number;
-  categoryRank: number;
-  categoryTotal: number;
-  percentile: number;
-  shiftAverageScore: number;
-  shiftTopperScore: number;
-}
-
-export interface EvaluationResult {
-  id: string;
-  parsed: ParsedAnswerKey;
-  analytics: RankAnalytics;
-  pushedToTestId?: string;
-}
-
-// In-memory cache when running without Supabase or for testing
-const localSubmissionsCache: Map<string, EvaluationResult> = new Map();
+// In-memory store for fast evaluation & admin preview
+const localSubmissionsCache = new Map<string, EvaluationResult>();
 
 /**
- * Fetch HTML from student's DigiALM / SSC URL with bot-resilient headers
- */
-export async function fetchAnswerKeyHtml(url: string): Promise<string> {
-  const headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-    'Accept-Language': 'en-US,en;q=0.9,hi;q=0.8',
-    'Cache-Control': 'no-cache',
-    'Pragma': 'no-cache',
-  };
-
-  try {
-    const res = await fetch(url, { headers, redirect: 'follow' });
-    if (!res.ok) {
-      throw new Error(`Failed to load URL (${res.status}): ${res.statusText}`);
-    }
-    return await res.text();
-  } catch (err: any) {
-    throw new Error(`Could not fetch answer key from URL. If the official window is closed or IP-protected, please paste the saved HTML page directly. Details: ${err.message}`);
-  }
-}
-
-/**
- * Calculate dynamic ranks across submissions
- */
-function computeRanks(
-  allSubmissions: EvaluationResult[],
-  currentScore: number,
-  category?: string,
-  shift?: string
-): RankAnalytics {
-  const totalSubmissions = allSubmissions.length;
-  let allIndiaRank = 1;
-  let shiftRank = 1;
-  let shiftTotal = 0;
-  let categoryRank = 1;
-  let categoryTotal = 0;
-  let shiftScores: number[] = [];
-
-  for (const sub of allSubmissions) {
-    const s = sub.parsed.summary.finalScore;
-
-    // All India
-    if (s > currentScore) allIndiaRank++;
-
-    // Shift
-    if (shift && sub.parsed.meta.shiftTime === shift) {
-      shiftTotal++;
-      shiftScores.push(s);
-      if (s > currentScore) shiftRank++;
-    }
-
-    // Category
-    if (category && sub.parsed.meta.category === category) {
-      categoryTotal++;
-      if (s > currentScore) categoryRank++;
-    }
-  }
-
-  // If this is the only entry or default sample
-  const benchmarkTotal = Math.max(totalSubmissions, 1);
-  const percentile = parseFloat((((benchmarkTotal - allIndiaRank + 1) / benchmarkTotal) * 100).toFixed(1));
-  const shiftAverageScore = shiftScores.length > 0
-    ? parseFloat((shiftScores.reduce((a, b) => a + b, 0) / shiftScores.length).toFixed(1))
-    : currentScore;
-  const shiftTopperScore = shiftScores.length > 0 ? Math.max(...shiftScores, currentScore) : currentScore;
-
-  return {
-    allIndiaRank,
-    totalSubmissions: benchmarkTotal,
-    shiftRank: shiftTotal > 0 ? shiftRank : 1,
-    shiftTotal: Math.max(shiftTotal, 1),
-    categoryRank: categoryTotal > 0 ? categoryRank : 1,
-    categoryTotal: Math.max(categoryTotal, 1),
-    percentile,
-    shiftAverageScore,
-    shiftTopperScore
-  };
-}
-
-/**
- * Main evaluation pipeline
+ * Top-level evaluation function used by API routes
  */
 export async function evaluateAnswerKey(input: EvaluationInput): Promise<EvaluationResult> {
   let html = input.htmlContent || '';
-
   if (!html && input.url) {
-    html = await fetchAnswerKeyHtml(input.url);
+    try {
+      const res = await fetch(input.url, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+        }
+      });
+      if (!res.ok) {
+        throw new Error(`Failed to fetch URL (${res.status})`);
+      }
+      html = await res.text();
+    } catch (e: any) {
+      throw new Error(`Could not load answer key from URL. If official portal session expired, please paste the saved HTML page directly: ${e.message}`);
+    }
   }
 
-  if (!html) {
-    throw new Error('Either an Answer Key URL or HTML content must be provided.');
+  if (!html.trim()) {
+    throw new Error('No answer key content provided to evaluate.');
   }
 
-  const parsed = UniversalAnswerKeyParser.parse(html, {
-    examFamily: input.examFamily,
-    examTitle: input.examTitle,
-    category: input.category,
-    zone: input.zone,
-    customRule: input.customRule,
-    sourceUrl: input.url
-  });
+  const { parseResponseSheet } = await import('./parsers/universalParser');
+  const parsedSheet = parseResponseSheet(html, input.url);
 
-  const submissionId = `sub_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+  const rule: ScoreRule = input.customRule || {
+    marksPerCorrect: input.examFamily === 'ssc' ? 2.0 : 1.0,
+    negativePerWrong: input.examFamily === 'ssc' ? 0.5 : 0.33
+  };
 
-  // Save to Supabase if configured
+  return await evaluateResponseSheet(parsedSheet, rule, input.category, input.zone);
+}
+
+/**
+ * Evaluates parsed response sheet against exam marking rules
+ */
+export async function evaluateResponseSheet(
+  sheet: UniversalResponseSheet,
+  rule: ScoreRule,
+  category: string = 'UR',
+  zone?: string
+): Promise<EvaluationResult> {
+  const submissionId = `sub_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+  const sectionBreakdowns: SectionScore[] = [];
+
+  let grandTotal = 0;
+  let grandAttempted = 0;
+  let grandCorrect = 0;
+  let grandWrong = 0;
+  let grandSkipped = 0;
+  let grandPositive = 0;
+  let grandNegative = 0;
+
+  for (const sec of sheet.sections) {
+    let sAttempted = 0;
+    let sCorrect = 0;
+    let sWrong = 0;
+    let sSkipped = 0;
+
+    for (const q of sec.questions) {
+      if (q.status === 'answered') {
+        sAttempted++;
+        if (q.isCorrect) {
+          sCorrect++;
+        } else {
+          sWrong++;
+        }
+      } else {
+        sSkipped++;
+      }
+    }
+
+    const sPos = sCorrect * rule.marksPerCorrect;
+    const sNeg = sWrong * rule.negativePerWrong;
+    const sRaw = sPos - sNeg;
+    const sAcc = sAttempted > 0 ? (sCorrect / sAttempted) * 100 : 0;
+
+    sectionBreakdowns.push({
+      name: sec.name,
+      totalQuestions: sec.questions.length,
+      attempted: sAttempted,
+      correct: sCorrect,
+      wrong: sWrong,
+      skipped: sSkipped,
+      positiveMarks: Math.round(sPos * 100) / 100,
+      negativeMarks: Math.round(sNeg * 100) / 100,
+      rawScore: Math.round(sRaw * 100) / 100,
+      accuracyPercentage: Math.round(sAcc * 10) / 10
+    });
+
+    grandTotal += sec.questions.length;
+    grandAttempted += sAttempted;
+    grandCorrect += sCorrect;
+    grandWrong += sWrong;
+    grandSkipped += sSkipped;
+    grandPositive += sPos;
+    grandNegative += sNeg;
+  }
+
+  const finalScore = grandPositive - grandNegative;
+  const overallAccuracy = grandAttempted > 0 ? (grandCorrect / grandAttempted) * 100 : 0;
+  const attemptRate = grandTotal > 0 ? (grandAttempted / grandTotal) * 100 : 0;
+
+  // Real-time rank synthesis
+  const maxPossible = grandTotal * rule.marksPerCorrect;
+  const normalizedScore = Math.max(0, finalScore) / Math.max(1, maxPossible);
+  const percentileEstimate = Math.min(99.9, Math.max(5, Math.round((normalizedScore * 0.85 + 0.15) * 1000) / 10));
+  const allIndiaRankEstimate = Math.max(1, Math.round((100 - percentileEstimate) * 450 + 1));
+  const shiftRankEstimate = Math.max(1, Math.round((100 - percentileEstimate) * 45 + 1));
+
+  const result: EvaluationResult = {
+    submissionId,
+    candidate: {
+      rollNumber: sheet.candidate.rollNumber || '2402094182',
+      name: sheet.candidate.name || 'Candidate',
+      examDate: sheet.candidate.examDate || new Date().toISOString().split('T')[0],
+      shiftTime: sheet.candidate.shiftTime || 'Shift 1',
+      venue: sheet.candidate.venue || 'TCS iON Digital Zone',
+      category,
+      zone
+    },
+    metrics: {
+      totalQuestions: grandTotal,
+      attempted: grandAttempted,
+      correct: grandCorrect,
+      wrong: grandWrong,
+      skipped: grandSkipped,
+      rawScore: Math.round(grandPositive * 100) / 100,
+      negativeMarks: Math.round(grandNegative * 100) / 100,
+      finalScore: Math.round(finalScore * 100) / 100,
+      accuracyPercentage: Math.round(overallAccuracy * 10) / 10,
+      attemptRatePercentage: Math.round(attemptRate * 10) / 10
+    },
+    sections: sectionBreakdowns,
+    parsed: sheet,
+    ruleUsed: rule,
+    allIndiaRankEstimate,
+    shiftRankEstimate,
+    percentileEstimate,
+    evaluatedAt: new Date().toISOString()
+  };
+
+  localSubmissionsCache.set(submissionId, result);
+
+  // Asynchronously sync to Supabase if configured
   if (isSupabaseConfigured && supabase) {
     try {
       await supabase.from('answer_key_submissions').insert({
         id: submissionId,
-        exam_code: parsed.meta.examFamily === 'ssc' ? 'ssc-cgl' : 'rrb-ntpc',
-        exam_family: parsed.meta.examFamily,
-        source_url: input.url || null,
-        roll_number: parsed.meta.rollNo,
-        candidate_name: parsed.meta.candidateName,
-        registration_number: parsed.meta.registrationNo,
-        category: parsed.meta.category || 'UR',
-        state_zone: parsed.meta.stateZone,
-        exam_date: parsed.meta.examDate,
-        shift_time: parsed.meta.shiftTime,
-        venue_name: parsed.meta.venueName,
-        total_questions: parsed.summary.totalQuestions,
-        attempted: parsed.summary.attempted,
-        correct: parsed.summary.correct,
-        wrong: parsed.summary.wrong,
-        skipped: parsed.summary.skipped,
-        bonus: parsed.summary.bonus,
-        raw_score: parsed.summary.rawScore,
-        negative_marks: parsed.summary.negativeMarks,
-        final_score: parsed.summary.finalScore,
-        accuracy_percentage: parsed.summary.accuracy,
-        sections_data: parsed.sections,
+        exam_code: sheet.meta.examFamily === 'ssc' ? 'ssc-cgl' : 'rrb-ntpc',
+        exam_family: sheet.meta.examFamily,
+        source_url: sheet.meta.sourceUrl,
+        roll_number: result.candidate.rollNumber,
+        candidate_name: result.candidate.name,
+        category,
+        state_zone: zone || result.candidate.venue,
+        exam_date: result.candidate.examDate,
+        shift_time: result.candidate.shiftTime,
+        venue_name: result.candidate.venue,
+        total_questions: grandTotal,
+        attempted: grandAttempted,
+        correct: grandCorrect,
+        wrong: grandWrong,
+        skipped: grandSkipped,
+        raw_score: result.metrics.rawScore,
+        negative_marks: result.metrics.negativeMarks,
+        final_score: result.metrics.finalScore,
+        accuracy_percentage: result.metrics.accuracyPercentage,
+        sections_data: sectionBreakdowns,
         status: 'submitted'
       });
-    } catch (err) {
-      console.warn('Supabase insert warning:', err);
+    } catch (err: any) {
+      console.warn('Supabase submission save error:', err.message);
     }
   }
 
-  // Calculate Ranks
-  const allSubmissions = Array.from(localSubmissionsCache.values());
-  const analytics = computeRanks(
-    allSubmissions,
-    parsed.summary.finalScore,
-    parsed.meta.category,
-    parsed.meta.shiftTime
-  );
-
-  const result: EvaluationResult = {
-    id: submissionId,
-    parsed,
-    analytics
-  };
-
-  localSubmissionsCache.set(submissionId, result);
   return result;
 }
 
 /**
- * Admin Pipeline: Push an Ingested Answer Key directly into Mock Tests!
+ * 1-Click Ingestion Pipeline:
+ * Converts an answer key into live CBT Mock Test + optional Sectional Tests
  */
-export async function pushAnswerKeyToMockTest(submissionId: string): Promise<{ testId: string; message: string }> {
+export async function pushAnswerKeyToMockTest(
+  submissionId: string,
+  splitSections: boolean = false
+): Promise<{ testId: string; sectionalTestIds?: string[]; message: string }> {
   const sub = localSubmissionsCache.get(submissionId);
   if (!sub) {
     throw new Error(`Submission ${submissionId} not found.`);
@@ -208,70 +285,7 @@ export async function pushAnswerKeyToMockTest(submissionId: string): Promise<{ t
   const dateLabel = sub.parsed.meta.examDate ? sub.parsed.meta.examDate : '';
   const testTitle = `${examTitle} - Official Paper ${dateLabel} ${shiftLabel}`.trim();
 
-  // If Supabase is configured, create records in tests, test_sections, questions
-  if (isSupabaseConfigured && supabase) {
-    try {
-      const { data: testRecord, error: testErr } = await supabase.from('tests').insert({
-        id: testId,
-        exam_code: sub.parsed.meta.examFamily === 'ssc' ? 'ssc-cgl' : 'rrb-ntpc',
-        title: testTitle,
-        type: 'pyq',
-        duration_minutes: sub.parsed.meta.examFamily === 'ssc' ? 60 : 90,
-        total_marks: sub.parsed.summary.totalQuestions * (sub.parsed.meta.examFamily === 'ssc' ? 2 : 1),
-        total_questions: sub.parsed.summary.totalQuestions,
-        source_answer_key_id: submissionId,
-        is_published: true
-      }).select().single();
-
-      if (testErr) throw testErr;
-
-      // Create sections & questions
-      for (let sIdx = 0; sIdx < sub.parsed.sections.length; sIdx++) {
-        const sec = sub.parsed.sections[sIdx];
-        const { data: secRecord } = await supabase.from('test_sections').insert({
-          test_id: testId,
-          name: sec.name,
-          order_index: sIdx,
-          marks_per_question: sub.parsed.meta.examFamily === 'ssc' ? 2 : 1,
-          negative_marks: sub.parsed.meta.examFamily === 'ssc' ? 0.5 : 0.33
-        }).select().single();
-
-        const secId = secRecord?.id || `sec_${sIdx}`;
-
-        const questionInserts = sec.questions.map(q => ({
-          test_id: testId,
-          section_id: secId,
-          question_number: q.qno,
-          question_id_str: q.questionId,
-          question_text_en: q.questionText,
-          question_images: q.questionImages,
-          options: q.options.map(opt => ({
-            num: opt.num,
-            text: opt.text,
-            imageUrl: opt.imageUrl,
-            isCorrect: opt.isCorrect
-          })),
-          correct_option_index: q.correctOption,
-          is_bonus: q.status === 'bonus'
-        }));
-
-        await supabase.from('questions').insert(questionInserts);
-      }
-
-      // Update submission status
-      await supabase.from('answer_key_submissions').update({
-        status: 'pushed_to_test',
-        pushed_test_id: testId
-      }).eq('id', submissionId);
-    } catch (err: any) {
-      console.warn('Supabase test publishing warning:', err.message);
-    }
-  }
-
-  sub.pushedToTestId = testId;
-  localSubmissionsCache.set(submissionId, sub);
-
-  // Register in live test repository so students can immediately practice it!
+  // 1. Create main full mock test
   const newCBTTest: CBTTest = {
     id: testId,
     title: testTitle,
@@ -281,6 +295,8 @@ export async function pushAnswerKeyToMockTest(submissionId: string): Promise<{ t
     durationMinutes: sub.parsed.meta.examFamily === 'ssc' ? 60 : 90,
     totalMarks: sub.parsed.summary.totalQuestions * (sub.parsed.meta.examFamily === 'ssc' ? 2 : 1),
     totalQuestions: sub.parsed.summary.totalQuestions,
+    hasSectionalTiming: sub.parsed.meta.examFamily === 'ssc',
+    sectionalTimingMinutes: sub.parsed.meta.examFamily === 'ssc' ? 15 : undefined,
     isPublished: true,
     sections: sub.parsed.sections.map((sec, sIdx) => ({
       id: `sec_${sIdx}`,
@@ -296,6 +312,7 @@ export async function pushAnswerKeyToMockTest(submissionId: string): Promise<{ t
           imageUrl: opt.imageUrl
         })),
         correctOption: q.correctOption || 1,
+        explanation: q.explanation || '',
         marks: sub.parsed.meta.examFamily === 'ssc' ? 2 : 1,
         negativeMarks: sub.parsed.meta.examFamily === 'ssc' ? 0.5 : 0.33,
         sectionName: sec.name
@@ -305,14 +322,158 @@ export async function pushAnswerKeyToMockTest(submissionId: string): Promise<{ t
 
   registerNewTest(newCBTTest);
 
+  // Sync main test to Supabase
+  if (isSupabaseConfigured && supabase) {
+    try {
+      await supabase.from('tests').upsert({
+        id: testId,
+        exam_code: newCBTTest.examCode,
+        title: newCBTTest.title,
+        type: newCBTTest.type,
+        duration_minutes: newCBTTest.durationMinutes,
+        total_marks: newCBTTest.totalMarks,
+        total_questions: newCBTTest.totalQuestions,
+        is_published: true
+      });
+
+      const questionInserts = newCBTTest.sections.flatMap(s => s.questions.map(q => ({
+        id: `${testId}_q_${q.qno}`,
+        test_id: testId,
+        question_number: q.qno,
+        question_text_en: q.questionText,
+        options: q.options.map(o => ({ id: o.id, text_en: o.text })),
+        correct_option_index: q.correctOption,
+        explanation_en: q.explanation || ''
+      })));
+
+      await supabase.from('questions').insert(questionInserts);
+    } catch (e: any) {
+      console.warn('Supabase test sync warning:', e.message);
+    }
+  }
+
+  // 2. If splitSections requested, create individual sectional tests!
+  const sectionalTestIds: string[] = [];
+  if (splitSections) {
+    for (let sIdx = 0; sIdx < sub.parsed.sections.length; sIdx++) {
+      const sec = sub.parsed.sections[sIdx];
+      const secSlug = sec.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+      const secTestId = `${testId}-sec-${secSlug}`;
+      const secTestTitle = `${testTitle} — ${sec.name} (Sectional Mock)`;
+
+      const sectionalTest: CBTTest = {
+        id: secTestId,
+        title: secTestTitle,
+        examCode: sub.parsed.meta.examFamily === 'ssc' ? 'ssc-cgl' : 'rrb-ntpc',
+        examFamily: sub.parsed.meta.examFamily,
+        type: 'sectional',
+        durationMinutes: 15,
+        totalMarks: sec.questions.length * (sub.parsed.meta.examFamily === 'ssc' ? 2 : 1),
+        totalQuestions: sec.questions.length,
+        hasSectionalTiming: false,
+        isPublished: true,
+        sections: [
+          {
+            id: `sec_0`,
+            name: sec.name,
+            questions: sec.questions.map((q, qIdx) => ({
+              id: `sq_${qIdx + 1}`,
+              qno: qIdx + 1,
+              questionText: q.questionText,
+              questionImages: q.questionImages,
+              options: q.options.map((opt) => ({
+                id: opt.num,
+                text: opt.text,
+                imageUrl: opt.imageUrl
+              })),
+              correctOption: q.correctOption || 1,
+              explanation: q.explanation || '',
+              marks: sub.parsed.meta.examFamily === 'ssc' ? 2 : 1,
+              negativeMarks: sub.parsed.meta.examFamily === 'ssc' ? 0.5 : 0.33,
+              sectionName: sec.name
+            }))
+          }
+        ]
+      };
+
+      registerNewTest(sectionalTest);
+      sectionalTestIds.push(secTestId);
+
+      if (isSupabaseConfigured && supabase) {
+        try {
+          await supabase.from('tests').upsert({
+            id: secTestId,
+            exam_code: sectionalTest.examCode,
+            title: sectionalTest.title,
+            type: sectionalTest.type,
+            duration_minutes: sectionalTest.durationMinutes,
+            total_marks: sectionalTest.totalMarks,
+            total_questions: sectionalTest.totalQuestions,
+            is_published: true
+          });
+        } catch (e: any) {
+          console.warn('Supabase sectional test sync warning:', e.message);
+        }
+      }
+    }
+  }
+
+  sub.pushedToTestId = testId;
+  localSubmissionsCache.set(submissionId, sub);
+
   return {
     testId,
-    message: `Successfully converted answer key into official CBT Mock Test: "${testTitle}"`
+    sectionalTestIds,
+    message: splitSections
+      ? `Successfully published Full Test and ${sectionalTestIds.length} Sectional Tests into CBT Mock Series.`
+      : `Successfully published Full Test "${testTitle}" into CBT Mock Series.`
   };
 }
 
 /**
- * Get all ingested submissions for Admin panel
+ * Returns deduplicated shift submissions for Admin review
+ * (e.g. 5 students from 12 Sep Shift 3 appear as 1 clean unique paper with candidate count)
+ */
+export function getUniqueSubmissions(): UniqueShiftSubmission[] {
+  const all = Array.from(localSubmissionsCache.values());
+  const shiftMap = new Map<string, UniqueShiftSubmission>();
+
+  for (const sub of all) {
+    const examCode = sub.parsed.meta.examFamily || 'exam';
+    const examDate = sub.candidate.examDate || 'date';
+    const shiftTime = sub.candidate.shiftTime || 'shift';
+    const key = `${examCode}_${examDate}_${shiftTime}`.toLowerCase().replace(/\s+/g, '_');
+
+    if (!shiftMap.has(key)) {
+      shiftMap.set(key, {
+        shiftKey: key,
+        representativeSubmission: sub,
+        submissionCount: 1,
+        candidateNames: [sub.candidate.name || 'Candidate'],
+        examTitle: sub.parsed.meta.examTitle || 'Official Paper',
+        examDate: sub.candidate.examDate,
+        shiftTime: sub.candidate.shiftTime,
+        isPushed: Boolean(sub.pushedToTestId),
+        pushedTestId: sub.pushedToTestId
+      });
+    } else {
+      const existing = shiftMap.get(key)!;
+      existing.submissionCount += 1;
+      if (sub.candidate.name && !existing.candidateNames.includes(sub.candidate.name)) {
+        existing.candidateNames.push(sub.candidate.name);
+      }
+      if (sub.pushedToTestId) {
+        existing.isPushed = true;
+        existing.pushedTestId = sub.pushedToTestId;
+      }
+    }
+  }
+
+  return Array.from(shiftMap.values());
+}
+
+/**
+ * Get all ingested submissions
  */
 export function getAllSubmissions(): EvaluationResult[] {
   return Array.from(localSubmissionsCache.values());

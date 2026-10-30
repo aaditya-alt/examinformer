@@ -5,11 +5,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { BRANDING } from '@/lib/branding';
 import { ThemeToggle } from './ThemeToggle';
-import { Calculator, BookOpen, ShieldCheck, Sparkles, Menu, X, ArrowUpRight } from 'lucide-react';
+import { useAuth } from './auth/AuthContext';
+import { Calculator, BookOpen, Sparkles, Menu, X, ArrowUpRight, User, LogOut } from 'lucide-react';
 
 export function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, openAuthModal, signOut } = useAuth();
 
   const navLinks = [
     {
@@ -78,6 +80,31 @@ export function Navbar() {
           {/* Right Action buttons */}
           <div className="flex items-center gap-2 sm:gap-3">
             <ThemeToggle />
+
+            {/* Candidate Profile / Auth Button */}
+            {user ? (
+              <div className="flex items-center gap-2">
+                <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-200">
+                  <User className="w-3.5 h-3.5 text-blue-600" />
+                  <span className="truncate max-w-[120px]">{user.name}</span>
+                </div>
+                <button
+                  onClick={signOut}
+                  title="Sign Out"
+                  className="p-2 rounded-xl text-slate-400 hover:text-rose-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => openAuthModal()}
+                className="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+              >
+                Sign In
+              </button>
+            )}
+
             <Link
               href="/score-calculator"
               className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-sm shadow-blue-500/30 transition"
