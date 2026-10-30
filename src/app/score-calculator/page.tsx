@@ -115,9 +115,13 @@ const SAMPLE_DIGIALM_HTML = `
 export default function ScoreCalculatorPage() {
   const router = useRouter();
 
-  const [inputTab, setInputTab] = useState<'url' | 'html'>('url');
+  const [inputTab, setInputTab] = useState<'url' | 'html' | 'roll'>('url');
   const [answerKeyUrl, setAnswerKeyUrl] = useState('');
   const [htmlContent, setHtmlContent] = useState('');
+  const [rollInput, setRollInput] = useState('');
+  const [rollLoading, setRollLoading] = useState(false);
+  const [savedSession, setSavedSession] = useState<any>(null);
+
   const [selectedExamId, setSelectedExamId] = useState('ssc-cgl');
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
   const [selectedGender, setSelectedGender] = useState(GENDERS[0]);
@@ -132,6 +136,72 @@ export default function ScoreCalculatorPage() {
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  // Check for saved candidate evaluation in localStorage
+  React.useEffect(() => {
+    const raw = localStorage.getItem('last_evaluated_submission');
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        setSavedSession(parsed);
+      } catch (e) {
+        console.warn('Failed to parse saved session:', e);
+      }
+    }
+  }, []);
+
+  const handleClearSavedSession = () => {
+    localStorage.removeItem('last_evaluated_submission');
+    setSavedSession(null);
+  };
+
+  const handleCheckByRoll = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage('');
+
+    if (!rollInput.trim()) {
+      setErrorMessage('Please enter your examination Roll Number.');
+      return;
+    }
+
+    setRollLoading(true);
+    try {
+      // 1. Check local storage first
+      const localRaw = localStorage.getItem('saved_evaluation_' + rollInput.trim());
+      if (localRaw) {
+        const parsed = JSON.parse(localRaw);
+        sessionStorage.setItem('current_evaluation', JSON.stringify(parsed));
+        router.push(`/score-calculator/result?id=${parsed.submissionId}`);
+        return;
+      }
+
+      // 2. Query server API / Supabase
+      const res = await fetch(`/api/score-calculator/submissions?rollNumber=${encodeURIComponent(rollInput.trim())}`);
+      const json = await res.json();
+
+      if (!res.ok || !json.success || !json.data) {
+        throw new Error(`No evaluated scorecard found for Roll No. ${rollInput.trim()}. Please evaluate your answer key URL first.`);
+      }
+
+      sessionStorage.setItem('current_evaluation', JSON.stringify(json.data));
+      localStorage.setItem('saved_evaluation_' + json.data.candidate.rollNumber, JSON.stringify(json.data));
+      localStorage.setItem('last_evaluated_submission', JSON.stringify({
+        submissionId: json.data.submissionId,
+        rollNumber: json.data.candidate.rollNumber,
+        candidateName: json.data.candidate.name,
+        examDate: json.data.candidate.examDate,
+        shiftTime: json.data.candidate.shiftTime,
+        category: json.data.candidate.category,
+        finalScore: json.data.metrics.finalScore,
+        timestamp: Date.now()
+      }));
+
+      router.push(`/score-calculator/result?id=${json.data.submissionId}`);
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Could not find scorecard for this roll number.');
+      setRollLoading(false);
+    }
+  };
 
   const currentExam = EXAMS.find(e => e.id === selectedExamId) || EXAMS[0];
   const isRRB = currentExam.family === 'rrb';
@@ -188,6 +258,18 @@ export default function ScoreCalculatorPage() {
 
       setLoadingStep('Generating scorecard & All-India Shift ranks...');
       sessionStorage.setItem('current_evaluation', JSON.stringify(json.data));
+      localStorage.setItem('saved_evaluation_' + json.data.candidate.rollNumber, JSON.stringify(json.data));
+      localStorage.setItem('last_evaluated_submission', JSON.stringify({
+        submissionId: json.data.submissionId,
+        rollNumber: json.data.candidate.rollNumber,
+        candidateName: json.data.candidate.name,
+        examDate: json.data.candidate.examDate,
+        shiftTime: json.data.candidate.shiftTime,
+        category: json.data.candidate.category,
+        finalScore: json.data.metrics.finalScore,
+        timestamp: Date.now()
+      }));
+
       router.push(`/score-calculator/result?id=${json.data.submissionId}`);
     } catch (err: any) {
       console.error(err);
@@ -219,14 +301,51 @@ export default function ScoreCalculatorPage() {
         </p>
       </div>
 
+      {/* Active Saved Session Banner (Rule 4) */}
+      {savedSession && (
+        <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 border border-blue-700/80 text-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+          <div className="space-y-1.5 text-center sm:text-left">
+            <div className="flex items-center justify-center sm:justify-start gap-2">
+              <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-emerald-400 text-slate-950">
+                Active Saved Session
+              </span>
+              <span className="text-xs text-sky-200">Roll: <strong>{savedSession.rollNumber}</strong></span>
+            </div>
+            <h3 className="text-lg font-black tracking-tight text-white">
+              Welcome Back, {savedSession.candidateName}!
+            </h3>
+            <p className="text-xs text-slate-200 leading-relaxed">
+              Your Evaluated Marks: <strong className="text-emerald-300">{savedSession.finalScore}</strong> &bull; Category: <strong>{savedSession.category || 'General'}</strong> &bull; Shift: <strong>{savedSession.shiftTime} ({savedSession.examDate})</strong>
+            </p>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => router.push(`/score-calculator/result?id=${savedSession.submissionId}`)}
+              className="px-5 py-2.5 rounded-xl bg-blue-500 hover:bg-blue-400 text-white font-bold text-xs flex items-center gap-1.5 shadow-md transition active:scale-95"
+            >
+              <BarChart3 className="w-4 h-4" />
+              <span>View Live Shift &amp; Category Rank</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleClearSavedSession}
+              className="px-3 py-2.5 rounded-xl border border-slate-600 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Main Input Form Card */}
       <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm p-5 sm:p-8 space-y-6">
         {/* Input Mode Selector */}
-        <div className="flex border-b border-slate-100 dark:border-slate-800 gap-6">
+        <div className="flex border-b border-slate-100 dark:border-slate-800 gap-4 sm:gap-6 overflow-x-auto">
           <button
             type="button"
             onClick={() => setInputTab('url')}
-            className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 transition ${
+            className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 whitespace-nowrap transition ${
               inputTab === 'url'
                 ? 'border-blue-600 text-blue-600 dark:text-blue-400'
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
@@ -237,8 +356,20 @@ export default function ScoreCalculatorPage() {
           </button>
           <button
             type="button"
+            onClick={() => setInputTab('roll')}
+            className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 whitespace-nowrap transition ${
+              inputTab === 'roll'
+                ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+                : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+            }`}
+          >
+            <ShieldCheck className="w-4 h-4 text-emerald-500" />
+            <span>Check by Roll Number</span>
+          </button>
+          <button
+            type="button"
             onClick={() => setInputTab('html')}
-            className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 transition ${
+            className={`pb-3 text-xs sm:text-sm font-bold flex items-center gap-2 border-b-2 whitespace-nowrap transition ${
               inputTab === 'html'
                 ? 'border-blue-600 text-blue-600 dark:text-blue-400'
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
@@ -249,7 +380,44 @@ export default function ScoreCalculatorPage() {
           </button>
         </div>
 
-        <form onSubmit={handleCalculate} className="space-y-6">
+        {/* Form when checking by Roll Number */}
+        {inputTab === 'roll' ? (
+          <form onSubmit={handleCheckByRoll} className="space-y-5">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                Examination Roll Number / Participant ID
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="e.g. 2402094182"
+                  value={rollInput}
+                  onChange={(e) => setRollInput(e.target.value)}
+                  className="flex-1 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition font-mono"
+                />
+                <button
+                  type="submit"
+                  disabled={rollLoading}
+                  className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-md transition flex items-center gap-2 active:scale-95"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                  <span>{rollLoading ? 'Searching...' : 'Find Scorecard & Rank'}</span>
+                </button>
+              </div>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5">
+                Enter the roll number you used when previously evaluating your answer key on Exam Informer.
+              </p>
+            </div>
+
+            {errorMessage && (
+              <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-xs font-semibold text-rose-700 dark:text-rose-300 flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                <span>{errorMessage}</span>
+              </div>
+            )}
+          </form>
+        ) : (
+          <form onSubmit={handleCalculate} className="space-y-6">
           {/* URL Input */}
           {inputTab === 'url' ? (
             <div>
@@ -482,6 +650,7 @@ export default function ScoreCalculatorPage() {
             )}
           </button>
         </form>
+        )}
       </div>
     </div>
   );

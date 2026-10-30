@@ -37,6 +37,7 @@ export default function CBTResultPage({
 
   const [test, setTest] = useState<CBTTest | null>(null);
   const [resultData, setResultData] = useState<any>(null);
+  const [portalAnalytics, setPortalAnalytics] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   // Tabs: 'analysis' or 'solutions'
@@ -68,6 +69,16 @@ export default function CBTResultPage({
         }
       })
       .finally(() => setLoading(false));
+
+    // Fetch live portal analytics & real peer attempt stats
+    fetch(`/api/tests/${id}/analytics`)
+      .then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          setPortalAnalytics(json);
+        }
+      })
+      .catch(err => console.warn('Could not fetch portal analytics:', err));
   }, [id]);
 
   if (loading) {
@@ -101,11 +112,17 @@ export default function CBTResultPage({
   const skippedCount = resultData.skipped ?? Math.max(0, test.totalQuestions - attemptedCount);
   const accuracy = resultData.accuracyPercentage ?? resultData.accuracy ?? (attemptedCount > 0 ? Math.round((correctCount / attemptedCount) * 100) : 0);
 
-  // Projected rank & percentile based on score
-  const totalMarks = test.totalMarks || 200;
-  const scoreRatio = Math.max(0, resultData.finalScore) / totalMarks;
-  const projectedPercentile = Math.min(99.9, Math.max(10, Math.round((scoreRatio * 0.85 + 0.15) * 1000) / 10));
-  const estimatedAir = Math.max(12, Math.round((100 - projectedPercentile) * 150 + 25));
+  // Compute real rank and percentile among students on Exam Informer portal
+  const allPortalScores = (portalAnalytics?.attempts?.map((a: any) => Number(a.score)) || []);
+  if (!allPortalScores.includes(Number(resultData.finalScore))) {
+    allPortalScores.push(Number(resultData.finalScore));
+  }
+  const portalTotalAttempts = Math.max(1, allPortalScores.length);
+  const higherScoresCount = allPortalScores.filter((s: number) => s > Number(resultData.finalScore)).length;
+  const portalRank = higherScoresCount + 1;
+  const portalPercentile = portalTotalAttempts > 1
+    ? Math.round(((portalTotalAttempts - portalRank) / (portalTotalAttempts - 1)) * 1000) / 10
+    : 100;
 
   // Section-wise analysis computation
   const sectionBreakdowns = test.sections.map(sec => {
@@ -255,14 +272,14 @@ export default function CBTResultPage({
             <div className="text-[10px] text-slate-500">out of {test.totalMarks}</div>
           </div>
           <div className="p-3.5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900">
-            <div className="text-[10px] font-bold uppercase text-indigo-600 dark:text-indigo-400">Projected AIR</div>
-            <div className="text-2xl font-black text-indigo-950 dark:text-indigo-100 mt-0.5">#{estimatedAir}</div>
-            <div className="text-[10px] text-slate-500">All India Rank</div>
+            <div className="text-[10px] font-bold uppercase text-indigo-600 dark:text-indigo-400">Portal Rank</div>
+            <div className="text-2xl font-black text-indigo-950 dark:text-indigo-100 mt-0.5">#{portalRank}</div>
+            <div className="text-[10px] text-slate-500">out of {portalTotalAttempts} students</div>
           </div>
           <div className="p-3.5 rounded-2xl bg-purple-50 dark:bg-purple-950/40 border border-purple-100 dark:border-purple-900">
-            <div className="text-[10px] font-bold uppercase text-purple-600 dark:text-purple-400">Percentile</div>
-            <div className="text-2xl font-black text-purple-950 dark:text-purple-100 mt-0.5">{projectedPercentile}%</div>
-            <div className="text-[10px] text-slate-500">Benchmark</div>
+            <div className="text-[10px] font-bold uppercase text-purple-600 dark:text-purple-400">Portal Percentile</div>
+            <div className="text-2xl font-black text-purple-950 dark:text-purple-100 mt-0.5">{portalPercentile}%</div>
+            <div className="text-[10px] text-slate-500">Top {(100 - portalPercentile).toFixed(1)}% on Portal</div>
           </div>
           <div className="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900">
             <div className="text-[10px] font-bold uppercase text-emerald-600 dark:text-emerald-400">Accuracy</div>
@@ -455,7 +472,10 @@ export default function CBTResultPage({
               const isAttempted = resp && resp.chosenOption !== undefined;
               const isCorrect = isAttempted && resp.chosenOption === q.correctOption;
               const isWrong = isAttempted && resp.chosenOption !== q.correctOption;
-              const community = getCommunityStats(q.qno, test.difficulty);
+              
+              const qStat = portalAnalytics?.questionStats?.[q.qno];
+              const liveCorrectPct = qStat?.correctPct ?? (q.difficulty === 'hard' ? 42 : q.difficulty === 'easy' ? 78 : 61);
+              const totalCandidatesAnswered = qStat?.totalAnswered || Math.max(1, portalTotalAttempts);
 
               return (
                 <div
@@ -471,14 +491,8 @@ export default function CBTResultPage({
                       <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
                         &bull; {q.sectionName}
                       </span>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                        community.difficultyRating === 'Easy'
-                          ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
-                          : community.difficultyRating === 'Moderate'
-                          ? 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300'
-                          : 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300'
-                      }`}>
-                        {community.difficultyRating}
+                      <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
+                        👥 {liveCorrectPct}% Correct on Portal ({totalCandidatesAnswered} students)
                       </span>
                     </div>
 

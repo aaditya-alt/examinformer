@@ -485,3 +485,89 @@ export function getAllSubmissions(): EvaluationResult[] {
 export function getSubmissionById(id: string): EvaluationResult | undefined {
   return localSubmissionsCache.get(id);
 }
+
+export async function getSubmissionByRollNumber(rollNumber: string): Promise<EvaluationResult | undefined> {
+  const cleanRoll = rollNumber.trim().toLowerCase();
+  
+  // 1. Search in local cache
+  for (const sub of localSubmissionsCache.values()) {
+    if (sub.candidate.rollNumber?.toLowerCase() === cleanRoll) {
+      return sub;
+    }
+  }
+
+  // 2. Search in Supabase
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('answer_key_submissions')
+        .select('*')
+        .ilike('roll_number', cleanRoll)
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      if (!error && data && data.length > 0) {
+        const row = data[0];
+        const reconstructed: EvaluationResult = {
+          submissionId: row.id,
+          candidate: {
+            rollNumber: row.roll_number,
+            name: row.candidate_name,
+            examDate: row.exam_date,
+            shiftTime: row.shift_time,
+            venue: row.venue_name,
+            category: row.category,
+            zone: row.state_zone
+          },
+          metrics: {
+            totalQuestions: row.total_questions,
+            attempted: row.attempted,
+            correct: row.correct,
+            wrong: row.wrong,
+            skipped: row.skipped,
+            rawScore: row.raw_score,
+            negativeMarks: row.negative_marks,
+            finalScore: row.final_score,
+            accuracyPercentage: row.accuracy_percentage,
+            attemptRatePercentage: row.total_questions > 0 ? Math.round((row.attempted / row.total_questions) * 100) : 0
+          },
+          sections: row.sections_data || [],
+          parsed: {
+            candidate: {
+              rollNumber: row.roll_number,
+              name: row.candidate_name,
+              examDate: row.exam_date,
+              shiftTime: row.shift_time,
+              venue: row.venue_name
+            },
+            meta: {
+              examTitle: row.exam_code,
+              examFamily: row.exam_family || 'ssc',
+              rawPlatform: 'tcs_ion',
+              sourceUrl: row.source_url
+            },
+            sections: [],
+            summary: {
+              totalQuestions: row.total_questions,
+              totalAttempted: row.attempted,
+              totalCorrect: row.correct,
+              totalWrong: row.wrong,
+              totalSkipped: row.skipped
+            }
+          },
+          ruleUsed: {
+            marksPerCorrect: row.exam_family === 'ssc' ? 2 : 1,
+            negativePerWrong: row.exam_family === 'ssc' ? 0.5 : 0.33
+          },
+          evaluatedAt: row.created_at
+        };
+        localSubmissionsCache.set(row.id, reconstructed);
+        return reconstructed;
+      }
+    } catch (e) {
+      console.warn('Could not query Supabase for roll number:', e);
+    }
+  }
+
+  return undefined;
+}

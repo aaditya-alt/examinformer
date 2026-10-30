@@ -633,7 +633,8 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     router.push(`/tests/${test.id}/result`);
   };
 
-  const isQuestionSolutionVisible = !reattemptMode || revealedPerQuestion[qno];
+  // Only visible when in solution mode and (reattempt is OFF or revealed for this specific question)
+  const isQuestionSolutionVisible = Boolean(isSolutionMode && (!reattemptMode || revealedPerQuestion[qno]));
 
   return (
     <div
@@ -885,12 +886,12 @@ function EduquityCBTContent({ testId }: { testId: string }) {
               {currentQuestion.options.map((opt) => {
                 const optText = language === 'hi' && opt.textHi ? opt.textHi : opt.text;
                 
-                const isSelectedInExam = currentResponse.chosenOption === opt.id;
-                const isSelectedInReattempt = reattemptChoices[qno] === opt.id;
+                const isSelectedInExam = !isSolutionMode && currentResponse.chosenOption === opt.id;
+                const isSelectedInReattempt = isSolutionMode && reattemptMode && reattemptChoices[qno] === opt.id;
                 
-                const isOfficialCorrect = isQuestionSolutionVisible && opt.id === currentQuestion.correctOption;
-                const isUserAttempted = isQuestionSolutionVisible && currentResponse.chosenOption === opt.id;
-                const isUserWrongChoice = isUserAttempted && !isOfficialCorrect;
+                const isOfficialCorrect = isSolutionMode && isQuestionSolutionVisible && opt.id === currentQuestion.correctOption;
+                const isUserAttempted = isSolutionMode && isQuestionSolutionVisible && currentResponse.chosenOption === opt.id;
+                const isUserWrongChoice = isSolutionMode && isUserAttempted && !isOfficialCorrect;
 
                 return (
                   <div
