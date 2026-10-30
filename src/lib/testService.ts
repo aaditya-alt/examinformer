@@ -37,6 +37,9 @@ export interface CBTTest {
   totalQuestions: number;
   sections: CBTSection[];
   isPublished: boolean;
+  hasSectionalTiming?: boolean;
+  sectionalTimingMinutes?: number;
+  difficulty?: string;
 }
 
 // Built-in verified sample mock tests with bilingual content

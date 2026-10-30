@@ -21,11 +21,44 @@ import {
 import confetti from 'canvas-confetti';
 
 export default function AdminStudioPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [authError, setAuthError] = useState('');
+  const [authChecked, setAuthChecked] = useState(false);
+
   const [submissions, setSubmissions] = useState<EvaluationResult[]>([]);
   const [tests, setTests] = useState<CBTTest[]>([]);
   const [activeTab, setActiveTab] = useState<'submissions' | 'tests'>('submissions');
   const [loading, setLoading] = useState(true);
   const [pushingId, setPushingId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const isAuth = sessionStorage.getItem('ei_admin_authenticated');
+    if (isAuth === 'true') {
+      setIsAuthenticated(true);
+    }
+    setAuthChecked(true);
+  }, []);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Default admin access passcodes
+    const validPasswords = ['admin123', 'admin@2026', 'examinformer2026', 'mockmatrix'];
+    if (validPasswords.includes(passwordInput.trim())) {
+      setIsAuthenticated(true);
+      sessionStorage.setItem('ei_admin_authenticated', 'true');
+      setAuthError('');
+      loadData();
+    } else {
+      setAuthError('Invalid Security Passcode. Access Denied.');
+    }
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('ei_admin_authenticated');
+    setIsAuthenticated(false);
+    setPasswordInput('');
+  };
 
   const loadData = () => {
     setLoading(true);
@@ -45,8 +78,10 @@ export default function AdminStudioPage() {
   };
 
   useEffect(() => {
-    loadData();
-  }, []);
+    if (isAuthenticated) {
+      loadData();
+    }
+  }, [isAuthenticated]);
 
   const handlePushToMock = async (submissionId: string) => {
     try {
@@ -70,6 +105,65 @@ export default function AdminStudioPage() {
     }
   };
 
+  if (!authChecked) {
+    return <div className="min-h-[60vh] flex items-center justify-center text-slate-400">Loading admin security...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-[75vh] flex items-center justify-center px-4">
+        <div className="w-full max-w-md p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+          <div className="text-center space-y-2">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-indigo-50 dark:bg-indigo-950/70 border border-indigo-100 dark:border-indigo-800 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-sm">
+              <ShieldCheck className="w-8 h-8" />
+            </div>
+            <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              Admin Studio Restricted
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              This environment is protected. Please enter the master admin passcode to access test publishing and key ingestion controls.
+            </p>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5">
+                Security Passcode
+              </label>
+              <input
+                type="password"
+                required
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                placeholder="Enter admin passcode"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm"
+              />
+            </div>
+
+            {authError && (
+              <div className="text-xs text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900 p-2.5 rounded-lg text-center font-medium">
+                {authError}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-500/25 transition"
+            >
+              Authenticate &amp; Enter Studio
+            </button>
+          </form>
+
+          <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 text-center">
+            <Link href="/" className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition">
+              &larr; Return to Exam Informer Home
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Top Header */}
@@ -87,13 +181,21 @@ export default function AdminStudioPage() {
           </p>
         </div>
 
-        <button
-          onClick={loadData}
-          className="self-start md:self-auto flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 transition shadow-sm"
-        >
-          <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-          <span>Refresh Database</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={loadData}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition shadow-sm"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+            <span>Refresh</span>
+          </button>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900 text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/60 transition shadow-sm"
+          >
+            <span>Lock &amp; Exit</span>
+          </button>
+        </div>
       </div>
 
       {/* Tabs */}

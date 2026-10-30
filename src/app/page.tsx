@@ -4,153 +4,154 @@ import { BRANDING } from '@/lib/branding';
 import {
   Calculator,
   BookOpen,
-  Sparkles,
   ArrowRight,
   ShieldCheck,
   CheckCircle2,
   TrendingUp,
   Award,
-  Zap,
   Clock,
   Layers,
-  FileCheck2
+  FileCheck2,
+  BarChart3,
+  Users,
+  Compass
 } from 'lucide-react';
 
 export default function HomePage() {
   return (
-    <div className="space-y-24 py-10 sm:py-16">
+    <div className="space-y-16 sm:space-y-24 py-8 sm:py-14">
       {/* ── 1. Hero Section ── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-950/70 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-xs sm:text-sm font-extrabold shadow-sm">
-          <Sparkles className="w-4 h-4 text-blue-600 animate-spin" />
-          <span>Next-Generation Evaluation Engine &amp; CBT Test Simulator</span>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 sm:space-y-8">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-900 text-blue-700 dark:text-blue-300 text-xs sm:text-sm font-bold shadow-sm">
+          <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+          <span>Official SSC &amp; Railway Exam Portal &bull; 2024–2025 Sessions</span>
         </div>
 
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.1] max-w-4xl mx-auto">
-          SSC &amp; Railway Exam
-          <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500">
-            Rank Calculator &amp; CBT Mocks
+        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.15] max-w-4xl mx-auto">
+          Evaluate Answer Keys, Calculate Ranks &amp;
+          <span className="block text-blue-600 dark:text-blue-400 mt-1">
+            Practice Real CBT Mock Tests
           </span>
         </h1>
 
-        <p className="text-base sm:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed font-normal">
-          Paste your official TCS iON or DigiALM answer key URL to calculate instant marks, shift percentiles, and All-India Ranks. Or practice authentic Computer Based Tests (CBT) powered by real ingested exam papers.
+        <p className="text-sm sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          Paste your official TCS iON or DigiALM response sheet URL for instant marks, section analysis, shift ranks, and percentiles. Or practice full-length CBT tests in the exact official examination interface.
         </p>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+        {/* Call to action buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-2">
           <Link
             href="/score-calculator"
-            className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-base flex items-center justify-center gap-2.5 shadow-xl shadow-blue-500/25 active:scale-95 transition"
+            className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-md shadow-blue-600/20 active:scale-95 transition"
           >
-            <Calculator className="w-5 h-5" />
-            <span>Calculate Your Marks &amp; Rank</span>
-            <ArrowRight className="w-5 h-5" />
+            <Calculator className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span>Check Score &amp; Rank</span>
+            <ArrowRight className="w-4 h-4" />
           </Link>
 
           <Link
             href="/tests"
-            className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 font-extrabold text-base flex items-center justify-center gap-2.5 shadow-sm active:scale-95 transition"
+            className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-750 font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-sm active:scale-95 transition"
           >
-            <BookOpen className="w-5 h-5 text-blue-600" />
-            <span>Practice CBT Mock Tests</span>
+            <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" />
+            <span>Practice CBT Mocks</span>
           </Link>
         </div>
 
-        {/* Feature Highlights Pills */}
-        <div className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs font-semibold text-slate-500 dark:text-slate-400">
-          <span className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-            100% Verified DigiALM / TCS iON Parsing
+        {/* Trust Badges */}
+        <div className="pt-4 flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs font-semibold text-slate-500 dark:text-slate-400">
+          <span className="flex items-center gap-1.5">
+            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+            Official DigiALM / TCS iON URL Support
           </span>
-          <span className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-            Instant Shift &amp; All-India Rankings
+          <span className="flex items-center gap-1.5">
+            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+            Instant All-India &amp; Shift Ranks
           </span>
-          <span className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-            Offline HTML / Paste Fallback Support
+          <span className="flex items-center gap-1.5">
+            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+            Official Sectional Timers &amp; Math (KaTeX)
           </span>
-          <span className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-            1-Click Answer Key to Mock Test Conversion
+          <span className="flex items-center gap-1.5">
+            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+            100% Free Open Access
           </span>
         </div>
       </section>
 
-      {/* ── 2. Primary Feature Cards ── */}
+      {/* ── 2. Primary Modules ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Card 1: Score & Rank Engine */}
-          <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-xl shadow-blue-500/10 flex flex-col justify-between space-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          {/* Module 1: Score & Rank Engine */}
+          <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-blue-700 to-indigo-800 text-white shadow-lg flex flex-col justify-between space-y-6">
             <div className="space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center">
+              <div className="w-11 h-11 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center">
                 <Calculator className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
-                Official Answer Key &amp; Shift Rank Engine
+              <h2 className="text-xl sm:text-2xl font-black tracking-tight">
+                Answer Key Score &amp; Rank Calculator
               </h2>
-              <p className="text-blue-100 text-sm leading-relaxed">
-                Evaluates response sheets across SSC (CGL, CHSL, MTS, GD, Steno) and Railways (RRB NTPC, Group D, ALP). Handles complex HTML, MathML LaTeX equations, negative marking, and dropped questions.
+              <p className="text-blue-100 text-xs sm:text-sm leading-relaxed">
+                Paste your official TCS iON / SSC cbexams response sheet link. The system extracts questions, evaluates negative marks, groups section marks, and provides shift normalization benchmark.
               </p>
-              <ul className="space-y-2 text-xs font-semibold text-blue-100/90 pt-2">
+              <ul className="space-y-2 text-xs font-medium text-blue-100/90 pt-1">
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-cyan-300" />
-                  Live Shift Benchmark (Average vs Topper Score)
+                  <CheckCircle2 className="w-3.5 h-3.5 text-cyan-300" />
+                  Detailed Sectional &amp; Category Breakdown
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-cyan-300" />
-                  Category Rank &amp; Zonal Cutoff Projections
+                  <CheckCircle2 className="w-3.5 h-3.5 text-cyan-300" />
+                  Shift Comparison (Your Marks vs Average vs Shift Topper)
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-cyan-300" />
-                  Clean Printable Scorecard &amp; PDF Export
+                  <CheckCircle2 className="w-3.5 h-3.5 text-cyan-300" />
+                  Printable Official Format Scorecard
                 </li>
               </ul>
             </div>
 
             <Link
               href="/score-calculator"
-              className="w-full py-4 rounded-2xl bg-white text-blue-700 hover:bg-blue-50 font-extrabold text-sm flex items-center justify-center gap-2 shadow-md transition"
+              className="w-full py-3 rounded-xl bg-white text-blue-800 hover:bg-blue-50 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow transition"
             >
-              <span>Launch Score Calculator</span>
+              <span>Calculate Your Score</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
-          {/* Card 2: CBT Mock Test Series */}
-          <div className="p-8 sm:p-10 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-8">
+          {/* Module 2: CBT Mock Tests */}
+          <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-6">
             <div className="space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950 flex items-center justify-center text-indigo-600">
+              <div className="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-indigo-950/70 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
                 <BookOpen className="w-6 h-6" />
               </div>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-                Real CBT Examination Environment
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                Full-Length CBT Examination Engine
               </h2>
-              <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
-                Take full-length tests and official shift PYQs in an authentic exam screen. Features bilingual question toggle (Hindi/English), section timers, 5-state palette status, and KaTeX math formulas.
+              <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm leading-relaxed">
+                Practice official previous year papers and mock tests in a 1:1 replica of the TCS iON examination terminal. Features official sectional timers, KaTeX math expressions, and 5-state color question palette.
               </p>
-              <ul className="space-y-2 text-xs font-semibold text-slate-600 dark:text-slate-400 pt-2">
+              <ul className="space-y-2 text-xs font-medium text-slate-600 dark:text-slate-400 pt-1">
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                  TCS iON CBT 5-state color coded palette
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                  Latest SSC Sectional Timer (15 Min / Section Auto-lock)
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                  Step-by-step solutions with KaTeX LaTeX math
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                  Radio Button Option Selection &amp; Clear Response
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                  Papers ingested directly from official response sheets
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                  Step-by-Step Solutions &amp; Peer Comparison Metrics
                 </li>
               </ul>
             </div>
 
             <Link
               href="/tests"
-              className="w-full py-4 rounded-2xl bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-md transition"
+              className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow transition"
             >
-              <span>Explore All CBT Tests</span>
+              <span>Explore CBT Mock Papers</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -158,35 +159,35 @@ export default function HomePage() {
       </section>
 
       {/* ── 3. Supported Exams Grid ── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <div className="text-center max-w-xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-            Supported Exam Agencies
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <div className="text-center max-w-xl mx-auto space-y-1">
+          <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+            Popular Examination Categories
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2">
-            Tailored evaluation logic and negative marking formulas for every major competitive board.
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+            Tailored negative marking, section patterns, and timing rules for every board.
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
           {[
-            { name: 'SSC CGL', mark: '+2 / -0.50', cat: 'SSC', href: '/score-calculator' },
-            { name: 'SSC CHSL', mark: '+2 / -0.50', cat: 'SSC', href: '/score-calculator' },
-            { name: 'SSC MTS', mark: '+3 / -1.00', cat: 'SSC', href: '/score-calculator' },
-            { name: 'RRB NTPC', mark: '+1 / -0.33', cat: 'Railway', href: '/score-calculator' },
-            { name: 'RRB Group D', mark: '+1 / -0.33', cat: 'Railway', href: '/score-calculator' },
-            { name: 'RRB ALP', mark: '+1 / -0.33', cat: 'Railway', href: '/score-calculator' },
+            { name: 'SSC CGL', mark: '+2.0 / -0.50', cat: 'SSC', href: '/tests?exam=ssc-cgl' },
+            { name: 'SSC CHSL', mark: '+2.0 / -0.50', cat: 'SSC', href: '/tests?exam=ssc-chsl' },
+            { name: 'SSC MTS', mark: '+3.0 / -1.00', cat: 'SSC', href: '/tests?exam=ssc-mts' },
+            { name: 'RRB NTPC', mark: '+1.0 / -0.33', cat: 'Railway', href: '/tests?exam=rrb-ntpc' },
+            { name: 'RRB Group D', mark: '+1.0 / -0.33', cat: 'Railway', href: '/tests?exam=rrb-group-d' },
+            { name: 'RRB ALP', mark: '+1.0 / -0.33', cat: 'Railway', href: '/tests?exam=rrb-alp' },
           ].map((exam, i) => (
             <Link
               key={i}
               href={exam.href}
-              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 hover:border-blue-500 text-center space-y-1 transition group"
+              className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 text-center space-y-1 transition group shadow-sm"
             >
-              <div className="text-[10px] font-bold text-slate-400 uppercase">{exam.cat}</div>
-              <div className="font-extrabold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 transition">
+              <div className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">{exam.cat}</div>
+              <div className="font-extrabold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
                 {exam.name}
               </div>
-              <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+              <div className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
                 {exam.mark}
               </div>
             </Link>
@@ -194,28 +195,34 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 4. Admin Pipeline Feature Spotlight ── */}
+      {/* ── 4. Exam Preparation & Live Analytics Banner ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="p-8 sm:p-12 rounded-3xl bg-slate-900 text-white relative overflow-hidden">
-          <div className="relative z-10 max-w-2xl space-y-4">
-            <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold uppercase tracking-wider border border-blue-400/30">
-              Admin &amp; Pipeline Engine
+        <div className="p-6 sm:p-10 rounded-2xl bg-slate-900 text-white border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6 shadow-md">
+          <div className="space-y-2 max-w-xl text-center md:text-left">
+            <span className="px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-[11px] font-bold uppercase tracking-wider border border-blue-400/30">
+              Exam Informer Data Hub
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black tracking-tight leading-tight">
-              Ingest Answer Keys &rarr; Instant Live Mock Tests
-            </h2>
-            <p className="text-slate-300 text-sm leading-relaxed">
-              When candidates submit their official response sheets to check marks, our engine scrapes and structures all questions, diagrams, and options. Admins can review them in the Admin Studio and publish them into CBT test series with a single click.
+            <h3 className="text-xl sm:text-2xl font-black tracking-tight">
+              540+ Official Shift Questions &amp; Real Papers Ready
+            </h3>
+            <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+              Every mock test in our repository is extracted from official TCS iON candidate answer keys with verified answers, bilingual hindi/english support, and community difficulty ratings.
             </p>
-            <div className="pt-2">
-              <Link
-                href="/admin"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md transition"
-              >
-                <ShieldCheck className="w-4 h-4" />
-                <span>Open Admin Studio</span>
-              </Link>
-            </div>
+          </div>
+
+          <div className="flex items-center gap-3 shrink-0">
+            <Link
+              href="/tests"
+              className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-md transition"
+            >
+              Start Free CBT Mock
+            </Link>
+            <Link
+              href="/score-calculator"
+              className="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs sm:text-sm transition"
+            >
+              Enter Answer Key URL
+            </Link>
           </div>
         </div>
       </section>

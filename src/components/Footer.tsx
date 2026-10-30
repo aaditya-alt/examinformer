@@ -102,10 +102,8 @@ export function Footer() {
           <div>
             &copy; {new Date().getFullYear()} {BRANDING.name}. An independent educational testing engine. Not affiliated with SSC, RRB, or TCS.
           </div>
-          <div className="flex items-center gap-4">
-            <Link href="/admin" className="hover:text-slate-800 dark:hover:text-slate-200">
-              Admin Portal
-            </Link>
+          <div className="flex items-center gap-4 text-slate-400">
+            <span>Server Status: Operational</span>
           </div>
         </div>
       </div>

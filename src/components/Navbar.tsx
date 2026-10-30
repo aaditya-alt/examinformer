@@ -23,12 +23,6 @@ export function Navbar() {
       href: '/tests',
       icon: BookOpen,
       badge: 'CBT 2.0'
-    },
-    {
-      name: 'Admin Studio',
-      href: '/admin',
-      icon: ShieldCheck,
-      badge: 'Push Engine'
     }
   ];
 
