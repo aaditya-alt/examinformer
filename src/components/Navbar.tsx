@@ -34,22 +34,22 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="flex items-center -space-x-2">
-              <div className="w-9 h-9 rounded-full bg-white shadow-md border border-slate-200 dark:border-slate-700 flex items-center justify-center p-0.5 overflow-hidden z-10">
-                <img src="/ssc-logo.svg" alt="SSC" className="w-full h-full object-contain" />
+            <div className="flex items-center -space-x-1.5">
+              <div className="w-8 h-8 rounded-full bg-white shadow-sm border border-slate-200 dark:border-slate-700 flex items-center justify-center p-0.5 overflow-hidden z-10">
+                <img src="/ssc-logo.png" alt="SSC" className="w-full h-full object-contain" />
               </div>
-              <div className="w-9 h-9 rounded-full bg-white shadow-md border border-slate-200 dark:border-slate-700 flex items-center justify-center p-0.5 overflow-hidden">
-                <img src="/rrb-logo.svg" alt="RRB" className="w-full h-full object-contain" />
+              <div className="w-8 h-8 rounded-full bg-white shadow-sm border border-slate-200 dark:border-slate-700 flex items-center justify-center p-0.5 overflow-hidden">
+                <img src="/rrb-logo.png" alt="RRB" className="w-full h-full object-contain" />
               </div>
             </div>
             <div>
-              <div className="font-extrabold text-lg text-slate-900 dark:text-white tracking-tight flex items-center gap-1.5">
+              <div className="font-extrabold text-base text-slate-900 dark:text-white tracking-tight flex items-center gap-1.5">
                 {BRANDING.name}
-                <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
-                  Eduquity CBT
+                <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
+                  CBT
                 </span>
               </div>
-              <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium -mt-1 hidden sm:block">
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium -mt-1 hidden sm:block">
                 SSC &amp; Railway National Assessment Portal
               </div>
             </div>
