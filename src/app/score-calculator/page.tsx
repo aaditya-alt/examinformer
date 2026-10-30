@@ -383,6 +383,17 @@ export default function ScoreCalculatorPage() {
         {/* Form when checking by Roll Number */}
         {inputTab === 'roll' ? (
           <form onSubmit={handleCheckByRoll} className="space-y-5">
+            {/* Clear instructions as requested by user */}
+            <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 text-xs text-blue-900 dark:text-blue-200 space-y-1">
+              <div className="font-bold flex items-center gap-1.5 text-blue-800 dark:text-blue-300">
+                <HelpCircle className="w-4 h-4 shrink-0" />
+                <span>How Roll Number Lookup Works</span>
+              </div>
+              <p className="leading-relaxed text-[11px] text-slate-600 dark:text-slate-300">
+                If you have checked your answer key on Exam Informer earlier, enter your <strong>Roll Number</strong> below to see your live shift &amp; category rank directly. If you haven&apos;t checked yet, please submit your answer key link in the <strong>&quot;Answer Key URL&quot;</strong> tab first, and then you can check anytime via Roll Number.
+              </p>
+            </div>
+
             <div>
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                 Examination Roll Number / Participant ID
@@ -405,7 +416,7 @@ export default function ScoreCalculatorPage() {
                 </button>
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5">
-                Enter the roll number you used when previously evaluating your answer key on Exam Informer.
+                Enter your official SSC or RRB Roll Number from your response sheet or admit card.
               </p>
             </div>
 
@@ -435,13 +446,13 @@ export default function ScoreCalculatorPage() {
               </div>
               <input
                 type="url"
-                placeholder="https://ssc.digialm.com//per/g01/pub/2201/touchstone/AssessmentQPHTMLMode1//..."
+                placeholder="https://sscexams.cbexams.com/candidateportal/response/... or https://ssc.digialm.com/..."
                 value={answerKeyUrl}
                 onChange={(e) => setAnswerKeyUrl(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder:text-slate-400 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               />
               <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5">
-                Copy the link from your browser's address bar when viewing your official response sheet on the candidate portal.
+                Official SSC answer key links start with <code className="text-blue-600 dark:text-blue-400 font-bold">https://sscexams.cbexams.com/</code> or <code className="text-blue-600 dark:text-blue-400 font-bold">https://ssc.digialm.com/</code>. Copy and paste the full URL from your browser.
               </p>
             </div>
           ) : (

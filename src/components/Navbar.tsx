@@ -15,16 +15,22 @@ export function Navbar() {
 
   const navLinks = [
     {
+      name: 'Practice Mocks',
+      href: '/tests',
+      icon: BookOpen,
+      badge: '2026–27'
+    },
+    {
       name: 'Score Calculator',
       href: '/score-calculator',
       icon: Calculator,
       badge: 'Live Keys'
     },
     {
-      name: 'Mock Tests & PYQs',
-      href: '/tests',
-      icon: BookOpen,
-      badge: 'CBT 2.0'
+      name: 'My Tests',
+      href: '/my-tests',
+      icon: Sparkles,
+      badge: 'Dashboard'
     }
   ];
 

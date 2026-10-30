@@ -897,43 +897,53 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                   <div
                     key={opt.id}
                     onClick={() => handleSelectOption(opt.id)}
-                    className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition ${
+                    className={`flex items-start gap-3.5 p-3.5 sm:p-4 rounded-xl border cursor-pointer transition select-none ${
                       isOfficialCorrect
                         ? 'bg-emerald-50 border-emerald-500 ring-1 ring-emerald-500/30'
                         : isUserWrongChoice
                         ? 'bg-rose-50 border-rose-400 ring-1 ring-rose-400/20'
                         : (isSelectedInExam || (reattemptMode && isSelectedInReattempt))
-                        ? 'bg-sky-50 border-sky-500'
-                        : 'bg-white border-slate-200 hover:bg-slate-50'
+                        ? 'bg-blue-50/80 border-blue-600 ring-1 ring-blue-500/30 shadow-sm'
+                        : 'bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300'
                     }`}
                   >
-                    {/* Small Round Radio Button */}
-                    <div
-                      className={`mt-0.5 w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition ${
+                    {/* Small Round Radio Button — Strictly clickable directly & displays selected state */}
+                    <button
+                      type="button"
+                      role="radio"
+                      aria-checked={isSelectedInExam || (reattemptMode && isSelectedInReattempt)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelectOption(opt.id);
+                      }}
+                      className={`mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 cursor-pointer transition-all ${
                         isOfficialCorrect
                           ? 'border-emerald-600 bg-emerald-600 text-white'
                           : isUserWrongChoice
                           ? 'border-rose-600 bg-rose-600 text-white'
                           : (isSelectedInExam || (reattemptMode && isSelectedInReattempt))
-                          ? 'border-sky-600 bg-white'
-                          : 'border-slate-400 bg-white'
+                          ? 'border-blue-600 bg-white ring-2 ring-blue-500/25'
+                          : 'border-slate-400 hover:border-blue-500 bg-white'
                       }`}
                     >
                       {isOfficialCorrect ? (
-                        <Check className="w-2.5 h-2.5 text-white stroke-[3]" />
+                        <Check className="w-3 h-3 text-white stroke-[3]" />
                       ) : isUserWrongChoice ? (
-                        <X className="w-2.5 h-2.5 text-white stroke-[3]" />
+                        <X className="w-3 h-3 text-white stroke-[3]" />
                       ) : (isSelectedInExam || (reattemptMode && isSelectedInReattempt)) ? (
-                        <div className="w-2 h-2 rounded-full bg-sky-600" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-in zoom-in-75 duration-100" />
                       ) : null}
-                    </div>
+                    </button>
 
                     <div className="flex-1 flex flex-wrap items-start justify-between gap-2 text-sm text-slate-800 leading-normal">
-                      <div className="flex-1 min-w-[200px]">
-                        <MathRenderer content={optText} />
-                        {opt.imageUrl && (
-                          <img src={opt.imageUrl} alt={`Option ${opt.id}`} className="mt-2 max-h-36 border rounded" />
-                        )}
+                      <div className="flex-1 min-w-[200px] flex items-start gap-2">
+                        <span className="font-bold text-xs text-slate-500 mt-0.5 shrink-0">({opt.id})</span>
+                        <div className="flex-1">
+                          <MathRenderer content={optText} />
+                          {opt.imageUrl && (
+                            <img src={opt.imageUrl} alt={`Option ${opt.id}`} className="mt-2 max-h-36 border rounded" />
+                          )}
+                        </div>
                       </div>
 
                       {/* Solution Badges */}
