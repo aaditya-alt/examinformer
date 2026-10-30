@@ -2,11 +2,12 @@
 -- SUPABASE SCHEMA FOR MOCK MATRIX / EXAM PREP PLATFORM
 -- Covers: Exam Management, Answer Key Ingestion, Score Calculator,
 -- Rank Engine, CBT Mock Test Series, and Admin Pipeline.
+-- Compatible with both UUIDs and custom string slugs.
 -- ====================================================================
 
 -- 1. EXAMS & CATEGORIES
 CREATE TABLE IF NOT EXISTS public.exams (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
     code VARCHAR(50) UNIQUE NOT NULL, -- e.g. 'ssc-cgl', 'rrb-ntpc', 'ssc-chsl'
     title VARCHAR(150) NOT NULL,
     family VARCHAR(50) NOT NULL, -- 'ssc', 'rrb', 'banking', 'state'
@@ -21,8 +22,8 @@ CREATE TABLE IF NOT EXISTS public.exams (
 
 -- 2. ANSWER KEY SUBMISSIONS (Ingested from students entering URLs)
 CREATE TABLE IF NOT EXISTS public.answer_key_submissions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    exam_id UUID REFERENCES public.exams(id) ON DELETE SET NULL,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    exam_id TEXT REFERENCES public.exams(id) ON DELETE SET NULL,
     exam_code VARCHAR(50) NOT NULL,
     exam_family VARCHAR(50) NOT NULL, -- 'ssc', 'rrb', 'other'
     source_url TEXT,
@@ -54,7 +55,7 @@ CREATE TABLE IF NOT EXISTS public.answer_key_submissions (
     
     -- Admin Ingestion status
     status VARCHAR(50) DEFAULT 'submitted', -- 'submitted', 'pushed_to_test', 'archived'
-    pushed_test_id UUID,
+    pushed_test_id TEXT,
     
     ip_hash VARCHAR(64),
     created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL
@@ -67,8 +68,8 @@ CREATE INDEX IF NOT EXISTS idx_submissions_category ON public.answer_key_submiss
 
 -- 3. MOCK TESTS (Created natively or pushed from answer keys)
 CREATE TABLE IF NOT EXISTS public.tests (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    exam_id UUID REFERENCES public.exams(id) ON DELETE SET NULL,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    exam_id TEXT REFERENCES public.exams(id) ON DELETE SET NULL,
     exam_code VARCHAR(50) NOT NULL,
     title VARCHAR(200) NOT NULL,
     type VARCHAR(50) DEFAULT 'pyq', -- 'pyq', 'full_mock', 'sectional', 'live'
@@ -76,15 +77,15 @@ CREATE TABLE IF NOT EXISTS public.tests (
     duration_minutes INTEGER DEFAULT 60,
     total_marks NUMERIC(7,2) DEFAULT 200,
     total_questions INTEGER DEFAULT 100,
-    source_answer_key_id UUID REFERENCES public.answer_key_submissions(id) ON DELETE SET NULL,
+    source_answer_key_id TEXT REFERENCES public.answer_key_submissions(id) ON DELETE SET NULL,
     is_published BOOLEAN DEFAULT true,
     created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
 -- 4. TEST SECTIONS
 CREATE TABLE IF NOT EXISTS public.test_sections (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    test_id UUID REFERENCES public.tests(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    test_id TEXT REFERENCES public.tests(id) ON DELETE CASCADE,
     name VARCHAR(100) NOT NULL, -- e.g. "General Intelligence and Reasoning"
     order_index INTEGER DEFAULT 0,
     marks_per_question NUMERIC(5,2) DEFAULT 2.0,
@@ -94,9 +95,9 @@ CREATE TABLE IF NOT EXISTS public.test_sections (
 
 -- 5. QUESTIONS BANK
 CREATE TABLE IF NOT EXISTS public.questions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    test_id UUID REFERENCES public.tests(id) ON DELETE CASCADE,
-    section_id UUID REFERENCES public.test_sections(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    test_id TEXT REFERENCES public.tests(id) ON DELETE CASCADE,
+    section_id TEXT REFERENCES public.test_sections(id) ON DELETE CASCADE,
     question_number INTEGER NOT NULL,
     question_id_str VARCHAR(100), -- original TCS question ID e.g. 4410091631384
     question_text_en TEXT,
@@ -116,9 +117,9 @@ CREATE TABLE IF NOT EXISTS public.questions (
 
 -- 6. STUDENT TEST ATTEMPTS
 CREATE TABLE IF NOT EXISTS public.test_attempts (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    test_id UUID REFERENCES public.tests(id) ON DELETE CASCADE,
-    user_id UUID, -- nullable for guest attempts
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    test_id TEXT REFERENCES public.tests(id) ON DELETE CASCADE,
+    user_id TEXT, -- nullable for guest attempts
     candidate_name VARCHAR(150) DEFAULT 'Student',
     
     -- Answers record: { [question_id]: { chosen_option: 2, time_spent_sec: 45, status: "answered" } }
@@ -132,7 +133,37 @@ CREATE TABLE IF NOT EXISTS public.test_attempts (
     created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- SEED INITIAL EXAMS
+-- 7. ENABLE ROW LEVEL SECURITY & PUBLIC ACCESS POLICIES
+ALTER TABLE public.exams ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.answer_key_submissions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.tests ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.test_sections ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.questions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.test_attempts ENABLE ROW LEVEL SECURITY;
+
+-- Allow public read & insert policies for seamless student access
+DO $$
+BEGIN
+    DROP POLICY IF EXISTS "Allow public read on exams" ON public.exams;
+    CREATE POLICY "Allow public read on exams" ON public.exams FOR SELECT USING (true);
+
+    DROP POLICY IF EXISTS "Allow public read on tests" ON public.tests;
+    CREATE POLICY "Allow public read on tests" ON public.tests FOR SELECT USING (true);
+
+    DROP POLICY IF EXISTS "Allow public read on test_sections" ON public.test_sections;
+    CREATE POLICY "Allow public read on test_sections" ON public.test_sections FOR SELECT USING (true);
+
+    DROP POLICY IF EXISTS "Allow public read on questions" ON public.questions;
+    CREATE POLICY "Allow public read on questions" ON public.questions FOR SELECT USING (true);
+
+    DROP POLICY IF EXISTS "Allow public insert & read on submissions" ON public.answer_key_submissions;
+    CREATE POLICY "Allow public insert & read on submissions" ON public.answer_key_submissions FOR ALL USING (true) WITH CHECK (true);
+
+    DROP POLICY IF EXISTS "Allow public insert on attempts" ON public.test_attempts;
+    CREATE POLICY "Allow public insert on attempts" ON public.test_attempts FOR ALL USING (true) WITH CHECK (true);
+END $$;
+
+-- 8. SEED INITIAL EXAMS
 INSERT INTO public.exams (code, title, family, marks_per_correct, negative_per_wrong, total_time_minutes)
 VALUES
     ('ssc-cgl', 'SSC CGL (Tier 1)', 'ssc', 2.00, 0.50, 60),
