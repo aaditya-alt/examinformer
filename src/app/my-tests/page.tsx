@@ -174,7 +174,7 @@ export default function MyTestsDashboardPage() {
         </div>
       ) : attempts.length === 0 ? (
         /* Empty State */
-        <div className="p-8 sm:p-14 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-5 shadow-sm max-w-xl mx-auto">
+        <div className="p-8 sm:p-14 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-5 card-3d max-w-xl mx-auto">
           <div className="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 mx-auto flex items-center justify-center">
             <BookOpen className="w-7 h-7" />
           </div>
@@ -207,7 +207,7 @@ export default function MyTestsDashboardPage() {
             {attempts.map((att) => (
               <div
                 key={att.id}
-                className="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-slate-300 dark:hover:border-slate-700 transition flex flex-col md:flex-row md:items-center justify-between gap-5"
+                className="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 card-3d flex flex-col md:flex-row md:items-center justify-between gap-5"
               >
                 {/* Attempt Details */}
                 <div className="space-y-2 flex-1">
@@ -250,7 +250,7 @@ export default function MyTestsDashboardPage() {
                 <div className="flex items-center gap-2 shrink-0 flex-wrap">
                   <Link
                     href={`/tests/${att.test_id}/result`}
-                    className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition active:scale-95"
+                    className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs flex items-center gap-1.5 btn-3d-primary cursor-pointer"
                   >
                     <BarChart2 className="w-3.5 h-3.5" />
                     <span>View Scorecard</span>

@@ -3,6 +3,7 @@ import 'katex/dist/katex.min.css';
 import './globals.css';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { TelegramPopup } from '@/components/TelegramPopup';
 import { BRANDING } from '@/lib/branding';
 import { AuthProvider } from '@/components/auth/AuthContext';
 import { AuthModal } from '@/components/auth/AuthModal';
@@ -19,6 +20,23 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                const saved = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (saved === 'dark' || (!saved && prefersDark)) {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+              } catch (_) {}
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#090d16] text-slate-900 dark:text-slate-100 antialiased selection:bg-blue-500 selection:text-white">
         <AuthProvider>
           <Navbar />
@@ -27,6 +45,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <AuthModal />
+          <TelegramPopup />
         </AuthProvider>
       </body>
     </html>

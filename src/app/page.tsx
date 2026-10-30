@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { BRANDING } from '@/lib/branding';
 import Hero3DMockup from '@/components/Hero3DMockup';
+import { ExamLogo } from '@/components/ExamLogo';
 import {
   Calculator,
   BookOpen,
@@ -156,28 +157,16 @@ export default function HomePage() {
 
         {/* Official Logos Side-by-Side with 3D tactile card depth */}
         <div className="flex flex-wrap items-center justify-center gap-4 pt-1">
-          <div className="flex items-center gap-3 p-3 px-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition">
-            <div className="w-10 h-10 relative flex items-center justify-center">
-              <img
-                src="/ssc-logo.png"
-                alt="Staff Selection Commission"
-                className="w-full h-full object-contain"
-              />
-            </div>
+          <div className="flex items-center gap-3.5 p-3 px-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm card-3d">
+            <ExamLogo type="ssc" size="md" />
             <div className="text-left">
               <div className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">SSC Examination Portal</div>
               <div className="text-[11px] text-slate-500 font-medium">CGL &bull; CHSL &bull; GD &bull; MTS &bull; Eduquity Pattern</div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-3 px-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition">
-            <div className="w-10 h-10 relative flex items-center justify-center">
-              <img
-                src="/rrb-logo.png"
-                alt="Railway Recruitment Boards"
-                className="w-full h-full object-contain"
-              />
-            </div>
+          <div className="flex items-center gap-3.5 p-3 px-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm card-3d">
+            <ExamLogo type="rrb" size="md" />
             <div className="text-left">
               <div className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">Railway Recruitment Portal</div>
               <div className="text-[11px] text-slate-500 font-medium">NTPC &bull; Group D &bull; ALP &bull; 21 RRB Zones</div>
@@ -212,7 +201,7 @@ export default function HomePage() {
 
           <Link
             href="/score-calculator"
-            className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-750 font-extrabold text-sm flex items-center justify-center gap-2 btn-3d-secondary cursor-pointer"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700 font-extrabold text-sm flex items-center justify-center gap-2 btn-3d-secondary cursor-pointer"
           >
             <Calculator className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <span>Check Answer Key Rank</span>
@@ -220,7 +209,7 @@ export default function HomePage() {
 
           <Link
             href="/my-tests"
-            className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-850 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-sm flex items-center justify-center gap-2 transition cursor-pointer"
+            className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-sm flex items-center justify-center gap-2 transition cursor-pointer"
           >
             <Sparkles className="w-4 h-4 text-amber-500" />
             <span>My Attempted Tests</span>
@@ -384,14 +373,8 @@ export default function HomePage() {
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 relative shrink-0">
-                      <img
-                        src={t.family === 'rrb' ? '/rrb-logo.png' : '/ssc-logo.png'}
-                        alt={t.family}
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
+                  <div className="flex items-center gap-2.5">
+                    <ExamLogo type={t.family as any} size="sm" />
                     <span className="text-xs font-bold px-2.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
                       {t.badge}
                     </span>

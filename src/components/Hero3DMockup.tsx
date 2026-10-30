@@ -51,18 +51,30 @@ export default function Hero3DMockup() {
   ];
 
   return (
-    <div className="relative w-full max-w-5xl mx-auto perspective-1200 py-6 sm:py-10">
+    <div className="relative w-full max-w-5xl mx-auto perspective-1200 py-4 sm:py-10">
       {/* Background Radial Glow */}
       <div className="absolute inset-0 -top-10 bg-gradient-to-r from-blue-500/15 via-indigo-500/10 to-emerald-500/15 blur-3xl -z-10 rounded-full" />
 
-      {/* Floating 3D Badge 1: Top Left */}
+      {/* Mobile Floating 3D Badges (Visible on mobile) */}
+      <div className="flex sm:hidden items-center justify-between gap-2 pb-3 px-1 text-[11px] font-bold">
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm text-slate-800 dark:text-slate-200">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+          <span>Eduquity 2026-27</span>
+        </div>
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm text-slate-800 dark:text-slate-200">
+          <Trophy className="w-3.5 h-3.5 text-amber-500" />
+          <span>AIR #1: 191.5</span>
+        </div>
+      </div>
+
+      {/* Floating 3D Badge 1: Top Left (Desktop) */}
       <div className="hidden sm:flex absolute -top-3 -left-4 z-20 items-center gap-2 px-3.5 py-2 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200/80 dark:border-slate-700/80 shadow-xl floating-3d-slow text-xs font-bold text-slate-800 dark:text-slate-100">
         <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-ping" />
         <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-blue-400" />
         <span>Eduquity 2026-27 CBT Standard</span>
       </div>
 
-      {/* Floating 3D Badge 2: Top Right */}
+      {/* Floating 3D Badge 2: Top Right (Desktop) */}
       <div className="hidden sm:flex absolute -top-5 -right-4 z-20 items-center gap-2 px-4 py-2 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200/80 dark:border-slate-700/80 shadow-xl floating-3d-fast text-xs font-bold text-slate-800 dark:text-slate-100">
         <Trophy className="w-4 h-4 text-amber-500" />
         <span>AIR #1 Score: 191.5 / 200</span>
@@ -85,7 +97,7 @@ export default function Hero3DMockup() {
             <div className="h-4 w-px bg-slate-300 dark:bg-slate-700" />
             <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
               <span className="text-blue-600 dark:text-blue-400 font-extrabold text-sm tracking-tight">EXAM INFORMER</span>
-              <span className="text-[11px] px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950/70 text-blue-700 dark:text-blue-300 font-semibold">
+              <span className="text-[11px] px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950/70 text-blue-700 dark:text-blue-300 font-semibold truncate max-w-[200px] sm:max-w-none">
                 SSC CGL (Eduquity Pattern Based) Revision Full Test - 01
               </span>
             </div>
@@ -118,7 +130,7 @@ export default function Hero3DMockup() {
                   className={`px-3 py-1.5 rounded text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                     isActive
                       ? 'bg-blue-600 text-white shadow-sm'
-                      : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-750 border border-slate-200 dark:border-slate-700'
+                      : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
                   }`}
                 >
                   <span className={`text-[10px] px-1 rounded ${isActive ? 'bg-blue-700 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200'}`}>
@@ -141,7 +153,7 @@ export default function Hero3DMockup() {
           <div className="lg:col-span-8 p-5 sm:p-6 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800">
             <div className="space-y-4">
               {/* Question Header */}
-              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800/80 pb-3">
+              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                 <div className="flex items-center gap-2">
                   <span className="px-2.5 py-1 rounded bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-extrabold text-xs">
                     Question No. 2
@@ -158,7 +170,7 @@ export default function Hero3DMockup() {
                 <p className="font-semibold text-slate-700 dark:text-slate-300 text-xs">
                   Directions: The first and sixth sentences are given in the beginning as S1 and S6. The middle four sentences in each have been jumbled up and labelled as P, Q, R and S. Find the proper sequence:
                 </p>
-                <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/60 text-xs space-y-1 font-mono">
+                <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 text-xs space-y-1 font-mono">
                   <p><strong>S1:</strong> Global warming has escalated the severity and frequency of natural disasters worldwide.</p>
                   <p><strong>S6:</strong> This multi-faceted approach is crucial for the long-term sustainability of our planet.</p>
                   <p><strong>P:</strong> Governments and organizations are now prioritizing the development of sustainable energy sources.</p>
@@ -178,8 +190,8 @@ export default function Hero3DMockup() {
                       onClick={() => setSelectedOption(opt.id)}
                       className={`group flex items-center gap-3 p-3 rounded-xl border text-xs sm:text-sm cursor-pointer transition select-none ${
                         isChecked
-                          ? 'border-blue-600 bg-blue-50/70 dark:bg-blue-950/40 text-blue-950 dark:text-blue-200 font-semibold shadow-sm'
-                          : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-850 hover:border-slate-300 dark:hover:border-slate-700 text-slate-700 dark:text-slate-300'
+                          ? 'border-blue-600 bg-blue-50/70 dark:bg-blue-950/60 text-blue-950 dark:text-blue-100 font-semibold shadow-sm'
+                          : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700 text-slate-700 dark:text-slate-300'
                       }`}
                     >
                       {/* Interactive Radio Circle Button */}
@@ -207,7 +219,7 @@ export default function Hero3DMockup() {
             </div>
 
             {/* Bottom Eduquity Action Buttons with 3D Tactile Styling */}
-            <div className="pt-5 mt-4 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
+            <div className="pt-5 mt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <button
                   type="button"
@@ -235,9 +247,9 @@ export default function Hero3DMockup() {
           </div>
 
           {/* Right: Question Number Palette (Eduquity Grid 1..25) */}
-          <div className="lg:col-span-4 p-4 sm:p-5 bg-slate-50 dark:bg-slate-850/50 flex flex-col justify-between">
+          <div className="lg:col-span-4 p-4 sm:p-5 bg-slate-50 dark:bg-slate-900/60 flex flex-col justify-between">
             <div className="space-y-3">
-              <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700/60 pb-2">
+              <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700/80 pb-2">
                 <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                   Question Palette ({sections.find((s) => s.key === activeSection)?.subject})
                 </span>
@@ -266,7 +278,7 @@ export default function Hero3DMockup() {
               </div>
 
               {/* Eduquity Color Legend */}
-              <div className="pt-3 border-t border-slate-200 dark:border-slate-700/60 space-y-1.5 text-[10px] font-medium text-slate-600 dark:text-slate-400">
+              <div className="pt-3 border-t border-slate-200 dark:border-slate-700/80 space-y-1.5 text-[10px] font-medium text-slate-600 dark:text-slate-400">
                 <div className="grid grid-cols-2 gap-2">
                   <div className="flex items-center gap-1.5">
                     <span className="w-3.5 h-3.5 rounded bg-emerald-600 text-white text-[9px] font-bold flex items-center justify-center">1</span>
@@ -289,7 +301,7 @@ export default function Hero3DMockup() {
             </div>
 
             {/* Candidate Summary Panel */}
-            <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700/60 flex items-center justify-between text-[11px]">
+            <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700/80 flex items-center justify-between text-[11px]">
               <span className="text-slate-500">Attempt Status</span>
               <span className="font-bold text-slate-800 dark:text-slate-200">1 / 25 Answered</span>
             </div>

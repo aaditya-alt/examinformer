@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { BRANDING } from '@/lib/branding';
 import { ThemeToggle } from './ThemeToggle';
+import { ExamLogo } from './ExamLogo';
 import { useAuth } from './auth/AuthContext';
 import { Calculator, BookOpen, Sparkles, Menu, X, ArrowUpRight, User, LogOut } from 'lucide-react';
 
@@ -35,27 +36,20 @@ export function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Brand Logo */}
+          {/* Brand Logo with Round Official Emblems */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="flex items-center -space-x-1.5">
-              <div className="w-8 h-8 rounded-full bg-white shadow-sm border border-slate-200 dark:border-slate-700 flex items-center justify-center p-0.5 overflow-hidden z-10">
-                <img src="/ssc-logo.png" alt="SSC" className="w-full h-full object-contain" />
-              </div>
-              <div className="w-8 h-8 rounded-full bg-white shadow-sm border border-slate-200 dark:border-slate-700 flex items-center justify-center p-0.5 overflow-hidden">
-                <img src="/rrb-logo.png" alt="RRB" className="w-full h-full object-contain" />
-              </div>
-            </div>
+            <ExamLogo type="combo" size="sm" />
             <div>
               <div className="font-extrabold text-base text-slate-900 dark:text-white tracking-tight flex items-center gap-1.5">
                 {BRANDING.name}
-                <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
+                <span className="text-[10px] uppercase font-black tracking-wider px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 dark:bg-blue-900/60 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                   CBT
                 </span>
               </div>
-              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium -mt-1 hidden sm:block">
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold -mt-0.5 hidden sm:block">
                 SSC &amp; Railway National Assessment Portal
               </div>
             </div>

@@ -20,15 +20,15 @@
 }
 
 .dark {
-  --background: #060911;
-  --foreground: #f1f5f9;
-  --card: #0c1222;
+  --background: #090d16;
+  --foreground: #f8fafc;
+  --card: #0f172a;
   --card-foreground: #f8fafc;
   --primary: #3b82f6;
   --primary-foreground: #ffffff;
-  --secondary: #111a30;
+  --secondary: #162033;
   --secondary-foreground: #f8fafc;
-  --muted: #111a30;
+  --muted: #162033;
   --muted-foreground: #94a3b8;
   --accent: #1e293b;
   --accent-foreground: #60a5fa;
@@ -183,6 +183,22 @@ body {
 }
 
 /* 3D Floating Elements */
+@media (max-width: 640px) {
+  .hero-3d-card {
+    transform: perspective(800px) rotateX(4deg) translateY(-2px) !important;
+    box-shadow: 0 16px 32px -8px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(226, 232, 240, 0.9) !important;
+  }
+  .dark .hero-3d-card {
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(51, 65, 85, 0.8) !important;
+  }
+  .card-3d {
+    box-shadow: 0 5px 0 #cbd5e1, 0 8px 16px -2px rgba(0, 0, 0, 0.1) !important;
+  }
+  .dark .card-3d {
+    box-shadow: 0 5px 0 #1e293b, 0 8px 16px -2px rgba(0, 0, 0, 0.6) !important;
+  }
+}
+
 .floating-3d-slow {
   animation: float3dSlow 6s ease-in-out infinite alternate;
 }

@@ -338,8 +338,8 @@ export default function ScoreCalculatorPage() {
         </div>
       )}
 
-      {/* Main Input Form Card */}
-      <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm p-5 sm:p-8 space-y-6">
+      {/* Main Input Form Card with 3D Depth */}
+      <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 card-3d p-5 sm:p-8 space-y-6">
         {/* Input Mode Selector */}
         <div className="flex border-b border-slate-100 dark:border-slate-800 gap-4 sm:gap-6 overflow-x-auto">
           <button
@@ -409,7 +409,7 @@ export default function ScoreCalculatorPage() {
                 <button
                   type="submit"
                   disabled={rollLoading}
-                  className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-md transition flex items-center gap-2 active:scale-95"
+                  className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs sm:text-sm btn-3d-primary cursor-pointer transition flex items-center gap-2"
                 >
                   <ArrowRight className="w-4 h-4" />
                   <span>{rollLoading ? 'Searching...' : 'Find Scorecard & Rank'}</span>
@@ -641,10 +641,10 @@ export default function ScoreCalculatorPage() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3.5 px-6 rounded-xl font-black text-sm text-white flex items-center justify-center gap-2 shadow-md transition ${
+            className={`w-full py-4 px-6 rounded-xl font-black text-sm text-white flex items-center justify-center gap-2 btn-3d-primary cursor-pointer transition ${
               loading
-                ? 'bg-blue-400 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/20 active:scale-[0.99]'
+                ? 'bg-blue-400 cursor-not-allowed opacity-80'
+                : 'bg-blue-600 hover:bg-blue-700'
             }`}
           >
             {loading ? (
