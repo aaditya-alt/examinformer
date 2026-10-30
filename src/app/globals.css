@@ -20,15 +20,15 @@
 }
 
 .dark {
-  --background: #090d16;
+  --background: #060911;
   --foreground: #f1f5f9;
-  --card: #0e172a;
+  --card: #0c1222;
   --card-foreground: #f8fafc;
   --primary: #3b82f6;
   --primary-foreground: #ffffff;
-  --secondary: #131d33;
+  --secondary: #111a30;
   --secondary-foreground: #f8fafc;
-  --muted: #131d33;
+  --muted: #111a30;
   --muted-foreground: #94a3b8;
   --accent: #1e293b;
   --accent-foreground: #60a5fa;
@@ -58,6 +58,155 @@ body {
 }
 .dark ::-webkit-scrollbar-thumb {
   background: #334155;
+}
+
+/* ── 3D Perspective & Tactile Visuals (ExamGoal Standard) ── */
+.perspective-800 {
+  perspective: 800px;
+}
+.perspective-1000 {
+  perspective: 1000px;
+}
+.perspective-1200 {
+  perspective: 1200px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.translate-z-10 {
+  transform: translateZ(10px);
+}
+.translate-z-20 {
+  transform: translateZ(20px);
+}
+.translate-z-30 {
+  transform: translateZ(30px);
+}
+.translate-z-40 {
+  transform: translateZ(40px);
+}
+
+.hero-3d-card {
+  transform: perspective(1200px) rotateX(7deg) rotateY(-4deg) rotateZ(0.5deg);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(226, 232, 240, 0.8);
+}
+
+.dark .hero-3d-card {
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(51, 65, 85, 0.6);
+}
+
+.hero-3d-card:hover {
+  transform: perspective(1200px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateY(-8px);
+  box-shadow: 0 35px 70px -15px rgba(37, 99, 235, 0.25), 0 0 0 1px rgba(59, 130, 246, 0.4);
+}
+
+/* Tactile 3D Buttons with Physical Press Depth */
+.btn-3d-primary {
+  box-shadow: 0 4px 0 #1e40af, 0 6px 12px rgba(30, 64, 175, 0.3);
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-3d-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #1e40af, 0 10px 16px rgba(30, 64, 175, 0.35);
+}
+.btn-3d-primary:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #1e40af, 0 2px 4px rgba(30, 64, 175, 0.2);
+}
+
+.btn-3d-emerald {
+  box-shadow: 0 4px 0 #065f46, 0 6px 12px rgba(5, 150, 105, 0.3);
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-3d-emerald:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #065f46, 0 10px 16px rgba(5, 150, 105, 0.35);
+}
+.btn-3d-emerald:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #065f46, 0 2px 4px rgba(5, 150, 105, 0.2);
+}
+
+.btn-3d-purple {
+  box-shadow: 0 4px 0 #581c87, 0 6px 12px rgba(126, 34, 206, 0.3);
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-3d-purple:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #581c87, 0 10px 16px rgba(126, 34, 206, 0.35);
+}
+.btn-3d-purple:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #581c87, 0 2px 4px rgba(126, 34, 206, 0.2);
+}
+
+.btn-3d-secondary {
+  box-shadow: 0 4px 0 #94a3b8, 0 6px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.dark .btn-3d-secondary {
+  box-shadow: 0 4px 0 #1e293b, 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+.btn-3d-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #94a3b8, 0 10px 16px rgba(0, 0, 0, 0.08);
+}
+.dark .btn-3d-secondary:hover {
+  box-shadow: 0 6px 0 #1e293b, 0 10px 16px rgba(0, 0, 0, 0.5);
+}
+.btn-3d-secondary:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #94a3b8;
+}
+.dark .btn-3d-secondary:active {
+  box-shadow: 0 1px 0 #1e293b;
+}
+
+/* Tactile 3D Cards with Layered Shadows */
+.card-3d {
+  box-shadow: 0 6px 0 #cbd5e1, 0 12px 24px -4px rgba(0, 0, 0, 0.06);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.2s ease;
+}
+.card-3d:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 0 #93c5fd, 0 24px 36px -6px rgba(37, 99, 235, 0.18);
+}
+.dark .card-3d {
+  box-shadow: 0 6px 0 #1e293b, 0 12px 24px -4px rgba(0, 0, 0, 0.5);
+}
+.dark .card-3d:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 0 #1d4ed8, 0 24px 36px -6px rgba(0, 0, 0, 0.8);
+}
+
+/* 3D Floating Elements */
+.floating-3d-slow {
+  animation: float3dSlow 6s ease-in-out infinite alternate;
+}
+.floating-3d-fast {
+  animation: float3dFast 4s ease-in-out infinite alternate;
+}
+
+@keyframes float3dSlow {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(1.2deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+@keyframes float3dFast {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(-1.5deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.isometric-grid {
+  background-image: 
+    linear-gradient(to right, rgba(59, 130, 246, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(59, 130, 246, 0.07) 1px, transparent 1px);
+  background-size: 32px 32px;
 }
 
 @media print {
