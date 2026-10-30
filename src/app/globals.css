@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "katex/dist/katex.min.css";
 
 :root {
   --background: #f8fafc;
@@ -42,7 +41,6 @@ body {
   min-height: 100vh;
 }
 
-/* Print styles for official scorecards */
 @media print {
   body {
     background: #ffffff !important;
