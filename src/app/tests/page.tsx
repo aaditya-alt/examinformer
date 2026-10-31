@@ -80,9 +80,9 @@ function TestsExplorerContent() {
     return t.examCode.toLowerCase().includes(selectedExam.toLowerCase()) || t.examFamily === selectedExam;
   });
 
-  const shiftPapers = filteredTests.filter((t) => t.type === 'pyq');
+  const shiftPapers = filteredTests.filter((t) => t.type === 'pyq' || t.title.includes('Shift') || t.title.includes('2025') || t.title.includes('2026'));
   const sectionalPapers = filteredTests.filter((t) => t.type === 'sectional' || t.sections.length === 1);
-  const fullMocks = filteredTests.filter((t) => t.type === 'full_mock' || t.type === 'live');
+  const fullMocks = filteredTests.filter((t) => t.type === 'full_mock' || t.type === 'live' || t.type === 'pyq' || t.title.includes('2025'));
 
   const handleLaunchGenerated = () => {
     setIsGenerating(true);

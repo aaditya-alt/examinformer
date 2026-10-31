@@ -86,6 +86,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   // Modals
   const [submitModalOpen, setSubmitModalOpen] = useState(false);
   const [instructionsModalOpen, setInstructionsModalOpen] = useState(false);
+  const [languageModalOpen, setLanguageModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [sectionAlertMsg, setSectionAlertMsg] = useState<string | null>(null);
 
@@ -120,6 +121,13 @@ function EduquityCBTContent({ testId }: { testId: string }) {
 
           // Check if there is an existing paused session in localStorage
           if (!isSolutionMode) {
+            const chosenLang = sessionStorage.getItem(`cbt_lang_${testId}`);
+            if (!chosenLang) {
+              setLanguageModalOpen(true);
+            } else {
+              setLanguage(chosenLang as 'en' | 'hi');
+            }
+
             const rawSaved = localStorage.getItem(pauseStorageKey);
             if (rawSaved) {
               try {
@@ -990,51 +998,53 @@ function EduquityCBTContent({ testId }: { testId: string }) {
               })}
             </div>
 
-            {/* ── DETAILED SOLUTION BOX (Shown in Solution Mode when Reattempt is OFF or checked) ── */}
+            {/* ── DETAILED SOLUTION BOX (Positioned directly under options with full dark mode support) ── */}
             {isSolutionMode && isQuestionSolutionVisible && (
-              <div className="mt-8 p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-slate-50 to-sky-50/40 border-2 border-sky-200 shadow-sm space-y-4 max-w-4xl">
-                <div className="flex items-center justify-between pb-3 border-b border-sky-100">
+              <div className="mt-4 p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border-2 border-sky-400/40 dark:border-sky-500/30 shadow-md space-y-3.5 max-w-3xl">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-sky-600 text-white flex items-center justify-center shadow">
+                    <div className="w-7 h-7 rounded-lg bg-[#0284c7] text-white flex items-center justify-center shadow">
                       <Sparkles className="w-3.5 h-3.5" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-sm text-slate-900">
-                        Official Detailed Solution &amp; Derivation
+                      <h4 className="font-bold text-sm text-slate-900 dark:text-white">
+                        Official Step-by-Step Solution ({language === 'hi' ? 'हिंदी माध्यम' : 'English'})
                       </h4>
-                      <div className="text-[11px] text-slate-500 font-medium">
-                        Concept breakdown &bull; Exam Informer Shortcut Trick
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                        Detailed Conceptual Breakdown &bull; Exam Informer Shortcut Trick
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 text-xs">
-                    <span className="text-slate-500">Marks:</span>
-                    <span className="font-bold text-emerald-600">+{currentQuestion.marks}</span>
-                    <span className="font-bold text-rose-500">-{currentQuestion.negativeMarks}</span>
+                    <span className="text-slate-400 font-medium">Marks:</span>
+                    <span className="font-bold text-emerald-600 dark:text-emerald-400">+{currentQuestion.marks}</span>
+                    <span className="font-bold text-rose-500 dark:text-rose-400">-{currentQuestion.negativeMarks}</span>
                   </div>
                 </div>
 
-                <div className="prose prose-sm max-w-none text-slate-800 leading-relaxed">
+                <div className="prose prose-sm max-w-none text-slate-800 dark:text-slate-200 leading-relaxed font-normal">
                   <MathRenderer
                     content={
-                      currentQuestion.explanation ||
-                      `**Official Solution:** Option (${currentQuestion.correctOption}) is the correct answer according to official answer key standards.`
+                      (language === 'hi' && (currentQuestion as any).explanationHi)
+                        ? (currentQuestion as any).explanationHi
+                        : currentQuestion.explanation ||
+                          `**Official Solution:** Option (${currentQuestion.correctOption}) is the correct answer according to official SSC/RRB answer key standards.`
                     }
                   />
                 </div>
 
-                <div className="pt-3 border-t border-sky-100 flex flex-wrap items-center justify-between text-xs text-slate-600 gap-2">
+                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between text-xs text-slate-600 dark:text-slate-400 gap-2">
                   <div className="flex items-center gap-3">
                     <span>
-                      Candidate Choice: <strong>{currentResponse.chosenOption ? `Option (${currentResponse.chosenOption})` : 'Unattempted'}</strong>
+                      Candidate Choice: <strong className="text-slate-900 dark:text-white">{currentResponse.chosenOption ? `Option (${currentResponse.chosenOption})` : 'Unattempted'}</strong>
                     </span>
-                    <span className="text-slate-300">|</span>
-                    <span className="text-emerald-700">
+                    <span className="text-slate-300 dark:text-slate-700">|</span>
+                    <span className="text-emerald-700 dark:text-emerald-400">
                       Official Key: <strong>Option ({currentQuestion.correctOption})</strong>
                     </span>
                   </div>
-                  <div className="text-[11px] text-slate-500">
-                    Section: <strong>{currentSection.name}</strong>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Section: <strong className="text-slate-700 dark:text-slate-300">{currentSection.name}</strong>
                   </div>
                 </div>
               </div>
@@ -1434,6 +1444,52 @@ function EduquityCBTContent({ testId }: { testId: string }) {
               >
                 <RotateCcw className="w-4 h-4" />
                 <span>Start Fresh Attempt (Reset Timer)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── PRE-TEST LANGUAGE SELECTION PROMPT MODAL ── */}
+      {languageModalOpen && (
+        <div className="fixed inset-0 z-[200] bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 text-center shadow-2xl space-y-5 animate-in fade-in zoom-in-95 duration-200">
+            <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 mx-auto flex items-center justify-center border border-blue-200 dark:border-blue-900 shadow">
+              <FileText className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-lg font-black text-slate-900 dark:text-white">
+                Select Examination Language
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                परीक्षा का माध्यम चुनें (आप परीक्षा के दौरान भी कभी भी भाषा बदल सकते हैं)
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setLanguage('en');
+                  sessionStorage.setItem(`cbt_lang_${testId}`, 'en');
+                  setLanguageModalOpen(false);
+                }}
+                className="p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 hover:border-blue-600 dark:hover:border-blue-500 bg-white dark:bg-slate-800/60 text-slate-900 dark:text-white font-bold text-sm transition hover:shadow-md active:scale-95 flex flex-col items-center gap-1.5"
+              >
+                <span className="text-base font-black">English</span>
+                <span className="text-[11px] font-normal text-slate-500">Default (EN)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setLanguage('hi');
+                  sessionStorage.setItem(`cbt_lang_${testId}`, 'hi');
+                  setLanguageModalOpen(false);
+                }}
+                className="p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 hover:border-blue-600 dark:hover:border-blue-500 bg-white dark:bg-slate-800/60 text-slate-900 dark:text-white font-bold text-sm transition hover:shadow-md active:scale-95 flex flex-col items-center gap-1.5"
+              >
+                <span className="text-base font-black">हिंदी</span>
+                <span className="text-[11px] font-normal text-slate-500">Hindi (HI)</span>
               </button>
             </div>
           </div>
