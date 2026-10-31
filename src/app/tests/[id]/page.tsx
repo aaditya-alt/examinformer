@@ -100,6 +100,22 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   // Storage key for pause/resume state
   const pauseStorageKey = user ? `cbt_paused_session_${testId}_${user.id}` : `cbt_paused_session_${testId}_guest`;
 
+  const isSectionalTimingApplicable = (testObj: CBTTest | null): boolean => {
+    if (!testObj) return false;
+    if (testObj.hasSectionalTiming === false) return false;
+    const code = (testObj.examCode || '').toLowerCase();
+    const id = (testObj.id || '').toLowerCase();
+    // SSC exams (CGL, CHSL, MTS, CPO, GD) and any sectional test strictly enforce sectional timers
+    if (code.includes('cgl') || code.includes('chsl') || code.includes('mts') || code.includes('cpo') || code.includes('gd') || code.includes('ssc') || id.startsWith('sec-') || testObj.type === 'sectional') {
+      return true;
+    }
+    // Any test that defines sectional timing or has multiple sections
+    if (testObj.hasSectionalTiming || (testObj.sections && testObj.sections.length > 1)) {
+      return true;
+    }
+    return false;
+  };
+
   const getExamSectionTimingMinutes = (testObj: CBTTest | null, sIdx: number): number => {
     if (!testObj) return 15;
     const code = (testObj.examCode || '').toLowerCase();
@@ -242,7 +258,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
 
   // 4. Sectional Timer countdown (Only in Exam Mode and when not paused)
   useEffect(() => {
-    if (isSolutionMode || !user || !test || !test.hasSectionalTiming || isPaused || sectionSecondsRemaining <= 0 || preTestStep !== 'started') return;
+    if (isSolutionMode || !user || !test || !isSectionalTimingApplicable(test) || isPaused || sectionSecondsRemaining <= 0 || preTestStep !== 'started') return;
 
     const interval = setInterval(() => {
       setSectionSecondsRemaining(prev => {
@@ -271,6 +287,29 @@ function EduquityCBTContent({ testId }: { testId: string }) {
 
       setSectionAlertMsg(`Time expired for section "${test.sections[activeSectionIdx].name}". Eduquity has transitioned you to "${test.sections[nextIdx].name}".`);
       setTimeout(() => setSectionAlertMsg(null), 5000);
+    } else {
+      handleSubmitTest();
+    }
+  };
+
+  const handleSubmitSection = () => {
+    if (!test) return;
+    const secName = test.sections[activeSectionIdx]?.name || `Section #${activeSectionIdx + 1}`;
+    const confirmed = window.confirm(
+      `Submit ${secName}?\n\nOnce submitted, this section will be locked and cannot be re-visited under official examination rules.`
+    );
+    if (!confirmed) return;
+
+    setLockedSections(prev => ({ ...prev, [activeSectionIdx]: true }));
+
+    if (activeSectionIdx < test.sections.length - 1) {
+      const nextIdx = activeSectionIdx + 1;
+      setActiveSectionIdx(nextIdx);
+      setActiveQuestionIdx(0);
+      const nextMins = getExamSectionTimingMinutes(test, nextIdx);
+      setSectionSecondsRemaining(nextMins * 60);
+      setSectionAlertMsg(`Submitted "${secName}". Now in "${test.sections[nextIdx].name}".`);
+      setTimeout(() => setSectionAlertMsg(null), 4000);
     } else {
       handleSubmitTest();
     }
@@ -537,9 +576,14 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     if (activeQuestionIdx < currentSection.questions.length - 1) {
       setActiveQuestionIdx(activeQuestionIdx + 1);
     } else if (activeSectionIdx < test.sections.length - 1) {
-      if (!test.hasSectionalTiming || !lockedSections[activeSectionIdx + 1] || isSolutionMode) {
-        setActiveSectionIdx(activeSectionIdx + 1);
+      if (!lockedSections[activeSectionIdx + 1] || isSolutionMode) {
+        const nextIdx = activeSectionIdx + 1;
+        setActiveSectionIdx(nextIdx);
         setActiveQuestionIdx(0);
+        if (isSectionalTimingApplicable(test)) {
+          const nextMins = getExamSectionTimingMinutes(test, nextIdx);
+          setSectionSecondsRemaining(nextMins * 60);
+        }
       }
     }
   };
@@ -547,16 +591,25 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   const goToPrevQuestion = () => {
     if (activeQuestionIdx > 0) {
       setActiveQuestionIdx(activeQuestionIdx - 1);
-    } else if (activeSectionIdx > 0 && (!test.hasSectionalTiming || !lockedSections[activeSectionIdx - 1] || isSolutionMode)) {
-      setActiveSectionIdx(activeSectionIdx - 1);
-      setActiveQuestionIdx(test.sections[activeSectionIdx - 1].questions.length - 1);
+    } else if (activeSectionIdx > 0 && (!lockedSections[activeSectionIdx - 1] || isSolutionMode)) {
+      const prevIdx = activeSectionIdx - 1;
+      setActiveSectionIdx(prevIdx);
+      setActiveQuestionIdx(test.sections[prevIdx].questions.length - 1);
+      if (isSectionalTimingApplicable(test)) {
+        const prevMins = getExamSectionTimingMinutes(test, prevIdx);
+        setSectionSecondsRemaining(prevMins * 60);
+      }
     }
   };
 
   const handlePaletteClick = (secIdx: number, qIdx: number, targetQno: number) => {
-    if (!isSolutionMode && test.hasSectionalTiming && lockedSections[secIdx]) {
+    if (!isSolutionMode && lockedSections[secIdx]) {
       alert('This section has expired and is locked under Eduquity SSC examination rules.');
       return;
+    }
+    if (secIdx !== activeSectionIdx && isSectionalTimingApplicable(test)) {
+      const secMins = getExamSectionTimingMinutes(test, secIdx);
+      setSectionSecondsRemaining(secMins * 60);
     }
     setActiveSectionIdx(secIdx);
     setActiveQuestionIdx(qIdx);
@@ -840,7 +893,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
               <div className="bg-[#fffbeb] border border-[#fef08a] px-3 py-0.5 rounded text-center leading-none min-w-[90px] shadow-xs">
                 <div className="text-[9px] text-slate-600 font-semibold tracking-wider flex items-center justify-center gap-1">
                   <span>Time Left</span>
-                  {test.hasSectionalTiming && (
+                  {isSectionalTimingApplicable(test) && (
                     <span className="text-[8px] bg-rose-100 text-rose-800 px-1 rounded font-bold">
                       SEC: {formatTimeEduquity(sectionSecondsRemaining)}
                     </span>
@@ -914,21 +967,32 @@ function EduquityCBTContent({ testId }: { testId: string }) {
         <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none">
           {test.sections.map((sec, sIdx) => {
             const isActive = activeSectionIdx === sIdx;
+            const isLocked = !isSolutionMode && lockedSections[sIdx];
             return (
               <button
                 key={sec.id}
                 type="button"
                 onClick={() => {
+                  if (isLocked) {
+                    alert(`Section "${sec.name}" has already been submitted and is locked.`);
+                    return;
+                  }
                   setActiveSectionIdx(sIdx);
                   setActiveQuestionIdx(0);
+                  if (isSectionalTimingApplicable(test)) {
+                    const secMins = getExamSectionTimingMinutes(test, sIdx);
+                    setSectionSecondsRemaining(secMins * 60);
+                  }
                 }}
                 className={`px-3 py-1 rounded text-xs font-black uppercase tracking-wider transition whitespace-nowrap ${
-                  isActive
+                  isLocked
+                    ? 'bg-slate-300 text-slate-600 cursor-not-allowed'
+                    : isActive
                     ? 'bg-[#15803d] text-white shadow-xs'
                     : 'bg-[#166534] text-emerald-100 hover:bg-[#15803d]'
                 }`}
               >
-                {sec.name}
+                {sec.name} {isLocked ? '🔒' : ''}
               </button>
             );
           })}
@@ -967,8 +1031,8 @@ function EduquityCBTContent({ testId }: { testId: string }) {
             </button>
             <button
               type="button"
-              disabled
-              className="px-2.5 sm:px-3 py-1 rounded bg-blue-200 text-blue-800 font-bold text-xs opacity-75 cursor-not-allowed hidden sm:inline-block"
+              onClick={handleSubmitSection}
+              className="px-2.5 sm:px-3 py-1 rounded bg-[#0284c7] hover:bg-[#0369a1] text-white font-bold text-xs shadow-xs transition active:scale-95 cursor-pointer"
             >
               Submit Section
             </button>

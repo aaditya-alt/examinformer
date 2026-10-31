@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BRANDING } from '@/lib/branding';
 import { ThemeToggle } from './ThemeToggle';
 import { ExamLogo } from './ExamLogo';
 import { useAuth } from './auth/AuthContext';
@@ -11,9 +10,7 @@ import { BorderlandDrawer } from './BorderlandDrawer';
 import {
   Globe,
   Menu,
-  User as UserIcon,
-  Sparkles,
-  ArrowUpRight
+  User as UserIcon
 } from 'lucide-react';
 
 export function Navbar() {
@@ -25,13 +22,7 @@ export function Navbar() {
   const navLinks = [
     {
       name: 'Test Series',
-      href: '/tests',
-      badge: '2025–26'
-    },
-    {
-      name: 'Pricing',
-      href: '/tests?hub=pricing',
-      badge: 'Free Tier'
+      href: '/tests'
     },
     {
       name: 'Score Calculator',
@@ -45,17 +36,17 @@ export function Navbar() {
       <header className="sticky top-0 z-50 w-full border-b border-slate-200/90 dark:border-slate-800 bg-white/95 dark:bg-[#0f1117]/95 backdrop-blur-md shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Left: Brand Logo styled like RepeaterMock / MockMatrix */}
+            {/* Left: Brand Logo styled as ExamInformer matching RepeaterMock font aesthetic */}
             <div className="flex items-center gap-6">
               <Link href="/" className="flex items-center gap-2.5 group">
                 <ExamLogo type="combo" size="sm" />
-                <div className="flex items-center font-black text-xl sm:text-2xl tracking-tight text-slate-900 dark:text-white">
-                  <span>Mock</span>
-                  <span className="text-[#0891b2] dark:text-[#06b6d4]">Matrix</span>
+                <div className="flex items-center font-black text-xl sm:text-2xl tracking-tight">
+                  <span className="text-slate-900 dark:text-white">Exam</span>
+                  <span className="text-[#0891b2] dark:text-[#06b6d4]">Informer</span>
                 </div>
               </Link>
 
-              {/* RepeaterMock Style Desktop Navigation */}
+              {/* RepeaterMock Style Navigation */}
               <nav className="hidden md:flex items-center gap-1 sm:gap-2">
                 {navLinks.map((link) => {
                   const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
@@ -83,7 +74,7 @@ export function Navbar() {
 
             {/* Right: Language, ThemeToggle, Log In / Candidate Pill, and Borderland Drawer Trigger */}
             <div className="flex items-center gap-2 sm:gap-3">
-              {/* Language Dropdown (RepeaterMock style) */}
+              {/* Language Dropdown */}
               <div className="relative hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900">
                 <Globe className="w-3.5 h-3.5 text-slate-500" />
                 <select
@@ -124,7 +115,7 @@ export function Navbar() {
                 </button>
               )}
 
-              {/* Borderland Drawer Hamburger Trigger (Always Accessible) */}
+              {/* Borderland Drawer Hamburger Trigger */}
               <button
                 type="button"
                 onClick={() => setDrawerOpen(true)}

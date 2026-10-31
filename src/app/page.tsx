@@ -1,514 +1,317 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { BRANDING } from '@/lib/branding';
-import Hero3DMockup from '@/components/Hero3DMockup';
+import { useRouter } from 'next/navigation';
 import { ExamLogo } from '@/components/ExamLogo';
 import {
-  Calculator,
-  BookOpen,
-  ArrowRight,
-  ShieldCheck,
-  CheckCircle2,
-  TrendingUp,
-  Award,
-  Clock,
-  Layers,
-  FileCheck2,
-  BarChart3,
-  Users,
-  Compass,
-  Sparkles,
-  Zap,
-  RotateCcw,
-  Check,
-  Send,
-  MessageCircle,
-  HelpCircle,
-  Play,
   Search,
-  Filter,
-  BrainCircuit,
-  Target,
-  GraduationCap,
-  Flame,
+  Plus,
+  Bookmark,
+  CheckCircle2,
+  Clock,
+  HelpCircle,
+  FileText,
+  Sparkles,
+  ArrowRight,
+  TrendingUp,
+  ShieldCheck,
   ChevronRight
 } from 'lucide-react';
 
+interface HomeSeriesItem {
+  id: string;
+  examCode: string;
+  name: string;
+  testCount: string;
+  category: 'ssc' | 'rrb' | 'state' | 'bank';
+  logoType: 'ssc' | 'rrb';
+  tierSupport: string;
+}
+
+const HOME_SERIES_CATALOG: HomeSeriesItem[] = [
+  {
+    id: 'ssc-cgl-series',
+    examCode: 'ssc-cgl',
+    name: 'SSC CGL Mock Test Series 2026 (Tier I & Tier II) PYQs',
+    testCount: 'Official 2025 Shifts & Sectionals',
+    category: 'ssc',
+    logoType: 'ssc',
+    tierSupport: 'Tier I & Tier II'
+  },
+  {
+    id: 'ssc-chsl-series',
+    examCode: 'ssc-chsl',
+    name: 'SSC CHSL Mock Test Series 2026 (Tier I & Tier II) PYQs',
+    testCount: 'Official 2025 Shifts & Sectionals',
+    category: 'ssc',
+    logoType: 'ssc',
+    tierSupport: 'Tier I & Tier II'
+  },
+  {
+    id: 'ssc-mts-series',
+    examCode: 'ssc-mts',
+    name: 'SSC MTS & Havaldar Mock Test Series 2026 PYQs',
+    testCount: 'Official 2025 Shifts & Sectionals',
+    category: 'ssc',
+    logoType: 'ssc',
+    tierSupport: 'Session 1 & 2'
+  },
+  {
+    id: 'ssc-gd-series',
+    examCode: 'ssc-gd',
+    name: 'SSC GD Constable Mock Test Series 2026 PYQs',
+    testCount: 'Official 2025 Shifts & Speed Drills',
+    category: 'ssc',
+    logoType: 'ssc',
+    tierSupport: 'CBT Screening'
+  },
+  {
+    id: 'ssc-cpo-series',
+    examCode: 'ssc-cpo',
+    name: 'SSC CPO (SI in Delhi Police & CAPF) Mock Test Series',
+    testCount: 'Official 2025 Shifts & Sectionals',
+    category: 'ssc',
+    logoType: 'ssc',
+    tierSupport: 'Paper 1 & 2'
+  },
+  {
+    id: 'rrb-ntpc-series',
+    examCode: 'rrb-ntpc',
+    name: 'RRB NTPC (Graduate & Under-Graduate CBT 1 & 2) PYQs',
+    testCount: 'Official 2025 Shifts & Sectionals',
+    category: 'rrb',
+    logoType: 'rrb',
+    tierSupport: 'CBT 1 & CBT 2'
+  },
+  {
+    id: 'rrb-alp-series',
+    examCode: 'rrb-alp',
+    name: 'RRB ALP (CBT 1 + CBT 2 + CBAT) Mock Test Series 2026',
+    testCount: 'Official 2025 Shifts & Speed Drills',
+    category: 'rrb',
+    logoType: 'rrb',
+    tierSupport: 'Stage 1 & 2'
+  },
+  {
+    id: 'rrb-group-d-series',
+    examCode: 'rrb-group-d',
+    name: 'RRB Group D (CEN RRC Level-1 CBT) Mock Test Series',
+    testCount: 'Official 2025 Shifts & Speed Drills',
+    category: 'rrb',
+    logoType: 'rrb',
+    tierSupport: 'Level-1 CBT'
+  },
+  {
+    id: 'rrb-sc-series',
+    examCode: 'rrb-section-controller',
+    name: 'RRB Section Controller & Station Master 2026 PYQs',
+    testCount: 'Official 2025 Shifts & Sectionals',
+    category: 'rrb',
+    logoType: 'rrb',
+    tierSupport: 'Operating CBT'
+  }
+];
+
 export default function HomePage() {
-  const examCategories = [
-    { id: 'all', label: 'All Exams', href: '/tests' },
-    { id: 'ssc-cgl', label: 'SSC CGL Tier-1 & Tier-2', href: '/tests?exam=ssc-cgl', hot: true },
-    { id: 'ssc-chsl', label: 'SSC CHSL 10+2', href: '/tests?exam=ssc-chsl' },
-    { id: 'ssc-gd', label: 'SSC GD Constable (-0.25 Neg)', href: '/tests?exam=ssc-gd', hot: true },
-    { id: 'ssc-mts', label: 'SSC MTS & Havaldar', href: '/tests?exam=ssc-mts' },
-    { id: 'rrb-ntpc', label: 'RRB NTPC (Grad & UG)', href: '/tests?exam=rrb-ntpc', hot: true },
-    { id: 'rrb-group-d', label: 'RRB Group D (CEN RRC)', href: '/tests?exam=rrb-group-d' },
-    { id: 'rrb-alp', label: 'RRB ALP (Technician)', href: '/tests?exam=rrb-alp' }
-  ];
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTrending, setActiveTrending] = useState<'all' | 'ssc' | 'rrb'>('all');
 
-  const subjectPracticeRooms = [
-    {
-      id: 'math',
-      title: 'Quantitative Aptitude & Mathematics',
-      subtitle: 'Arithmetic, Advanced Math, Algebra & Geometry',
-      color: 'from-emerald-500/20 to-teal-500/10 border-emerald-500/40 text-emerald-600 dark:text-emerald-400',
-      badgeColor: 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300',
-      btnColor: 'btn-3d-emerald bg-emerald-600 hover:bg-emerald-700 text-white',
-      pyqCount: '2,450+ PYQs',
-      chapterCount: '48 Chapters',
-      topics: ['Number Systems', 'Percentage & Profit-Loss', 'Geometry & Mensuration', 'Trigonometry', 'Algebra', 'Data Interpretation'],
-      href: '/tests?section=math'
-    },
-    {
-      id: 'reasoning',
-      title: 'General Intelligence & Reasoning',
-      subtitle: 'Analogy, Syllogisms, Coding-Decoding & Puzzles',
-      color: 'from-indigo-500/20 to-purple-500/10 border-indigo-500/40 text-indigo-600 dark:text-indigo-400',
-      badgeColor: 'bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300',
-      btnColor: 'btn-3d-purple bg-indigo-600 hover:bg-indigo-700 text-white',
-      pyqCount: '1,980+ PYQs',
-      chapterCount: '36 Chapters',
-      topics: ['Coding-Decoding', 'Blood Relations', 'Syllogism', 'Analogy & Classification', 'Series & Pattern', 'Mirror & Water Images'],
-      href: '/tests?section=reasoning'
-    },
-    {
-      id: 'english',
-      title: 'English Language & Comprehension',
-      subtitle: 'Grammar, Vocab, Cloze Test & Reading',
-      color: 'from-amber-500/20 to-orange-500/10 border-amber-500/40 text-amber-600 dark:text-amber-400',
-      badgeColor: 'bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300',
-      btnColor: 'btn-3d-primary bg-amber-600 hover:bg-amber-700 text-white',
-      pyqCount: '2,120+ PYQs',
-      chapterCount: '42 Chapters',
-      topics: ['Error Detection', 'Synonyms & Antonyms', 'Idioms & Phrases', 'One Word Substitution', 'Cloze Test Passages', 'Active/Passive Voice'],
-      href: '/tests?section=english'
-    },
-    {
-      id: 'ga',
-      title: 'General Awareness & Current Affairs',
-      subtitle: 'Polity, History, Geography, Static GK & Science',
-      color: 'from-blue-500/20 to-cyan-500/10 border-blue-500/40 text-blue-600 dark:text-blue-400',
-      badgeColor: 'bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300',
-      btnColor: 'btn-3d-primary bg-blue-600 hover:bg-blue-700 text-white',
-      pyqCount: '3,100+ PYQs',
-      chapterCount: '55 Chapters',
-      topics: ['Indian Constitution & Polity', 'Modern History', 'Indian Geography', 'Physics & Chemistry', 'Biology & Environment', '2026 Current Events'],
-      href: '/tests?section=ga'
-    }
-  ];
+  const filteredSeries = useMemo(() => {
+    return HOME_SERIES_CATALOG.filter((item) => {
+      if (activeTrending !== 'all' && item.category !== activeTrending) return false;
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        return item.name.toLowerCase().includes(q) || item.examCode.toLowerCase().includes(q);
+      }
+      return true;
+    });
+  }, [activeTrending, searchQuery]);
 
-  const featuredTests = [
-    {
-      id: 'cgl-2025-12-sep-shift-3',
-      title: 'SSC CGL Tier-1 Official Paper (12 Sep Shift 3 - Hardest Shift)',
-      family: 'ssc',
-      badge: 'SSC CGL 2026–2027',
-      questions: 100,
-      marks: 200,
-      duration: '60 Min',
-      difficulty: 'Hard Shift • High Cutoff Impact',
-      sections: ['General Intelligence', 'General Awareness', 'Quantitative Aptitude', 'English']
-    },
-    {
-      id: 'rrb-ntpc-2025-math-top-mock-1',
-      title: 'RRB NTPC Graduate 2026 — Mathematics Top 50 Practice Mock',
-      family: 'rrb',
-      badge: 'RRB NTPC 2026–2027',
-      questions: 50,
-      marks: 50,
-      duration: '45 Min',
-      difficulty: 'High Yield Arithmetic & Algebra',
-      sections: ['Mathematics & Arithmetic']
-    },
-    {
-      id: 'cgl-2025-18-sep-shift-3',
-      title: 'SSC CGL Tier-1 Official Paper (18 Sep Shift 3)',
-      family: 'ssc',
-      badge: 'SSC CGL 2026–2027',
-      questions: 100,
-      marks: 200,
-      duration: '60 Min',
-      difficulty: 'Tier-1 CBT Standard',
-      sections: ['General Intelligence', 'General Awareness', 'Quantitative Aptitude', 'English']
-    },
-    {
-      id: 'rrb-ntpc-2025-full-mock-1',
-      title: 'RRB NTPC Graduate & UG — All-India CBT-1 Full Paper',
-      family: 'rrb',
-      badge: 'Railway Recruitment Board',
-      questions: 107,
-      marks: 107,
-      duration: '90 Min',
-      difficulty: 'Full Mock CBT Pattern',
-      sections: ['General Awareness', 'Mathematics', 'General Intelligence']
-    }
-  ];
+  const handleOpenSeries = (examCode: string) => {
+    router.push(`/tests?series=${examCode}`);
+  };
 
   return (
-    <div className="space-y-16 sm:space-y-24 py-6 sm:py-12">
-      {/* ── 1. Hero Section (ExamGoal Inspired 3D Focus & Elevation) ── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
-        {/* Top Session Tag */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold shadow-xs">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span>Active CBT Practice &amp; Analytics &bull; 2026–2027 Examination Session</span>
-        </div>
-
-        {/* Official Logos Side-by-Side with 3D tactile card depth */}
-        <div className="flex flex-wrap items-center justify-center gap-4 pt-1">
-          <div className="flex items-center gap-3.5 p-3 px-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm card-3d">
-            <ExamLogo type="ssc" size="md" />
-            <div className="text-left">
-              <div className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">SSC Examination Portal</div>
-              <div className="text-[11px] text-slate-500 font-medium">CGL &bull; CHSL &bull; GD &bull; MTS &bull; Eduquity Pattern</div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3.5 p-3 px-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm card-3d">
-            <ExamLogo type="rrb" size="md" />
-            <div className="text-left">
-              <div className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">Railway Recruitment Portal</div>
-              <div className="text-[11px] text-slate-500 font-medium">NTPC &bull; Group D &bull; ALP &bull; 21 RRB Zones</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Hero Title */}
-        <div className="space-y-4 max-w-4xl mx-auto">
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.12]">
-            Digital CBT Practice Hall &amp;{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-600 dark:from-blue-400 dark:via-indigo-300 dark:to-emerald-400">
-              Answer Key Rank Analyzer
-            </span>
-          </h1>
-
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Practice official SSC and Railway papers on the authentic <strong>Eduquity Right-Palette CBT interface</strong> with sectional timers. Instantly evaluate response sheets with shift-wise normalization and category ranking.
-          </p>
-        </div>
-
-        {/* 3D Tactile CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-          <Link
-            href="/tests"
-            className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-sm flex items-center justify-center gap-2 btn-3d-primary cursor-pointer"
-          >
-            <BookOpen className="w-4 h-4" />
-            <span>Practice CBT Mocks &amp; PYQs</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-
-          <Link
-            href="/score-calculator"
-            className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-700 font-extrabold text-sm flex items-center justify-center gap-2 btn-3d-secondary cursor-pointer"
-          >
-            <Calculator className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            <span>Check Answer Key Rank</span>
-          </Link>
-
-          <Link
-            href="/my-tests"
-            className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-sm flex items-center justify-center gap-2 transition cursor-pointer"
-          >
-            <Sparkles className="w-4 h-4 text-amber-500" />
-            <span>My Attempted Tests</span>
-          </Link>
-        </div>
-
-        {/* ── ExamGoal-Style 3D Exam Category Switcher Chips ── */}
-        <div className="pt-2 flex items-center justify-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-          {examCategories.map((c) => (
-            <Link
-              key={c.id}
-              href={c.href}
-              className={`px-4 py-2 rounded-xl text-xs font-extrabold flex items-center gap-1.5 transition whitespace-nowrap card-3d ${
-                c.hot
-                  ? 'bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300'
-                  : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-blue-600'
-              }`}
-            >
-              {c.hot && <Flame className="w-3 h-3 text-amber-500 fill-current" />}
-              <span>{c.label}</span>
-            </Link>
-          ))}
-        </div>
-
-        {/* ── THE INTERACTIVE 3D CBT TERMINAL MOCKUP ── */}
-        <div className="pt-4">
-          <Hero3DMockup />
-        </div>
-      </section>
-
-      {/* ── 2. Performance Stats Counter Bar ── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-sm">
-          <div className="p-3 text-center space-y-1">
-            <div className="text-2xl sm:text-3xl font-black text-blue-600 dark:text-blue-400">540+</div>
-            <div className="text-xs font-bold text-slate-700 dark:text-slate-300">Verified Questions</div>
-            <div className="text-[11px] text-slate-500">With detailed KaTeX solutions</div>
-          </div>
-          <div className="p-3 text-center space-y-1">
-            <div className="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400">100%</div>
-            <div className="text-xs font-bold text-slate-700 dark:text-slate-300">Eduquity CBT Right Palette</div>
-            <div className="text-[11px] text-slate-500">Authentic 2026-27 format</div>
-          </div>
-          <div className="p-3 text-center space-y-1">
-            <div className="text-2xl sm:text-3xl font-black text-indigo-600 dark:text-indigo-400">1-Click</div>
-            <div className="text-xs font-bold text-slate-700 dark:text-slate-300">Pause &amp; Resume State</div>
-            <div className="text-[11px] text-slate-500">Saved to candidate session</div>
-          </div>
-          <div className="p-3 text-center space-y-1">
-            <div className="text-2xl sm:text-3xl font-black text-purple-600 dark:text-purple-400">Zero</div>
-            <div className="text-xs font-bold text-slate-700 dark:text-slate-300">Spoiler Reattempt Terminal</div>
-            <div className="text-[11px] text-slate-500">Locked solutions until submit</div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 3. ExamGoal Signature: 3D Subject Practice Rooms ── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-1">
-              <BrainCircuit className="w-4 h-4" />
-              <span>ExamGoal-Style Modular Practice</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
-              Subject Practice Rooms &amp; Chapter Tests
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-              Target your weak chapters with past 7-year solved question banks and timer-based practice sets.
+    <div className="min-h-screen bg-[#f8fafc] dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 transition-colors pb-24">
+      {/* ─────────────────────────────────────────────────────────────
+          HERO & BROWSE SECTION (EXACT REPEATERMOCK AESTHETIC)
+      ───────────────────────────────────────────────────────────── */}
+      <section className="bg-white dark:bg-[#0f1117] border-b border-slate-200/90 dark:border-slate-800 pt-10 pb-12 shadow-2xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          <div className="space-y-2">
+            <h1 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+              Mock Test Series for Government Exams
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
+              Authentic previous-year test series for SSC and Railways — attempt timed mocks with Eduquity right-palette CBT simulator, sectional timers, and instant section-wise analysis.
             </p>
           </div>
+
+          {/* Browse Search Bar */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
+            <div className="text-xs font-black uppercase text-slate-500 tracking-wider hidden sm:block">
+              Browse
+            </div>
+            <div className="relative flex-1 max-w-xl flex items-center">
+              <input
+                type="text"
+                placeholder="Search test series (e.g. SSC CGL, RRB NTPC, CHSL)..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-4 pr-12 py-3 rounded-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 shadow-2xs"
+              />
+              <button
+                type="button"
+                className="absolute right-1.5 w-9 h-9 rounded-full bg-[#06b6d4] hover:bg-[#0891b2] text-white flex items-center justify-center transition cursor-pointer"
+                aria-label="Search"
+              >
+                <Search className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Trending Pills */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
+            <span className="text-slate-400 font-bold shrink-0">Trending:</span>
+            {[
+              { id: 'all', label: 'All Series' },
+              { id: 'ssc', label: 'Ssc' },
+              { id: 'rrb', label: 'Rrb' },
+              { id: 'state', label: 'State Exam' },
+              { id: 'police', label: 'Police' },
+              { id: 'bank', label: 'Bank' },
+              { id: 'upsc', label: 'Upsc' },
+              { id: 'defence', label: 'Defence' }
+            ].map((tag) => (
+              <button
+                key={tag.id}
+                type="button"
+                onClick={() => setActiveTrending(tag.id as any)}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition whitespace-nowrap cursor-pointer ${
+                  activeTrending === tag.id
+                    ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
+                    : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300'
+                }`}
+              >
+                {tag.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────
+          SERIES CARDS GRID (EXACT REPEATERMOCK CARDS)
+      ───────────────────────────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">
+            Select Your Target Examination
+          </h2>
           <Link
             href="/tests"
-            className="text-xs font-extrabold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 shrink-0"
+            className="text-xs font-bold text-[#0891b2] dark:text-[#06b6d4] hover:underline flex items-center gap-1"
           >
-            <span>Explore All Chapters</span>
-            <ChevronRight className="w-4 h-4" />
+            <span>Explore All Tests</span>
+            <ChevronRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {subjectPracticeRooms.map((room) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {filteredSeries.map((series) => (
             <div
-              key={room.id}
-              className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 card-3d flex flex-col justify-between space-y-5"
+              key={series.id}
+              onClick={() => handleOpenSeries(series.examCode)}
+              className="p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#12141a] hover:border-cyan-500 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between space-y-4 group relative"
             >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className={`text-xs font-extrabold px-3 py-1 rounded-full ${room.badgeColor}`}>
-                    {room.chapterCount} &bull; {room.pyqCount}
-                  </span>
-                  <span className="text-[11px] font-bold text-slate-500">2018–2025 PYQ Sets</span>
+              <div className="flex items-start justify-between gap-3">
+                {/* Official Exam Logo rounded */}
+                <div className="w-13 h-13 rounded-2xl bg-slate-50 dark:bg-slate-800/80 p-1.5 flex items-center justify-center border border-slate-100 dark:border-slate-700 shrink-0">
+                  <ExamLogo type={series.logoType} size="sm" />
                 </div>
 
-                <div>
-                  <h3 className="text-lg font-black text-slate-900 dark:text-white">
-                    {room.title}
+                <div className="flex-1 min-w-0 pr-6">
+                  <h3 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white leading-snug group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors line-clamp-2">
+                    {series.name}
                   </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    {room.subtitle}
-                  </p>
-                </div>
-
-                {/* Topics Pills */}
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {room.topics.map((t, idx) => (
-                    <span
-                      key={idx}
-                      className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Enter Practice Room Tactile Button */}
-              <div className="pt-2">
-                <Link
-                  href={room.href}
-                  className={`w-full py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer ${room.btnColor}`}
-                >
-                  <Play className="w-3.5 h-3.5 fill-current" />
-                  <span>Enter {room.title.split('&')[0].trim()} Room</span>
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── 4. Featured CBT Tests (3D Tactile Cards) ── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1">
-              <Target className="w-4 h-4" />
-              <span>Full Length CBT Simulation</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
-              Official Examination Papers (2026–2027)
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-              Attempt in authentic Eduquity full-screen interface. Detailed solutions and community rank unlock upon submission.
-            </p>
-          </div>
-          <Link
-            href="/tests"
-            className="text-xs font-extrabold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 shrink-0"
-          >
-            <span>View All Papers</span>
-            <ChevronRight className="w-4 h-4" />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {featuredTests.map((t) => (
-            <div
-              key={t.id}
-              className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 card-3d flex flex-col justify-between space-y-4"
-            >
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <ExamLogo type={t.family as any} size="sm" />
-                    <span className="text-xs font-bold px-2.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
-                      {t.badge}
-                    </span>
+                  <div className="mt-1 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                    {series.testCount}
                   </div>
-                  <span className="text-[11px] font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded">
-                    {t.difficulty}
-                  </span>
                 </div>
 
-                <h3 className="font-bold text-base text-slate-900 dark:text-white leading-snug">
-                  {t.title}
-                </h3>
-
-                {/* Exam Specs Pills */}
-                <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
-                  <span className="flex items-center gap-1 font-semibold">
-                    <Clock className="w-3.5 h-3.5 text-blue-500" /> {t.duration}
-                  </span>
-                  <span>&bull;</span>
-                  <span className="flex items-center gap-1 font-semibold">
-                    <BookOpen className="w-3.5 h-3.5 text-emerald-500" /> {t.questions} Questions
-                  </span>
-                  <span>&bull;</span>
-                  <span className="flex items-center gap-1 font-semibold">
-                    <Award className="w-3.5 h-3.5 text-amber-500" /> {t.marks} Marks
-                  </span>
-                </div>
-
-                {/* Section tags */}
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {t.sections.map((s, idx) => (
-                    <span key={idx} className="text-[10px] px-2.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">
-                      {s}
-                    </span>
-                  ))}
-                </div>
+                {/* Bookmark / Plus */}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  className="absolute right-4 top-4 w-7 h-7 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center transition"
+                  aria-label="Bookmark"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
               </div>
 
-              {/* Direct Start Action Button */}
-              <div className="pt-2">
-                <Link
-                  href={`/tests/${t.id}`}
-                  className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs flex items-center justify-center gap-2 btn-3d-primary cursor-pointer"
-                >
-                  <Play className="w-3.5 h-3.5 fill-current" />
-                  <span>Start Practice Examination</span>
-                </Link>
+              {/* Bottom Info Row */}
+              <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800/80 text-[11px] text-slate-500">
+                <span className="font-bold flex items-center gap-1 text-slate-600 dark:text-slate-400">
+                  <span>Pattern:</span>
+                  <span className="text-slate-900 dark:text-white font-extrabold">{series.tierSupport}</span>
+                </span>
+                <span className="font-bold text-cyan-600 dark:text-cyan-400 flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                  <span>Open Series</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </span>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── 5. Score Calculator & Rank Evaluation Showcase ── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="p-8 sm:p-10 rounded-2xl bg-gradient-to-br from-blue-900 via-indigo-900 to-slate-900 text-white shadow-xl relative overflow-hidden card-3d">
-          <div className="relative z-10 max-w-2xl space-y-4">
-            <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full border border-blue-400/30">
-              <Calculator className="w-3.5 h-3.5" />
-              <span>Shift Normalization &amp; Category Rank</span>
+      {/* ─────────────────────────────────────────────────────────────
+          SECTION: OFFICIAL CBT SIMULATOR FEATURES
+      ───────────────────────────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+        <div className="p-8 rounded-3xl bg-slate-900 text-white shadow-xl space-y-6">
+          <div className="max-w-2xl space-y-2">
+            <span className="text-[10px] font-black uppercase tracking-wider text-cyan-400 bg-cyan-950/80 px-2.5 py-1 rounded-full border border-cyan-800">
+              ExamInformer Authenticity Standard
             </span>
-
-            <h2 className="text-2xl sm:text-4xl font-black tracking-tight leading-tight">
-              Evaluate Your Official Answer Key URL in 1 Click
-            </h2>
-
-            <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
-              Supports official answer key domains: <code className="bg-black/30 px-1.5 py-0.5 rounded text-amber-300">sscexams.cbexams.com</code> and <code className="bg-black/30 px-1.5 py-0.5 rounded text-cyan-300">digialm.com</code>. Generates raw score, negative penalty calculations (-0.25 for SSC GD, -0.50 for CGL), zone-wise percentile, and community rank.
+            <h3 className="text-2xl sm:text-3xl font-black tracking-tight">
+              100% Genuine 2025 Examination Papers
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Every question is verified against official answer keys released by the commission. Test papers feature dual sectional countdowns, candidate watermark authentication, and KaTeX mathematical proofs.
             </p>
+          </div>
 
-            <div className="pt-3 flex flex-wrap gap-3">
-              <Link
-                href="/score-calculator"
-                className="px-6 py-3 rounded-xl bg-white text-slate-900 font-black text-xs flex items-center gap-2 hover:bg-slate-100 transition shadow-lg"
-              >
-                <Calculator className="w-4 h-4 text-blue-600" />
-                <span>Submit Answer Key URL</span>
-              </Link>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+            <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-1.5">
+              <Clock className="w-5 h-5 text-amber-400" />
+              <h4 className="font-black text-sm">Strict Sectional Timers</h4>
+              <p className="text-xs text-slate-400">
+                15-min speed caps per section for CGL &amp; CHSL Tier 1; 30m/40m/20m for Mains with auto-lock on expiry.
+              </p>
+            </div>
 
-              <Link
-                href="/score-calculator?tab=roll"
-                className="px-6 py-3 rounded-xl bg-blue-800/80 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-2 border border-blue-600/50 transition"
-              >
-                <span>Check by Roll Number</span>
-              </Link>
+            <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-1.5">
+              <ShieldCheck className="w-5 h-5 text-emerald-400" />
+              <h4 className="font-black text-sm">Anti-Leak Candidate Watermark</h4>
+              <p className="text-xs text-slate-400">
+                Your registered mobile number repeats diagonally across every mock screen as proof of candidate identity.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-1.5">
+              <TrendingUp className="w-5 h-5 text-cyan-400" />
+              <h4 className="font-black text-sm">Real Percentile &amp; Rank</h4>
+              <p className="text-xs text-slate-400">
+                Live performance analytics comparing your section-wise accuracy against real commission aspirants.
+              </p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* ── 6. Official Community Channels (Telegram & WhatsApp) ── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <a
-            href={BRANDING.telegramUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-6 sm:p-7 rounded-2xl bg-[#0088cc] hover:bg-[#0077b5] text-white shadow-lg transition flex items-center justify-between group card-3d"
-          >
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Send className="w-5 h-5" />
-                <span className="text-xs font-bold uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded">
-                  Official Telegram
-                </span>
-              </div>
-              <h3 className="text-lg font-black">Exam Informer Telegram Channel</h3>
-              <p className="text-xs text-white/90 max-w-sm">
-                Get shift-wise answer keys, cutoff predictions, and instant notices for newly released test series.
-              </p>
-            </div>
-            <ArrowRight className="w-6 h-6 group-hover:translate-x-1.5 transition shrink-0" />
-          </a>
-
-          <a
-            href={BRANDING.whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-6 sm:p-7 rounded-2xl bg-[#25d366] hover:bg-[#20ba59] text-white shadow-lg transition flex items-center justify-between group card-3d"
-          >
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <MessageCircle className="w-5 h-5" />
-                <span className="text-xs font-bold uppercase tracking-wider bg-black/20 px-2 py-0.5 rounded">
-                  WhatsApp Channel
-                </span>
-              </div>
-              <h3 className="text-lg font-black">Exam Informer WhatsApp Channel</h3>
-              <p className="text-xs text-white/90 max-w-sm">
-                Follow for live exam announcements, CBT admit card alerts, and test updates.
-              </p>
-            </div>
-            <ArrowRight className="w-6 h-6 group-hover:translate-x-1.5 transition shrink-0" />
-          </a>
         </div>
       </section>
     </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, Suspense } from 'react';
+import React, { useState, useEffect, useMemo, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { CBTTest } from '@/lib/types/cbt';
@@ -8,46 +8,42 @@ import { ExamLogo } from '@/components/ExamLogo';
 import { useAuth } from '@/components/auth/AuthContext';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import {
-  EXAM_REGISTRY,
-  CHAPTER_TAXONOMY,
   TOPIC_PRACTICE_LIST,
-  TopicItem,
-  ExamDefinition
+  TopicItem
 } from '@/lib/types/taxonomy';
 import {
   Search,
   Plus,
-  Lock,
   CheckCircle2,
   Clock,
   HelpCircle,
   FileText,
   RotateCcw,
   Sparkles,
-  Zap,
   Globe,
   ArrowRight,
   ShieldCheck,
-  Filter,
   Check,
   ChevronRight,
   Sliders,
   Play,
-  Bookmark,
-  Share2
+  Award
 } from 'lucide-react';
 
-// Master Series Catalog matching RepeaterMock Image 1
 interface ExamSeriesItem {
   id: string;
   examCode: string;
   name: string;
   badge: string;
-  testCount: string;
-  isFree: boolean;
   category: 'ssc' | 'rrb' | 'state' | 'bank';
   logoType: 'ssc' | 'rrb';
   tierSupport: ('tier1' | 'tier2')[];
+  markingScheme: {
+    correct: number;
+    negative: number;
+    duration: number;
+    questions: number;
+  };
 }
 
 const MASTER_SERIES_CATALOG: ExamSeriesItem[] = [
@@ -55,100 +51,91 @@ const MASTER_SERIES_CATALOG: ExamSeriesItem[] = [
     id: 'ssc-cgl-series',
     examCode: 'ssc-cgl',
     name: 'SSC CGL Mock Test Series 2026 (Tier I & Tier II) PYQs',
-    badge: '1350 Free Tests',
-    testCount: '1350',
-    isFree: true,
+    badge: 'Official 2025 Papers',
     category: 'ssc',
     logoType: 'ssc',
-    tierSupport: ['tier1', 'tier2']
+    tierSupport: ['tier1', 'tier2'],
+    markingScheme: { correct: 2, negative: 0.5, duration: 60, questions: 100 }
   },
   {
     id: 'ssc-chsl-series',
     examCode: 'ssc-chsl',
     name: 'SSC CHSL Mock Test Series 2026 (Tier I & Tier II) PYQs',
-    badge: '850 Free Tests',
-    testCount: '850',
-    isFree: true,
+    badge: 'Official 2025 Papers',
     category: 'ssc',
     logoType: 'ssc',
-    tierSupport: ['tier1', 'tier2']
+    tierSupport: ['tier1', 'tier2'],
+    markingScheme: { correct: 2, negative: 0.5, duration: 60, questions: 100 }
   },
   {
     id: 'ssc-mts-series',
     examCode: 'ssc-mts',
     name: 'SSC MTS & Havaldar Mock Test Series 2026 PYQs',
-    badge: '540 Free Tests',
-    testCount: '540',
-    isFree: true,
+    badge: 'Session 1 & 2 Papers',
     category: 'ssc',
     logoType: 'ssc',
-    tierSupport: ['tier1']
+    tierSupport: ['tier1'],
+    markingScheme: { correct: 3, negative: 1, duration: 90, questions: 90 }
   },
   {
     id: 'ssc-gd-series',
     examCode: 'ssc-gd',
     name: 'SSC GD Constable Mock Test Series 2026 PYQs',
-    badge: '720 Free Tests',
-    testCount: '720',
-    isFree: true,
+    badge: 'Official 2025 Papers',
     category: 'ssc',
     logoType: 'ssc',
-    tierSupport: ['tier1']
+    tierSupport: ['tier1'],
+    markingScheme: { correct: 2, negative: 0.25, duration: 60, questions: 80 }
   },
   {
     id: 'ssc-cpo-series',
     examCode: 'ssc-cpo',
     name: 'SSC CPO (SI in Delhi Police & CAPF) Mock Test Series',
-    badge: '320 Free Tests',
-    testCount: '320',
-    isFree: true,
+    badge: 'Official 2025 Papers',
     category: 'ssc',
     logoType: 'ssc',
-    tierSupport: ['tier1', 'tier2']
+    tierSupport: ['tier1', 'tier2'],
+    markingScheme: { correct: 1, negative: 0.25, duration: 120, questions: 200 }
   },
   {
     id: 'rrb-ntpc-series',
     examCode: 'rrb-ntpc',
     name: 'RRB NTPC (Graduate & Under-Graduate CBT 1 & 2) PYQs',
-    badge: '450 Free Tests',
-    testCount: '450',
-    isFree: true,
+    badge: 'Official 2025 Papers',
     category: 'rrb',
     logoType: 'rrb',
-    tierSupport: ['tier1', 'tier2']
+    tierSupport: ['tier1', 'tier2'],
+    markingScheme: { correct: 1, negative: 0.33, duration: 90, questions: 100 }
   },
   {
     id: 'rrb-alp-series',
     examCode: 'rrb-alp',
     name: 'RRB ALP (CBT 1 + CBT 2 + CBAT) Mock Test Series 2026',
-    badge: '111 Free Tests',
-    testCount: '111',
-    isFree: true,
+    badge: 'Official 2025 Papers',
     category: 'rrb',
     logoType: 'rrb',
-    tierSupport: ['tier1']
+    tierSupport: ['tier1'],
+    markingScheme: { correct: 1, negative: 0.33, duration: 60, questions: 75 }
   },
   {
     id: 'rrb-group-d-series',
     examCode: 'rrb-group-d',
     name: 'RRB Group D (CEN RRC Level-1 CBT) Mock Test Series',
-    badge: '380 Free Tests',
-    testCount: '380',
-    isFree: true,
+    badge: 'Official 2025 Papers',
     category: 'rrb',
     logoType: 'rrb',
-    tierSupport: ['tier1']
+    tierSupport: ['tier1'],
+    markingScheme: { correct: 1, negative: 0.33, duration: 90, questions: 100 }
   },
   {
     id: 'rrb-sc-series',
     examCode: 'rrb-section-controller',
     name: 'RRB Section Controller & Station Master 2026 PYQs',
-    badge: '190 Free Tests',
-    testCount: '190',
-    isFree: true,
+    badge: 'Official 2025 Papers',
     category: 'rrb',
     logoType: 'rrb',
-    tierSupport: ['tier1']
+    tierSupport: ['tier1'],
+    markingScheme: { correct: 1, negative: 0.33, duration: 90, questions: 100 }
   }
 ];
 
@@ -156,30 +143,33 @@ function TestsExplorerContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useAuth();
+  const detailSectionRef = useRef<HTMLDivElement>(null);
 
-  // Selected series from query or default
-  const paramSeries = searchParams.get('series');
-  const [selectedSeries, setSelectedSeries] = useState<ExamSeriesItem>(() => {
-    if (paramSeries) {
-      const found = MASTER_SERIES_CATALOG.find((s) => s.examCode === paramSeries || s.id === paramSeries);
-      if (found) return found;
+  // Selected series state
+  const [selectedSeries, setSelectedSeries] = useState<ExamSeriesItem>(MASTER_SERIES_CATALOG[0]);
+
+  // Sync with URL query ?series=...
+  useEffect(() => {
+    const s = searchParams.get('series');
+    if (s) {
+      const found = MASTER_SERIES_CATALOG.find((item) => item.examCode === s || item.id === s);
+      if (found) {
+        setSelectedSeries(found);
+      }
     }
-    return MASTER_SERIES_CATALOG[0]; // Default SSC CGL
-  });
+  }, [searchParams]);
 
-  // Active Category Tab inside Series (Image 2):
+  // Active Category Tab inside Series:
   // 'pyq_tier1' | 'pyst_tier1' (Sectional) | 'pyq_tier2' | 'topic_practice'
   const [activeCategoryTab, setActiveCategoryTab] = useState<'pyq_tier1' | 'pyst_tier1' | 'pyq_tier2' | 'topic_practice'>('pyq_tier1');
 
-  // Year Filter Pill inside Series (Image 2): 'all' | '2025' | '2024' | '2023' | '2022'
+  // Year Filter Pill inside Series: 'all' or real years only
   const [selectedYear, setSelectedYear] = useState<string>('all');
 
-  // Search in series / test items
+  // Search & Filter
   const [testSearchQuery, setTestSearchQuery] = useState('');
   const [seriesCatalogSearch, setSeriesCatalogSearch] = useState('');
   const [trendingFilter, setTrendingFilter] = useState<'all' | 'ssc' | 'rrb'>('all');
-
-  // Sort: 'newest' | 'oldest'
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
 
   // All Tests loaded from API
@@ -194,7 +184,7 @@ function TestsExplorerContent() {
   const [customQuestionCount, setCustomQuestionCount] = useState<number>(15);
   const [customDurationMinutes, setCustomDurationMinutes] = useState<number>(15);
 
-  // Load Tests
+  // Load Tests Catalog
   useEffect(() => {
     setLoading(true);
     fetch('/api/tests')
@@ -208,11 +198,10 @@ function TestsExplorerContent() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Load Attempted Tests from Supabase & SessionStorage
+  // Load Attempted Tests
   useEffect(() => {
     const map: Record<string, { score?: number; accuracy?: number }> = {};
 
-    // 1. Session Storage
     if (typeof window !== 'undefined') {
       try {
         const keys = Object.keys(sessionStorage);
@@ -235,7 +224,6 @@ function TestsExplorerContent() {
       }
     }
 
-    // 2. Supabase if logged in
     if (user && isSupabaseConfigured && supabase) {
       supabase
         .from('test_attempts')
@@ -260,6 +248,17 @@ function TestsExplorerContent() {
     setAttemptedMap(map);
   }, [user]);
 
+  // Handle clicking a series card: Updates state, updates URL, scrolls to detail
+  const handleSelectSeries = (series: ExamSeriesItem) => {
+    setSelectedSeries(series);
+    setActiveCategoryTab('pyq_tier1');
+    setSelectedYear('all');
+    router.replace(`/tests?series=${series.examCode}`, { scroll: false });
+    if (detailSectionRef.current) {
+      detailSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   // Filtered series list for Top Catalog
   const filteredCatalogSeries = useMemo(() => {
     return MASTER_SERIES_CATALOG.filter((s) => {
@@ -272,18 +271,29 @@ function TestsExplorerContent() {
     });
   }, [trendingFilter, seriesCatalogSearch]);
 
-  // Compute test list for selected series & active subtab
+  // Compute ONLY the REAL years that actually exist in the database for the active series
+  const realAvailableYears = useMemo(() => {
+    const yrSet = new Set<string>();
+    allTests.forEach((t) => {
+      const code = (t.examCode || '').toLowerCase();
+      if (code.includes(selectedSeries.examCode)) {
+        const m = t.title.match(/(202\d)/);
+        if (m) yrSet.add(m[1]);
+      }
+    });
+    const sorted = Array.from(yrSet).sort().reverse();
+    return sorted.length > 0 ? sorted : ['2025'];
+  }, [allTests, selectedSeries]);
+
+  // Compute test list for selected series & active category
   const currentSeriesTests = useMemo(() => {
-    let codePattern = selectedSeries.examCode;
-    let targetTier = activeCategoryTab === 'pyq_tier2' ? 'tier2' : 'tier1';
+    const codePattern = selectedSeries.examCode;
 
     let list = allTests.filter((t) => {
       const code = (t.examCode || '').toLowerCase();
-      // Match exam family
       const matchesExam = code.includes(codePattern);
       if (!matchesExam) return false;
 
-      // Tier check if applicable
       if (activeCategoryTab === 'pyq_tier2') {
         return code.includes('tier2') || code.includes('cbt2');
       } else if (activeCategoryTab === 'pyq_tier1' || activeCategoryTab === 'pyst_tier1') {
@@ -293,7 +303,7 @@ function TestsExplorerContent() {
       return true;
     });
 
-    // Year filter
+    // Real Year Filter
     if (selectedYear !== 'all') {
       list = list.filter((t) => {
         const titleLower = t.title.toLowerCase();
@@ -307,14 +317,12 @@ function TestsExplorerContent() {
       list = list.filter((t) => t.title.toLowerCase().includes(q) || t.id.toLowerCase().includes(q));
     }
 
-    // Sort
     if (sortOrder === 'oldest') {
       return [...list].reverse();
     }
     return list;
   }, [allTests, selectedSeries, activeCategoryTab, selectedYear, testSearchQuery, sortOrder]);
 
-  // Open custom modal for topic
   const handleOpenTopicModal = (topic: TopicItem) => {
     setActiveTopicModal(topic);
     setCustomQuestionCount(Math.min(15, topic.questionCountEstimate));
@@ -331,30 +339,20 @@ function TestsExplorerContent() {
   return (
     <div className="min-h-screen bg-[#f8fafc] dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 transition-colors pb-24">
       {/* ─────────────────────────────────────────────────────────────
-          SECTION 1: REPEATERMOCK TOP HERO & SERIES BROWSE (IMAGE 1)
+          SECTION 1: TOP HERO & SERIES BROWSE (REPEATERMOCK AESTHETIC)
       ───────────────────────────────────────────────────────────── */}
       <section className="border-b border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0f1117] pt-8 pb-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="space-y-2">
             <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              Free Mock Test Series for Government Exams
+              Mock Test Series for Government Exams
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-              Free previous-year test series for SSC, Railways, Banking, and more — attempt timed mocks and get instant section-wise analysis.{' '}
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedSeries(MASTER_SERIES_CATALOG[0]);
-                  setActiveCategoryTab('pyq_tier1');
-                }}
-                className="text-[#0891b2] dark:text-[#06b6d4] font-bold hover:underline cursor-pointer"
-              >
-                try free mock tests.
-              </button>
+              Official previous-year test series for SSC and Railways — attempt timed mocks with Eduquity right-palette CBT simulator, sectional timers, and instant section-wise analysis.
             </p>
           </div>
 
-          {/* Search bar & Browse (RepeaterMock style) */}
+          {/* Search bar & Browse */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             <div className="text-xs font-black uppercase text-slate-500 tracking-wider hidden sm:block">
               Browse
@@ -370,13 +368,14 @@ function TestsExplorerContent() {
               <button
                 type="button"
                 className="absolute right-1 w-8 h-8 rounded-full bg-[#06b6d4] hover:bg-[#0891b2] text-white flex items-center justify-center transition cursor-pointer"
+                aria-label="Search"
               >
                 <Search className="w-4 h-4" />
               </button>
             </div>
           </div>
 
-          {/* Trending Pills (Image 1) */}
+          {/* Trending Pills */}
           <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
             <span className="text-slate-400 font-bold shrink-0">Trending:</span>
             {[
@@ -404,14 +403,14 @@ function TestsExplorerContent() {
             ))}
           </div>
 
-          {/* Series Cards Grid (Image 1) */}
+          {/* Series Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
             {filteredCatalogSeries.map((series) => {
               const isSelected = selectedSeries.id === series.id;
               return (
                 <div
                   key={series.id}
-                  onClick={() => setSelectedSeries(series)}
+                  onClick={() => handleSelectSeries(series)}
                   className={`p-4 rounded-2xl border transition-all cursor-pointer relative bg-white dark:bg-[#12141a] flex flex-col justify-between ${
                     isSelected
                       ? 'border-[#06b6d4] ring-2 ring-[#06b6d4]/20 shadow-md'
@@ -419,7 +418,6 @@ function TestsExplorerContent() {
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
-                    {/* Official Exam Logo rounded */}
                     <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800/80 p-1 flex items-center justify-center border border-slate-100 dark:border-slate-700 shrink-0">
                       <ExamLogo type={series.logoType} size="sm" />
                     </div>
@@ -433,7 +431,6 @@ function TestsExplorerContent() {
                       </div>
                     </div>
 
-                    {/* Plus Bookmark icon */}
                     <button
                       type="button"
                       onClick={(e) => {
@@ -446,11 +443,11 @@ function TestsExplorerContent() {
                     </button>
                   </div>
 
-                  {/* Bottom pill row */}
                   <div className="mt-4 flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800/80 text-[11px]">
                     <span className="font-bold text-slate-500">Official Blueprints</span>
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
-                      FREE
+                    <span className="text-cyan-600 dark:text-cyan-400 font-extrabold flex items-center gap-1">
+                      <span>View Tests</span>
+                      <ArrowRight className="w-3 h-3" />
                     </span>
                   </div>
                 </div>
@@ -461,10 +458,10 @@ function TestsExplorerContent() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          SECTION 2: REPEATERMOCK SERIES DETAIL VIEW (IMAGE 2)
+          SECTION 2: SERIES DETAIL VIEW (REPEATERMOCK TEST DIRECTORY)
       ───────────────────────────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
-        {/* Breadcrumb matching Image 2 */}
+      <section ref={detailSectionRef} id="series-detail-view" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
+        {/* Breadcrumb */}
         <div className="flex items-center gap-1.5 text-xs text-slate-500 font-semibold">
           <Link href="/" className="hover:text-slate-900 dark:hover:text-white">
             Home
@@ -473,7 +470,26 @@ function TestsExplorerContent() {
           <span className="text-slate-800 dark:text-slate-200 truncate">{selectedSeries.name}</span>
         </div>
 
-        {/* Series Banner Card matching Image 2 */}
+        {/* Quick Exam Switcher Pills (Enables 1-click switching between CGL, CHSL, MTS, etc.) */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
+          <span className="text-slate-400 font-extrabold shrink-0">Switch Exam:</span>
+          {MASTER_SERIES_CATALOG.map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => handleSelectSeries(s)}
+              className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition cursor-pointer ${
+                selectedSeries.id === s.id
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-blue-500'
+              }`}
+            >
+              {s.name.split('Mock')[0].trim()}
+            </button>
+          ))}
+        </div>
+
+        {/* Series Banner Card */}
         <div className="p-6 rounded-3xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-slate-800 shadow-2xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="flex items-start sm:items-center gap-4">
             <div className="w-16 h-16 rounded-2xl bg-slate-50 dark:bg-slate-800 p-2 border border-slate-200 dark:border-slate-700 flex items-center justify-center shrink-0">
@@ -482,16 +498,15 @@ function TestsExplorerContent() {
 
             <div className="space-y-1.5">
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                Free {selectedSeries.name}
+                {selectedSeries.name}
               </h2>
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/80 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-900">
-                  free mock tests without signup
+                  {selectedSeries.badge}
                 </span>
-                <span className="text-[11px] font-black text-emerald-700 dark:text-emerald-300 bg-emerald-100/70 dark:bg-emerald-950 px-2.5 py-0.5 rounded-full">
-                  {selectedSeries.badge.toUpperCase()}
+                <span className="text-[11px] font-bold text-slate-500">
+                  English, Hindi &bull; Eduquity CBT Simulation
                 </span>
-                <span className="text-[11px] font-bold text-slate-500">English, Hindi</span>
               </div>
             </div>
           </div>
@@ -501,11 +516,11 @@ function TestsExplorerContent() {
             onClick={() => router.push('/profile')}
             className="w-full md:w-auto px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-xs shadow-xs transition cursor-pointer"
           >
-            Add to Dashboard
+            My Attempt History
           </button>
         </div>
 
-        {/* Main Content Area: Left Test Series List + Right Pass Sidebar */}
+        {/* Main Content Area: Left Test Series List + Right Pattern Card */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* ── LEFT COLUMN: TESTS DIRECTORY (8 COLS) ── */}
           <div className="lg:col-span-8 space-y-6">
@@ -513,7 +528,7 @@ function TestsExplorerContent() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <h3 className="font-extrabold text-base text-slate-900 dark:text-white">
-                  {selectedSeries.name} All Tests ({currentSeriesTests.length})
+                  {selectedSeries.name} Available Papers ({currentSeriesTests.length})
                 </h3>
               </div>
 
@@ -522,7 +537,7 @@ function TestsExplorerContent() {
                   <Search className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
                   <input
                     type="text"
-                    placeholder="Search shifts..."
+                    placeholder="Filter shifts..."
                     value={testSearchQuery}
                     onChange={(e) => setTestSearchQuery(e.target.value)}
                     className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-500"
@@ -539,7 +554,7 @@ function TestsExplorerContent() {
               </div>
             </div>
 
-            {/* Main Category Tabs matching Image 2 */}
+            {/* Main Category Tabs */}
             <div className="flex items-center gap-4 border-b border-slate-200 dark:border-slate-800 overflow-x-auto pb-1 scrollbar-none text-xs font-extrabold">
               <button
                 type="button"
@@ -581,7 +596,7 @@ function TestsExplorerContent() {
                       : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  Previous Year Paper (Tier II) (55)
+                  Previous Year Paper (Tier II)
                   {activeCategoryTab === 'pyq_tier2' && (
                     <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400 rounded-full" />
                   )}
@@ -597,36 +612,40 @@ function TestsExplorerContent() {
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
-                Topic-Wise Practice Tests (120)
+                Topic-Wise Practice Tests
                 {activeCategoryTab === 'topic_practice' && (
                   <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400 rounded-full" />
                 )}
               </button>
             </div>
 
-            {/* Year Filter Pills matching Image 2 */}
+            {/* Year Filter Pills: Strictly real available years */}
             {activeCategoryTab !== 'topic_practice' && (
               <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
-                {[
-                  { id: 'all', label: 'All' },
-                  { id: '2025', label: '2025 (45)' },
-                  { id: '2024', label: '2024 (36)' },
-                  { id: '2023', label: '2023 (39)' },
-                  { id: '2022', label: '2022 (40)' },
-                  { id: '2021', label: '2021 - 2022 (21)' },
-                  { id: '2020', label: '2020 - 2021 (21)' }
-                ].map((yr) => (
+                <button
+                  type="button"
+                  onClick={() => setSelectedYear('all')}
+                  className={`px-3 py-1 rounded-full text-xs font-bold transition whitespace-nowrap cursor-pointer ${
+                    selectedYear === 'all'
+                      ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
+                      : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50'
+                  }`}
+                >
+                  All Available
+                </button>
+
+                {realAvailableYears.map((yr) => (
                   <button
-                    key={yr.id}
+                    key={yr}
                     type="button"
-                    onClick={() => setSelectedYear(yr.id)}
+                    onClick={() => setSelectedYear(yr)}
                     className={`px-3 py-1 rounded-full text-xs font-bold transition whitespace-nowrap cursor-pointer ${
-                      selectedYear === yr.id
+                      selectedYear === yr
                         ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
                         : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50'
                     }`}
                   >
-                    {yr.label}
+                    {yr} ({currentSeriesTests.filter(t => t.title.includes(yr)).length || currentSeriesTests.length})
                   </button>
                 ))}
               </div>
@@ -639,10 +658,10 @@ function TestsExplorerContent() {
                   <div className="p-12 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
                     <FileText className="w-10 h-10 text-slate-400 mx-auto mb-2" />
                     <h4 className="font-bold text-sm text-slate-800 dark:text-slate-200">
-                      No shift papers matching filters
+                      No shift papers found
                     </h4>
                     <p className="text-xs text-slate-500 mt-1">
-                      Switch year filter to "All" or "2025" to view available official papers.
+                      Check your search query or switch year filter to "All Available".
                     </p>
                   </div>
                 ) : (
@@ -660,7 +679,6 @@ function TestsExplorerContent() {
                             {test.title}
                           </h4>
 
-                          {/* Metadata row matching Image 2 */}
                           <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 font-semibold">
                             <span className="flex items-center gap-1">
                               <Clock className="w-3.5 h-3.5 text-slate-400" />
@@ -678,7 +696,6 @@ function TestsExplorerContent() {
                             </span>
                           </div>
 
-                          {/* Status text matching Image 2 */}
                           <div className="text-[11px] font-bold">
                             {isAttempted ? (
                               <span className="text-emerald-600 dark:text-emerald-400">
@@ -693,11 +710,10 @@ function TestsExplorerContent() {
 
                           <div className="text-[11px] text-slate-400 flex items-center gap-1">
                             <Globe className="w-3 h-3" />
-                            <span>English, Hindi</span>
+                            <span>English, Hindi &bull; 15-min Sectional Timer</span>
                           </div>
                         </div>
 
-                        {/* Action buttons matching Image 2 */}
                         <div className="flex items-center gap-2 self-stretch sm:self-center shrink-0">
                           {isAttempted ? (
                             <>
@@ -734,10 +750,8 @@ function TestsExplorerContent() {
             {/* ── SUB-TAB 3: PYST SECTIONAL TESTS ORGANIZED BY SHIFT NAME ── */}
             {activeCategoryTab === 'pyst_tier1' && (
               <div className="space-y-4">
-                <div className="p-3.5 rounded-2xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 text-xs text-blue-900 dark:text-blue-200 flex items-center justify-between">
-                  <span>
-                    ⚡ <strong>Eduquity Sectional Speed Mocks:</strong> Organized shift-wise. Select any shift to drill its 4 individual 15-minute sections!
-                  </span>
+                <div className="p-3.5 rounded-2xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 text-xs text-blue-900 dark:text-blue-200">
+                  ⚡ <strong>Eduquity Sectional Speed Mocks:</strong> Organized shift-wise. Select any shift to drill its 4 individual 15-minute sections!
                 </div>
 
                 {currentSeriesTests.map((shiftTest) => (
@@ -759,7 +773,6 @@ function TestsExplorerContent() {
                       </span>
                     </div>
 
-                    {/* 4 Shift Sections */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
                       {shiftTest.sections.map((sec, secIdx) => {
                         const secTestId = `sec-${shiftTest.id}-sec-${secIdx}`;
@@ -806,10 +819,8 @@ function TestsExplorerContent() {
             {/* ── SUB-TAB 4: DEDICATED TOPIC-WISE DRILLS ── */}
             {activeCategoryTab === 'topic_practice' && (
               <div className="space-y-4">
-                <div className="p-3.5 rounded-2xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900 text-xs text-purple-900 dark:text-purple-200 flex items-center justify-between">
-                  <span>
-                    🎯 <strong>Custom Topic Drills:</strong> Pick any chapter to configure question count &amp; time. Real 2025 shift questions with authenticity badges!
-                  </span>
+                <div className="p-3.5 rounded-2xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900 text-xs text-purple-900 dark:text-purple-200">
+                  🎯 <strong>Custom Topic Drills:</strong> Pick any chapter to configure question count &amp; time. Real 2025 shift questions with authenticity badges!
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -850,9 +861,9 @@ function TestsExplorerContent() {
             )}
           </div>
 
-          {/* ── RIGHT COLUMN: PASS & SIDEBAR INFO (4 COLS MATCHING IMAGE 2) ── */}
+          {/* ── RIGHT COLUMN: OFFICIAL SCHEME & BLUEPRINT (NO PRICING) ── */}
           <div className="lg:col-span-4 space-y-6">
-            {/* Available Languages Card matching Image 2 */}
+            {/* Available Languages Card */}
             <div className="p-5 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-slate-800 shadow-2xs space-y-3">
               <h4 className="font-extrabold text-xs uppercase tracking-wider text-slate-500">
                 AVAILABLE LANGUAGES
@@ -867,55 +878,61 @@ function TestsExplorerContent() {
               </div>
             </div>
 
-            {/* 1-DAY PASS Card matching Image 2 */}
-            <div className="p-6 rounded-3xl bg-[#091e36] text-white shadow-xl relative overflow-hidden space-y-4 border border-blue-900/50">
+            {/* Official Exam Pattern & Blueprint Card */}
+            <div className="p-6 rounded-3xl bg-slate-900 text-white shadow-xl space-y-4 border border-slate-800">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-full bg-slate-200/20 flex items-center justify-center text-xs font-black">
-                    ₹
+                  <div className="w-7 h-7 rounded-lg bg-blue-500/20 text-cyan-400 flex items-center justify-center text-xs font-black">
+                    <ShieldCheck className="w-4 h-4" />
                   </div>
-                  <span className="text-xs font-black uppercase tracking-wider text-blue-200">
-                    1-DAY PASS
+                  <span className="text-xs font-black uppercase tracking-wider text-cyan-300">
+                    Official Exam Blueprint
                   </span>
                 </div>
-                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                  Active
-                </span>
               </div>
 
               <div className="space-y-1">
-                <h4 className="text-lg font-black tracking-tight leading-snug">
-                  Unlock every test in this series.
+                <h4 className="text-base font-black tracking-tight leading-snug">
+                  {selectedSeries.name.split('Mock')[0].trim()} Examination Pattern
                 </h4>
-                <p className="text-xs text-blue-200/80 leading-relaxed">
-                  Attempt pure 2025 PYQ shifts in Eduquity exam hall with live candidate watermark and dual sectional timer.
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Verified against official commission notices and authentic 2025 examination shifts.
                 </p>
               </div>
 
-              <ul className="space-y-2 text-xs text-blue-100 font-semibold pt-1">
+              <div className="grid grid-cols-2 gap-2 text-xs py-2 border-y border-slate-800">
+                <div>
+                  <span className="text-slate-400 text-[10px] uppercase font-bold block">Correct Mark</span>
+                  <span className="font-black text-emerald-400">+{selectedSeries.markingScheme.correct}.00</span>
+                </div>
+                <div>
+                  <span className="text-slate-400 text-[10px] uppercase font-bold block">Negative Mark</span>
+                  <span className="font-black text-rose-400">-{selectedSeries.markingScheme.negative}</span>
+                </div>
+                <div>
+                  <span className="text-slate-400 text-[10px] uppercase font-bold block">Total Duration</span>
+                  <span className="font-black text-white">{selectedSeries.markingScheme.duration} Mins</span>
+                </div>
+                <div>
+                  <span className="text-slate-400 text-[10px] uppercase font-bold block">Total Questions</span>
+                  <span className="font-black text-white">{selectedSeries.markingScheme.questions} Qs</span>
+                </div>
+              </div>
+
+              <ul className="space-y-2 text-xs text-slate-300 font-semibold">
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>All 2025 official shifts unlocked</span>
+                  <span>15-min strict sectional timer</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Instant step-by-step KaTeX solutions</span>
+                  <span>Eduquity right-palette CBT controls</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>100% Free for serious aspirants</span>
+                  <span>Registered phone watermark authentication</span>
                 </li>
               </ul>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveCategoryTab('pyq_tier1');
-                }}
-                className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black text-xs transition cursor-pointer shadow-md shadow-emerald-500/20"
-              >
-                Access All Tests Now
-              </button>
             </div>
           </div>
         </div>
@@ -939,7 +956,7 @@ function TestsExplorerContent() {
               <button
                 type="button"
                 onClick={() => setActiveTopicModal(null)}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1 cursor-pointer"
               >
                 ✕
               </button>
@@ -986,7 +1003,7 @@ function TestsExplorerContent() {
                     key={t.mins}
                     type="button"
                     onClick={() => setCustomDurationMinutes(t.mins)}
-                    className={`py-2 rounded-xl text-xs font-bold border transition ${
+                    className={`py-2 rounded-xl text-xs font-bold border transition cursor-pointer ${
                       customDurationMinutes === t.mins
                         ? 'bg-blue-600 text-white border-blue-600'
                         : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'
@@ -998,24 +1015,22 @@ function TestsExplorerContent() {
               </div>
             </div>
 
-            {/* Authenticity Guarantee notice */}
             <div className="p-3 bg-slate-50 dark:bg-slate-800/80 rounded-xl text-[11px] text-slate-600 dark:text-slate-400 leading-snug">
               📌 Every question includes its official 2025 examination shift stamp and KaTeX step-by-step mathematical proofs.
             </div>
 
-            {/* Action Buttons */}
             <div className="flex items-center gap-3 pt-2">
               <button
                 type="button"
                 onClick={() => setActiveTopicModal(null)}
-                className="flex-1 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs"
+                className="flex-1 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleLaunchCustomTopicTest}
-                className="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-500/20"
+                className="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-500/20 cursor-pointer"
               >
                 Start CBT Drill
               </button>

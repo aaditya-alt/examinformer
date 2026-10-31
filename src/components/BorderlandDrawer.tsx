@@ -16,7 +16,7 @@ import {
   LogIn,
   LogOut,
   X,
-  Crown,
+  Compass,
   ChevronRight
 } from 'lucide-react';
 
@@ -61,7 +61,7 @@ export function BorderlandDrawer({ isOpen, onClose }: BorderlandDrawerProps) {
         onClick={onClose}
       />
 
-      {/* Slide-out drawer matching BorderlandSSC screenshot */}
+      {/* Slide-out drawer matching BorderlandSSC layout */}
       <aside className="relative w-80 max-w-[85vw] bg-[#111216] text-white h-full shadow-2xl flex flex-col justify-between z-10 border-r border-slate-800/80 animate-in slide-in-from-left duration-200 select-none">
         {/* Scrollable upper content */}
         <div className="overflow-y-auto p-4 space-y-4 scrollbar-none">
@@ -69,7 +69,7 @@ export function BorderlandDrawer({ isOpen, onClose }: BorderlandDrawerProps) {
           <div className="flex items-center justify-between pb-2">
             <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-purple-700 via-indigo-600 to-blue-500 flex items-center justify-center font-black text-white text-lg shadow-md">
+                <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 via-blue-600 to-indigo-600 flex items-center justify-center font-black text-white text-lg shadow-md">
                   {initial}
                 </div>
                 <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[#111216]" />
@@ -95,20 +95,19 @@ export function BorderlandDrawer({ isOpen, onClose }: BorderlandDrawerProps) {
             </button>
           </div>
 
-          {/* Premium User Banner Card (Matching BorderlandSSC) */}
-          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-900 border border-amber-500/30 flex items-center justify-between group cursor-pointer hover:border-amber-400/50 transition">
+          {/* Clean Portal Status Banner */}
+          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-blue-950/40 via-slate-900 to-slate-900 border border-blue-500/20 flex items-center justify-between group">
             <div className="flex items-start gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
-                <Crown className="w-4 h-4 fill-amber-400/30" />
+              <div className="w-7 h-7 rounded-lg bg-blue-500/10 text-cyan-400 flex items-center justify-center shrink-0 mt-0.5">
+                <Compass className="w-4 h-4" />
               </div>
               <div className="space-y-0.5">
-                <div className="text-xs font-black text-amber-300">Premium User</div>
+                <div className="text-xs font-black text-cyan-300">ExamInformer Portal</div>
                 <p className="text-[11px] text-slate-400 leading-snug">
-                  Unlock all 2025 official PYQs &amp; accelerate your preparation.
+                  Official 2025 PYQ papers, shift-wise sectional tests &amp; live Eduquity CBT.
                 </p>
               </div>
             </div>
-            <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-amber-300 transition" />
           </div>
 
           {/* Main Navigation Links */}
@@ -149,7 +148,7 @@ export function BorderlandDrawer({ isOpen, onClose }: BorderlandDrawerProps) {
             >
               <div className="flex items-center gap-3">
                 <Calendar className="w-4 h-4 text-slate-400" />
-                <span>Study Plan &amp; Mocks</span>
+                <span>Test Series Catalog</span>
               </div>
               <ChevronRight className="w-3.5 h-3.5 opacity-40" />
             </Link>
@@ -173,7 +172,7 @@ export function BorderlandDrawer({ isOpen, onClose }: BorderlandDrawerProps) {
                 <ChevronRight className="w-3.5 h-3.5 opacity-40" />
               </Link>
               <a
-                href="https://t.me/mockmatrixhub"
+                href="https://t.me/Examinformer_nitesh"
                 target="_blank"
                 rel="noreferrer"
                 onClick={onClose}
@@ -181,7 +180,7 @@ export function BorderlandDrawer({ isOpen, onClose }: BorderlandDrawerProps) {
               >
                 <div className="flex items-center gap-3">
                   <Heart className="w-4 h-4 text-rose-400" />
-                  <span>Support Us &bull; Telegram</span>
+                  <span>Join Official Telegram</span>
                 </div>
                 <ChevronRight className="w-3.5 h-3.5 opacity-40" />
               </a>
@@ -189,7 +188,7 @@ export function BorderlandDrawer({ isOpen, onClose }: BorderlandDrawerProps) {
           </div>
         </div>
 
-        {/* Bottom Auth Button (Matching BorderlandSSC reddish/orange outlined pill) */}
+        {/* Bottom Auth Button */}
         <div className="p-4 border-t border-slate-800/80 bg-[#0d0e11]">
           {user ? (
             <button
