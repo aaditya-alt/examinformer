@@ -1,408 +1,21 @@
-import { CBTTest, CBTSection, CBTQuestion } from './testService';
+import fs from 'fs';
+import path from 'path';
+import { CBTTest, CBTSection, CBTQuestion } from './types/cbt';
+import {
+  ExamDefinition,
+  MappedQuestion,
+  EXAM_REGISTRY,
+  CHAPTER_TAXONOMY,
+  TOPIC_PRACTICE_LIST,
+  TopicItem
+} from './types/taxonomy';
 
-const fs = typeof window === 'undefined' ? eval("require('fs')") : null;
-const path = typeof window === 'undefined' ? eval("require('path')") : null;
-
-export interface ExamDefinition {
-  id: string;
-  name: string;
-  shortName: string;
-  family: 'ssc' | 'rrb';
-  tier: string;
-  totalQuestions: number;
-  durationMinutes: number;
-  totalMarks: number;
-  marksPerCorrect: number;
-  negativePerWrong: number;
-  hasSectionalTiming?: boolean;
-  sectionalTimingMinutes?: number;
-  sections: { name: string; questionCount: number; marks: number }[];
-  description: string;
-}
-
-export const EXAM_REGISTRY: ExamDefinition[] = [
-  // ── SSC Exams ──
-  {
-    id: 'ssc-cgl-tier1',
-    name: 'SSC CGL (Tier-1) Combined Graduate Level',
-    shortName: 'CGL Tier-1',
-    family: 'ssc',
-    tier: 'Tier-1',
-    totalQuestions: 100,
-    durationMinutes: 60,
-    totalMarks: 200,
-    marksPerCorrect: 2.0,
-    negativePerWrong: 0.50,
-    hasSectionalTiming: true,
-    sectionalTimingMinutes: 15,
-    sections: [
-      { name: 'General Intelligence and Reasoning', questionCount: 25, marks: 50 },
-      { name: 'General Awareness', questionCount: 25, marks: 50 },
-      { name: 'Quantitative Aptitude', questionCount: 25, marks: 50 },
-      { name: 'English Comprehension', questionCount: 25, marks: 50 },
-    ],
-    description: 'Tier-1 CBT examination for Inspector, Assistant Section Officer, Auditor, Tax Assistant positions.'
-  },
-  {
-    id: 'ssc-cgl-tier2',
-    name: 'SSC CGL (Tier-2) Combined Graduate Level Paper-1',
-    shortName: 'CGL Tier-2',
-    family: 'ssc',
-    tier: 'Tier-2',
-    totalQuestions: 130,
-    durationMinutes: 135,
-    totalMarks: 390,
-    marksPerCorrect: 3.0,
-    negativePerWrong: 1.0,
-    hasSectionalTiming: true,
-    sectionalTimingMinutes: 60,
-    sections: [
-      { name: 'Section 1: Mathematical Abilities & Reasoning', questionCount: 60, marks: 180 },
-      { name: 'Section 2: English Language & General Awareness', questionCount: 70, marks: 210 },
-    ],
-    description: 'Tier-2 comprehensive merit CBT with negative marking of 1 mark per incorrect response.'
-  },
-  {
-    id: 'ssc-chsl-tier1',
-    name: 'SSC CHSL (Tier-1) Combined Higher Secondary Level (10+2)',
-    shortName: 'CHSL Tier-1',
-    family: 'ssc',
-    tier: 'Tier-1',
-    totalQuestions: 100,
-    durationMinutes: 60,
-    totalMarks: 200,
-    marksPerCorrect: 2.0,
-    negativePerWrong: 0.50,
-    hasSectionalTiming: true,
-    sectionalTimingMinutes: 15,
-    sections: [
-      { name: 'General Intelligence', questionCount: 25, marks: 50 },
-      { name: 'General Awareness', questionCount: 25, marks: 50 },
-      { name: 'Quantitative Aptitude (Basic Arithmetic)', questionCount: 25, marks: 50 },
-      { name: 'English Language (Basic Knowledge)', questionCount: 25, marks: 50 },
-    ],
-    description: 'CHSL 10+2 examination for LDC, Junior Secretariat Assistant (JSA), Data Entry Operator (DEO).'
-  },
-  {
-    id: 'ssc-chsl-tier2',
-    name: 'SSC CHSL (Tier-2) Combined Higher Secondary Level',
-    shortName: 'CHSL Tier-2',
-    family: 'ssc',
-    tier: 'Tier-2',
-    totalQuestions: 135,
-    durationMinutes: 135,
-    totalMarks: 360,
-    marksPerCorrect: 3.0,
-    negativePerWrong: 1.0,
-    sections: [
-      { name: 'Section 1: Math & Reasoning Abilities', questionCount: 60, marks: 180 },
-      { name: 'Section 2: English Language & General Awareness', questionCount: 60, marks: 180 },
-      { name: 'Section 3: Computer Knowledge Module', questionCount: 15, marks: 45 },
-    ],
-    description: 'CHSL Tier-2 merit-deciding paper with computer knowledge test.'
-  },
-  {
-    id: 'ssc-cpo-tier1',
-    name: 'SSC CPO (Tier-1) Sub-Inspector in Delhi Police & CAPFs',
-    shortName: 'CPO Tier-1',
-    family: 'ssc',
-    tier: 'Tier-1',
-    totalQuestions: 100,
-    durationMinutes: 120,
-    totalMarks: 100,
-    marksPerCorrect: 1.0,
-    negativePerWrong: 0.25,
-    sections: [
-      { name: 'General Intelligence and Reasoning', questionCount: 25, marks: 25 },
-      { name: 'General Knowledge and General Awareness', questionCount: 25, marks: 25 },
-      { name: 'Quantitative Aptitude', questionCount: 25, marks: 25 },
-      { name: 'English Comprehension', questionCount: 25, marks: 25 },
-    ],
-    description: 'Updated official SSC CPO pattern: 100 Questions / 100 Marks with 0.25 negative marking.'
-  },
-  {
-    id: 'ssc-cpo-tier2',
-    name: 'SSC CPO (Tier-2) English Language & Comprehension Paper',
-    shortName: 'CPO Tier-2',
-    family: 'ssc',
-    tier: 'Tier-2',
-    totalQuestions: 200,
-    durationMinutes: 120,
-    totalMarks: 200,
-    marksPerCorrect: 1.0,
-    negativePerWrong: 0.25,
-    sections: [
-      { name: 'English Language and Comprehension', questionCount: 200, marks: 200 },
-    ],
-    description: 'Exclusively tests advanced grammar, active/passive voice, narration, vocab, and reading comprehension.'
-  },
-  {
-    id: 'ssc-mts',
-    name: 'SSC MTS & Havaldar (Multi-Tasking Staff Non-Technical)',
-    shortName: 'SSC MTS',
-    family: 'ssc',
-    tier: 'Session 1 & 2',
-    totalQuestions: 90,
-    durationMinutes: 90,
-    totalMarks: 150, // Merit based exclusively on Session 2 (150 Marks)
-    marksPerCorrect: 3.0,
-    negativePerWrong: 1.0,
-    sections: [
-      { name: 'Session 1: Numerical Ability & Reasoning (Qualifying Only, No Negative)', questionCount: 40, marks: 120 },
-      { name: 'Session 2: General Awareness & English Language (Merit Determining)', questionCount: 50, marks: 150 },
-    ],
-    description: 'Official MTS pattern: Final merit is prepared solely on Session 2 performance (150 Marks). Session 1 is qualifying only with zero negative marking.'
-  },
-  {
-    id: 'ssc-gd',
-    name: 'SSC GD Constable in CAPFs, SSF, Rifleman in Assam Rifles',
-    shortName: 'SSC GD',
-    family: 'ssc',
-    tier: 'CBT',
-    totalQuestions: 80,
-    durationMinutes: 60,
-    totalMarks: 160,
-    marksPerCorrect: 2.0,
-    negativePerWrong: 0.25,
-    sections: [
-      { name: 'General Intelligence and Reasoning', questionCount: 20, marks: 40 },
-      { name: 'General Knowledge and General Awareness', questionCount: 20, marks: 40 },
-      { name: 'Elementary Mathematics', questionCount: 20, marks: 40 },
-      { name: 'English / Hindi Language', questionCount: 20, marks: 40 },
-    ],
-    description: 'Official 80-question GD pattern with authentic 0.25 negative marks per wrong answer.'
-  },
-  {
-    id: 'delhi-police',
-    name: 'Delhi Police Constable (Executive) Recruitment Exam',
-    shortName: 'Delhi Police',
-    family: 'ssc',
-    tier: 'CBT',
-    totalQuestions: 100,
-    durationMinutes: 90,
-    totalMarks: 100,
-    marksPerCorrect: 1.0,
-    negativePerWrong: 0.25,
-    sections: [
-      { name: 'General Knowledge & Current Affairs', questionCount: 50, marks: 50 },
-      { name: 'Reasoning Ability', questionCount: 25, marks: 25 },
-      { name: 'Numerical Ability', questionCount: 15, marks: 15 },
-      { name: 'Computer Fundamentals & MS Office', questionCount: 10, marks: 10 },
-    ],
-    description: 'Delhi Police recruitment paper conducted by Staff Selection Commission.'
-  },
-
-  // ── RRB / Railway Exams ──
-  {
-    id: 'rrb-ntpc-grad-cbt1',
-    name: 'RRB NTPC Graduate (CBT-1) Non-Technical Popular Categories',
-    shortName: 'NTPC Grad CBT-1',
-    family: 'rrb',
-    tier: 'CBT-1',
-    totalQuestions: 100,
-    durationMinutes: 90,
-    totalMarks: 100,
-    marksPerCorrect: 1.0,
-    negativePerWrong: 0.33,
-    sections: [
-      { name: 'General Awareness', questionCount: 40, marks: 40 },
-      { name: 'Mathematics', questionCount: 30, marks: 30 },
-      { name: 'General Intelligence & Reasoning', questionCount: 30, marks: 30 },
-    ],
-    description: 'CEN 05/2024 Graduate Level: Station Master, Goods Train Manager, Senior Commercial Clerk.'
-  },
-  {
-    id: 'rrb-ntpc-grad-cbt2',
-    name: 'RRB NTPC Graduate (CBT-2) Level 5 & 6 Main Examination',
-    shortName: 'NTPC Grad CBT-2',
-    family: 'rrb',
-    tier: 'CBT-2',
-    totalQuestions: 120,
-    durationMinutes: 90,
-    totalMarks: 120,
-    marksPerCorrect: 1.0,
-    negativePerWrong: 0.33,
-    sections: [
-      { name: 'General Awareness', questionCount: 50, marks: 50 },
-      { name: 'Mathematics', questionCount: 35, marks: 35 },
-      { name: 'General Intelligence & Reasoning', questionCount: 35, marks: 35 },
-    ],
-    description: 'CBT-2 merit examination for Level 5 & Level 6 executive railway positions.'
-  },
-  {
-    id: 'rrb-ntpc-ug-cbt1',
-    name: 'RRB NTPC Under-Graduate (12th Level CBT-1)',
-    shortName: 'NTPC UG CBT-1',
-    family: 'rrb',
-    tier: 'CBT-1',
-    totalQuestions: 100,
-    durationMinutes: 90,
-    totalMarks: 100,
-    marksPerCorrect: 1.0,
-    negativePerWrong: 0.33,
-    sections: [
-      { name: 'General Awareness', questionCount: 40, marks: 40 },
-      { name: 'Mathematics', questionCount: 30, marks: 30 },
-      { name: 'General Intelligence & Reasoning', questionCount: 30, marks: 30 },
-    ],
-    description: 'Junior Clerk cum Typist, Accounts Clerk cum Typist, Commercial cum Ticket Clerk.'
-  },
-  {
-    id: 'rrb-ntpc-ug-cbt2',
-    name: 'RRB NTPC Under-Graduate (12th Level CBT-2)',
-    shortName: 'NTPC UG CBT-2',
-    family: 'rrb',
-    tier: 'CBT-2',
-    totalQuestions: 120,
-    durationMinutes: 90,
-    totalMarks: 120,
-    marksPerCorrect: 1.0,
-    negativePerWrong: 0.33,
-    sections: [
-      { name: 'General Awareness', questionCount: 50, marks: 50 },
-      { name: 'Mathematics', questionCount: 35, marks: 35 },
-      { name: 'General Intelligence & Reasoning', questionCount: 35, marks: 35 },
-    ],
-    description: 'Level 2 & Level 3 merit CBT with 120 objective questions.'
-  },
-  {
-    id: 'rrb-section-controller',
-    name: 'RRB Section Controller & Station Master Operating Exam',
-    shortName: 'Section Controller',
-    family: 'rrb',
-    tier: 'CBT',
-    totalQuestions: 120,
-    durationMinutes: 90,
-    totalMarks: 120,
-    marksPerCorrect: 1.0,
-    negativePerWrong: 0.33,
-    sections: [
-      { name: 'Traffic & Railway Operating Concepts', questionCount: 40, marks: 40 },
-      { name: 'General Awareness & Indian Railways History', questionCount: 40, marks: 40 },
-      { name: 'Mathematics & Logical Reasoning', questionCount: 40, marks: 40 },
-    ],
-    description: 'Specialized railway operating cadre test for Section Controllers and Station Masters.'
-  },
-  {
-    id: 'rrb-group-d',
-    name: 'RRB Group D (CEN RRC Level-1 Posts)',
-    shortName: 'RRB Group D',
-    family: 'rrb',
-    tier: 'CBT',
-    totalQuestions: 100,
-    durationMinutes: 90,
-    totalMarks: 100,
-    marksPerCorrect: 1.0,
-    negativePerWrong: 0.33,
-    sections: [
-      { name: 'General Science', questionCount: 25, marks: 25 },
-      { name: 'Mathematics', questionCount: 25, marks: 25 },
-      { name: 'General Intelligence and Reasoning', questionCount: 30, marks: 30 },
-      { name: 'General Awareness and Current Affairs', questionCount: 20, marks: 20 },
-    ],
-    description: 'Track Maintainer Grade IV, Helper/Assistant in various technical departments.'
-  },
-  {
-    id: 'rrb-alp',
-    name: 'RRB Assistant Loco Pilot & Technician (CEN 01/2024)',
-    shortName: 'RRB ALP',
-    family: 'rrb',
-    tier: 'CBT-1',
-    totalQuestions: 75,
-    durationMinutes: 60,
-    totalMarks: 75,
-    marksPerCorrect: 1.0,
-    negativePerWrong: 0.33,
-    sections: [
-      { name: 'Mathematics', questionCount: 20, marks: 20 },
-      { name: 'General Intelligence and Reasoning', questionCount: 25, marks: 25 },
-      { name: 'General Science', questionCount: 20, marks: 20 },
-      { name: 'General Awareness on Current Affairs', questionCount: 10, marks: 10 },
-    ],
-    description: 'Assistant Loco Pilot & Technician Grade III first stage computer based test.'
-  }
-];
-
-export interface MappedQuestion {
-  id: string;
-  examCode: string;
-  examFamily: 'ssc' | 'rrb';
-  tier: string;
-  year: number;
-  shift: string;
-  date: string;
-  sectionName: string;
-  subject: 'math' | 'reasoning' | 'english' | 'ga';
-  chapter: string;
-  difficulty: 'Easy' | 'Moderate' | 'Hard';
-  questionText: string;
-  questionTextHi?: string;
-  options: { id: number; text: string; textHi?: string }[];
-  correctOption: number;
-  explanation: string;
-  marks: number;
-  negativeMarks: number;
-}
-
-export const CHAPTER_TAXONOMY = {
-  math: [
-    'Trigonometry & Heights-Distances',
-    'Algebra & Polynomials',
-    'Geometry (Circles & Triangles)',
-    'Mensuration 2D & 3D',
-    'Number System & Divisibility',
-    'Simple & Compound Interest',
-    'Profit, Loss & Discount',
-    'Time and Work & Pipes-Cisterns',
-    'Time, Speed and Distance & Trains',
-    'Percentage & Applications',
-    'Ratio, Proportion & Partnership',
-    'Average, Mixtures & Alligations',
-    'Data Interpretation (Charts & Tables)'
-  ],
-  reasoning: [
-    'Series (Number & Alphabet)',
-    'Coding-Decoding',
-    'Analogy (Word & Number)',
-    'Classification & Odd-One-Out',
-    'Blood Relations',
-    'Direction & Distance Sense',
-    'Venn Diagrams & Syllogisms',
-    'Order, Ranking & Seating',
-    'Non-Verbal & Mirror/Water Images',
-    'Dice, Cube & Counting Figures',
-    'Statement & Conclusion / Assumptions'
-  ],
-  english: [
-    'Spotting the Error (Grammar)',
-    'Sentence Improvement',
-    'Fill in the Blanks',
-    'Synonyms & Antonyms',
-    'Idioms and Phrases',
-    'One Word Substitution',
-    'Spelling Test / Misspelt Words',
-    'Active and Passive Voice',
-    'Direct and Indirect Speech',
-    'Cloze Test Passages',
-    'Reading Comprehension'
-  ],
-  ga: [
-    'Indian Polity & Constitution',
-    'Ancient & Medieval Indian History',
-    'Modern History & Freedom Struggle',
-    'Physical & Indian Geography',
-    'Indian Economy & Banking',
-    'General Science (Physics & Chemistry)',
-    'General Science (Biology & Health)',
-    'Static GK (Art, Culture, Dances, Festivals)',
-    'Current Affairs, Awards & Sports'
-  ]
-};
+export * from './types/taxonomy';
 
 // Automatic intelligent classifier for chapters
 export function classifyQuestion(section: string, text: string): { subject: 'math' | 'reasoning' | 'english' | 'ga'; chapter: string } {
-  const t = text.toLowerCase();
-  const sec = section.toLowerCase();
+  const t = (text || '').toLowerCase();
+  const sec = (section || '').toLowerCase();
 
   // Reasoning
   if (sec.includes('reason') || sec.includes('intelligence')) {
@@ -448,35 +61,33 @@ export function classifyQuestion(section: string, text: string): { subject: 'mat
     if (t.includes('passive') || t.includes('voice') || t.includes('active')) return { subject: 'english', chapter: 'Active and Passive Voice' };
     if (t.includes('direct') || t.includes('indirect') || t.includes('narration') || t.includes('speech')) return { subject: 'english', chapter: 'Direct and Indirect Speech' };
     if (t.includes('cloze') || t.includes('passage')) return { subject: 'english', chapter: 'Cloze Test Passages' };
-    return { subject: 'english', chapter: 'Sentence Improvement' };
+    return { subject: 'english', chapter: 'Reading Comprehension' };
   }
 
   // General Awareness
-  if (t.includes('article') || t.includes('constitution') || t.includes('president') || t.includes('parliament') || t.includes('amendment') || t.includes('fundamental right') || t.includes('governor') || t.includes('lok sabha')) {
+  if (t.includes('article') || t.includes('constitution') || t.includes('president') || t.includes('amendment') || t.includes('parliament') || t.includes('fundamental right')) {
     return { subject: 'ga', chapter: 'Indian Polity & Constitution' };
   }
-  if (t.includes('mughal') || t.includes('delhi sultanate') || t.includes('ashoka') || t.includes('harappa') || t.includes('indus valley') || t.includes('mauryan') || t.includes('chola') || t.includes('ancient')) {
-    return { subject: 'ga', chapter: 'Ancient & Medieval Indian History' };
-  }
-  if (t.includes('1857') || t.includes('gandhi') || t.includes('congress') || t.includes('british') || t.includes('viceroy') || t.includes('freedom') || t.includes('movement') || t.includes('revolt')) {
+  if (t.includes('battle') || t.includes('gandhi') || t.includes('congress') || t.includes('viceroy') || t.includes('1857') || t.includes('revolt') || t.includes('british')) {
     return { subject: 'ga', chapter: 'Modern History & Freedom Struggle' };
   }
-  if (t.includes('river') || t.includes('mountain') || t.includes('soil') || t.includes('himalaya') || t.includes('tributary') || t.includes('plateau') || t.includes('monsoon') || t.includes('census')) {
+  if (t.includes('river') || t.includes('himalaya') || t.includes('soil') || t.includes('lake') || t.includes('dam') || t.includes('latitude') || t.includes('monsoon')) {
     return { subject: 'ga', chapter: 'Physical & Indian Geography' };
   }
-  if (t.includes('rbi') || t.includes('gdp') || t.includes('inflation') || t.includes('repo') || t.includes('budget') || t.includes('fiscal') || t.includes('five year plan') || t.includes('economy')) {
+  if (t.includes('dance') || t.includes('festival') || t.includes('temple') || t.includes('gharana') || t.includes('instrument') || t.includes('classical dance')) {
+    return { subject: 'ga', chapter: 'Static GK (Art, Culture, Dances, Festivals)' };
+  }
+  if (t.includes('gdp') || t.includes('inflation') || t.includes('rbi') || t.includes('bank') || t.includes('fiscal') || t.includes('budget') || t.includes('five year plan')) {
     return { subject: 'ga', chapter: 'Indian Economy & Banking' };
   }
-  if (t.includes('velocity') || t.includes('energy') || t.includes('force') || t.includes('optics') || t.includes('refraction') || t.includes('newton') || t.includes('acid') || t.includes('metal') || t.includes('periodic table') || t.includes('compound') || t.includes('atom')) {
-    return { subject: 'ga', chapter: 'General Science (Physics & Chemistry)' };
-  }
-  if (t.includes('cell') || t.includes('vitamin') || t.includes('disease') || t.includes('hormone') || t.includes('blood') || t.includes('bacteria') || t.includes('virus') || t.includes('photosynthesis') || t.includes('plant')) {
+  if (t.includes('cell') || t.includes('vitamin') || t.includes('disease') || t.includes('bacteria') || t.includes('virus') || t.includes('blood') || t.includes('plant') || t.includes('hormone')) {
     return { subject: 'ga', chapter: 'General Science (Biology & Health)' };
   }
-  if (t.includes('cup') || t.includes('trophy') || t.includes('olympic') || t.includes('cricket') || t.includes('championship') || t.includes('award') || t.includes('scheme') || t.includes('2024') || t.includes('2025') || t.includes('2026')) {
-    return { subject: 'ga', chapter: 'Current Affairs, Awards & Sports' };
+  if (t.includes('force') || t.includes('energy') || t.includes('acid') || t.includes('reaction') || t.includes('metal') || t.includes('gravity') || t.includes('lens') || t.includes('current')) {
+    return { subject: 'ga', chapter: 'General Science (Physics & Chemistry)' };
   }
-  return { subject: 'ga', chapter: 'Static GK (Art, Culture, Dances, Festivals)' };
+
+  return { subject: 'ga', chapter: 'Current Affairs, Awards & Sports' };
 }
 
 // Master memory question bank populated with all bundled questions and mapped metadata
@@ -490,15 +101,15 @@ export function getMasterQuestionBank(): MappedQuestion[] {
   try {
     const testsDir = path.join(process.cwd(), 'src/data/tests');
     if (fs.existsSync(testsDir)) {
-      const files = fs.readdirSync(testsDir).slice(0, 30); // sample across 30 shifts to generate rich chapter rooms
+      const files = fs.readdirSync(testsDir).slice(0, 45); // sample across 45 shifts to generate rich chapter rooms
       files.forEach((file) => {
         try {
           const t = JSON.parse(fs.readFileSync(path.join(testsDir, file), 'utf8'));
           const examCode = t.examCode || 'ssc-cgl-tier1';
           const examFamily = t.examFamily || (examCode.startsWith('rrb') ? 'rrb' : 'ssc');
-          const shift = t.title.includes('Shift') ? t.title.split('(')[1]?.replace(')', '') || 'Shift 1' : 'Official Shift 1';
-          const year = 2025;
-          const date = '2025-2026 Official';
+          const shift = t.title || 'Official Shift 2025';
+          const year = t.examYear || 2025;
+          const date = '2025 Official Paper';
 
           t.sections?.forEach((s: any) => {
             s.questions?.forEach((q: any) => {
@@ -568,7 +179,7 @@ export function generateChapterTest(subject: 'math' | 'reasoning' | 'english' | 
 
   const testId = `ch-${subject}-${encodeURIComponent(chapter).replace(/%20/g, '-').toLowerCase()}-${count}`;
   const duration = Math.max(10, Math.round(selected.length * 1.2)); // ~1.2 mins per question
-  const totalMarks = selected.reduce((sum, q) => sum + q.marks, 0);
+  const totalMarks = selected.reduce((sum, q) => sum + q.marks, 0) || count * 2;
 
   const cbtQuestions: CBTQuestion[] = selected.map((q, idx) => ({
     id: q.id,
@@ -580,7 +191,8 @@ export function generateChapterTest(subject: 'math' | 'reasoning' | 'english' | 
     explanation: q.explanation,
     marks: q.marks,
     negativeMarks: q.negativeMarks,
-    sectionName: chapter
+    sectionName: chapter,
+    examOrigin: `Official 2025 Paper: ${q.shift || q.examCode.toUpperCase()}`
   }));
 
   return {
@@ -588,7 +200,7 @@ export function generateChapterTest(subject: 'math' | 'reasoning' | 'english' | 
     title: `${chapter} — Chapter-Wise PYQ Practice Test (${count} Questions)`,
     examCode: 'chapter-practice',
     examFamily: subject === 'math' || subject === 'reasoning' ? 'ssc' : 'ssc',
-    type: 'sectional',
+    type: 'chapter',
     durationMinutes: duration,
     totalMarks,
     totalQuestions: selected.length,
@@ -623,7 +235,8 @@ export function generateSectionalTest(examCode: string, sectionName: string): CB
     explanation: q.explanation,
     marks: q.marks,
     negativeMarks: q.negativeMarks,
-    sectionName
+    sectionName,
+    examOrigin: `Official 2025 Paper: ${q.shift || examCode.toUpperCase()}`
   }));
 
   return {
@@ -668,7 +281,8 @@ export function generateSmartFullMock(examCode: string): CBTTest {
       explanation: q.explanation,
       marks: examDef.marksPerCorrect,
       negativeMarks: examDef.negativePerWrong,
-      sectionName: secDef.name
+      sectionName: secDef.name,
+      examOrigin: `Official 2025 Paper: ${q.shift || examDef.shortName}`
     }));
 
     return {

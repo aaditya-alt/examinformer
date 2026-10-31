@@ -3,7 +3,7 @@
 import React, { useEffect, useState, use } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { CBTTest } from '@/lib/testService';
+import type { CBTTest } from '@/lib/types/cbt';
 import { MathRenderer } from '@/components/MathRenderer';
 import {
   Trophy,

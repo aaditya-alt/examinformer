@@ -4,7 +4,7 @@ import React, { useState, useEffect, use, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { CBTTest, CBTQuestion } from '@/lib/testService';
+import type { CBTTest, CBTQuestion } from '@/lib/types/cbt';
 import { MathRenderer } from '@/components/MathRenderer';
 import { useAuth } from '@/components/auth/AuthContext';
 import { supabase } from '@/lib/supabase';
@@ -82,6 +82,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
 
   // Responsive Mobile Palette Drawer State
   const [mobilePaletteOpen, setMobilePaletteOpen] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState<number>(1);
 
   // Modals
   const [submitModalOpen, setSubmitModalOpen] = useState(false);
@@ -670,118 +671,104 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   // Only visible when in solution mode and (reattempt is OFF or revealed for this specific question)
   const isQuestionSolutionVisible = Boolean(isSolutionMode && (!reattemptMode || revealedPerQuestion[qno]));
 
+  const totalAnsweredCount = Object.values(userResponses).filter(
+    (r) => r.status === 'answered' || r.status === 'answered_review'
+  ).length;
+
+  const currentSectionStats = {
+    answered: currentSection.questions.filter(
+      (q) => userResponses[q.qno]?.status === 'answered' || userResponses[q.qno]?.status === 'answered_review'
+    ).length,
+    notAnswered: currentSection.questions.filter(
+      (q) => userResponses[q.qno]?.status === 'not_answered'
+    ).length,
+    review: currentSection.questions.filter(
+      (q) => userResponses[q.qno]?.status === 'review' || userResponses[q.qno]?.status === 'answered_review'
+    ).length,
+    notVisited: currentSection.questions.filter(
+      (q) => !userResponses[q.qno] || userResponses[q.qno]?.status === 'not_visited'
+    ).length
+  };
+
+  const watermarkStyle = {
+    backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='130'><text x='30' y='70' fill='rgba(100,116,139,0.06)' font-size='16' font-family='sans-serif' font-weight='bold' transform='rotate(-22 120 65)'>${encodeURIComponent(user?.rollNumber || '9990287066')}</text></svg>")`,
+    backgroundRepeat: 'repeat'
+  };
+
   return (
     <div
       ref={containerRef}
       className="fixed inset-0 z-[100] w-screen h-screen flex flex-col select-none overflow-hidden bg-white text-slate-900 font-sans"
     >
-      {/* ── 1. TOP HEADER (Eduquity CBT Layout with Real Logos & Pause Functionality) ── */}
-      <header className="h-14 px-3 sm:px-6 bg-[#f8fafc] border-b border-slate-300 flex items-center justify-between shrink-0 shadow-sm">
-        {/* Brand & Test Title */}
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-          <div className="flex items-center gap-2 min-w-0">
-            {/* Authentic Logo */}
-            <div className="w-8 h-8 rounded-full bg-white shadow-sm border border-slate-200 flex items-center justify-center p-0.5 overflow-hidden shrink-0">
-              <img
-                src={test.examFamily === 'rrb' ? '/rrb-logo.png' : '/ssc-logo.png'}
-                alt={test.examFamily.toUpperCase()}
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <div className="min-w-0">
-              <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-[#0284c7] text-xs sm:text-sm tracking-tight">
-                  Exam Informer
-                </span>
-                <span className="text-[10px] uppercase font-bold text-white px-1.5 py-0.2 rounded bg-[#0284c7]">
-                  {test.examFamily.toUpperCase()} CBT
-                </span>
-                {isSolutionMode && (
-                  <span className="text-[10px] uppercase font-bold text-purple-700 bg-purple-100 border border-purple-300 px-1.5 py-0.2 rounded hidden sm:inline-flex items-center gap-1">
-                    <Sparkles className="w-3 h-3 text-purple-600" />
-                    Solution Terminal
-                  </span>
-                )}
-              </div>
-              <div className="text-[11px] sm:text-xs font-semibold text-slate-700 truncate max-w-[140px] sm:max-w-sm md:max-w-md">
-                {test.title}
-              </div>
-            </div>
-          </div>
+      {/* ── 1. EDUQUITY OFFICIAL TOP HEADER ── */}
+      <header className="h-12 px-3 sm:px-6 bg-[#f8fafc] border-b border-slate-300 flex items-center justify-between shrink-0 shadow-xs">
+        {/* Left: Zoom Buttons */}
+        <div className="flex items-center gap-1.5 shrink-0">
+          <button
+            type="button"
+            onClick={() => setZoomLevel((prev) => Math.min(prev + 0.1, 1.4))}
+            className="px-3 py-1 bg-[#1d4ed8] hover:bg-[#1e40af] text-white font-bold text-xs rounded transition active:scale-95 shadow-xs"
+          >
+            Zoom (+)
+          </button>
+          <button
+            type="button"
+            onClick={() => setZoomLevel((prev) => Math.max(prev - 0.1, 0.8))}
+            className="px-3 py-1 bg-[#1d4ed8] hover:bg-[#1e40af] text-white font-bold text-xs rounded transition active:scale-95 shadow-xs"
+          >
+            Zoom (-)
+          </button>
         </div>
 
-        {/* Center Timer / Terminal Status */}
-        {!isSolutionMode ? (
-          <div className="flex items-center gap-2">
-            <span className="text-[11px] sm:text-xs font-bold text-slate-600 hidden sm:inline">Time Left</span>
-            <div className="px-2.5 py-0.5 rounded bg-slate-100 border border-slate-300 font-mono font-bold text-xs sm:text-sm text-slate-800 tracking-wider shadow-inner">
-              {formatTimeEduquity(overallSecondsRemaining)}
-            </div>
-          </div>
-        ) : (
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1.5 bg-slate-100 border border-slate-300 px-2.5 py-0.5 rounded-full shadow-inner">
-              <span className="text-[11px] font-bold text-slate-700 hidden sm:inline">Reattempt:</span>
-              <button
-                type="button"
-                onClick={() => setReattemptMode(!reattemptMode)}
-                className={`relative inline-flex h-4 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
-                  reattemptMode ? 'bg-[#0284c7]' : 'bg-slate-300'
-                }`}
-              >
-                <span
-                  className={`pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                    reattemptMode ? 'translate-x-5' : 'translate-x-0'
-                  }`}
-                />
-              </button>
-              <span className={`text-[11px] font-bold ${reattemptMode ? 'text-[#0284c7]' : 'text-slate-500'}`}>
-                {reattemptMode ? 'ON' : 'OFF'}
-              </span>
-            </div>
-          </div>
-        )}
+        {/* Center: Title */}
+        <div className="text-center font-bold text-xs sm:text-sm text-slate-800 truncate max-w-xs sm:max-w-md md:max-w-lg px-2">
+          {qno}) {currentSection.name || test.title} Practice
+        </div>
 
-        {/* Top Right Action & Info Widgets */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          {!isSolutionMode && (
+        {/* Right: Fullscreen, Pause, Timer */}
+        <div className="flex items-center gap-2 shrink-0">
+          {!isSolutionMode ? (
             <>
-              {/* Working Pause Button (Saves state so user can return later) */}
-              <button
-                type="button"
-                onClick={handlePauseTest}
-                className="px-2.5 py-1 rounded border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs flex items-center gap-1 transition shadow-sm active:scale-95"
-              >
-                <Pause className="w-3.5 h-3.5 fill-current" />
-                <span className="hidden sm:inline">Pause Test</span>
-              </button>
-
               <button
                 type="button"
                 onClick={toggleFullscreen}
-                className="hidden sm:flex px-2.5 py-1 rounded border border-slate-300 hover:bg-slate-100 text-slate-700 font-semibold text-xs items-center gap-1 transition"
+                className="hidden sm:inline-flex px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 text-xs font-semibold rounded shadow-xs transition"
               >
-                {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
-                <span className="hidden md:inline">Full Screen</span>
+                Show Fullscreen
               </button>
+              <button
+                type="button"
+                onClick={handlePauseTest}
+                title="Pause Test"
+                className="p-1 sm:px-2 py-1 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 text-xs font-semibold rounded shadow-xs transition flex items-center gap-1"
+              >
+                <Pause className="w-3.5 h-3.5 fill-current" />
+              </button>
+              {/* Official Yellow Timer Box */}
+              <div className="bg-[#fffbeb] border border-[#fef08a] px-3 py-0.5 rounded text-center leading-none min-w-[75px] shadow-xs">
+                <div className="text-[9px] text-slate-600 font-semibold tracking-wider">Time Left</div>
+                <div className="text-sm sm:text-base font-black text-rose-600 font-mono tracking-wider">
+                  {formatTimeEduquity(overallSecondsRemaining)}
+                </div>
+              </div>
             </>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Link
+                href={`/tests/${testId}/result`}
+                className="px-3 py-1 rounded bg-[#1d4ed8] text-white font-bold text-xs flex items-center gap-1 transition shadow-xs"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Scorecard</span>
+              </Link>
+            </div>
           )}
 
-          {isSolutionMode && (
-            <Link
-              href={`/tests/${testId}/result`}
-              className="px-3 py-1 rounded border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs flex items-center gap-1 transition shadow-sm"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Scorecard</span>
-            </Link>
-          )}
-
-          {/* Mobile Drawer Trigger for Question Palette (On screens < lg) */}
+          {/* Mobile Drawer Trigger for Palette */}
           <button
             type="button"
             onClick={() => setMobilePaletteOpen(true)}
-            className="lg:hidden px-2.5 py-1 rounded bg-[#1d4ed8] text-white font-bold text-xs flex items-center gap-1 shadow-sm"
+            className="lg:hidden px-2.5 py-1 rounded bg-[#1d4ed8] text-white font-bold text-xs flex items-center gap-1 shadow-xs"
           >
             <Menu className="w-3.5 h-3.5" />
             <span>Palette</span>
@@ -789,97 +776,202 @@ function EduquityCBTContent({ testId }: { testId: string }) {
         </div>
       </header>
 
+      {/* ── 2. EDUQUITY SUB-HEADER: SYMBOLS & INSTRUCTIONS (Red Underlined) ── */}
+      <div className="px-3 sm:px-6 py-1 bg-[#f1f5f9] border-b border-slate-200 flex items-center justify-between text-xs shrink-0">
+        <div className="flex items-center gap-4">
+          <button
+            type="button"
+            onClick={() => alert('Eduquity Palette Symbols:\n- Blue: Not Answered / Visited\n- Green: Answered\n- Purple: Marked for Review\n- Purple with Green dot: Answered & Marked for Review')}
+            className="text-rose-600 underline font-bold text-xs hover:text-rose-700 tracking-wider"
+          >
+            SYMBOLS
+          </button>
+          <button
+            type="button"
+            onClick={() => setInstructionsModalOpen(true)}
+            className="text-rose-600 underline font-bold text-xs hover:text-rose-700 tracking-wider"
+          >
+            INSTRUCTIONS
+          </button>
+        </div>
+
+        {/* Language Selection */}
+        <div className="flex items-center gap-1.5 text-xs text-slate-700 font-medium">
+          <span className="hidden sm:inline">Select Language:</span>
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value as 'en' | 'hi')}
+            className="border border-slate-300 rounded px-1.5 py-0.5 text-xs bg-white text-slate-800 font-semibold focus:outline-none"
+          >
+            <option value="en">English</option>
+            <option value="hi">हिंदी</option>
+          </select>
+        </div>
+      </div>
+
+      {/* ── 3. EDUQUITY SECTION BAR & ACTION BUTTONS ROW ── */}
+      <div className="px-3 sm:px-6 py-1.5 bg-white border-b border-slate-300 flex flex-wrap items-center justify-between gap-2 shrink-0">
+        {/* Section Pills (Green) */}
+        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none">
+          {test.sections.map((sec, sIdx) => {
+            const isActive = activeSectionIdx === sIdx;
+            return (
+              <button
+                key={sec.id}
+                type="button"
+                onClick={() => {
+                  setActiveSectionIdx(sIdx);
+                  setActiveQuestionIdx(0);
+                }}
+                className={`px-3 py-1 rounded text-xs font-black uppercase tracking-wider transition whitespace-nowrap ${
+                  isActive
+                    ? 'bg-[#15803d] text-white shadow-xs'
+                    : 'bg-[#166534] text-emerald-100 hover:bg-[#15803d]'
+                }`}
+              >
+                {sec.name}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Horizontal Action Buttons Row (Blue) */}
+        {!isSolutionMode ? (
+          <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap">
+            <button
+              type="button"
+              onClick={goToPrevQuestion}
+              className="px-2.5 sm:px-3 py-1 rounded bg-[#1d4ed8] hover:bg-[#1e40af] text-white font-bold text-xs shadow-xs transition active:scale-95"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              onClick={handleMarkForReviewAndNext}
+              className="px-2.5 sm:px-3 py-1 rounded bg-[#1d4ed8] hover:bg-[#1e40af] text-white font-bold text-xs shadow-xs transition active:scale-95"
+            >
+              Mark For Review
+            </button>
+            <button
+              type="button"
+              onClick={handleSaveAndNext}
+              className="px-2.5 sm:px-3 py-1 rounded bg-[#1d4ed8] hover:bg-[#1e40af] text-white font-bold text-xs shadow-xs transition active:scale-95"
+            >
+              Save &amp; Next
+            </button>
+            <button
+              type="button"
+              onClick={handleClearResponse}
+              className="px-2.5 sm:px-3 py-1 rounded bg-[#1d4ed8] hover:bg-[#1e40af] text-white font-bold text-xs shadow-xs transition active:scale-95"
+            >
+              Clear
+            </button>
+            <button
+              type="button"
+              disabled
+              className="px-2.5 sm:px-3 py-1 rounded bg-blue-200 text-blue-800 font-bold text-xs opacity-75 cursor-not-allowed hidden sm:inline-block"
+            >
+              Submit Section
+            </button>
+            <button
+              type="button"
+              onClick={() => setSubmitModalOpen(true)}
+              className="px-2.5 sm:px-3 py-1 rounded bg-[#1d4ed8] hover:bg-[#1e40af] text-white font-bold text-xs shadow-xs transition active:scale-95"
+            >
+              Submit Test
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={goToPrevQuestion}
+              className="px-3 py-1 rounded bg-[#1d4ed8] hover:bg-[#1e40af] text-white font-bold text-xs shadow-xs transition flex items-center gap-1"
+            >
+              <ChevronLeft className="w-3.5 h-3.5" />
+              <span>Previous</span>
+            </button>
+            <button
+              type="button"
+              onClick={goToNextQuestion}
+              className="px-3 py-1 rounded bg-[#1d4ed8] hover:bg-[#1e40af] text-white font-bold text-xs shadow-xs transition flex items-center gap-1"
+            >
+              <span>Next</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
+
+        {/* Right Info: Marks & Total Answered */}
+        <div className="flex items-center gap-2 sm:gap-3 text-xs text-slate-700 whitespace-nowrap">
+          <span className="hidden md:inline">
+            Marks for correct answer: <strong className="text-slate-900">{currentQuestion.marks.toFixed(2)}</strong> | Negative: <strong className="text-slate-900">{currentQuestion.negativeMarks.toFixed(2)}</strong>
+          </span>
+          <span>
+            Total Questions Answered: <strong className="text-rose-600 font-black text-sm">{totalAnsweredCount}</strong>
+          </span>
+        </div>
+      </div>
+
       {sectionAlertMsg && (
-        <div className="bg-amber-400 text-slate-950 font-bold text-xs py-1.5 px-4 text-center shadow-md animate-pulse">
+        <div className="bg-amber-400 text-slate-950 font-bold text-xs py-1 px-4 text-center shadow-xs animate-pulse">
           {sectionAlertMsg}
         </div>
       )}
 
-      {/* ── 2. MAIN WORKSPACE: Question Area (LEFT) vs Eduquity Palette (RIGHT) ── */}
+      {/* ── 4. MAIN WORKSPACE: Question Area (LEFT) vs Eduquity Palette (RIGHT) ── */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
-        {/* ── LEFT PANE: Question Area & Controls ── */}
+        {/* ── LEFT PANE: Question Area & Options ── */}
         <div className="flex-1 flex flex-col bg-white overflow-hidden border-r border-slate-300">
-          {/* Question Subheader & Blue Action Buttons */}
-          <div className="px-3 sm:px-6 py-2 bg-white border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 shrink-0">
-            {/* Question No. and Action Buttons */}
-            <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-              <span className="font-bold text-sm sm:text-base text-slate-900 whitespace-nowrap">
-                Question No. {qno}
-              </span>
+          {/* Question Subheader Line (Question: 1 | Last 4 Minutes | Save | Report) */}
+          <div className="px-3 sm:px-6 py-1.5 bg-[#f8fafc] border-b border-slate-200 flex items-center justify-between shrink-0">
+            <span className="font-bold text-xs sm:text-sm text-slate-900">
+              Question: {qno}
+            </span>
 
-              {/* Eduquity Blue Action Buttons in Header Line */}
-              {!isSolutionMode ? (
-                <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-                  <button
-                    type="button"
-                    onClick={handleMarkForReviewAndNext}
-                    className="px-2.5 sm:px-3.5 py-1 rounded bg-[#1d4ed8] hover:bg-[#1e40af] text-white font-bold text-[11px] sm:text-xs shadow-sm transition active:scale-95"
-                  >
-                    Mark for Review &amp; Next
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleSaveAndNext}
-                    className="px-2.5 sm:px-3.5 py-1 rounded bg-[#1d4ed8] hover:bg-[#1e40af] text-white font-bold text-[11px] sm:text-xs shadow-sm transition active:scale-95"
-                  >
-                    Save &amp; Next
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSubmitModalOpen(true)}
-                    className="px-2.5 sm:px-3.5 py-1 rounded bg-[#1d4ed8] hover:bg-[#1e40af] text-white font-bold text-[11px] sm:text-xs shadow-sm transition active:scale-95"
-                  >
-                    Submit Test
-                  </button>
-                </div>
-              ) : (
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <button
-                    type="button"
-                    onClick={goToPrevQuestion}
-                    className="px-2.5 py-1 rounded bg-[#1d4ed8] hover:bg-[#1e40af] text-white font-bold text-xs shadow-sm transition flex items-center gap-1"
-                  >
-                    <ChevronLeft className="w-3.5 h-3.5" />
-                    <span>Previous</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={goToNextQuestion}
-                    className="px-2.5 py-1 rounded bg-[#1d4ed8] hover:bg-[#1e40af] text-white font-bold text-xs shadow-sm transition flex items-center gap-1"
-                  >
-                    <span>Next</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+            <div className="flex items-center gap-3">
+              {!isSolutionMode && (
+                <span className="text-xs font-bold text-rose-600 tracking-wide">
+                  Last {Math.max(1, Math.ceil(overallSecondsRemaining / 60))} Minutes
+                </span>
               )}
-            </div>
-
-            {/* Language Selection & Report */}
-            <div className="flex items-center gap-2 text-xs text-slate-600">
               <div className="flex items-center gap-1">
-                <span className="hidden sm:inline">Select Language</span>
-                <select
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value as 'en' | 'hi')}
-                  className="border border-slate-300 rounded px-1.5 py-0.5 text-xs bg-white text-slate-800 font-medium focus:outline-none"
+                <button
+                  type="button"
+                  onClick={handleSaveAndNext}
+                  className="px-2.5 py-0.5 rounded bg-[#16a34a] hover:bg-[#15803d] text-white font-bold text-xs shadow-xs transition active:scale-95"
                 >
-                  <option value="en">English</option>
-                  <option value="hi">Hindi</option>
-                </select>
+                  Save
+                </button>
+                <button
+                  type="button"
+                  onClick={() => alert('Question feedback noted for the examination review committee.')}
+                  className="px-2.5 py-0.5 rounded bg-[#dc2626] hover:bg-[#b91c1c] text-white font-bold text-xs shadow-xs transition active:scale-95"
+                >
+                  Report
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => alert('Question feedback noted for the examination review committee.')}
-                className="text-slate-500 hover:text-slate-800 flex items-center gap-1 text-xs"
-              >
-                <AlertTriangle className="w-3 h-3 text-amber-500" />
-                <span className="hidden sm:inline">Report</span>
-              </button>
             </div>
           </div>
 
           {/* Question Text & Options (Scrollable, mobile responsive) */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-6 pb-24">
+          <div
+            className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-6 pb-24"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='130'%3E%3Ctext x='15' y='75' fill='%2394a3b8' opacity='0.16' font-family='sans-serif' font-weight='900' font-size='19' transform='rotate(-22 15 75)'%3E9990287066%3C/text%3E%3C/svg%3E")`,
+              backgroundRepeat: 'repeat'
+            }}
+          >
+            {/* Authentic Exam Origin Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-blue-50/90 border border-blue-200/80 text-xs font-semibold text-slate-800 shadow-2xs">
+              <span className="text-blue-700 font-bold uppercase tracking-wider text-[10px] bg-blue-100 px-1.5 py-0.5 rounded">
+                📌 Official Exam Origin
+              </span>
+              <span className="font-mono text-slate-700">
+                {currentQuestion.examOrigin || test.title}
+              </span>
+            </div>
+
             {/* Question Text */}
             <div className="text-sm sm:text-base font-normal text-slate-900 leading-relaxed max-w-4xl">
               <MathRenderer
@@ -906,7 +998,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
             )}
 
             {/* Options List with Clean Round Radio Buttons */}
-            <div className="space-y-2.5 pt-2 max-w-3xl">
+            <div className="space-y-0 pt-2 max-w-3xl border-t border-slate-200">
               {currentQuestion.options.map((opt) => {
                 const optText = language === 'hi' && opt.textHi ? opt.textHi : opt.text;
                 
@@ -920,14 +1012,14 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                 return (
                   <div
                     key={opt.id}
-                    className={`flex items-start gap-3.5 p-3.5 sm:p-4 rounded-xl border transition select-none ${
+                    className={`flex items-start gap-4 py-3.5 px-2 border-b border-slate-200/80 transition select-none ${
                       isOfficialCorrect
-                        ? 'bg-emerald-50 border-emerald-500 ring-1 ring-emerald-500/30'
+                        ? 'bg-emerald-50/70'
                         : isUserWrongChoice
-                        ? 'bg-rose-50 border-rose-400 ring-1 ring-rose-400/20'
+                        ? 'bg-rose-50/70'
                         : (isSelectedInExam || (reattemptMode && isSelectedInReattempt))
-                        ? 'bg-blue-50/80 border-blue-600 ring-1 ring-blue-500/30 shadow-sm'
-                        : 'bg-white border-slate-200 hover:bg-slate-50'
+                        ? 'bg-blue-50/50'
+                        : 'bg-transparent'
                     }`}
                   >
                     {/* Small Round Radio Button — Strictly clickable directly to select (Eduquity standard) */}
@@ -939,28 +1031,27 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                         e.stopPropagation();
                         handleSelectOption(opt.id);
                       }}
-                      className={`mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 cursor-pointer transition-all active:scale-90 ${
+                      className={`mt-0.5 w-4.5 h-4.5 rounded-full border-2 flex items-center justify-center shrink-0 cursor-pointer transition-all active:scale-90 ${
                         isOfficialCorrect
                           ? 'border-emerald-600 bg-emerald-600 text-white'
                           : isUserWrongChoice
                           ? 'border-rose-600 bg-rose-600 text-white'
                           : (isSelectedInExam || (reattemptMode && isSelectedInReattempt))
                           ? 'border-blue-600 bg-white ring-2 ring-blue-500/25'
-                          : 'border-slate-400 hover:border-blue-500 bg-white shadow-inner'
+                          : 'border-slate-400 hover:border-blue-600 bg-white'
                       }`}
                     >
                       {isOfficialCorrect ? (
-                        <Check className="w-3 h-3 text-white stroke-[3]" />
+                        <Check className="w-2.5 h-2.5 text-white stroke-[3]" />
                       ) : isUserWrongChoice ? (
-                        <X className="w-3 h-3 text-white stroke-[3]" />
+                        <X className="w-2.5 h-2.5 text-white stroke-[3]" />
                       ) : (isSelectedInExam || (reattemptMode && isSelectedInReattempt)) ? (
-                        <div className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-in zoom-in-75 duration-100" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-blue-600" />
                       ) : null}
                     </button>
 
                     <div className="flex-1 flex flex-wrap items-start justify-between gap-2 text-sm text-slate-800 leading-normal">
                       <div className="flex-1 min-w-[200px] flex items-start gap-2">
-                        <span className="font-bold text-xs text-slate-500 mt-0.5 shrink-0">({opt.id})</span>
                         <div className="flex-1">
                           <MathRenderer content={optText} />
                           {opt.imageUrl && (
@@ -1075,72 +1166,42 @@ function EduquityCBTContent({ testId }: { testId: string }) {
 
         {/* ── RIGHT PANE: DESKTOP PALETTE (Hidden on screens < lg) ── */}
         <aside className="hidden lg:flex w-80 xl:w-96 bg-white flex-col shrink-0 overflow-y-auto border-l border-slate-300">
-          {/* Top Links: SYMBOLS | INSTRUCTIONS */}
-          <div className="px-4 py-2 bg-white border-b border-slate-200 flex items-center justify-start gap-4 text-xs font-bold text-amber-700 uppercase tracking-wider shrink-0">
-            <button
-              onClick={() => alert('Eduquity Palette Symbols:\nGreen: Answered\nRed: Not Answered\nBlue: Not Visited\nPurple: Marked for Review')}
-              className="hover:underline"
-            >
-              SYMBOLS
-            </button>
-            <button
-              onClick={() => setInstructionsModalOpen(true)}
-              className="hover:underline"
-            >
-              INSTRUCTIONS
-            </button>
-          </div>
-
-          {/* Section Part Tabs: [PART-A] [PART-B] [PART-C] [PART-D] */}
-          <div className="p-2 bg-[#f8fafc] border-b border-slate-200 flex items-center gap-1 overflow-x-auto shrink-0">
-            {test.sections.map((sec, idx) => {
-              const isActive = activeSectionIdx === idx;
-              const partLabel = `PART-${String.fromCharCode(65 + idx)}`;
-              return (
-                <button
-                  key={sec.id}
-                  onClick={() => {
-                    setActiveSectionIdx(idx);
-                    setActiveQuestionIdx(0);
-                  }}
-                  className={`px-3 py-1.5 rounded text-xs font-black transition whitespace-nowrap ${
-                    isActive
-                      ? 'bg-[#15803d] text-white shadow-sm'
-                      : 'bg-[#1d4ed8] text-white hover:bg-[#1e40af]'
-                  }`}
-                >
-                  {partLabel}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Active Section Name Header with Navigation Arrows */}
-          <div className="px-4 py-2 bg-white border-b border-slate-200 flex items-center justify-between shrink-0">
-            <button
-              type="button"
-              onClick={handlePrevSection}
-              disabled={activeSectionIdx === 0}
-              className="p-1 rounded text-slate-500 hover:text-slate-900 disabled:opacity-30"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <span className="font-bold text-xs text-slate-800 truncate px-2 text-center">
+          {/* Top Header matching Eduquity: Blue Triangle + Section Name */}
+          <div className="px-4 py-3 bg-white border-b border-slate-200 flex items-center gap-2 shrink-0">
+            <span className="text-[#1d4ed8] text-base font-black leading-none">▶</span>
+            <h3 className="font-bold text-sm text-slate-900 tracking-tight truncate">
               {currentSection.name}
-            </span>
-            <button
-              type="button"
-              onClick={handleNextSection}
-              disabled={activeSectionIdx === test.sections.length - 1}
-              className="p-1 rounded text-slate-500 hover:text-slate-900 disabled:opacity-30"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
+            </h3>
           </div>
 
-          {/* Question Number Palette Grid (1..25) */}
+          {/* Section Part Quick Switcher */}
+          {test.sections.length > 1 && (
+            <div className="p-2 bg-[#f8fafc] border-b border-slate-200 flex items-center gap-1 overflow-x-auto shrink-0">
+              {test.sections.map((sec, idx) => {
+                const isActive = activeSectionIdx === idx;
+                return (
+                  <button
+                    key={sec.id}
+                    onClick={() => {
+                      setActiveSectionIdx(idx);
+                      setActiveQuestionIdx(0);
+                    }}
+                    className={`px-2.5 py-1 rounded text-[11px] font-black transition whitespace-nowrap ${
+                      isActive
+                        ? 'bg-[#15803d] text-white shadow-xs'
+                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    }`}
+                  >
+                    {`PART-${String.fromCharCode(65 + idx)}`}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Question Number Palette Grid (5 columns per row, Eduquity standard) */}
           <div className="p-4 flex-1 overflow-y-auto">
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-5 gap-2.5">
               {currentSection.questions.map((q, idx) => {
                 const targetQno = q.qno;
                 const resp = userResponses[targetQno];
@@ -1184,28 +1245,28 @@ function EduquityCBTContent({ testId }: { testId: string }) {
             </div>
           </div>
 
-          {/* PART Analysis Mini-Box */}
-          <div className="border-t border-slate-300 bg-[#f8fafc] shrink-0">
-            <div className="bg-[#cbd5e1] text-slate-800 text-[11px] font-black uppercase text-center py-1 tracking-wider">
-              {`PART-${String.fromCharCode(65 + activeSectionIdx)} Analysis`}
+          {/* Eduquity Section Analysis Card (Tan header bg-[#d7cdbd], red/orange digits) */}
+          <div className="border-t border-slate-300 bg-white shrink-0">
+            <div className="bg-[#d7cdbd] text-slate-900 text-xs font-bold py-1.5 px-4 text-left">
+              {currentSection.name} Analysis
             </div>
             {!isSolutionMode ? (
-              <div className="p-3 text-xs space-y-1.5 font-bold text-slate-700">
+              <div className="p-3.5 text-xs space-y-2 font-bold text-slate-800 bg-white">
                 <div className="flex items-center justify-between">
                   <span>Answered</span>
-                  <span className="bg-amber-300 text-slate-900 px-2 py-0.5 rounded text-[11px]">
+                  <span className="text-rose-600 font-black text-sm">
                     {secAnswered}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Not Answered</span>
-                  <span className="bg-amber-300 text-slate-900 px-2 py-0.5 rounded text-[11px]">
+                  <span className="text-orange-500 font-black text-sm">
                     {secNotAnswered}
                   </span>
                 </div>
               </div>
             ) : (
-              <div className="p-3 text-xs space-y-1.5 font-bold text-slate-700">
+              <div className="p-3 text-xs space-y-1.5 font-bold text-slate-700 bg-white">
                 <div className="flex items-center justify-between">
                   <span className="text-emerald-700">Correct</span>
                   <span className="bg-emerald-100 border border-emerald-300 text-emerald-800 px-2 py-0.5 rounded text-[11px]">
@@ -1325,19 +1386,24 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                 </div>
               </div>
 
-              {/* Mobile PART Analysis summary */}
-              <div className="p-3 bg-slate-50 border-t border-slate-200 text-xs font-bold text-slate-700 space-y-1">
-                <div className="flex items-center justify-between">
-                  <span>Answered:</span>
-                  <span className="px-2 py-0.5 rounded bg-amber-300 text-slate-950 font-black">
-                    {secAnswered}
-                  </span>
+              {/* Mobile Eduquity Section Analysis */}
+              <div className="bg-white border-t border-slate-300">
+                <div className="bg-[#d7cdbd] text-slate-900 text-xs font-bold py-1.5 px-3">
+                  {currentSection.name} Analysis
                 </div>
-                <div className="flex items-center justify-between">
-                  <span>Not Answered:</span>
-                  <span className="px-2 py-0.5 rounded bg-slate-200 text-slate-800">
-                    {secNotAnswered}
-                  </span>
+                <div className="p-3 text-xs space-y-1.5 font-bold text-slate-800">
+                  <div className="flex items-center justify-between">
+                    <span>Answered:</span>
+                    <span className="text-rose-600 font-black text-sm">
+                      {secAnswered}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Not Answered:</span>
+                    <span className="text-orange-500 font-black text-sm">
+                      {secNotAnswered}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

@@ -1,6 +1,7 @@
 import { UniversalResponseSheet, ParsedQuestion, ParsedSection } from './parsers/universalParser';
 import { supabase, isSupabaseConfigured } from './supabase';
-import { CBTTest, registerNewTest } from './testService';
+import type { CBTTest } from '@/lib/types/cbt';
+import { registerNewTest } from './testService';
 
 export interface ScoreRule {
   marksPerCorrect: number;

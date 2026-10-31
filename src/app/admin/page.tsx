@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { EvaluationResult, UniqueShiftSubmission } from '@/lib/scoreService';
-import { CBTTest } from '@/lib/testService';
+import type { CBTTest } from '@/lib/types/cbt';
 import {
   ShieldCheck,
   Sparkles,

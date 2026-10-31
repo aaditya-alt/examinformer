@@ -1834,46 +1834,6 @@
     ]
   },
   {
-    "id": "ssc-chsl-2025-shift-1",
-    "title": "SSC CHSL 2025 Tier-1 — 12 Nov, 2025 Shift 2",
-    "examCode": "ssc-chsl-tier1",
-    "examFamily": "ssc",
-    "type": "pyq",
-    "isOfficialPYQ": true,
-    "examYear": 2025,
-    "durationMinutes": 60,
-    "totalQuestions": 100,
-    "totalMarks": 200,
-    "positiveMarks": 2,
-    "negativeMarks": 0.5,
-    "sections": [
-      {
-        "id": "sec_1",
-        "name": "English Language",
-        "questionCount": 25,
-        "marks": 50
-      },
-      {
-        "id": "sec_2",
-        "name": "General Intelligence",
-        "questionCount": 25,
-        "marks": 50
-      },
-      {
-        "id": "sec_3",
-        "name": "Quantitative Aptitude",
-        "questionCount": 25,
-        "marks": 50
-      },
-      {
-        "id": "sec_4",
-        "name": "General Awareness",
-        "questionCount": 25,
-        "marks": 50
-      }
-    ]
-  },
-  {
     "id": "ssc-mts-2025-shift-1",
     "title": "SSC MTS 2025 — 04 Feb, 2026 Shift 3",
     "examCode": "ssc-mts",
@@ -4176,6 +4136,2006 @@
         "name": "Stage I (CBT I)",
         "questionCount": 75,
         "marks": 75
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-1",
+    "title": "SSC CHSL 2025 Tier-1 — 12 Nov, 2025 Shift 2",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-2",
+    "title": "SSC CHSL 2025 Tier-1 — 13 Nov, 2025 Shift 3",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-3",
+    "title": "SSC CHSL 2025 Tier-1 — 14 Nov, 2025 Shift 1",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-4",
+    "title": "SSC CHSL 2025 Tier-1 — 14 Nov, 2025 Shift 2",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-5",
+    "title": "SSC CHSL 2025 Tier-1 — 14 Nov, 2025 Shift 3",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-6",
+    "title": "SSC CHSL 2025 Tier-1 — 15 Nov, 2025 Shift 1",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-7",
+    "title": "SSC CHSL 2025 Tier-1 — 20 Nov, 2025 Shift 1",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-8",
+    "title": "SSC CHSL 2025 Tier-1 — 20 Nov, 2025 Shift 2",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-9",
+    "title": "SSC CHSL 2025 Tier-1 — 20 Nov, 2025 Shift 3",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-10",
+    "title": "SSC CHSL 2025 Tier-1 — 21 Nov, 2025 Shift 1",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-11",
+    "title": "SSC CHSL 2025 Tier-1 — 21 Nov, 2025 Shift 2",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-12",
+    "title": "SSC CHSL 2025 Tier-1 — 21 Nov, 2025 Shift 3",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-13",
+    "title": "SSC CHSL 2025 Tier-1 — 12 Nov, 2025 Shift 3",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-14",
+    "title": "SSC CHSL 2025 Tier-1 — 13 Nov, 2025 Shift 1",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-15",
+    "title": "SSC CHSL 2025 Tier-1 — 13 Nov, 2025 Shift 2",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-16",
+    "title": "SSC CHSL 2025 Tier-1 — 15 Nov, 2025 Shift 2",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-17",
+    "title": "SSC CHSL 2025 Tier-1 — 15 Nov, 2025 Shift 3",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-18",
+    "title": "SSC CHSL 2025 Tier-1 — 17 Nov, 2025 Shift 1",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-19",
+    "title": "SSC CHSL 2025 Tier-1 — 17 Nov, 2025 Shift 2",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-20",
+    "title": "SSC CHSL 2025 Tier-1 — 17 Nov, 2025 Shift 3",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-21",
+    "title": "SSC CHSL 2025 Tier-1 — 18 Nov, 2025 Shift 1",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-22",
+    "title": "SSC CHSL 2025 Tier-1 — 18 Nov, 2025 Shift 2",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-23",
+    "title": "SSC CHSL 2025 Tier-1 — 18 Nov, 2025 Shift 3",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-24",
+    "title": "SSC CHSL 2025 Tier-1 — 19 Nov, 2025 Shift 1",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-25",
+    "title": "SSC CHSL 2025 Tier-1 — 19 Nov, 2025 Shift 2",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-26",
+    "title": "SSC CHSL 2025 Tier-1 — 19 Nov, 2025 Shift 3",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-27",
+    "title": "SSC CHSL 2025 Tier-1 — 22 Nov, 2025 Shift 1",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-28",
+    "title": "SSC CHSL 2025 Tier-1 — 22 Nov, 2025 Shift 2",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-29",
+    "title": "SSC CHSL 2025 Tier-1 — 22 Nov, 2025 Shift 3",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-30",
+    "title": "SSC CHSL 2025 Tier-1 — 24 Nov, 2025 Shift 1",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-31",
+    "title": "SSC CHSL 2025 Tier-1 — 24 Nov, 2025 Shift 2",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-32",
+    "title": "SSC CHSL 2025 Tier-1 — 24 Nov, 2025 Shift 3",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-33",
+    "title": "SSC CHSL 2025 Tier-1 — 25 Nov, 2025 Shift 1",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-34",
+    "title": "SSC CHSL 2025 Tier-1 — 25 Nov, 2025 Shift 2",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-35",
+    "title": "SSC CHSL 2025 Tier-1 — 25 Nov, 2025 Shift 3",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-36",
+    "title": "SSC CHSL 2025 Tier-1 — 26 Nov, 2025 Shift 1",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-37",
+    "title": "SSC CHSL 2025 Tier-1 — 26 Nov, 2025 Shift 2",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-38",
+    "title": "SSC CHSL 2025 Tier-1 — 26 Nov, 2025 Shift 3",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-39",
+    "title": "SSC CHSL 2025 Tier-1 — 27 Nov, 2025 Shift 1",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-40",
+    "title": "SSC CHSL 2025 Tier-1 — 27 Nov, 2025 Shift 2",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-41",
+    "title": "SSC CHSL 2025 Tier-1 — 27 Nov, 2025 Shift 3",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-42",
+    "title": "SSC CHSL 2025 Tier-1 — 28 Nov, 2025 Shift 1",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-43",
+    "title": "SSC CHSL 2025 Tier-1 — 28 Nov, 2025 Shift 2",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-44",
+    "title": "SSC CHSL 2025 Tier-1 — 28 Nov, 2025 Shift 3",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-45",
+    "title": "SSC CHSL 2025 Tier-1 — 29 Nov, 2025 Shift 1",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-46",
+    "title": "SSC CHSL 2025 Tier-1 — 29 Nov, 2025 Shift 2",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-47",
+    "title": "SSC CHSL 2025 Tier-1 — 29 Nov, 2025 Shift 3",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-48",
+    "title": "SSC CHSL 2025 Tier-1 — 30 Nov, 2025 Shift 1",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-49",
+    "title": "SSC CHSL 2025 Tier-1 — 30 Nov, 2025 Shift 2",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-50",
+    "title": "SSC CHSL 2025 Tier-1 — 30 Nov, 2025 Shift 3",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
       }
     ]
   }
