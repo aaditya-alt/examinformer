@@ -644,12 +644,12 @@ function EduquityCBTContent({ testId }: { testId: string }) {
       rollNumber: user?.rollNumber || '2402094182'
     };
 
-    if (supabase && user) {
+    if (supabase) {
       try {
         await supabase.from('test_attempts').insert({
           test_id: test.id,
-          user_id: user.id,
-          candidate_name: user.name,
+          user_id: user?.id || `guest_${Date.now()}`,
+          candidate_name: user?.name || 'Aspirant',
           total_score: finalScore,
           accuracy: accuracy,
           time_taken_seconds: timeTaken,
@@ -850,16 +850,6 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                     <span>Next</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </button>
-                  {reattemptMode && (
-                    <button
-                      type="button"
-                      onClick={() => setRevealedPerQuestion(prev => ({ ...prev, [qno]: !prev[qno] }))}
-                      className="px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition flex items-center gap-1"
-                    >
-                      {revealedPerQuestion[qno] ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                      <span>{revealedPerQuestion[qno] ? 'Hide' : 'Check'}</span>
-                    </button>
-                  )}
                 </div>
               )}
             </div>

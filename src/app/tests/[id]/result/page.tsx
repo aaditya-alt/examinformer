@@ -179,26 +179,60 @@ export default function CBTResultPage({
     return true;
   });
 
-  // Deterministic community stats per question
+  // Real Topper & Aggregate metrics from database
+  const topperScore = portalAnalytics?.topper?.score !== undefined 
+    ? Math.max(portalAnalytics.topper.score, Number(resultData.finalScore)) 
+    : Number(resultData.finalScore);
+
+  const isCandidateTopper = Number(resultData.finalScore) >= topperScore;
+
+  const topperAccuracy = isCandidateTopper 
+    ? accuracy 
+    : (portalAnalytics?.topper?.accuracy ?? accuracy);
+
+  const topperTimeSec = isCandidateTopper 
+    ? resultData.timeTakenSeconds 
+    : (portalAnalytics?.topper?.timeTakenSeconds ?? resultData.timeTakenSeconds);
+
+  const batchAvgScore = portalAnalytics?.avgScore !== undefined && portalAnalytics.totalAttempts > 0
+    ? portalAnalytics.avgScore
+    : Number(resultData.finalScore);
+
+  const batchAvgAccuracy = portalAnalytics?.avgAccuracy !== undefined && portalAnalytics.totalAttempts > 0
+    ? portalAnalytics.avgAccuracy
+    : accuracy;
+
+  const batchAvgTimeSec = portalAnalytics?.avgTimeSeconds !== undefined && portalAnalytics.totalAttempts > 0
+    ? portalAnalytics.avgTimeSeconds
+    : resultData.timeTakenSeconds;
+
+  // Real question statistics from database attempts
   const getCommunityStats = (qno: number, difficulty: string = 'medium') => {
-    const seed = (qno * 37 + id.length * 13) % 100;
-    let correctPct = 65;
-    if (difficulty === 'hard') correctPct = 35 + (seed % 25);
-    else if (difficulty === 'easy') correctPct = 75 + (seed % 20);
-    else correctPct = 50 + (seed % 30);
+    const stat = portalAnalytics?.questionStats?.[qno];
+    const avgQTime = Math.max(12, Math.round(batchAvgTimeSec / Math.max(1, test?.totalQuestions || 100)));
+    const topperQTime = Math.max(8, Math.round(topperTimeSec / Math.max(1, test?.totalQuestions || 100)));
 
-    const wrongPct = Math.round((100 - correctPct) * 0.7);
-    const skippedPct = 100 - correctPct - wrongPct;
-    const topperTimeSec = 15 + (seed % 20);
-    const avgTimeSec = 35 + (seed % 40);
+    if (stat && stat.totalCandidates > 0) {
+      return {
+        correctPct: stat.correctPct,
+        wrongPct: stat.wrongPct,
+        skippedPct: stat.skippedPct,
+        topperTimeSec: topperQTime,
+        avgTimeSec: avgQTime,
+        difficultyRating: stat.correctPct > 70 ? 'Easy' : stat.correctPct > 40 ? 'Moderate' : 'Tricky'
+      };
+    }
 
+    // Single attempt fallback (candidate's own performance)
+    const resp = resultData.userResponses?.[qno];
+    const isCorrect = resp && resp.chosenOption !== undefined && resp.chosenOption === (test?.sections.flatMap(s => s.questions).find(q => q.qno === qno)?.correctOption);
     return {
-      correctPct,
-      wrongPct,
-      skippedPct,
-      topperTimeSec,
-      avgTimeSec,
-      difficultyRating: correctPct > 70 ? 'Easy' : correctPct > 45 ? 'Moderate' : 'Tricky'
+      correctPct: isCorrect ? 100 : 0,
+      wrongPct: !isCorrect && resp && resp.chosenOption !== undefined ? 100 : 0,
+      skippedPct: !resp || resp.chosenOption === undefined ? 100 : 0,
+      topperTimeSec: topperQTime,
+      avgTimeSec: avgQTime,
+      difficultyRating: difficulty === 'hard' ? 'Tricky' : difficulty === 'easy' ? 'Easy' : 'Moderate'
     };
   };
 
@@ -401,24 +435,28 @@ export default function CBTResultPage({
               <div className="p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-300 dark:border-amber-800 relative">
                 <span className="absolute top-3 right-3 px-2 py-0.5 rounded text-[10px] font-black uppercase bg-amber-500 text-slate-950 flex items-center gap-1">
                   <Award className="w-3 h-3" />
-                  AIR 1
+                  {isCandidateTopper ? 'You (AIR 1)' : 'AIR 1'}
                 </span>
                 <div className="text-xs font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wider">Topper Score</div>
                 <div className="text-3xl font-black text-amber-950 dark:text-amber-200 mt-1">
-                  {Math.round(test.totalMarks * 0.94 * 10) / 10} <span className="text-xs font-medium text-slate-500">/ {test.totalMarks}</span>
+                  {topperScore} <span className="text-xs font-medium text-slate-500">/ {test.totalMarks}</span>
                 </div>
                 <div className="mt-3 space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
                   <div className="flex justify-between">
                     <span>Accuracy:</span>
-                    <strong className="text-emerald-600">97.6%</strong>
+                    <strong className="text-emerald-600">{topperAccuracy}%</strong>
                   </div>
                   <div className="flex justify-between">
                     <span>Time Spent:</span>
-                    <strong className="text-slate-900 dark:text-white">{Math.round(test.durationMinutes * 0.68)}m 12s</strong>
+                    <strong className="text-slate-900 dark:text-white">
+                      {Math.floor(topperTimeSec / 60)}m {topperTimeSec % 60}s
+                    </strong>
                   </div>
                   <div className="flex justify-between">
-                    <span>AIR Percentile:</span>
-                    <strong className="text-amber-600 dark:text-amber-400">99.9%</strong>
+                    <span>AIR Standing:</span>
+                    <strong className="text-amber-600 dark:text-amber-400">
+                      {isCandidateTopper ? 'Top on Portal' : 'Benchmark'}
+                    </strong>
                   </div>
                 </div>
               </div>
@@ -430,20 +468,24 @@ export default function CBTResultPage({
                 </span>
                 <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">Average Score</div>
                 <div className="text-3xl font-black text-slate-800 dark:text-slate-200 mt-1">
-                  {Math.round(test.totalMarks * 0.52 * 10) / 10} <span className="text-xs font-medium text-slate-500">/ {test.totalMarks}</span>
+                  {batchAvgScore} <span className="text-xs font-medium text-slate-500">/ {test.totalMarks}</span>
                 </div>
                 <div className="mt-3 space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
                   <div className="flex justify-between">
                     <span>Accuracy:</span>
-                    <strong className="text-slate-900 dark:text-white">67.4%</strong>
+                    <strong className="text-slate-900 dark:text-white">{batchAvgAccuracy}%</strong>
                   </div>
                   <div className="flex justify-between">
                     <span>Time Spent:</span>
-                    <strong className="text-slate-900 dark:text-white">{Math.round(test.durationMinutes * 0.92)}m 40s</strong>
+                    <strong className="text-slate-900 dark:text-white">
+                      {Math.floor(batchAvgTimeSec / 60)}m {batchAvgTimeSec % 60}s
+                    </strong>
                   </div>
                   <div className="flex justify-between">
-                    <span>Cohort Median:</span>
-                    <strong className="text-slate-500">50.0%</strong>
+                    <span>Total Attempts:</span>
+                    <strong className="text-slate-600 dark:text-slate-300">
+                      {Math.max(1, portalAnalytics?.totalAttempts || 1)}
+                    </strong>
                   </div>
                 </div>
               </div>

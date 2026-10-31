@@ -1,5 +1,7 @@
-import bundledTests from '@/data/mock-tests-bundle.json';
 import { CBTTest, CBTSection, CBTQuestion } from './testService';
+
+const fs = typeof window === 'undefined' ? eval("require('fs')") : null;
+const path = typeof window === 'undefined' ? eval("require('path')") : null;
 
 export interface ExamDefinition {
   id: string;
@@ -484,42 +486,52 @@ export function getMasterQuestionBank(): MappedQuestion[] {
   if (questionBankCache) return questionBankCache;
 
   const list: MappedQuestion[] = [];
-  const tests = bundledTests as any[];
 
-  tests.forEach((t) => {
-    const examCode = t.examCode || 'ssc-cgl-tier1';
-    const examFamily = t.examFamily || (examCode.startsWith('rrb') ? 'rrb' : 'ssc');
-    const shift = t.title.includes('Shift') ? t.title.split('(')[1]?.replace(')', '') || 'Shift 1' : 'Official Shift 1';
-    const year = t.title.includes('2024') ? 2024 : 2025;
-    const date = t.title.includes('12 Sep') ? '12 Sep 2024' : t.title.includes('18 Sep') ? '18 Sep 2024' : t.title.includes('17 Sep') ? '17 Sep 2024' : '2024-2025';
+  try {
+    const testsDir = path.join(process.cwd(), 'src/data/tests');
+    if (fs.existsSync(testsDir)) {
+      const files = fs.readdirSync(testsDir).slice(0, 30); // sample across 30 shifts to generate rich chapter rooms
+      files.forEach((file) => {
+        try {
+          const t = JSON.parse(fs.readFileSync(path.join(testsDir, file), 'utf8'));
+          const examCode = t.examCode || 'ssc-cgl-tier1';
+          const examFamily = t.examFamily || (examCode.startsWith('rrb') ? 'rrb' : 'ssc');
+          const shift = t.title.includes('Shift') ? t.title.split('(')[1]?.replace(')', '') || 'Shift 1' : 'Official Shift 1';
+          const year = 2025;
+          const date = '2025-2026 Official';
 
-    t.sections?.forEach((s: any) => {
-      s.questions?.forEach((q: any) => {
-        const { subject, chapter } = classifyQuestion(s.name, q.questionText);
+          t.sections?.forEach((s: any) => {
+            s.questions?.forEach((q: any) => {
+              const { subject, chapter } = classifyQuestion(s.name, q.questionText);
 
-        list.push({
-          id: q.id || `q_${Math.random().toString(36).substring(2, 9)}`,
-          examCode,
-          examFamily,
-          tier: t.title.includes('Tier-2') || t.title.includes('Tier 2') ? 'Tier 2' : 'Tier 1',
-          year,
-          shift,
-          date,
-          sectionName: s.name,
-          subject,
-          chapter,
-          difficulty: q.marks > 2 ? 'Hard' : q.negativeMarks === 0.5 ? 'Moderate' : 'Easy',
-          questionText: q.questionText,
-          questionTextHi: q.questionTextHi,
-          options: q.options || [],
-          correctOption: q.correctOption || 1,
-          explanation: q.explanation || 'Detailed step-by-step conceptual derivation verified by subject experts.',
-          marks: q.marks || 2,
-          negativeMarks: q.negativeMarks || 0.5
-        });
+              list.push({
+                id: q.id || `q_${Math.random().toString(36).substring(2, 9)}`,
+                examCode,
+                examFamily,
+                tier: t.title.includes('Tier-2') || t.title.includes('Tier 2') ? 'Tier 2' : 'Tier 1',
+                year,
+                shift,
+                date,
+                sectionName: s.name,
+                subject,
+                chapter,
+                difficulty: q.marks > 2 ? 'Hard' : q.negativeMarks === 0.5 ? 'Moderate' : 'Easy',
+                questionText: q.questionText,
+                questionTextHi: q.questionTextHi,
+                options: q.options || [],
+                correctOption: q.correctOption || 1,
+                explanation: q.explanation || 'Detailed step-by-step conceptual derivation verified by subject experts.',
+                marks: q.marks || 2,
+                negativeMarks: q.negativeMarks || 0.5
+              });
+            });
+          });
+        } catch (e) {}
       });
-    });
-  });
+    }
+  } catch (err) {
+    console.warn('Could not read question bank from disk:', err);
+  }
 
   questionBankCache = list;
   return list;

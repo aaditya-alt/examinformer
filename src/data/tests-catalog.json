@@ -1,0 +1,4182 @@
+[
+  {
+    "id": "ssc-cgl-2025-shift-1",
+    "title": "SSC CGL 2025 Tier-1 — 12 Sept, 2025 Shift 1",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-2",
+    "title": "SSC CGL 2025 Tier-1 — 12 Sept, 2025 Shift 2",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-3",
+    "title": "SSC CGL 2025 Tier-1 — 12 Sept, 2025 Shift 3",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-4",
+    "title": "SSC CGL 2025 Tier-1 — 13 Sept, 2025 Shift 1",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-5",
+    "title": "SSC CGL 2025 Tier-1 — 13 Sept, 2025 Shift 2",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-6",
+    "title": "SSC CGL 2025 Tier-1 — 13 Sept, 2025 Shift 3",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-7",
+    "title": "SSC CGL 2025 Tier-1 — 14 Sept, 2025 Shift 1",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-8",
+    "title": "SSC CGL 2025 Tier-1 — 14 Sept, 2025 Shift 2",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-9",
+    "title": "SSC CGL 2025 Tier-1 — 14 Sept, 2025 Shift 3",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-10",
+    "title": "SSC CGL 2025 Tier-1 — 15 Sept, 2025 Shift 1",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-11",
+    "title": "SSC CGL 2025 Tier-1 — 15 Sept, 2025 Shift 2",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-12",
+    "title": "SSC CGL 2025 Tier-1 — 15 Sept, 2025 Shift 3",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-13",
+    "title": "SSC CGL 2025 Tier-1 — 16 Sept, 2025 Shift 1",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-14",
+    "title": "SSC CGL 2025 Tier-1 — 16 Sept, 2025 Shift 2",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-15",
+    "title": "SSC CGL 2025 Tier-1 — 16 Sept, 2025 Shift 3",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-16",
+    "title": "SSC CGL 2025 Tier-1 — 17 Sept, 2025 Shift 1",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-17",
+    "title": "SSC CGL 2025 Tier-1 — 17 Sept, 2025 Shift 2",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-18",
+    "title": "SSC CGL 2025 Tier-1 — 17 Sept, 2025 Shift 3",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-19",
+    "title": "SSC CGL 2025 Tier-1 — 18 Sept, 2025 Shift 1",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-20",
+    "title": "SSC CGL 2025 Tier-1 — 18 Sept, 2025 Shift 2",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-21",
+    "title": "SSC CGL 2025 Tier-1 — 18 Sept, 2025 Shift 3",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-22",
+    "title": "SSC CGL 2025 Tier-1 — 19 Sept, 2025 Shift 1",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-23",
+    "title": "SSC CGL 2025 Tier-1 — 19 Sept, 2025 Shift 2",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-24",
+    "title": "SSC CGL 2025 Tier-1 — 19 Sept, 2025 Shift 3",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-25",
+    "title": "SSC CGL 2025 Tier-1 — 20 Sept, 2025 Shift 1",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-26",
+    "title": "SSC CGL 2025 Tier-1 — 20 Sept, 2025 Shift 2",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-27",
+    "title": "SSC CGL 2025 Tier-1 — 20 Sept, 2025 Shift 3",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-28",
+    "title": "SSC CGL 2025 Tier-1 — 21 Sept, 2025 Shift 1",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-29",
+    "title": "SSC CGL 2025 Tier-1 — 21 Sept, 2025 Shift 2",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-30",
+    "title": "SSC CGL 2025 Tier-1 — 21 Sept, 2025 Shift 3",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-31",
+    "title": "SSC CGL 2025 Tier-1 — 22 Sept, 2025 Shift 1",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-32",
+    "title": "SSC CGL 2025 Tier-1 — 22 Sept, 2025 Shift 2",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-33",
+    "title": "SSC CGL 2025 Tier-1 — 22 Sept, 2025 Shift 3",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-34",
+    "title": "SSC CGL 2025 Tier-1 — 23 Sept, 2025 Shift 1",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-35",
+    "title": "SSC CGL 2025 Tier-1 — 23 Sept, 2025 Shift 2",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-36",
+    "title": "SSC CGL 2025 Tier-1 — 23 Sept, 2025 Shift 3",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-37",
+    "title": "SSC CGL 2025 Tier-1 — 24 Sept, 2025 Shift 1",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-38",
+    "title": "SSC CGL 2025 Tier-1 — 24 Sept, 2025 Shift 2",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-39",
+    "title": "SSC CGL 2025 Tier-1 — 24 Sept, 2025 Shift 3",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-40",
+    "title": "SSC CGL 2025 Tier-1 — 25 Sept, 2025 Shift 1",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-41",
+    "title": "SSC CGL 2025 Tier-1 — 25 Sept, 2025 Shift 2",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-42",
+    "title": "SSC CGL 2025 Tier-1 — 25 Sept, 2025 Shift 3",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-43",
+    "title": "SSC CGL 2025 Tier-1 — 26 Sept, 2025 Shift 1",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-44",
+    "title": "SSC CGL 2025 Tier-1 — 26 Sept, 2025 Shift 2",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-shift-45",
+    "title": "SSC CGL 2025 Tier-1 — 26 Sept, 2025 Shift 3",
+    "examCode": "ssc-cgl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "English Comprehension",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-cgl-2025-tier2-shift-1",
+    "title": "SSC CGL 2025 Tier-2 — 19 Jan, 2026",
+    "examCode": "ssc-cgl-tier2",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 135,
+    "totalQuestions": 150,
+    "totalMarks": 450,
+    "positiveMarks": 3,
+    "negativeMarks": 1,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Section I",
+        "questionCount": 60,
+        "marks": 180
+      },
+      {
+        "id": "sec_2",
+        "name": "Section II",
+        "questionCount": 70,
+        "marks": 210
+      },
+      {
+        "id": "sec_3",
+        "name": "Computer Knowledge",
+        "questionCount": 20,
+        "marks": 60
+      }
+    ]
+  },
+  {
+    "id": "ssc-chsl-2025-shift-1",
+    "title": "SSC CHSL 2025 Tier-1 — 12 Nov, 2025 Shift 2",
+    "examCode": "ssc-chsl-tier1",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 200,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "English Language",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_2",
+        "name": "General Intelligence",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_3",
+        "name": "Quantitative Aptitude",
+        "questionCount": 25,
+        "marks": 50
+      },
+      {
+        "id": "sec_4",
+        "name": "General Awareness",
+        "questionCount": 25,
+        "marks": 50
+      }
+    ]
+  },
+  {
+    "id": "ssc-mts-2025-shift-1",
+    "title": "SSC MTS 2025 — 04 Feb, 2026 Shift 3",
+    "examCode": "ssc-mts",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 90,
+    "totalMarks": 270,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Session 1",
+        "questionCount": 40,
+        "marks": 120
+      },
+      {
+        "id": "sec_2",
+        "name": "Session 2",
+        "questionCount": 50,
+        "marks": 150
+      }
+    ]
+  },
+  {
+    "id": "ssc-mts-2025-shift-2",
+    "title": "SSC MTS 2025 — 05 Feb, 2026 Shift 3",
+    "examCode": "ssc-mts",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 90,
+    "totalMarks": 270,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Session 1",
+        "questionCount": 40,
+        "marks": 120
+      },
+      {
+        "id": "sec_2",
+        "name": "Session 2",
+        "questionCount": 50,
+        "marks": 150
+      }
+    ]
+  },
+  {
+    "id": "ssc-mts-2025-shift-3",
+    "title": "SSC MTS 2025 — 05 Feb, 2026 Shift 1",
+    "examCode": "ssc-mts",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 90,
+    "totalMarks": 270,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Session 1",
+        "questionCount": 40,
+        "marks": 120
+      },
+      {
+        "id": "sec_2",
+        "name": "Session 2",
+        "questionCount": 50,
+        "marks": 150
+      }
+    ]
+  },
+  {
+    "id": "ssc-mts-2025-shift-4",
+    "title": "SSC MTS 2025 — 05 Feb, 2026 Shift 2",
+    "examCode": "ssc-mts",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 90,
+    "totalMarks": 270,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Session 1",
+        "questionCount": 40,
+        "marks": 120
+      },
+      {
+        "id": "sec_2",
+        "name": "Session 2",
+        "questionCount": 50,
+        "marks": 150
+      }
+    ]
+  },
+  {
+    "id": "ssc-mts-2025-shift-5",
+    "title": "SSC MTS 2025 — 06 Feb, 2026 Shift 3",
+    "examCode": "ssc-mts",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 90,
+    "totalMarks": 270,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Session 1",
+        "questionCount": 40,
+        "marks": 120
+      },
+      {
+        "id": "sec_2",
+        "name": "Session 2",
+        "questionCount": 50,
+        "marks": 150
+      }
+    ]
+  },
+  {
+    "id": "ssc-mts-2025-shift-6",
+    "title": "SSC MTS 2025 — 06 Feb, 2026 Shift 2",
+    "examCode": "ssc-mts",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 90,
+    "totalMarks": 270,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Session 1",
+        "questionCount": 40,
+        "marks": 120
+      },
+      {
+        "id": "sec_2",
+        "name": "Session 2",
+        "questionCount": 50,
+        "marks": 150
+      }
+    ]
+  },
+  {
+    "id": "ssc-mts-2025-shift-7",
+    "title": "SSC MTS 2025 — 09 Feb, 2026 Shift 3",
+    "examCode": "ssc-mts",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 90,
+    "totalMarks": 270,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Session 1",
+        "questionCount": 40,
+        "marks": 120
+      },
+      {
+        "id": "sec_2",
+        "name": "Session 2",
+        "questionCount": 50,
+        "marks": 150
+      }
+    ]
+  },
+  {
+    "id": "ssc-mts-2025-shift-8",
+    "title": "SSC MTS 2025 — 09 Feb, 2026 Shift 1",
+    "examCode": "ssc-mts",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 90,
+    "totalMarks": 270,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Session 1",
+        "questionCount": 40,
+        "marks": 120
+      },
+      {
+        "id": "sec_2",
+        "name": "Session 2",
+        "questionCount": 50,
+        "marks": 150
+      }
+    ]
+  },
+  {
+    "id": "ssc-mts-2025-shift-9",
+    "title": "SSC MTS 2025 — 09 Feb, 2026 Shift 2",
+    "examCode": "ssc-mts",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 90,
+    "totalMarks": 270,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Session 1",
+        "questionCount": 40,
+        "marks": 120
+      },
+      {
+        "id": "sec_2",
+        "name": "Session 2",
+        "questionCount": 50,
+        "marks": 150
+      }
+    ]
+  },
+  {
+    "id": "ssc-mts-2025-shift-10",
+    "title": "SSC MTS 2025 — 10 Feb, 2026 Shift 3",
+    "examCode": "ssc-mts",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 90,
+    "totalMarks": 270,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Session 1",
+        "questionCount": 40,
+        "marks": 120
+      },
+      {
+        "id": "sec_2",
+        "name": "Session 2",
+        "questionCount": 50,
+        "marks": 150
+      }
+    ]
+  },
+  {
+    "id": "ssc-mts-2025-shift-11",
+    "title": "SSC MTS 2025 — 10 Feb, 2026 Shift 1",
+    "examCode": "ssc-mts",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 90,
+    "totalMarks": 270,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Session 1",
+        "questionCount": 40,
+        "marks": 120
+      },
+      {
+        "id": "sec_2",
+        "name": "Session 2",
+        "questionCount": 50,
+        "marks": 150
+      }
+    ]
+  },
+  {
+    "id": "ssc-mts-2025-shift-12",
+    "title": "SSC MTS 2025 — 10 Feb, 2026 Shift 2",
+    "examCode": "ssc-mts",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 90,
+    "totalMarks": 270,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Session 1",
+        "questionCount": 40,
+        "marks": 120
+      },
+      {
+        "id": "sec_2",
+        "name": "Session 2",
+        "questionCount": 50,
+        "marks": 150
+      }
+    ]
+  },
+  {
+    "id": "ssc-mts-2025-shift-13",
+    "title": "SSC MTS 2025 — 11 Feb, 2026 Shift 3",
+    "examCode": "ssc-mts",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 90,
+    "totalMarks": 270,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Session 1",
+        "questionCount": 40,
+        "marks": 120
+      },
+      {
+        "id": "sec_2",
+        "name": "Session 2",
+        "questionCount": 50,
+        "marks": 150
+      }
+    ]
+  },
+  {
+    "id": "ssc-mts-2025-shift-14",
+    "title": "SSC MTS 2025 — 11 Feb, 2026 Shift 1",
+    "examCode": "ssc-mts",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 90,
+    "totalMarks": 270,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Session 1",
+        "questionCount": 40,
+        "marks": 120
+      },
+      {
+        "id": "sec_2",
+        "name": "Session 2",
+        "questionCount": 50,
+        "marks": 150
+      }
+    ]
+  },
+  {
+    "id": "ssc-mts-2025-shift-15",
+    "title": "SSC MTS 2025 — 11 Feb, 2026 Shift 2",
+    "examCode": "ssc-mts",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 90,
+    "totalMarks": 270,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Session 1",
+        "questionCount": 40,
+        "marks": 120
+      },
+      {
+        "id": "sec_2",
+        "name": "Session 2",
+        "questionCount": 50,
+        "marks": 150
+      }
+    ]
+  },
+  {
+    "id": "ssc-mts-2025-shift-16",
+    "title": "SSC MTS 2025 — 18 Feb, 2026 Shift 3",
+    "examCode": "ssc-mts",
+    "examFamily": "ssc",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 90,
+    "totalMarks": 270,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Session 1",
+        "questionCount": 40,
+        "marks": 120
+      },
+      {
+        "id": "sec_2",
+        "name": "Session 2",
+        "questionCount": 50,
+        "marks": 150
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-1",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 25 Mar, 2026 Shift 1",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-2",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 25 Mar, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-3",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 25 Mar, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-4",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 24 Mar, 2026 Shift 1",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-5",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 24 Mar, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-6",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 24 Mar, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-7",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 17 Mar, 2026 Shift 1",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-8",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 17 Mar, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-9",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 17 Mar, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-10",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 16 Mar, 2026 Shift 1",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-11",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 16 Mar, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-12",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 16 Mar, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-13",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 19 Mar, 2026 Shift 1",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-14",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 19 Mar, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-15",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 19 Mar, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-16",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 18 Mar, 2026 Shift 1",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-17",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 18 Mar, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-18",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 18 Mar, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-19",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 22 Mar, 2026 Shift 1",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-20",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 22 Mar, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-21",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 22 Mar, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-22",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 27 Mar, 2026 Shift 1",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-23",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 27 Mar, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-24",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 27 Mar, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-1",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 07 May, 2026 Shift 1",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-2",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 07 May, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-3",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 07 May, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-4",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 08 May, 2026 Shift 1",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-5",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 08 May, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-6",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 08 May, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-7",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 09 May, 2026 Shift 1",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-8",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 09 May, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-9",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 09 May, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-10",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 13 Jun, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-11",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 13 Jun, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-12",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 14 Jun, 2026 Shift 1",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-13",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 14 Jun, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-14",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 14 Jun, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-15",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 15 Jun, 2026 Shift 1",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-16",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 15 Jun, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-17",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 15 Jun, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-18",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 16 Jun, 2026 Shift 1",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-19",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 16 Jun, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-20",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 16 Jun, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-21",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 17 Jun, 2026 Shift 1",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-22",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 17 Jun, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-23",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 17 Jun, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-24",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 18 Jun, 2026 Shift 1",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-25",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 18 Jun, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-26",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 18 Jun, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-27",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 19 Jun, 2026 Shift 1",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-28",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 19 Jun, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-29",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 19 Jun, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-30",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 20 Jun, 2026 Shift 1",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-31",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 20 Jun, 2026 Shift 2",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-32",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 20 Jun, 2026 Shift 3",
+    "examCode": "rrb-ntpc-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 100,
+    "totalMarks": 100,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "sec_2",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ]
+  },
+  {
+    "id": "rrb-alp-2025-shift-1",
+    "title": "RRB ALP 2025 CBT-1 — 13 Feb, 2026 Shift 1",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 75,
+    "totalMarks": 75,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ]
+  },
+  {
+    "id": "rrb-alp-2025-shift-2",
+    "title": "RRB ALP 2025 CBT-1 — 16 Feb, 2026 Shift 1",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 75,
+    "totalMarks": 75,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ]
+  },
+  {
+    "id": "rrb-alp-2025-shift-3",
+    "title": "RRB ALP 2025 CBT-1 — 16 Feb, 2026 Shift 2",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 75,
+    "totalMarks": 75,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ]
+  },
+  {
+    "id": "rrb-alp-2025-shift-4",
+    "title": "RRB ALP 2025 CBT-1 — 16 Feb, 2026 Shift 3",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 75,
+    "totalMarks": 75,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ]
+  },
+  {
+    "id": "rrb-alp-2025-shift-5",
+    "title": "RRB ALP 2025 CBT-1 — 17 Feb, 2026 Shift 1",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 75,
+    "totalMarks": 75,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ]
+  },
+  {
+    "id": "rrb-alp-2025-shift-6",
+    "title": "RRB ALP 2025 CBT-1 — 17 Feb, 2026 Shift 2",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 75,
+    "totalMarks": 75,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ]
+  },
+  {
+    "id": "rrb-alp-2025-shift-7",
+    "title": "RRB ALP 2025 CBT-1 — 17 Feb, 2026 Shift 3",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 75,
+    "totalMarks": 75,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ]
+  },
+  {
+    "id": "rrb-alp-2025-shift-8",
+    "title": "RRB ALP 2025 CBT-1 — 18 Feb, 2026 Shift 1",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 75,
+    "totalMarks": 75,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ]
+  },
+  {
+    "id": "rrb-alp-2025-shift-9",
+    "title": "RRB ALP 2025 CBT-1 — 18 Feb, 2026 Shift 2",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 75,
+    "totalMarks": 75,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ]
+  },
+  {
+    "id": "rrb-alp-2025-shift-10",
+    "title": "RRB ALP 2025 CBT-1 — 18 Feb, 2026 Shift 3",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 75,
+    "totalMarks": 75,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ]
+  },
+  {
+    "id": "rrb-alp-2025-shift-11",
+    "title": "RRB ALP 2025 CBT-1 — 11 Mar, 2026 Shift 1",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "examYear": 2025,
+    "durationMinutes": 60,
+    "totalQuestions": 75,
+    "totalMarks": 75,
+    "positiveMarks": 2,
+    "negativeMarks": 0.5,
+    "sections": [
+      {
+        "id": "sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ]
+  }
+]

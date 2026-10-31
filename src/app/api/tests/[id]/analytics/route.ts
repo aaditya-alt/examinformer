@@ -19,7 +19,7 @@ export async function GET(
     try {
       const { data, error } = await supabase
         .from('test_attempts')
-        .select('id, total_score, accuracy, time_taken_seconds, responses')
+        .select('id, candidate_name, total_score, accuracy, time_taken_seconds, responses, created_at')
         .eq('test_id', id);
 
       if (!error && data) {
@@ -32,7 +32,37 @@ export async function GET(
 
   const totalAttempts = attemptsList.length;
 
-  // Calculate question-level stats from all real attempts
+  // Real Topper and Aggregate Statistics calculated directly from recorded attempts
+  let topper = null;
+  let avgScore = 0;
+  let avgAccuracy = 0;
+  let avgTimeSeconds = 0;
+
+  if (totalAttempts > 0) {
+    // Sort descending by score, tiebreaker on time_taken_seconds ascending
+    const sorted = [...attemptsList].sort((a, b) => {
+      const scoreDiff = (Number(b.total_score) || 0) - (Number(a.total_score) || 0);
+      if (scoreDiff !== 0) return scoreDiff;
+      return (Number(a.time_taken_seconds) || 0) - (Number(b.time_taken_seconds) || 0);
+    });
+
+    topper = {
+      score: Number(sorted[0].total_score) || 0,
+      accuracy: Number(sorted[0].accuracy) || 0,
+      timeTakenSeconds: Number(sorted[0].time_taken_seconds) || 0,
+      candidateName: sorted[0].candidate_name || 'Portal Topper'
+    };
+
+    const totalScoreSum = attemptsList.reduce((acc, a) => acc + (Number(a.total_score) || 0), 0);
+    const totalAccuracySum = attemptsList.reduce((acc, a) => acc + (Number(a.accuracy) || 0), 0);
+    const totalTimeSum = attemptsList.reduce((acc, a) => acc + (Number(a.time_taken_seconds) || 0), 0);
+
+    avgScore = Math.round((totalScoreSum / totalAttempts) * 10) / 10;
+    avgAccuracy = Math.round((totalAccuracySum / totalAttempts) * 10) / 10;
+    avgTimeSeconds = Math.round(totalTimeSum / totalAttempts);
+  }
+
+  // Calculate real question-level stats from recorded attempts
   const questionStats: Record<number, { correctPct: number; wrongPct: number; skippedPct: number; totalAnswered: number }> = {};
 
   test.sections.forEach(sec => {
@@ -59,8 +89,8 @@ export async function GET(
       const totalCandidates = Math.max(1, attemptsList.length);
 
       questionStats[qno] = {
-        correctPct: totalAnswered > 0 ? Math.round((qCorrect / totalAnswered) * 100) : 60,
-        wrongPct: totalAnswered > 0 ? Math.round((qWrong / totalAnswered) * 100) : 30,
+        correctPct: totalAnswered > 0 ? Math.round((qCorrect / totalAnswered) * 100) : 0,
+        wrongPct: totalAnswered > 0 ? Math.round((qWrong / totalAnswered) * 100) : 0,
         skippedPct: Math.round((qSkipped / totalCandidates) * 100),
         totalAnswered
       };
@@ -70,6 +100,10 @@ export async function GET(
   return NextResponse.json({
     success: true,
     totalAttempts,
+    topper,
+    avgScore,
+    avgAccuracy,
+    avgTimeSeconds,
     attempts: attemptsList.map(a => ({
       id: a.id,
       score: a.total_score,
