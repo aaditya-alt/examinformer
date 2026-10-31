@@ -72,7 +72,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
 
   // Timers (Overall and Sectional)
   const [overallSecondsRemaining, setOverallSecondsRemaining] = useState<number>(3600);
-  const [sectionSecondsRemaining, setSectionSecondsRemaining] = useState<number>(900);
+  const [sectionTimesRemaining, setSectionTimesRemaining] = useState<Record<number, number>>({ 0: 900, 1: 900, 2: 900, 3: 900 });
   const [lockedSections, setLockedSections] = useState<Record<number, boolean>>({});
 
   // Pre-test instructions step state (1: Overview & Checklist, 2: Symbols & Declaration, 'started': Test Hall)
@@ -187,7 +187,9 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                   setSavedSessionData(parsed);
                   setResumePromptOpen(true);
                   setOverallSecondsRemaining(parsed.overallSecondsRemaining);
-                  setSectionSecondsRemaining(parsed.sectionSecondsRemaining || 900);
+                  if (parsed.sectionTimesRemaining) {
+                    setSectionTimesRemaining(parsed.sectionTimesRemaining);
+                  }
                   setActiveSectionIdx(parsed.activeSectionIdx || 0);
                   setActiveQuestionIdx(parsed.activeQuestionIdx || 0);
                   setUserResponses(parsed.userResponses || {});
@@ -202,8 +204,11 @@ function EduquityCBTContent({ testId }: { testId: string }) {
             // Fresh session initialization: Show Pre-Test Instructions
             setPreTestStep(1);
             setOverallSecondsRemaining(t.durationMinutes * 60);
-            const secMins = getExamSectionTimingMinutes(t, 0);
-            setSectionSecondsRemaining(secMins * 60);
+            const initialSecTimes: Record<number, number> = {};
+            t.sections.forEach((_, sIdx) => {
+              initialSecTimes[sIdx] = getExamSectionTimingMinutes(t, sIdx) * 60;
+            });
+            setSectionTimesRemaining(initialSecTimes);
 
             const initialMap: Record<number, any> = {};
             let qCounter = 1;
@@ -241,10 +246,12 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     }
   };
 
-  // 3. Overall Timer countdown (Only in Exam Mode and when not paused)
+  // 3. Official Server-Controlled Exam & Sectional Timer Countdown
   useEffect(() => {
-    if (isSolutionMode || !user || !test || isPaused || overallSecondsRemaining <= 0 || preTestStep !== 'started') return;
+    if (isSolutionMode || !test || isPaused || preTestStep !== 'started') return;
+
     const interval = setInterval(() => {
+      // Decrement overall exam timer
       setOverallSecondsRemaining(prev => {
         if (prev <= 1) {
           clearInterval(interval);
@@ -253,28 +260,24 @@ function EduquityCBTContent({ testId }: { testId: string }) {
         }
         return prev - 1;
       });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [isSolutionMode, user, test, isPaused, overallSecondsRemaining, preTestStep]);
 
-  // 4. Sectional Timer countdown (Only in Exam Mode and when not paused)
-  useEffect(() => {
-    if (isSolutionMode || !user || !test || !isSectionalTimingApplicable(test) || isPaused || sectionSecondsRemaining <= 0 || preTestStep !== 'started') return;
-
-    const interval = setInterval(() => {
-      setSectionSecondsRemaining(prev => {
-        if (prev <= 1) {
-          handleSectionTimeExpired();
-          return 0;
-        }
-        return prev - 1;
-      });
+      // Decrement active section timer if sectional timing applies
+      if (isSectionalTimingApplicable(test)) {
+        setSectionTimesRemaining(prevMap => {
+          const currentSecTime = prevMap[activeSectionIdx] ?? (getExamSectionTimingMinutes(test, activeSectionIdx) * 60);
+          if (currentSecTime <= 1) {
+            handleSectionTimeExpired();
+            return { ...prevMap, [activeSectionIdx]: 0 };
+          }
+          return { ...prevMap, [activeSectionIdx]: currentSecTime - 1 };
+        });
+      }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isSolutionMode, user, test, isPaused, sectionSecondsRemaining, activeSectionIdx, preTestStep]);
+  }, [isSolutionMode, test, isPaused, activeSectionIdx, preTestStep]);
 
-  // 5. Bookmark sync with localStorage & candidate profile
+  // 4. Bookmark sync with localStorage & candidate profile
   useEffect(() => {
     if (!test || !test.sections) return;
     const curSec = test.sections[activeSectionIdx] || test.sections[0];
@@ -294,15 +297,13 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     if (!test) return;
     setLockedSections(prev => ({ ...prev, [activeSectionIdx]: true }));
 
-    if (activeSectionIdx < test.sections.length - 1) {
-      const nextIdx = activeSectionIdx + 1;
+    // Find next available section that is not locked
+    const nextIdx = test.sections.findIndex((_, idx) => idx > activeSectionIdx && !lockedSections[idx]);
+
+    if (nextIdx !== -1) {
       setActiveSectionIdx(nextIdx);
       setActiveQuestionIdx(0);
-
-      const secMins = getExamSectionTimingMinutes(test, nextIdx);
-      setSectionSecondsRemaining(secMins * 60);
-
-      setSectionAlertMsg(`Time expired for section "${test.sections[activeSectionIdx].name}". Eduquity has transitioned you to "${test.sections[nextIdx].name}".`);
+      setSectionAlertMsg(`Time expired for section "${test.sections[activeSectionIdx]?.name || 'Current Section'}". Eduquity has transitioned you to "${test.sections[nextIdx].name}".`);
       setTimeout(() => setSectionAlertMsg(null), 5000);
     } else {
       handleSubmitTest();
@@ -319,12 +320,11 @@ function EduquityCBTContent({ testId }: { testId: string }) {
 
     setLockedSections(prev => ({ ...prev, [activeSectionIdx]: true }));
 
-    if (activeSectionIdx < test.sections.length - 1) {
-      const nextIdx = activeSectionIdx + 1;
+    const nextIdx = test.sections.findIndex((_, idx) => idx > activeSectionIdx && !lockedSections[idx]);
+
+    if (nextIdx !== -1) {
       setActiveSectionIdx(nextIdx);
       setActiveQuestionIdx(0);
-      const nextMins = getExamSectionTimingMinutes(test, nextIdx);
-      setSectionSecondsRemaining(nextMins * 60);
       setSectionAlertMsg(`Submitted "${secName}". Now in "${test.sections[nextIdx].name}".`);
       setTimeout(() => setSectionAlertMsg(null), 4000);
     } else {
@@ -342,7 +342,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
       userId: user?.id,
       savedAt: Date.now(),
       overallSecondsRemaining,
-      sectionSecondsRemaining,
+      sectionTimesRemaining,
       activeSectionIdx,
       activeQuestionIdx,
       userResponses
@@ -358,7 +358,6 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   };
 
   const handleSaveAndExit = () => {
-    // Session is already stored in localStorage
     router.push('/tests');
   };
 
@@ -367,8 +366,11 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     setResumePromptOpen(false);
     if (test) {
       setOverallSecondsRemaining(test.durationMinutes * 60);
-      const secMins = test.sectionalTimingMinutes || 15;
-      setSectionSecondsRemaining(secMins * 60);
+      const initialSecTimes: Record<number, number> = {};
+      test.sections.forEach((_, idx) => {
+        initialSecTimes[idx] = getExamSectionTimingMinutes(test, idx) * 60;
+      });
+      setSectionTimesRemaining(initialSecTimes);
       setActiveSectionIdx(0);
       setActiveQuestionIdx(0);
 
@@ -389,10 +391,14 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   };
 
   const formatTimeEduquity = (totalSec: number) => {
+    if (typeof totalSec !== 'number' || isNaN(totalSec) || totalSec < 0) totalSec = 0;
     const h = Math.floor(totalSec / 3600);
     const m = Math.floor((totalSec % 3600) / 60);
     const s = totalSec % 60;
-    return `${h.toString().padStart(2, '0')} : ${m.toString().padStart(2, '0')} : ${s.toString().padStart(2, '0')}`;
+    if (h > 0) {
+      return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
   // Safe section & question pointers
@@ -512,17 +518,13 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   };
 
   const goToNextQuestion = () => {
-    if (activeQuestionIdx < currentSection.questions.length - 1) {
+    if (activeQuestionIdx < (currentSection?.questions?.length || 0) - 1) {
       setActiveQuestionIdx(activeQuestionIdx + 1);
-    } else if (activeSectionIdx < test.sections.length - 1) {
+    } else if (activeSectionIdx < (test?.sections?.length || 0) - 1) {
       if (!lockedSections[activeSectionIdx + 1] || isSolutionMode) {
         const nextIdx = activeSectionIdx + 1;
         setActiveSectionIdx(nextIdx);
         setActiveQuestionIdx(0);
-        if (isSectionalTimingApplicable(test)) {
-          const nextMins = getExamSectionTimingMinutes(test, nextIdx);
-          setSectionSecondsRemaining(nextMins * 60);
-        }
       }
     }
   };
@@ -533,11 +535,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     } else if (activeSectionIdx > 0 && (!lockedSections[activeSectionIdx - 1] || isSolutionMode)) {
       const prevIdx = activeSectionIdx - 1;
       setActiveSectionIdx(prevIdx);
-      setActiveQuestionIdx(test.sections[prevIdx].questions.length - 1);
-      if (isSectionalTimingApplicable(test)) {
-        const prevMins = getExamSectionTimingMinutes(test, prevIdx);
-        setSectionSecondsRemaining(prevMins * 60);
-      }
+      setActiveQuestionIdx((test?.sections?.[prevIdx]?.questions?.length || 1) - 1);
     }
   };
 
@@ -545,10 +543,6 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     if (!isSolutionMode && lockedSections[secIdx]) {
       alert('This section has expired and is locked under Eduquity SSC examination rules.');
       return;
-    }
-    if (secIdx !== activeSectionIdx && isSectionalTimingApplicable(test)) {
-      const secMins = getExamSectionTimingMinutes(test, secIdx);
-      setSectionSecondsRemaining(secMins * 60);
     }
     setActiveSectionIdx(secIdx);
     setActiveQuestionIdx(qIdx);
@@ -890,8 +884,11 @@ function EduquityCBTContent({ testId }: { testId: string }) {
         onStartTest={() => {
           setPreTestStep('started');
           setOverallSecondsRemaining(test.durationMinutes * 60);
-          const initialSecMins = getExamSectionTimingMinutes(test, 0);
-          setSectionSecondsRemaining(initialSecMins * 60);
+          const initialSecTimes: Record<number, number> = {};
+          test.sections.forEach((_, sIdx) => {
+            initialSecTimes[sIdx] = getExamSectionTimingMinutes(test, sIdx) * 60;
+          });
+          setSectionTimesRemaining(initialSecTimes);
         }}
         onCancel={() => router.push('/tests')}
       />
@@ -947,19 +944,23 @@ function EduquityCBTContent({ testId }: { testId: string }) {
               >
                 <Pause className="w-3.5 h-3.5 fill-current" />
               </button>
-              {/* Official Yellow Timer Box */}
-              <div className="bg-[#fffbeb] border border-[#fef08a] px-3 py-0.5 rounded text-center leading-none min-w-[90px] shadow-xs">
-                <div className="text-[9px] text-slate-600 font-semibold tracking-wider flex items-center justify-center gap-1">
-                  <span>Time Left</span>
-                  {isSectionalTimingApplicable(test) && (
-                    <span className="text-[8px] bg-rose-100 text-rose-800 px-1 rounded font-bold">
-                      SEC: {formatTimeEduquity(sectionSecondsRemaining)}
-                    </span>
+              {/* Official Eduquity Yellow Timer Box */}
+              <div className="bg-[#fffbeb] border border-[#fef08a] px-3 py-1 rounded text-center leading-none min-w-[105px] shadow-xs">
+                <div className="text-[9px] sm:text-[10px] text-slate-700 font-bold uppercase tracking-wider flex items-center justify-center gap-1">
+                  <span>{isSectionalTimingApplicable(test) ? 'Section Time Left' : 'Time Left'}</span>
+                </div>
+                <div className="text-base sm:text-lg font-black text-rose-600 font-mono tracking-wider mt-0.5">
+                  {formatTimeEduquity(
+                    isSectionalTimingApplicable(test)
+                      ? (sectionTimesRemaining[activeSectionIdx] ?? (getExamSectionTimingMinutes(test, activeSectionIdx) * 60))
+                      : overallSecondsRemaining
                   )}
                 </div>
-                <div className="text-sm sm:text-base font-black text-rose-600 font-mono tracking-wider mt-0.5">
-                  {formatTimeEduquity(overallSecondsRemaining)}
-                </div>
+                {isSectionalTimingApplicable(test) && (
+                  <div className="text-[9px] text-slate-500 font-semibold mt-0.5">
+                    Exam Total: {formatTimeEduquity(overallSecondsRemaining)}
+                  </div>
+                )}
               </div>
             </>
           ) : (
@@ -1051,10 +1052,6 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                   }
                   setActiveSectionIdx(sIdx);
                   setActiveQuestionIdx(0);
-                  if (isSectionalTimingApplicable(test)) {
-                    const secMins = getExamSectionTimingMinutes(test, sIdx);
-                    setSectionSecondsRemaining(secMins * 60);
-                  }
                 }}
                 className={`px-3 py-1 rounded text-xs font-black uppercase tracking-wider transition whitespace-nowrap ${
                   isLocked
@@ -1167,7 +1164,9 @@ function EduquityCBTContent({ testId }: { testId: string }) {
             <div className="flex items-center gap-3">
               {!isSolutionMode && (
                 <span className="text-xs font-bold text-rose-600 tracking-wide">
-                  Last {Math.max(1, Math.ceil(overallSecondsRemaining / 60))} Minutes
+                  {isSectionalTimingApplicable(test)
+                    ? `Section: Last ${Math.max(1, Math.ceil((sectionTimesRemaining[activeSectionIdx] ?? (getExamSectionTimingMinutes(test, activeSectionIdx) * 60)) / 60))} Minutes`
+                    : `Last ${Math.max(1, Math.ceil(overallSecondsRemaining / 60))} Minutes`}
                 </span>
               )}
               <div className="flex items-center gap-1.5">

@@ -17,21 +17,6 @@ export async function POST(req: Request) {
     const cleanName = name.trim();
     const rollNumber = '2402' + Math.floor(100000 + Math.random() * 900000);
 
-    if (!supabaseAdmin) {
-      // Local fallback if Supabase not reachable
-      return NextResponse.json({
-        success: true,
-        user: {
-          id: 'usr_' + Date.now(),
-          email: cleanEmail,
-          name: cleanName,
-          phone: cleanPhone,
-          rollNumber,
-          category: 'UR'
-        }
-      });
-    }
-
     // Create user in Supabase Auth with auto-confirmed email (zero wait time for user)
     const { data, error } = await supabaseAdmin.auth.admin.createUser({
       email: cleanEmail,
