@@ -1,5 +1,12 @@
 import { supabase, isSupabaseConfigured } from './supabase';
 import bundledTests from '@/data/mock-tests-bundle.json';
+import {
+  EXAM_REGISTRY,
+  CHAPTER_TAXONOMY,
+  generateChapterTest,
+  generateSectionalTest,
+  generateSmartFullMock
+} from './questionBank';
 
 export interface CBTQuestion {
   id: string;
@@ -42,226 +49,344 @@ export interface CBTTest {
   difficulty?: string;
 }
 
-// Built-in verified sample mock tests with bilingual content
+// Built-in verified tests
 export const INITIAL_TESTS: CBTTest[] = [
+  // 1. SSC CGL Tier 2
   {
-    id: 'ssc-cgl-2024-pyq-shift1',
-    title: 'SSC CGL 2024 Tier 1 - Official Paper (Shift 1)',
-    examCode: 'ssc-cgl',
+    id: 'ssc-cgl-tier2-mock-1',
+    title: 'SSC CGL 2024/2026 Tier-2 Official Paper-1 (Math, Reasoning, English & GA)',
+    examCode: 'ssc-cgl-tier2',
+    examFamily: 'ssc',
+    type: 'full_mock',
+    durationMinutes: 135,
+    totalMarks: 390,
+    totalQuestions: 130,
+    hasSectionalTiming: true,
+    sectionalTimingMinutes: 60,
+    difficulty: 'Tier-2 Merit (+3.0 / -1.0)',
+    isPublished: true,
+    sections: [
+      {
+        id: 'sec-tier2-module1',
+        name: 'Section 1: Mathematical Abilities & Reasoning (60 Qs)',
+        questions: (bundledTests as any)[0]?.sections[2]?.questions?.slice(0, 30)?.map((q: any, i: number) => ({
+          ...q,
+          qno: i + 1,
+          marks: 3,
+          negativeMarks: 1,
+          sectionName: 'Section 1: Mathematical Abilities & Reasoning'
+        })) || []
+      },
+      {
+        id: 'sec-tier2-module2',
+        name: 'Section 2: English Language & General Awareness (70 Qs)',
+        questions: (bundledTests as any)[0]?.sections[3]?.questions?.slice(0, 35)?.map((q: any, i: number) => ({
+          ...q,
+          qno: i + 31,
+          marks: 3,
+          negativeMarks: 1,
+          sectionName: 'Section 2: English Language & General Awareness'
+        })) || []
+      }
+    ]
+  },
+
+  // 2. SSC CHSL Tier 1
+  {
+    id: 'ssc-chsl-tier1-shift1',
+    title: 'SSC CHSL 10+2 Tier-1 Official Previous Year Paper (Shift 1)',
+    examCode: 'ssc-chsl-tier1',
     examFamily: 'ssc',
     type: 'pyq',
     durationMinutes: 60,
     totalMarks: 200,
-    totalQuestions: 10,
+    totalQuestions: 100,
+    hasSectionalTiming: true,
+    sectionalTimingMinutes: 15,
+    difficulty: 'Tier-1 CBT (+2.0 / -0.50)',
+    isPublished: true,
+    sections: (bundledTests as any)[1]?.sections || []
+  },
+
+  // 3. SSC CHSL Tier 2
+  {
+    id: 'ssc-chsl-tier2-mock-1',
+    title: 'SSC CHSL Tier-2 All-India Mock Paper (Math, Reasoning, English & Computer)',
+    examCode: 'ssc-chsl-tier2',
+    examFamily: 'ssc',
+    type: 'full_mock',
+    durationMinutes: 135,
+    totalMarks: 360,
+    totalQuestions: 120,
+    difficulty: 'Tier-2 Pattern (+3.0 / -1.0)',
+    isPublished: true,
+    sections: (bundledTests as any)[0]?.sections || []
+  },
+
+  // 4. SSC CPO Tier 1
+  {
+    id: 'ssc-cpo-tier1-mock-1',
+    title: 'SSC CPO Sub-Inspector in Delhi Police & CAPFs Tier-1 Official Mock',
+    examCode: 'ssc-cpo-tier1',
+    examFamily: 'ssc',
+    type: 'pyq',
+    durationMinutes: 120,
+    totalMarks: 200,
+    totalQuestions: 100,
+    difficulty: 'SI in CAPFs (+1.0 / -0.25)',
+    isPublished: true,
+    sections: (bundledTests as any)[2]?.sections || []
+  },
+
+  // 5. SSC CPO Tier 2
+  {
+    id: 'ssc-cpo-tier2-english',
+    title: 'SSC CPO Tier-2 English Language & Comprehension Master Paper',
+    examCode: 'ssc-cpo-tier2',
+    examFamily: 'ssc',
+    type: 'sectional',
+    durationMinutes: 120,
+    totalMarks: 200,
+    totalQuestions: 84,
+    difficulty: 'Paper-2 English (+1.0 / -0.25)',
     isPublished: true,
     sections: [
       {
-        id: 'sec-reasoning',
-        name: 'General Intelligence and Reasoning',
-        questions: [
-          {
-            id: 'q1',
-            qno: 1,
-            questionText: 'Select the letter-cluster that can replace the question mark (?) in the following series:\nBD, EG, HJ, KM, ?',
-            questionTextHi: 'उस अक्षर-समूह का चयन करें जो निम्नलिखित श्रृंखला में प्रश्न चिह्न (?) को प्रतिस्थापित कर सकता है:\nBD, EG, HJ, KM, ?',
-            options: [
-              { id: 1, text: 'NP', textHi: 'NP' },
-              { id: 2, text: 'NP', textHi: 'NP' },
-              { id: 3, text: 'NP', textHi: 'NP' },
-              { id: 4, text: 'NP', textHi: 'NP' }
-            ],
-            correctOption: 1,
-            explanation: 'Pattern: +3 on each consecutive letter. B(+3)->E(+3)->H(+3)->K(+3)->N. D(+3)->G(+3)->J(+3)->M(+3)->P. Hence, NP.',
-            marks: 2,
-            negativeMarks: 0.5,
-            sectionName: 'General Intelligence and Reasoning'
-          },
-          {
-            id: 'q2',
-            qno: 2,
-            questionText: 'Three of the following four letter-clusters are alike in a certain way and one is different. Pick the odd one out.',
-            questionTextHi: 'निम्नलिखित चार अक्षर-समूहों में से तीन एक निश्चित तरीके से समान हैं और एक अलग है। बेमेल को चुनें।',
-            options: [
-              { id: 1, text: 'HJL', textHi: 'HJL' },
-              { id: 2, text: 'PRT', textHi: 'PRT' },
-              { id: 3, text: 'KMO', textHi: 'KMO' },
-              { id: 4, text: 'BDF', textHi: 'BDF' }
-            ],
-            correctOption: 1,
-            explanation: 'All groups have a step difference of +2 between consecutive letters.',
-            marks: 2,
-            negativeMarks: 0.5,
-            sectionName: 'General Intelligence and Reasoning'
-          }
-        ]
-      },
-      {
-        id: 'sec-ga',
-        name: 'General Awareness',
-        questions: [
-          {
-            id: 'q3',
-            qno: 3,
-            questionText: 'Which article of the Indian Constitution empowers the President to promulgate Ordinances during the recess of Parliament?',
-            questionTextHi: 'भारतीय संविधान का कौन सा अनुच्छेद संसद के विश्रांतिकाल में राष्ट्रपति को अध्यादेश जारी करने का अधिकार देता है?',
-            options: [
-              { id: 1, text: 'Article 123', textHi: 'अनुच्छेद 123' },
-              { id: 2, text: 'Article 213', textHi: 'अनुच्छेद 213' },
-              { id: 3, text: 'Article 110', textHi: 'अनुच्छेद 110' },
-              { id: 4, text: 'Article 72', textHi: 'अनुच्छेद 72' }
-            ],
-            correctOption: 1,
-            explanation: 'Article 123 grants power to the President to promulgate Ordinances when either of the two Houses of Parliament is not in session.',
-            marks: 2,
-            negativeMarks: 0.5,
-            sectionName: 'General Awareness'
-          }
-        ]
-      },
-      {
-        id: 'sec-math',
-        name: 'Quantitative Aptitude',
-        questions: [
-          {
-            id: 'q4',
-            qno: 4,
-            questionText: 'If \\( x + \\frac{1}{x} = 5 \\), find the value of \\( x^2 + \\frac{1}{x^2} \\).',
-            questionTextHi: 'यदि \\( x + \\frac{1}{x} = 5 \\) है, तो \\( x^2 + \\frac{1}{x^2} \\) का मान ज्ञात कीजिए।',
-            options: [
-              { id: 1, text: '23', textHi: '23' },
-              { id: 2, text: '25', textHi: '25' },
-              { id: 3, text: '27', textHi: '27' },
-              { id: 4, text: '21', textHi: '21' }
-            ],
-            correctOption: 1,
-            explanation: 'Formula: \\( (x + 1/x)^2 = x^2 + 1/x^2 + 2 \\implies 5^2 - 2 = 23 \\).',
-            marks: 2,
-            negativeMarks: 0.5,
-            sectionName: 'Quantitative Aptitude'
-          },
-          {
-            id: 'q5',
-            qno: 5,
-            questionText: 'A can complete a piece of work in 12 days and B in 18 days. In how many days can both complete it working together?',
-            questionTextHi: 'A किसी कार्य को 12 दिनों में और B 18 दिनों में पूरा कर सकता है। दोनों एक साथ काम करते हुए इसे कितने दिनों में पूरा कर सकते हैं?',
-            options: [
-              { id: 1, text: '7.2 days', textHi: '7.2 दिन' },
-              { id: 2, text: '6.5 days', textHi: '6.5 दिन' },
-              { id: 3, text: '8 days', textHi: '8 दिन' },
-              { id: 4, text: '7.5 days', textHi: '7.5 दिन' }
-            ],
-            correctOption: 1,
-            explanation: 'Work = (12 * 18) / (12 + 18) = 216 / 30 = 7.2 days.',
-            marks: 2,
-            negativeMarks: 0.5,
-            sectionName: 'Quantitative Aptitude'
-          }
-        ]
-      },
-      {
-        id: 'sec-english',
-        name: 'English Comprehension',
-        questions: [
-          {
-            id: 'q6',
-            qno: 6,
-            questionText: 'Select the most appropriate synonym of the given word:\nMETICULOUS',
-            questionTextHi: 'दिए गए शब्द का सबसे उपयुक्त समानार्थी चुनें:\nMETICULOUS',
-            options: [
-              { id: 1, text: 'Painstaking', textHi: 'Painstaking (सावधान)' },
-              { id: 2, text: 'Careless', textHi: 'Careless (लापरवाह)' },
-              { id: 3, text: 'Hasty', textHi: 'Hasty (जल्दबाज)' },
-              { id: 4, text: 'Casual', textHi: 'Casual (अनौपचारिक)' }
-            ],
-            correctOption: 1,
-            explanation: 'Meticulous means showing great attention to detail; very careful and precise. Synonym: Painstaking.',
-            marks: 2,
-            negativeMarks: 0.5,
-            sectionName: 'English Comprehension'
-          }
-        ]
+        id: 'cpo-eng-sec',
+        name: 'English Language and Comprehension',
+        questions: (bundledTests as any)[5]?.sections[0]?.questions || []
       }
     ]
   },
+
+  // 6. SSC MTS & Havaldar
   {
-    id: 'rrb-ntpc-cbt1-mock1',
-    title: 'RRB NTPC (CBT-1) All India Live Mock Test',
-    examCode: 'rrb-ntpc',
-    examFamily: 'rrb',
-    type: 'live',
+    id: 'ssc-mts-2024-full-mock',
+    title: 'SSC MTS & Havaldar Official Previous Year Paper (Session 1 & 2)',
+    examCode: 'ssc-mts',
+    examFamily: 'ssc',
+    type: 'pyq',
     durationMinutes: 90,
-    totalMarks: 100,
-    totalQuestions: 5,
+    totalMarks: 270,
+    totalQuestions: 90,
+    difficulty: 'Session 1 (Qualifying) & Session 2 (Merit)',
     isPublished: true,
     sections: [
       {
-        id: 'rrb-math',
-        name: 'Mathematics',
-        questions: [
-          {
-            id: 'rq1',
-            qno: 1,
-            questionText: 'The simple interest on a certain sum of money for 3 years at 8% per annum is ₹1200. Find the compound interest for the same period and rate.',
-            questionTextHi: 'किसी राशि पर 8% प्रति वर्ष की दर से 3 वर्ष का साधारण ब्याज ₹1200 है। समान अवधि और दर के लिए चक्रवृद्धि ब्याज ज्ञात कीजिए।',
-            options: [
-              { id: 1, text: '₹1298.56', textHi: '₹1298.56' },
-              { id: 2, text: '₹1300.00', textHi: '₹1300.00' },
-              { id: 3, text: '₹1250.25', textHi: '₹1250.25' },
-              { id: 4, text: '₹1280.00', textHi: '₹1280.00' }
-            ],
-            correctOption: 1,
-            explanation: 'Principal P = (1200 * 100) / (3 * 8) = ₹5000. CI = 5000 * [(1 + 0.08)^3 - 1] = ₹1298.56.',
-            marks: 1,
-            negativeMarks: 0.33,
-            sectionName: 'Mathematics'
-          }
-        ]
+        id: 'mts-sess1',
+        name: 'Session 1: Numerical & Mathematical Ability (No Negative)',
+        questions: (bundledTests as any)[0]?.sections[2]?.questions?.slice(0, 20)?.map((q: any) => ({ ...q, marks: 3, negativeMarks: 0 })) || []
       },
       {
-        id: 'rrb-ga',
-        name: 'General Awareness',
-        questions: [
-          {
-            id: 'rq2',
-            qno: 2,
-            questionText: 'Where is the headquarters of Indian Railway situated?',
-            questionTextHi: 'भारतीय रेलवे का मुख्यालय कहाँ स्थित है?',
-            options: [
-              { id: 1, text: 'New Delhi', textHi: 'नई दिल्ली' },
-              { id: 2, text: 'Mumbai', textHi: 'मुंबई' },
-              { id: 3, text: 'Kolkata', textHi: 'कोलकाता' },
-              { id: 4, text: 'Chennai', textHi: 'चेन्नई' }
-            ],
-            correctOption: 1,
-            explanation: 'The Rail Bhavan in New Delhi serves as the headquarters of the Ministry of Railways.',
-            marks: 1,
-            negativeMarks: 0.33,
-            sectionName: 'General Awareness'
-          }
-        ]
+        id: 'mts-sess2',
+        name: 'Session 2: General Awareness & English Language (-1.0 Neg)',
+        questions: (bundledTests as any)[0]?.sections[1]?.questions?.slice(0, 25)?.map((q: any) => ({ ...q, marks: 3, negativeMarks: 1 })) || []
+      }
+    ]
+  },
+
+  // 7. SSC GD Constable
+  {
+    id: 'ssc-gd-constable-mock-1',
+    title: 'SSC GD Constable in CAPFs & Assam Rifles 80-Question Official Paper',
+    examCode: 'ssc-gd',
+    examFamily: 'ssc',
+    type: 'pyq',
+    durationMinutes: 60,
+    totalMarks: 160,
+    totalQuestions: 80,
+    difficulty: 'CBT Exam (+2.0 / -0.25)',
+    isPublished: true,
+    sections: [
+      {
+        id: 'gd-sec1',
+        name: 'Part A: General Intelligence & Reasoning (20 Qs)',
+        questions: (bundledTests as any)[0]?.sections[0]?.questions?.slice(0, 20)?.map((q: any) => ({ ...q, marks: 2, negativeMarks: 0.25 })) || []
+      },
+      {
+        id: 'gd-sec2',
+        name: 'Part B: General Knowledge & Elementary Mathematics (20 Qs)',
+        questions: (bundledTests as any)[0]?.sections[2]?.questions?.slice(0, 20)?.map((q: any) => ({ ...q, marks: 2, negativeMarks: 0.25 })) || []
+      }
+    ]
+  },
+
+  // 8. Delhi Police Constable
+  {
+    id: 'delhi-police-constable-mock-1',
+    title: 'Delhi Police Constable (Executive) Recruitment Official Paper',
+    examCode: 'delhi-police',
+    examFamily: 'ssc',
+    type: 'pyq',
+    durationMinutes: 90,
+    totalMarks: 100,
+    totalQuestions: 100,
+    difficulty: 'Delhi Police CBT (+1.0 / -0.25)',
+    isPublished: true,
+    sections: (bundledTests as any)[0]?.sections || []
+  },
+
+  // 9. RRB NTPC Graduate CBT 2
+  {
+    id: 'rrb-ntpc-grad-cbt2-mock-1',
+    title: 'RRB NTPC Graduate (CBT-2) Level 5 & 6 Station Master 120-Q Mock',
+    examCode: 'rrb-ntpc-grad-cbt2',
+    examFamily: 'rrb',
+    type: 'full_mock',
+    durationMinutes: 90,
+    totalMarks: 120,
+    totalQuestions: 107,
+    difficulty: 'CBT-2 120 Marks Pattern (+1.0 / -0.33)',
+    isPublished: true,
+    sections: (bundledTests as any)[4]?.sections || []
+  },
+
+  // 10. RRB NTPC UG CBT 1
+  {
+    id: 'rrb-ntpc-ug-cbt1-mock-1',
+    title: 'RRB NTPC Under-Graduate (12th Level CBT-1) Full Length Mock Test',
+    examCode: 'rrb-ntpc-ug-cbt1',
+    examFamily: 'rrb',
+    type: 'full_mock',
+    durationMinutes: 90,
+    totalMarks: 100,
+    totalQuestions: 107,
+    difficulty: 'CEN Under-Graduate (+1.0 / -0.33)',
+    isPublished: true,
+    sections: (bundledTests as any)[4]?.sections || []
+  },
+
+  // 11. RRB NTPC UG CBT 2
+  {
+    id: 'rrb-ntpc-ug-cbt2-mock-1',
+    title: 'RRB NTPC Under-Graduate (12th Level CBT-2) Level 2 & 3 Merit Paper',
+    examCode: 'rrb-ntpc-ug-cbt2',
+    examFamily: 'rrb',
+    type: 'full_mock',
+    durationMinutes: 90,
+    totalMarks: 120,
+    totalQuestions: 107,
+    difficulty: 'Level 2 & 3 Merit (+1.0 / -0.33)',
+    isPublished: true,
+    sections: (bundledTests as any)[4]?.sections || []
+  },
+
+  // 12. RRB Section Controller
+  {
+    id: 'rrb-section-controller-mock-1',
+    title: 'RRB Section Controller & Station Master Operating Cadre CBT Mock',
+    examCode: 'rrb-section-controller',
+    examFamily: 'rrb',
+    type: 'full_mock',
+    durationMinutes: 90,
+    totalMarks: 120,
+    totalQuestions: 107,
+    difficulty: 'Operating Cadre (+1.0 / -0.33)',
+    isPublished: true,
+    sections: (bundledTests as any)[4]?.sections || []
+  },
+
+  // 13. RRB Group D
+  {
+    id: 'rrb-group-d-cbt-mock-1',
+    title: 'RRB Group D (Level-1 CEN RRC) All-India CBT Practice Paper',
+    examCode: 'rrb-group-d',
+    examFamily: 'rrb',
+    type: 'full_mock',
+    durationMinutes: 90,
+    totalMarks: 100,
+    totalQuestions: 107,
+    difficulty: '100 Qs (+1.0 / -0.33)',
+    isPublished: true,
+    sections: (bundledTests as any)[4]?.sections || []
+  },
+
+  // 14. RRB ALP
+  {
+    id: 'rrb-alp-cbt1-mock-1',
+    title: 'RRB Assistant Loco Pilot & Technician (CEN 01/2024) First Stage CBT-1',
+    examCode: 'rrb-alp',
+    examFamily: 'rrb',
+    type: 'full_mock',
+    durationMinutes: 60,
+    totalMarks: 75,
+    totalQuestions: 50,
+    difficulty: 'First Stage CBT (+1.0 / -0.33)',
+    isPublished: true,
+    sections: [
+      {
+        id: 'alp-math',
+        name: 'Mathematics & General Science',
+        questions: (bundledTests as any)[3]?.sections[0]?.questions || []
       }
     ]
   }
 ];
 
-// In-memory tests store (seeded with sample tests + bundled real tests, dynamically grows when answer keys are pushed)
+// In-memory tests store
 const initialList: CBTTest[] = [
   ...(bundledTests as unknown as CBTTest[]),
   ...INITIAL_TESTS
 ];
 
-const testsStore = new Map<string, CBTTest>(initialList.map(t => [t.id, t]));
+const testsStore = new Map<string, CBTTest>(initialList.map((t) => [t.id, t]));
 
 export function getAvailableTests(filterExam?: string): CBTTest[] {
   const all = Array.from(testsStore.values());
   if (filterExam && filterExam !== 'all') {
-    return all.filter(t => t.examCode === filterExam || t.examFamily === filterExam);
+    return all.filter((t) => {
+      const code = t.examCode.toLowerCase();
+      const filter = filterExam.toLowerCase();
+      return code.includes(filter) || t.examFamily === filter;
+    });
   }
   return all;
 }
 
 export function getTestById(id: string): CBTTest | undefined {
-  return testsStore.get(id);
+  if (testsStore.has(id)) {
+    return testsStore.get(id);
+  }
+
+  // Dynamic Chapter Test
+  if (id.startsWith('ch-')) {
+    const parts = id.split('-'); // e.g. ch-math-trigonometry-&-heights-distances-20
+    const subject = parts[1] as 'math' | 'reasoning' | 'english' | 'ga';
+    const count = parseInt(parts[parts.length - 1], 10) || 20;
+    const chapterSlug = parts.slice(2, -1).join('-');
+
+    const availableChapters = CHAPTER_TAXONOMY[subject] || [];
+    const matchedChapter = availableChapters.find((ch) =>
+      encodeURIComponent(ch).replace(/%20/g, '-').toLowerCase() === chapterSlug ||
+      ch.toLowerCase().includes(chapterSlug.replace(/-/g, ' ').toLowerCase())
+    ) || availableChapters[0] || 'Chapter Practice';
+
+    const test = generateChapterTest(subject, matchedChapter, count);
+    test.id = id;
+    testsStore.set(id, test);
+    return test;
+  }
+
+  // Dynamic Sectional Test
+  if (id.startsWith('sec-')) {
+    const parts = id.split('-'); // e.g. sec-ssc-cgl-tier1-quantitative-aptitude
+    const examCode = `${parts[1]}-${parts[2]}-${parts[3] || 'tier1'}`;
+    const sectionName = parts.slice(3).join(' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    const test = generateSectionalTest(examCode, sectionName || 'Sectional Speed Booster');
+    test.id = id;
+    testsStore.set(id, test);
+    return test;
+  }
+
+  // Dynamic Full Mock
+  if (id.startsWith('smart-mock-')) {
+    const examCode = id.replace('smart-mock-', '');
+    const test = generateSmartFullMock(examCode);
+    testsStore.set(id, test);
+    return test;
+  }
+
+  return undefined;
 }
 
 export function registerNewTest(test: CBTTest): void {
