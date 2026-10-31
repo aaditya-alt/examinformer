@@ -48,7 +48,7 @@ export default function CBTResultPage({
   const [filterSection, setFilterSection] = useState<string>('all');
 
   useEffect(() => {
-    const cached = sessionStorage.getItem(`cbt_result_${id}`);
+    const cached = sessionStorage.getItem(`cbt_result_${id}`) || localStorage.getItem(`cbt_result_${id}`);
     if (cached) {
       try {
         const parsed = JSON.parse(cached);
@@ -130,7 +130,13 @@ export default function CBTResultPage({
     );
   }
 
-  const allQuestions = test.sections.flatMap(s => s.questions);
+  const allQuestions = (test?.sections || []).flatMap(s => (s.questions || []).map(q => ({
+    ...q,
+    sectionName: s.name,
+    marks: Number(q.marks) || 2,
+    negativeMarks: Number(q.negativeMarks) || 0.5,
+    options: Array.isArray(q.options) ? q.options : []
+  })));
   const correctCount = resultData.correct ?? resultData.correctCount ?? 0;
   const wrongCount = resultData.wrong ?? resultData.wrongCount ?? 0;
   const attemptedCount = resultData.attempted ?? (correctCount + wrongCount);
@@ -714,7 +720,7 @@ export default function CBTResultPage({
 
                   {/* Options */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
-                    {q.options.map((opt) => {
+                    {(q.options || []).map((opt) => {
                       const isUserPick = resp?.chosenOption === opt.id;
                       const isRight = q.correctOption === opt.id;
 

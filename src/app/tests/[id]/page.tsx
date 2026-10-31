@@ -106,50 +106,86 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     if (testObj.hasSectionalTiming === false) return false;
     const code = (testObj.examCode || '').toLowerCase();
     const id = (testObj.id || '').toLowerCase();
-    // SSC exams (CGL, CHSL, MTS, CPO, GD) and any sectional test strictly enforce sectional timers
-    if (code.includes('cgl') || code.includes('chsl') || code.includes('mts') || code.includes('cpo') || code.includes('gd') || code.includes('ssc') || id.startsWith('sec-') || testObj.type === 'sectional') {
+    const title = (testObj.title || '').toLowerCase();
+    // SSC CGL Tier 1 & Tier 2, SSC CHSL Tier 1 & Tier 2, MTS, CPO, GD, and any sectional mock
+    if (
+      code.includes('cgl') ||
+      code.includes('chsl') ||
+      code.includes('tier1') ||
+      code.includes('tier2') ||
+      code.includes('tier-1') ||
+      code.includes('tier-2') ||
+      title.includes('cgl') ||
+      title.includes('chsl') ||
+      title.includes('tier 1') ||
+      title.includes('tier 2') ||
+      title.includes('tier-1') ||
+      title.includes('tier-2') ||
+      code.includes('mts') ||
+      code.includes('cpo') ||
+      code.includes('gd') ||
+      id.startsWith('sec-') ||
+      testObj.type === 'sectional'
+    ) {
       return true;
     }
     // Any test that defines sectional timing or has multiple sections
-    if (testObj.hasSectionalTiming || (testObj.sections && testObj.sections.length > 1)) {
-      return true;
-    }
-    return false;
+    return Boolean(testObj.hasSectionalTiming || (testObj.sections && testObj.sections.length > 1));
   };
 
   const getExamSectionTimingMinutes = (testObj: CBTTest | null, sIdx: number): number => {
     if (!testObj) return 15;
     const code = (testObj.examCode || '').toLowerCase();
-    const secName = (testObj.sections[sIdx]?.name || '').toLowerCase();
+    const id = (testObj.id || '').toLowerCase();
+    const title = (testObj.title || '').toLowerCase();
+    const secName = (testObj.sections?.[sIdx]?.name || '').toLowerCase();
 
-    // SSC CGL Tier 1 / CHSL Tier 1: 15 min each
-    if (code.includes('cgl-tier1') || code.includes('chsl-tier1') || code.includes('tier1')) {
-      return 15;
-    }
-    // SSC CGL Tier 2 (Mains): 30 min math, 30 min reasoning, 40 min english, 20 min gk
-    if (code.includes('cgl-tier2') || code.includes('tier2')) {
-      if (secName.includes('math') || secName.includes('numerical')) return 30;
+    // SSC CGL Tier 2 / CHSL Tier 2 (Mains): 30m Math, 30m Reasoning, 40m English, 20m GK, 15m Computer
+    if (
+      code.includes('tier2') ||
+      code.includes('tier-2') ||
+      id.includes('tier2') ||
+      id.includes('tier-2') ||
+      title.includes('tier 2') ||
+      title.includes('tier-2') ||
+      title.includes('tier ii') ||
+      title.includes('mains')
+    ) {
+      if (secName.includes('math') || secName.includes('numerical') || secName.includes('quant')) return 30;
       if (secName.includes('reason') || secName.includes('intelligence')) return 30;
-      if (secName.includes('english') || secName.includes('comprehension')) return 40;
-      if (secName.includes('awareness') || secName.includes('gk') || secName.includes('ga')) return 20;
+      if (secName.includes('english') || secName.includes('comprehension') || secName.includes('language')) return 40;
+      if (secName.includes('awareness') || secName.includes('gk') || secName.includes('ga') || secName.includes('general')) return 20;
+      if (secName.includes('computer')) return 15;
       return 30;
     }
-    // SSC CHSL Tier 2: 60m math & reasoning, 60m english & ga, 15m computer
-    if (code.includes('chsl-tier2')) {
-      if (secName.includes('computer')) return 15;
-      return 60;
+
+    // SSC CGL Tier 1 / CHSL Tier 1: 15 min each for all 4 sections
+    if (
+      code.includes('tier1') ||
+      code.includes('tier-1') ||
+      id.includes('tier1') ||
+      id.includes('tier-1') ||
+      title.includes('tier 1') ||
+      title.includes('tier-1') ||
+      title.includes('tier i') ||
+      code.includes('cgl') ||
+      code.includes('chsl')
+    ) {
+      return 15;
     }
+
     // SSC MTS: Session 1 (45m), Session 2 (45m)
-    if (code.includes('mts')) {
+    if (code.includes('mts') || title.includes('mts')) {
       return 45;
     }
+
     return testObj.sectionalTimingMinutes || 15;
   };
 
   // 1. Fetch test data and verify solution access or restore paused session
   useEffect(() => {
     if (isSolutionMode) {
-      const cached = sessionStorage.getItem(`cbt_result_${testId}`);
+      const cached = sessionStorage.getItem(`cbt_result_${testId}`) || localStorage.getItem(`cbt_result_${testId}`);
       if (cached) {
         try {
           const parsed = JSON.parse(cached);
@@ -160,6 +196,29 @@ function EduquityCBTContent({ testId }: { testId: string }) {
         } catch (e) {
           console.error('Failed to parse cached test result:', e);
         }
+      } else {
+        // Fallback: Fetch candidate attempt from database so solution always opens without error
+        fetch(`/api/attempts?testId=${testId}&limit=1`)
+          .then(res => res.json())
+          .then(json => {
+            if (json.success && json.attempts && json.attempts.length > 0) {
+              const att = json.attempts[0];
+              const parsed = {
+                testId: att.test_id,
+                finalScore: att.total_score,
+                userResponses: att.responses || {}
+              };
+              setTestResultCache(parsed);
+              if (att.responses) {
+                setUserResponses(att.responses);
+              }
+            } else {
+              setTestResultCache({ testId, userResponses: {} });
+            }
+          })
+          .catch(() => {
+            setTestResultCache({ testId, userResponses: {} });
+          });
       }
     }
 
@@ -518,28 +577,52 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   };
 
   const goToNextQuestion = () => {
-    if (activeQuestionIdx < (currentSection?.questions?.length || 0) - 1) {
+    const curSecQs = currentSection?.questions || [];
+    if (activeQuestionIdx < curSecQs.length - 1) {
       setActiveQuestionIdx(activeQuestionIdx + 1);
-    } else if (activeSectionIdx < (test?.sections?.length || 0) - 1) {
-      if (!lockedSections[activeSectionIdx + 1] || isSolutionMode) {
-        const nextIdx = activeSectionIdx + 1;
-        setActiveSectionIdx(nextIdx);
-        setActiveQuestionIdx(0);
+    } else if (!isSectionalTimingApplicable(test) || isSolutionMode) {
+      if (activeSectionIdx < (test?.sections?.length || 0) - 1) {
+        if (!lockedSections[activeSectionIdx + 1] || isSolutionMode) {
+          const nextIdx = activeSectionIdx + 1;
+          setActiveSectionIdx(nextIdx);
+          setActiveQuestionIdx(0);
+        }
       }
+    } else {
+      // In sectional timing: candidate reached the end of current section and must submit section or wait for timer
+      setSectionAlertMsg(`You have reached the last question of "${currentSection.name}". Click "Submit Section" when ready to proceed to the next section.`);
+      setTimeout(() => setSectionAlertMsg(null), 5000);
     }
   };
 
   const goToPrevQuestion = () => {
     if (activeQuestionIdx > 0) {
       setActiveQuestionIdx(activeQuestionIdx - 1);
-    } else if (activeSectionIdx > 0 && (!lockedSections[activeSectionIdx - 1] || isSolutionMode)) {
-      const prevIdx = activeSectionIdx - 1;
-      setActiveSectionIdx(prevIdx);
-      setActiveQuestionIdx((test?.sections?.[prevIdx]?.questions?.length || 1) - 1);
+    } else if (!isSectionalTimingApplicable(test) || isSolutionMode) {
+      if (activeSectionIdx > 0 && (!lockedSections[activeSectionIdx - 1] || isSolutionMode)) {
+        const prevIdx = activeSectionIdx - 1;
+        setActiveSectionIdx(prevIdx);
+        setActiveQuestionIdx((test?.sections?.[prevIdx]?.questions?.length || 1) - 1);
+      }
+    } else {
+      // In sectional timing: candidate cannot go back to previous section
+      setSectionAlertMsg(`You are on the first question of "${currentSection.name}". Previous sections are locked under official exam rules.`);
+      setTimeout(() => setSectionAlertMsg(null), 4000);
     }
   };
 
   const handlePaletteClick = (secIdx: number, qIdx: number, targetQno: number) => {
+    if (!isSolutionMode && isSectionalTimingApplicable(test)) {
+      if (secIdx < activeSectionIdx || lockedSections[secIdx]) {
+        alert('This section has already been submitted and is locked under official examination rules. You cannot return to previous sections.');
+        return;
+      }
+      if (secIdx > activeSectionIdx) {
+        alert(`Under examination rules, you cannot proceed to "${test?.sections?.[secIdx]?.name || 'the next section'}" until you complete and submit the current section.`);
+        return;
+      }
+    }
+
     if (!isSolutionMode && lockedSections[secIdx]) {
       alert('This section has expired and is locked under Eduquity SSC examination rules.');
       return;
@@ -699,6 +782,9 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     localStorage.removeItem(pauseStorageKey);
 
     sessionStorage.setItem(`cbt_result_${test.id}`, JSON.stringify(resultPayload));
+    try {
+      localStorage.setItem(`cbt_result_${test.id}`, JSON.stringify(resultPayload));
+    } catch {}
     router.push(`/tests/${test.id}/result?attemptId=${(resultPayload as any).attemptId || ''}`);
   };
 
@@ -1040,28 +1126,37 @@ function EduquityCBTContent({ testId }: { testId: string }) {
         <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none">
           {test.sections.map((sec, sIdx) => {
             const isActive = activeSectionIdx === sIdx;
-            const isLocked = !isSolutionMode && lockedSections[sIdx];
+            const isPastLocked = !isSolutionMode && (lockedSections[sIdx] || (isSectionalTimingApplicable(test) && sIdx < activeSectionIdx));
+            const isFutureLocked = !isSolutionMode && isSectionalTimingApplicable(test) && sIdx > activeSectionIdx;
+
             return (
               <button
                 key={sec.id}
                 type="button"
                 onClick={() => {
-                  if (isLocked) {
-                    alert(`Section "${sec.name}" has already been submitted and is locked.`);
+                  if (isPastLocked) {
+                    alert(`Section "${sec.name}" has already been submitted and is locked under official exam rules.`);
+                    return;
+                  }
+                  if (isFutureLocked) {
+                    alert(`Under official examination rules, you cannot proceed to "${sec.name}" until you submit or finish the current section.`);
                     return;
                   }
                   setActiveSectionIdx(sIdx);
                   setActiveQuestionIdx(0);
                 }}
+                disabled={isPastLocked || isFutureLocked}
                 className={`px-3 py-1 rounded text-xs font-black uppercase tracking-wider transition whitespace-nowrap ${
-                  isLocked
-                    ? 'bg-slate-300 text-slate-600 cursor-not-allowed'
+                  isPastLocked
+                    ? 'bg-slate-300 text-slate-500 cursor-not-allowed border border-slate-300'
+                    : isFutureLocked
+                    ? 'bg-slate-100 text-slate-400 cursor-not-allowed border border-dashed border-slate-300'
                     : isActive
                     ? 'bg-[#15803d] text-white shadow-xs'
                     : 'bg-[#166534] text-emerald-100 hover:bg-[#15803d]'
                 }`}
               >
-                {sec.name} {isLocked ? '🔒' : ''}
+                {sec.name} {isPastLocked ? '🔒' : isFutureLocked ? '🔒' : ''}
               </button>
             );
           })}
@@ -1137,7 +1232,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
         {/* Right Info: Marks & Total Answered */}
         <div className="flex items-center gap-2 sm:gap-3 text-xs text-slate-700 whitespace-nowrap">
           <span className="hidden md:inline">
-            Marks for correct answer: <strong className="text-slate-900">{currentQuestion.marks.toFixed(2)}</strong> | Negative: <strong className="text-slate-900">{currentQuestion.negativeMarks.toFixed(2)}</strong>
+            Marks for correct answer: <strong className="text-slate-900">{(Number(currentQuestion?.marks) || 2).toFixed(2)}</strong> | Negative: <strong className="text-slate-900">{(Number(currentQuestion?.negativeMarks) || 0.5).toFixed(2)}</strong>
           </span>
           <span>
             Total Questions Answered: <strong className="text-rose-600 font-black text-sm">{totalAnsweredCount}</strong>
@@ -1246,13 +1341,13 @@ function EduquityCBTContent({ testId }: { testId: string }) {
 
             {/* Options List with Clean Round Radio Buttons */}
             <div className="space-y-0 pt-2 max-w-3xl border-t border-slate-200">
-              {currentQuestion.options.map((opt) => {
+              {(currentQuestion?.options || []).map((opt) => {
                 const optText = language === 'hi' && opt.textHi ? opt.textHi : opt.text;
                 
                 const isSelectedInExam = !isSolutionMode && currentResponse.chosenOption === opt.id;
                 const isSelectedInReattempt = isSolutionMode && reattemptMode && reattemptChoices[qno] === opt.id;
                 
-                const isOfficialCorrect = isSolutionMode && isQuestionSolutionVisible && opt.id === currentQuestion.correctOption;
+                const isOfficialCorrect = isSolutionMode && isQuestionSolutionVisible && opt.id === currentQuestion?.correctOption;
                 const isUserAttempted = isSolutionMode && isQuestionSolutionVisible && currentResponse.chosenOption === opt.id;
                 const isUserWrongChoice = isSolutionMode && isUserAttempted && !isOfficialCorrect;
 
@@ -1345,18 +1440,18 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                   </div>
                   <div className="flex items-center gap-2 text-xs">
                     <span className="text-slate-400 font-medium">Marks:</span>
-                    <span className="font-bold text-emerald-600 dark:text-emerald-400">+{currentQuestion.marks}</span>
-                    <span className="font-bold text-rose-500 dark:text-rose-400">-{currentQuestion.negativeMarks}</span>
+                    <span className="font-bold text-emerald-600 dark:text-emerald-400">+{currentQuestion?.marks || 2}</span>
+                    <span className="font-bold text-rose-500 dark:text-rose-400">-{currentQuestion?.negativeMarks || 0.5}</span>
                   </div>
                 </div>
 
                 <div className="prose prose-sm max-w-none text-slate-800 dark:text-slate-200 leading-relaxed font-normal">
                   <MathRenderer
                     content={
-                      (language === 'hi' && (currentQuestion as any).explanationHi)
+                      (language === 'hi' && (currentQuestion as any)?.explanationHi)
                         ? (currentQuestion as any).explanationHi
-                        : currentQuestion.explanation ||
-                          `**Official Solution:** Option (${currentQuestion.correctOption}) is the correct answer according to official SSC/RRB answer key standards.`
+                        : currentQuestion?.explanation ||
+                          `**Official Solution:** Option (${currentQuestion?.correctOption || 1}) is the correct answer according to official SSC/RRB answer key standards.`
                     }
                   />
                 </div>
@@ -1388,7 +1483,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                     </span>
                     <span className="text-slate-300 dark:text-slate-700">|</span>
                     <span className="text-emerald-700 dark:text-emerald-400">
-                      Official Key: <strong>Option ({currentQuestion.correctOption})</strong>
+                      Official Key: <strong>Option ({currentQuestion?.correctOption || 1})</strong>
                     </span>
                   </div>
                   <div className="text-[11px] text-slate-500 dark:text-slate-400">

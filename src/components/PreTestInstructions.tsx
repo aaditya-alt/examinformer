@@ -39,25 +39,49 @@ export function PreTestInstructions({
   // Compute section timings
   const getSectionTime = (sIdx: number): number => {
     const code = (test.examCode || '').toLowerCase();
+    const id = (test.id || '').toLowerCase();
+    const title = (test.title || '').toLowerCase();
     const secName = (test.sections[sIdx]?.name || '').toLowerCase();
 
-    if (code.includes('cgl-tier1') || code.includes('chsl-tier1') || code.includes('tier1')) {
-      return 15;
-    }
-    if (code.includes('cgl-tier2') || code.includes('tier2')) {
-      if (secName.includes('math') || secName.includes('numerical')) return 30;
+    // SSC CGL Tier 2 / CHSL Tier 2 (Mains): 30m Math, 30m Reasoning, 40m English, 20m GK, 15m Computer
+    if (
+      code.includes('tier2') ||
+      code.includes('tier-2') ||
+      id.includes('tier2') ||
+      id.includes('tier-2') ||
+      title.includes('tier 2') ||
+      title.includes('tier-2') ||
+      title.includes('tier ii') ||
+      title.includes('mains')
+    ) {
+      if (secName.includes('math') || secName.includes('numerical') || secName.includes('quant')) return 30;
       if (secName.includes('reason') || secName.includes('intelligence')) return 30;
-      if (secName.includes('english') || secName.includes('comprehension')) return 40;
-      if (secName.includes('awareness') || secName.includes('gk') || secName.includes('ga')) return 20;
+      if (secName.includes('english') || secName.includes('comprehension') || secName.includes('language')) return 40;
+      if (secName.includes('awareness') || secName.includes('gk') || secName.includes('ga') || secName.includes('general')) return 20;
+      if (secName.includes('computer')) return 15;
       return 30;
     }
-    if (code.includes('chsl-tier2')) {
-      if (secName.includes('computer')) return 15;
-      return 60;
+
+    // SSC CGL Tier 1 / CHSL Tier 1: 15 min each
+    if (
+      code.includes('tier1') ||
+      code.includes('tier-1') ||
+      id.includes('tier1') ||
+      id.includes('tier-1') ||
+      title.includes('tier 1') ||
+      title.includes('tier-1') ||
+      title.includes('tier i') ||
+      code.includes('cgl') ||
+      code.includes('chsl')
+    ) {
+      return 15;
     }
-    if (code.includes('mts')) {
+
+    // SSC MTS: Session 1 (45m), Session 2 (45m)
+    if (code.includes('mts') || title.includes('mts')) {
       return 45;
     }
+
     return test.sectionalTimingMinutes || Math.floor(test.durationMinutes / Math.max(1, test.sections.length));
   };
 
