@@ -561,32 +561,47 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     } catch (e) {}
   }, [testId, qno, currentQuestion]);
 
-  const toggleSaveQuestion = () => {
+  const toggleSaveQuestion = async () => {
     if (!currentQuestion) return;
     try {
       const raw = localStorage.getItem('examinformer_saved_questions');
       let list = raw ? JSON.parse(raw) : [];
       const itemKey = currentQuestion.id || `${testId}_${qno}`;
-      const exists = list.some((item: any) => item.id === itemKey);
+      const exists = list.some((item: any) => (item.id === itemKey || item.questionId === itemKey));
+
+      const questionPayload = {
+        id: itemKey,
+        questionId: itemKey,
+        testId,
+        testTitle: test?.title,
+        qno,
+        questionText: currentQuestion.questionText,
+        questionHindi: currentQuestion.questionTextHi,
+        questionTextHi: currentQuestion.questionTextHi,
+        options: currentQuestion.options,
+        correctOption: currentQuestion.correctOption,
+        explanation: currentQuestion.explanation,
+        sectionName: currentSection.name,
+        examOrigin: currentQuestion.examOrigin || test?.title,
+        savedAt: Date.now()
+      };
+
       if (exists) {
-        list = list.filter((item: any) => item.id !== itemKey);
+        list = list.filter((item: any) => (item.id !== itemKey && item.questionId !== itemKey));
         setIsQuestionBookmarked(false);
+        if (user?.id) {
+          fetch(`/api/saved-questions?userId=${user.id}&questionId=${itemKey}`, { method: 'DELETE' }).catch(() => {});
+        }
       } else {
-        list.push({
-          id: itemKey,
-          testId,
-          testTitle: test?.title,
-          qno,
-          questionText: currentQuestion.questionText,
-          questionTextHi: currentQuestion.questionTextHi,
-          options: currentQuestion.options,
-          correctOption: currentQuestion.correctOption,
-          explanation: currentQuestion.explanation,
-          sectionName: currentSection.name,
-          examOrigin: currentQuestion.examOrigin || test?.title,
-          savedAt: Date.now()
-        });
+        list.push(questionPayload);
         setIsQuestionBookmarked(true);
+        if (user?.id) {
+          fetch('/api/saved-questions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: user.id, question: questionPayload })
+          }).catch(() => {});
+        }
       }
       localStorage.setItem('examinformer_saved_questions', JSON.stringify(list));
     } catch (e) {}
@@ -816,27 +831,41 @@ function EduquityCBTContent({ testId }: { testId: string }) {
       rollNumber: user?.rollNumber || '2402094182'
     };
 
-    if (supabase) {
-      try {
-        await supabase.from('test_attempts').insert({
-          test_id: test.id,
-          user_id: user?.id || `guest_${Date.now()}`,
-          candidate_name: user?.name || 'Aspirant',
-          total_score: finalScore,
-          accuracy: accuracy,
-          time_taken_seconds: timeTaken,
-          responses: userResponses
-        });
-      } catch (err) {
-        console.warn('Could not persist attempt to Supabase:', err);
+    // Persist complete examination attempt & question-level metrics directly into Supabase database
+    try {
+      const resp = await fetch('/api/attempts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          testId: test.id,
+          userId: user?.id || `guest_${Date.now()}`,
+          candidateName: user?.name || 'Aspirant',
+          totalScore: finalScore,
+          accuracy,
+          timeTakenSeconds: timeTaken,
+          responses: userResponses,
+          sectionsBreakdown: {
+            s1Score,
+            s2Score,
+            attempted: attemptedCount,
+            correct: correctCount,
+            wrong: wrongCount
+          }
+        })
+      });
+      const attemptRes = await resp.json();
+      if (attemptRes.attemptId) {
+        (resultPayload as any).attemptId = attemptRes.attemptId;
       }
+    } catch (err) {
+      console.warn('Could not persist attempt to Supabase via /api/attempts:', err);
     }
 
     // Clean up paused session from localStorage
     localStorage.removeItem(pauseStorageKey);
 
     sessionStorage.setItem(`cbt_result_${test.id}`, JSON.stringify(resultPayload));
-    router.push(`/tests/${test.id}/result`);
+    router.push(`/tests/${test.id}/result?attemptId=${(resultPayload as any).attemptId || ''}`);
   };
 
   // Only visible when in solution mode and (reattempt is OFF or revealed for this specific question)

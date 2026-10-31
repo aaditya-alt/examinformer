@@ -53,20 +53,16 @@ export default function CandidateProfilePage() {
     setLoading(true);
     const list: AttemptRecord[] = [];
 
-    // 1. Fetch from Supabase if configured
-    if (user && isSupabaseConfigured && supabase) {
+    // 1. Fetch directly from Supabase via /api/attempts
+    if (user?.id) {
       try {
-        const { data, error } = await supabase
-          .from('test_attempts')
-          .select('id, test_id, total_score, accuracy, time_taken_seconds, created_at, status')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false });
-
-        if (!error && data) {
-          list.push(...data);
+        const res = await fetch(`/api/attempts?userId=${user.id}`);
+        const json = await res.json();
+        if (json.success && Array.isArray(json.attempts)) {
+          list.push(...json.attempts);
         }
       } catch (err) {
-        console.warn('Could not load attempts from Supabase:', err);
+        console.warn('Could not load attempts from /api/attempts:', err);
       }
     }
 

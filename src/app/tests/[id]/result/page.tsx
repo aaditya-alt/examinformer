@@ -59,6 +59,31 @@ export default function CBTResultPage({
       } catch (e) {
         console.error('Failed to parse result cache:', e);
       }
+    } else {
+      // Fallback: Fetch directly from Supabase database test_attempts table
+      fetch(`/api/attempts?testId=${id}&limit=1`)
+        .then(res => res.json())
+        .then(json => {
+          if (json.success && json.attempts && json.attempts.length > 0) {
+            const att = json.attempts[0];
+            const responses = att.responses || {};
+            const resObj = {
+              testId: att.test_id,
+              finalScore: Number(att.total_score) || 0,
+              accuracyPercentage: Number(att.accuracy) || 0,
+              timeTakenSeconds: Number(att.time_taken_seconds) || 0,
+              userResponses: responses,
+              candidateName: att.candidate_name,
+              totalQuestions: 100,
+              totalMarks: 200
+            };
+            setResultData(resObj);
+            if (resObj.finalScore > 0) {
+              confetti({ particleCount: 70, spread: 80, origin: { y: 0.6 } });
+            }
+          }
+        })
+        .catch(e => console.warn('Could not fetch attempt from Supabase:', e));
     }
 
     fetch(`/api/tests/${id}`)
@@ -70,7 +95,7 @@ export default function CBTResultPage({
       })
       .finally(() => setLoading(false));
 
-    // Fetch live portal analytics & real peer attempt stats
+    // Fetch live portal analytics & real peer attempt stats from Supabase
     fetch(`/api/tests/${id}/analytics`)
       .then(res => res.json())
       .then(json => {

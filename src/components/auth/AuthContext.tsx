@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [authModalMessage, setAuthModalMessage] = useState('');
 
   useEffect(() => {
-    // 1. Check local session
+    // 1. Initial cached profile check
     const savedUser = localStorage.getItem('ei_user_profile');
     if (savedUser) {
       try {
@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     }
 
-    // 2. Supabase session check if configured
+    // 2. Supabase session synchronization
     if (supabase) {
       supabase.auth.getSession().then(({ data: { session } }) => {
         if (session?.user) {
@@ -103,118 +103,92 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signIn = async (emailOrPhone: string, pass: string) => {
-    const input = emailOrPhone.trim();
-    // Check if input is phone or email
-    const isEmail = input.includes('@');
-    const targetEmail = isEmail ? input : `${input}@candidate.examinformer.in`;
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emailOrPhone, password: pass })
+      });
 
-    if (supabase) {
-      const { data, error } = await supabase.auth.signInWithPassword({ email: targetEmail, password: pass });
-      if (!error && data.user) {
-        const meta = data.user.user_metadata || {};
-        const profile: UserProfile = {
-          id: data.user.id,
-          email: data.user.email || '',
-          name: meta.full_name || meta.name || input.split('@')[0] || 'Candidate',
-          phone: meta.phone || (isEmail ? '' : input),
-          rollNumber: meta.roll_number || '2402' + Math.floor(100000 + Math.random() * 900000),
-          category: meta.category || 'UR'
-        };
-        setUser(profile);
-        localStorage.setItem('ei_user_profile', JSON.stringify(profile));
-        setAuthModalOpen(false);
-        return {};
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        // Fallback local check if network error or server message
+        const storedUsersRaw = localStorage.getItem('ei_registered_accounts');
+        const registeredList: any[] = storedUsersRaw ? JSON.parse(storedUsersRaw) : [];
+        const cleanInput = emailOrPhone.trim().toLowerCase();
+        const matched = registeredList.find(
+          (u) => (u.email.toLowerCase() === cleanInput || u.phone === cleanInput) && u.password === pass
+        );
+
+        if (matched) {
+          const profile: UserProfile = {
+            id: matched.id,
+            email: matched.email,
+            name: matched.name,
+            phone: matched.phone,
+            rollNumber: matched.rollNumber,
+            category: matched.category || 'UR'
+          };
+          setUser(profile);
+          localStorage.setItem('ei_user_profile', JSON.stringify(profile));
+          setAuthModalOpen(false);
+          return {};
+        }
+
+        return { error: data.error || 'Invalid credentials. Please verify and try again.' };
       }
-    }
 
-    // Seamless Local Fallback Authentication
-    const storedUsersRaw = localStorage.getItem('ei_registered_accounts');
-    const registeredList: any[] = storedUsersRaw ? JSON.parse(storedUsersRaw) : [];
-    const matched = registeredList.find(
-      (u) => (u.email.toLowerCase() === input.toLowerCase() || u.phone === input) && u.password === pass
-    );
-
-    if (matched) {
-      const profile: UserProfile = {
-        id: matched.id,
-        email: matched.email,
-        name: matched.name,
-        phone: matched.phone,
-        rollNumber: matched.rollNumber,
-        category: matched.category || 'UR'
-      };
-      setUser(profile);
-      localStorage.setItem('ei_user_profile', JSON.stringify(profile));
+      // Success from Supabase database
+      setUser(data.user);
+      localStorage.setItem('ei_user_profile', JSON.stringify(data.user));
       setAuthModalOpen(false);
       return {};
+    } catch (err: any) {
+      console.error('Sign in error:', err);
+      return { error: 'Network error. Please try again.' };
     }
-
-    // If new credentials in local fallback, create instant candidate session
-    const fallbackProfile: UserProfile = {
-      id: 'usr_' + Date.now(),
-      email: isEmail ? input : `${input}@student.in`,
-      name: isEmail ? input.split('@')[0] : `Aspirant ${input.slice(-4)}`,
-      phone: isEmail ? '9990287066' : input,
-      rollNumber: '2402' + Math.floor(100000 + Math.random() * 900000),
-      category: 'UR'
-    };
-    setUser(fallbackProfile);
-    localStorage.setItem('ei_user_profile', JSON.stringify(fallbackProfile));
-    setAuthModalOpen(false);
-    return {};
   };
 
   const signUp = async ({ name, email, phone, pass }: { name: string; email: string; phone: string; pass: string }) => {
-    const cleanEmail = email.trim().toLowerCase();
-    const cleanPhone = phone.trim();
-    const cleanName = name.trim();
-    const rollNumber = '2402' + Math.floor(100000 + Math.random() * 900000);
-
-    const profile: UserProfile = {
-      id: 'usr_' + Date.now(),
-      email: cleanEmail,
-      name: cleanName,
-      phone: cleanPhone,
-      rollNumber,
-      category: 'UR',
-      createdAt: new Date().toISOString()
-    };
-
-    // Save to local registry
     try {
-      const storedUsersRaw = localStorage.getItem('ei_registered_accounts');
-      const registeredList: any[] = storedUsersRaw ? JSON.parse(storedUsersRaw) : [];
-      registeredList.push({ ...profile, password: pass });
-      localStorage.setItem('ei_registered_accounts', JSON.stringify(registeredList));
-    } catch {}
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, phone, password: pass })
+      });
 
-    // Register to Supabase without email confirmation barrier
-    if (supabase) {
-      try {
-        const { data, error } = await supabase.auth.signUp({
-          email: cleanEmail,
-          password: pass,
-          options: {
-            data: {
-              full_name: cleanName,
-              phone: cleanPhone,
-              roll_number: rollNumber
-            }
-          }
-        });
-        if (data?.user) {
-          profile.id = data.user.id;
-        }
-      } catch (err) {
-        console.warn('Supabase signup fallback to local account:', err);
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        return { error: data.error || 'Registration could not be completed.' };
       }
-    }
 
-    // Set user directly into active session
-    setUser(profile);
-    localStorage.setItem('ei_user_profile', JSON.stringify(profile));
-    setAuthModalOpen(false);
-    return {};
+      // Automatically sign in candidate with newly created Supabase credentials
+      if (supabase) {
+        await supabase.auth.signInWithPassword({
+          email: email.trim().toLowerCase(),
+          password: pass
+        }).catch(() => {});
+      }
+
+      setUser(data.user);
+      localStorage.setItem('ei_user_profile', JSON.stringify(data.user));
+
+      // Also keep local cached record for fast offline fallback
+      try {
+        const storedUsersRaw = localStorage.getItem('ei_registered_accounts');
+        const registeredList: any[] = storedUsersRaw ? JSON.parse(storedUsersRaw) : [];
+        registeredList.push({ ...data.user, password: pass });
+        localStorage.setItem('ei_registered_accounts', JSON.stringify(registeredList));
+      } catch {}
+
+      setAuthModalOpen(false);
+      return {};
+    } catch (err: any) {
+      console.error('Sign up error:', err);
+      return { error: 'Network error during registration. Please try again.' };
+    }
   };
 
   const updateProfile = (data: Partial<UserProfile>) => {

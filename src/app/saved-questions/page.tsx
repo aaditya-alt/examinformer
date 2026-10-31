@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useAuth } from '@/components/auth/AuthContext';
 import { MathRenderer } from '@/components/MathRenderer';
 import {
   Bookmark,
@@ -12,31 +13,59 @@ import {
   Search,
   ExternalLink,
   HelpCircle,
-  Sparkles
+  Sparkles,
+  RefreshCw,
+  Database
 } from 'lucide-react';
 
 interface SavedQuestionItem {
-  id: string;
+  id?: string;
+  questionId?: string;
   testId?: string;
   testTitle?: string;
-  qno: number;
+  qno?: number;
   questionText: string;
+  questionHindi?: string;
   questionTextHi?: string;
   options: { id: number; text: string; textHi?: string }[];
   correctOption: number;
   explanation?: string;
   sectionName?: string;
   examOrigin?: string;
-  savedAt: number;
+  savedAt: number | string;
 }
 
 export default function SavedQuestionsPage() {
+  const { user } = useAuth();
   const [savedList, setSavedList] = useState<SavedQuestionItem[]>([]);
+  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSubject, setSelectedSubject] = useState<string>('all');
   const [languageMode, setLanguageMode] = useState<Record<string, 'en' | 'hi'>>({});
 
   useEffect(() => {
+    // 1. Load from Supabase Database if candidate is authenticated
+    if (user?.id) {
+      setLoading(true);
+      fetch(`/api/saved-questions?userId=${user.id}`)
+        .then(res => res.json())
+        .then(json => {
+          if (json.success && Array.isArray(json.savedQuestions) && json.savedQuestions.length > 0) {
+            setSavedList(json.savedQuestions);
+            localStorage.setItem('examinformer_saved_questions', JSON.stringify(json.savedQuestions));
+          } else {
+            // Check local fallback
+            loadFromLocalStorage();
+          }
+        })
+        .catch(() => loadFromLocalStorage())
+        .finally(() => setLoading(false));
+    } else {
+      loadFromLocalStorage();
+    }
+  }, [user?.id]);
+
+  const loadFromLocalStorage = () => {
     try {
       const raw = localStorage.getItem('examinformer_saved_questions');
       if (raw) {
@@ -48,14 +77,25 @@ export default function SavedQuestionsPage() {
     } catch (e) {
       console.warn('Could not read saved questions:', e);
     }
-  }, []);
+  };
 
-  const handleRemoveQuestion = (id: string) => {
-    const updated = savedList.filter((item) => item.id !== id);
+  const handleRemoveQuestion = async (qid: string) => {
+    const updated = savedList.filter((item) => (item.questionId || item.id) !== qid);
     setSavedList(updated);
     try {
       localStorage.setItem('examinformer_saved_questions', JSON.stringify(updated));
     } catch (e) {}
+
+    // Sync deletion to Supabase
+    if (user?.id) {
+      try {
+        await fetch(`/api/saved-questions?userId=${user.id}&questionId=${qid}`, {
+          method: 'DELETE'
+        });
+      } catch (e) {
+        console.warn('Could not sync removal to Supabase:', e);
+      }
+    }
   };
 
   const filtered = savedList.filter((item) => {
@@ -68,9 +108,10 @@ export default function SavedQuestionsPage() {
     }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
+      const hi = item.questionHindi || item.questionTextHi || '';
       return (
-        item.questionText.toLowerCase().includes(q) ||
-        (item.questionTextHi && item.questionTextHi.toLowerCase().includes(q)) ||
+        (item.questionText && item.questionText.toLowerCase().includes(q)) ||
+        hi.toLowerCase().includes(q) ||
         (item.testTitle && item.testTitle.toLowerCase().includes(q))
       );
     }
@@ -95,14 +136,22 @@ export default function SavedQuestionsPage() {
                 <span>Saved Questions Library</span>
               </h1>
               <p className="text-xs text-slate-500">
-                Review questions bookmarked during official CBT mocks &amp; solution sessions.
+                Review questions bookmarked during official CBT mocks &amp; solution sessions. Stored permanently in database.
               </p>
             </div>
           </div>
 
-          <span className="text-xs font-bold px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-            {savedList.length} Questions Saved
-          </span>
+          <div className="flex items-center gap-2">
+            {user && (
+              <span className="text-[11px] font-bold px-2.5 py-1 rounded-md bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 flex items-center gap-1 border border-emerald-300 dark:border-emerald-800">
+                <Database className="w-3 h-3" />
+                <span>Database Sync Active</span>
+              </span>
+            )}
+            <span className="text-xs font-bold px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+              {savedList.length} Questions Saved
+            </span>
+          </div>
         </div>
 
         {/* Filters */}
@@ -145,7 +194,12 @@ export default function SavedQuestionsPage() {
         </div>
 
         {/* Questions List */}
-        {filtered.length === 0 ? (
+        {loading ? (
+          <div className="py-16 text-center">
+            <RefreshCw className="w-6 h-6 text-blue-600 animate-spin mx-auto mb-2" />
+            <p className="text-xs text-slate-500 font-semibold">Loading your saved questions from database...</p>
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="p-12 text-center rounded-3xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-slate-800 space-y-4">
             <Bookmark className="w-10 h-10 text-slate-400 mx-auto" />
             <div className="space-y-1">
@@ -166,12 +220,14 @@ export default function SavedQuestionsPage() {
         ) : (
           <div className="space-y-5">
             {filtered.map((item, idx) => {
-              const lang = languageMode[item.id] || 'en';
-              const textToRender = lang === 'hi' && item.questionTextHi ? item.questionTextHi : item.questionText;
+              const qKey = item.questionId || item.id || `q_${idx}`;
+              const lang = languageMode[qKey] || 'en';
+              const hiText = item.questionHindi || item.questionTextHi;
+              const textToRender = lang === 'hi' && hiText ? hiText : item.questionText;
 
               return (
                 <div
-                  key={item.id || idx}
+                  key={qKey}
                   className="p-6 rounded-3xl bg-white dark:bg-[#12141a] border border-slate-200/90 dark:border-slate-800 shadow-2xs space-y-4"
                 >
                   {/* Top Meta Row */}
@@ -189,18 +245,18 @@ export default function SavedQuestionsPage() {
 
                     <div className="flex items-center gap-2">
                       {/* Language Toggle */}
-                      {item.questionTextHi && (
+                      {hiText && (
                         <div className="flex items-center rounded-lg border border-slate-200 dark:border-slate-700 text-[10px] font-bold overflow-hidden">
                           <button
                             type="button"
-                            onClick={() => setLanguageMode((prev) => ({ ...prev, [item.id]: 'en' }))}
+                            onClick={() => setLanguageMode((prev) => ({ ...prev, [qKey]: 'en' }))}
                             className={`px-2 py-0.5 ${lang === 'en' ? 'bg-blue-600 text-white' : 'text-slate-600 dark:text-slate-300'}`}
                           >
                             EN
                           </button>
                           <button
                             type="button"
-                            onClick={() => setLanguageMode((prev) => ({ ...prev, [item.id]: 'hi' }))}
+                            onClick={() => setLanguageMode((prev) => ({ ...prev, [qKey]: 'hi' }))}
                             className={`px-2 py-0.5 ${lang === 'hi' ? 'bg-blue-600 text-white' : 'text-slate-600 dark:text-slate-300'}`}
                           >
                             HI
@@ -210,8 +266,8 @@ export default function SavedQuestionsPage() {
 
                       <button
                         type="button"
-                        onClick={() => handleRemoveQuestion(item.id)}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition"
+                        onClick={() => handleRemoveQuestion(qKey)}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer"
                         title="Remove question"
                       >
                         <Trash2 className="w-4 h-4" />
