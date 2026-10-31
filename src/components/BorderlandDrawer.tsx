@@ -8,16 +8,15 @@ import {
   Home,
   Bookmark,
   History,
-  BarChart3,
-  Flag,
+  Calculator,
   Calendar,
-  User as UserIcon,
   Heart,
   LogIn,
   LogOut,
   X,
   Compass,
-  ChevronRight
+  ChevronRight,
+  User as UserIcon
 } from 'lucide-react';
 
 interface BorderlandDrawerProps {
@@ -42,31 +41,30 @@ export function BorderlandDrawer({ isOpen, onClose }: BorderlandDrawerProps) {
 
   if (!isOpen) return null;
 
-  const candidateName = user?.name || 'Guest Student';
-  const initial = candidateName.charAt(0).toUpperCase() || 'G';
+  const candidateName = user?.name || 'Guest Candidate';
+  const initial = candidateName.charAt(0).toUpperCase() || 'C';
 
-  const mainNavItems = [
+  const relevantNavItems = [
     { label: 'Home', href: '/', icon: Home },
-    { label: 'Saved Questions', href: '/tests?hub=topic-wise', icon: Bookmark },
+    { label: 'Test Series', href: '/tests', icon: Calendar },
+    { label: 'Saved Questions', href: '/saved-questions', icon: Bookmark },
     { label: 'Attempt History', href: '/profile', icon: History },
-    { label: 'Mock Analysis', href: '/profile', icon: BarChart3 },
-    { label: 'My Reports', href: '/profile', icon: Flag },
+    { label: 'Score Calculator', href: '/score-calculator', icon: Calculator },
   ];
 
   return (
     <div className="fixed inset-0 z-[100] flex">
-      {/* Dimmed backdrop */}
+      {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/75 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
         onClick={onClose}
       />
 
-      {/* Slide-out drawer matching BorderlandSSC layout */}
+      {/* Slide-out drawer */}
       <aside className="relative w-80 max-w-[85vw] bg-[#111216] text-white h-full shadow-2xl flex flex-col justify-between z-10 border-r border-slate-800/80 animate-in slide-in-from-left duration-200 select-none">
-        {/* Scrollable upper content */}
-        <div className="overflow-y-auto p-4 space-y-4 scrollbar-none">
+        <div className="overflow-y-auto p-5 space-y-5 scrollbar-none">
           {/* User profile row & close button */}
-          <div className="flex items-center justify-between pb-2">
+          <div className="flex items-center justify-between pb-2 border-b border-slate-800">
             <div className="flex items-center gap-3">
               <div className="relative">
                 <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-cyan-600 via-blue-600 to-indigo-600 flex items-center justify-center font-black text-white text-lg shadow-md">
@@ -79,9 +77,11 @@ export function BorderlandDrawer({ isOpen, onClose }: BorderlandDrawerProps) {
                 <h3 className="font-extrabold text-sm text-slate-100 tracking-tight leading-snug">
                   {candidateName}
                 </h3>
-                <span className="inline-block mt-0.5 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
-                  {user ? 'Verified Candidate' : 'Normal User'}
-                </span>
+                {user?.phone && (
+                  <span className="text-[11px] font-mono text-slate-400">
+                    +91 {user.phone}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -95,8 +95,8 @@ export function BorderlandDrawer({ isOpen, onClose }: BorderlandDrawerProps) {
             </button>
           </div>
 
-          {/* Clean Portal Status Banner */}
-          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-blue-950/40 via-slate-900 to-slate-900 border border-blue-500/20 flex items-center justify-between group">
+          {/* Platform Identity Card */}
+          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-blue-950/40 via-slate-900 to-slate-900 border border-blue-500/20 flex items-center justify-between">
             <div className="flex items-start gap-2.5">
               <div className="w-7 h-7 rounded-lg bg-blue-500/10 text-cyan-400 flex items-center justify-center shrink-0 mt-0.5">
                 <Compass className="w-4 h-4" />
@@ -110,9 +110,9 @@ export function BorderlandDrawer({ isOpen, onClose }: BorderlandDrawerProps) {
             </div>
           </div>
 
-          {/* Main Navigation Links */}
-          <nav className="space-y-1">
-            {mainNavItems.map((item) => {
+          {/* Relevant Navigation Links */}
+          <nav className="space-y-1 pt-1">
+            {relevantNavItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
               return (
@@ -136,55 +136,33 @@ export function BorderlandDrawer({ isOpen, onClose }: BorderlandDrawerProps) {
             })}
           </nav>
 
-          {/* MANAGE Section */}
-          <div className="pt-2">
-            <div className="px-3 text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1.5">
-              MANAGE
-            </div>
+          {/* Community & Profile */}
+          <div className="pt-2 border-t border-slate-800 space-y-1">
             <Link
-              href="/tests"
+              href="/profile"
               onClick={onClose}
               className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800/60 hover:text-white transition"
             >
               <div className="flex items-center gap-3">
-                <Calendar className="w-4 h-4 text-slate-400" />
-                <span>Test Series Catalog</span>
+                <UserIcon className="w-4 h-4 text-slate-400" />
+                <span>My Candidate Profile</span>
               </div>
               <ChevronRight className="w-3.5 h-3.5 opacity-40" />
             </Link>
-          </div>
 
-          {/* ACCOUNT Section */}
-          <div className="pt-2">
-            <div className="px-3 text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1.5">
-              ACCOUNT
-            </div>
-            <div className="space-y-1">
-              <Link
-                href="/profile"
-                onClick={onClose}
-                className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800/60 hover:text-white transition"
-              >
-                <div className="flex items-center gap-3">
-                  <UserIcon className="w-4 h-4 text-slate-400" />
-                  <span>Profile &amp; Roll Number</span>
-                </div>
-                <ChevronRight className="w-3.5 h-3.5 opacity-40" />
-              </Link>
-              <a
-                href="https://t.me/Examinformer_nitesh"
-                target="_blank"
-                rel="noreferrer"
-                onClick={onClose}
-                className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800/60 hover:text-white transition"
-              >
-                <div className="flex items-center gap-3">
-                  <Heart className="w-4 h-4 text-rose-400" />
-                  <span>Join Official Telegram</span>
-                </div>
-                <ChevronRight className="w-3.5 h-3.5 opacity-40" />
-              </a>
-            </div>
+            <a
+              href="https://t.me/Examinformer_nitesh"
+              target="_blank"
+              rel="noreferrer"
+              onClick={onClose}
+              className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800/60 hover:text-white transition"
+            >
+              <div className="flex items-center gap-3">
+                <Heart className="w-4 h-4 text-rose-400" />
+                <span>Join Official Telegram</span>
+              </div>
+              <ChevronRight className="w-3.5 h-3.5 opacity-40" />
+            </a>
           </div>
         </div>
 

@@ -7,15 +7,10 @@ import { ExamLogo } from '@/components/ExamLogo';
 import {
   Search,
   Plus,
-  Bookmark,
-  CheckCircle2,
-  Clock,
-  HelpCircle,
-  FileText,
-  Sparkles,
   ArrowRight,
-  TrendingUp,
   ShieldCheck,
+  Clock,
+  TrendingUp,
   ChevronRight
 } from 'lucide-react';
 
@@ -24,17 +19,18 @@ interface HomeSeriesItem {
   examCode: string;
   name: string;
   testCount: string;
-  category: 'ssc' | 'rrb' | 'state' | 'bank';
+  category: 'ssc' | 'rrb';
   logoType: 'ssc' | 'rrb';
   tierSupport: string;
 }
 
-const HOME_SERIES_CATALOG: HomeSeriesItem[] = [
+// Strictly only exams for which we have official questions
+const REAL_SERIES_CATALOG: HomeSeriesItem[] = [
   {
     id: 'ssc-cgl-series',
     examCode: 'ssc-cgl',
     name: 'SSC CGL Mock Test Series 2026 (Tier I & Tier II) PYQs',
-    testCount: 'Official 2025 Shifts & Sectionals',
+    testCount: '46 Official 2025 Shifts & Sectionals',
     category: 'ssc',
     logoType: 'ssc',
     tierSupport: 'Tier I & Tier II'
@@ -43,7 +39,7 @@ const HOME_SERIES_CATALOG: HomeSeriesItem[] = [
     id: 'ssc-chsl-series',
     examCode: 'ssc-chsl',
     name: 'SSC CHSL Mock Test Series 2026 (Tier I & Tier II) PYQs',
-    testCount: 'Official 2025 Shifts & Sectionals',
+    testCount: '50 Official 2025 Shifts & Sectionals',
     category: 'ssc',
     logoType: 'ssc',
     tierSupport: 'Tier I & Tier II'
@@ -52,34 +48,16 @@ const HOME_SERIES_CATALOG: HomeSeriesItem[] = [
     id: 'ssc-mts-series',
     examCode: 'ssc-mts',
     name: 'SSC MTS & Havaldar Mock Test Series 2026 PYQs',
-    testCount: 'Official 2025 Shifts & Sectionals',
+    testCount: '16 Official 2025 Shifts & Sectionals',
     category: 'ssc',
     logoType: 'ssc',
     tierSupport: 'Session 1 & 2'
   },
   {
-    id: 'ssc-gd-series',
-    examCode: 'ssc-gd',
-    name: 'SSC GD Constable Mock Test Series 2026 PYQs',
-    testCount: 'Official 2025 Shifts & Speed Drills',
-    category: 'ssc',
-    logoType: 'ssc',
-    tierSupport: 'CBT Screening'
-  },
-  {
-    id: 'ssc-cpo-series',
-    examCode: 'ssc-cpo',
-    name: 'SSC CPO (SI in Delhi Police & CAPF) Mock Test Series',
-    testCount: 'Official 2025 Shifts & Sectionals',
-    category: 'ssc',
-    logoType: 'ssc',
-    tierSupport: 'Paper 1 & 2'
-  },
-  {
     id: 'rrb-ntpc-series',
     examCode: 'rrb-ntpc',
     name: 'RRB NTPC (Graduate & Under-Graduate CBT 1 & 2) PYQs',
-    testCount: 'Official 2025 Shifts & Sectionals',
+    testCount: '56 Official 2025 Shifts & Sectionals',
     category: 'rrb',
     logoType: 'rrb',
     tierSupport: 'CBT 1 & CBT 2'
@@ -88,28 +66,10 @@ const HOME_SERIES_CATALOG: HomeSeriesItem[] = [
     id: 'rrb-alp-series',
     examCode: 'rrb-alp',
     name: 'RRB ALP (CBT 1 + CBT 2 + CBAT) Mock Test Series 2026',
-    testCount: 'Official 2025 Shifts & Speed Drills',
+    testCount: '11 Official 2025 Shifts & Speed Drills',
     category: 'rrb',
     logoType: 'rrb',
     tierSupport: 'Stage 1 & 2'
-  },
-  {
-    id: 'rrb-group-d-series',
-    examCode: 'rrb-group-d',
-    name: 'RRB Group D (CEN RRC Level-1 CBT) Mock Test Series',
-    testCount: 'Official 2025 Shifts & Speed Drills',
-    category: 'rrb',
-    logoType: 'rrb',
-    tierSupport: 'Level-1 CBT'
-  },
-  {
-    id: 'rrb-sc-series',
-    examCode: 'rrb-section-controller',
-    name: 'RRB Section Controller & Station Master 2026 PYQs',
-    testCount: 'Official 2025 Shifts & Sectionals',
-    category: 'rrb',
-    logoType: 'rrb',
-    tierSupport: 'Operating CBT'
   }
 ];
 
@@ -119,7 +79,7 @@ export default function HomePage() {
   const [activeTrending, setActiveTrending] = useState<'all' | 'ssc' | 'rrb'>('all');
 
   const filteredSeries = useMemo(() => {
-    return HOME_SERIES_CATALOG.filter((item) => {
+    return REAL_SERIES_CATALOG.filter((item) => {
       if (activeTrending !== 'all' && item.category !== activeTrending) return false;
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
@@ -172,18 +132,13 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Trending Pills */}
+          {/* Trending Pills: Relevant Exams Only */}
           <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
             <span className="text-slate-400 font-bold shrink-0">Trending:</span>
             {[
               { id: 'all', label: 'All Series' },
-              { id: 'ssc', label: 'Ssc' },
-              { id: 'rrb', label: 'Rrb' },
-              { id: 'state', label: 'State Exam' },
-              { id: 'police', label: 'Police' },
-              { id: 'bank', label: 'Bank' },
-              { id: 'upsc', label: 'Upsc' },
-              { id: 'defence', label: 'Defence' }
+              { id: 'ssc', label: 'SSC Exams' },
+              { id: 'rrb', label: 'Railway Exams' }
             ].map((tag) => (
               <button
                 key={tag.id}
@@ -227,7 +182,6 @@ export default function HomePage() {
               className="p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#12141a] hover:border-cyan-500 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between space-y-4 group relative"
             >
               <div className="flex items-start justify-between gap-3">
-                {/* Official Exam Logo rounded */}
                 <div className="w-13 h-13 rounded-2xl bg-slate-50 dark:bg-slate-800/80 p-1.5 flex items-center justify-center border border-slate-100 dark:border-slate-700 shrink-0">
                   <ExamLogo type={series.logoType} size="sm" />
                 </div>
@@ -241,7 +195,6 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Bookmark / Plus */}
                 <button
                   type="button"
                   onClick={(e) => {
@@ -254,7 +207,6 @@ export default function HomePage() {
                 </button>
               </div>
 
-              {/* Bottom Info Row */}
               <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800/80 text-[11px] text-slate-500">
                 <span className="font-bold flex items-center gap-1 text-slate-600 dark:text-slate-400">
                   <span>Pattern:</span>
@@ -283,7 +235,7 @@ export default function HomePage() {
               100% Genuine 2025 Examination Papers
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Every question is verified against official answer keys released by the commission. Test papers feature dual sectional countdowns, candidate watermark authentication, and KaTeX mathematical proofs.
+              Every question is verified against official commission answer keys. Test papers feature dual sectional countdowns, candidate watermark authentication, and KaTeX mathematical proofs.
             </p>
           </div>
 

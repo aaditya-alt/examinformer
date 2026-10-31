@@ -175,8 +175,6 @@ export default function CandidateProfilePage() {
                 <strong className="text-slate-800 dark:text-slate-200">{user.phone || 'Phone Registered'}</strong>
                 <span className="text-[10px] text-slate-400">(Watermark ID)</span>
               </span>
-              <span>&bull;</span>
-              <span>Roll: <strong className="font-mono text-slate-800 dark:text-slate-200">{user.rollNumber}</strong></span>
             </div>
           </div>
         </div>

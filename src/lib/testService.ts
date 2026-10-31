@@ -119,6 +119,8 @@ export function getTestById(id: string): CBTTest | undefined {
       if (parent && parent.sections[secIdx]) {
         const targetSec = parent.sections[secIdx];
         const duration = parent.examCode.includes('tier2') ? 30 : 15;
+        const questionsList = targetSec.questions || [];
+        const count = questionsList.length || 25;
         const singleSec: CBTTest = {
           id,
           title: `${targetSec.name} — ${parent.title} (Sectional Mock)`,
@@ -126,12 +128,16 @@ export function getTestById(id: string): CBTTest | undefined {
           examFamily: parent.examFamily,
           type: 'sectional',
           durationMinutes: duration,
-          totalMarks: targetSec.questions.length * 2,
-          totalQuestions: targetSec.questions.length,
+          totalMarks: count * 2,
+          totalQuestions: count,
           isPublished: true,
           hasSectionalTiming: true,
           sectionalTimingMinutes: duration,
-          sections: [targetSec]
+          sections: [{
+            id: targetSec.id || `sec-${secIdx}`,
+            name: targetSec.name,
+            questions: questionsList
+          }]
         };
         testsStore.set(id, singleSec);
         return singleSec;

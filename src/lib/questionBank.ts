@@ -174,12 +174,19 @@ export function filterQuestionBank(filters: {
 
 // Generate on-demand Chapter-Wise Practice Test
 export function generateChapterTest(subject: 'math' | 'reasoning' | 'english' | 'ga', chapter: string, count = 20): CBTTest {
-  const questions = filterQuestionBank({ subject, chapter });
-  const selected = questions.length >= count ? questions.slice(0, count) : questions;
+  let questions = filterQuestionBank({ subject, chapter });
+  if (questions.length === 0) {
+    questions = filterQuestionBank({ subject });
+  }
+  if (questions.length === 0) {
+    questions = getMasterQuestionBank();
+  }
+  const selected = questions.length >= count ? questions.slice(0, count) : (questions.length > 0 ? questions : []);
+  const safeCount = Math.max(1, selected.length);
 
   const testId = `ch-${subject}-${encodeURIComponent(chapter).replace(/%20/g, '-').toLowerCase()}-${count}`;
-  const duration = Math.max(10, Math.round(selected.length * 1.2)); // ~1.2 mins per question
-  const totalMarks = selected.reduce((sum, q) => sum + q.marks, 0) || count * 2;
+  const duration = Math.max(10, Math.round(safeCount * 1.2)); // ~1.2 mins per question
+  const totalMarks = selected.reduce((sum, q) => sum + q.marks, 0) || safeCount * 2;
 
   const cbtQuestions: CBTQuestion[] = selected.map((q, idx) => ({
     id: q.id,

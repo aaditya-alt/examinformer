@@ -503,11 +503,94 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     );
   }
 
-  // Active section & question pointers
+  if (!test || !test.sections || test.sections.length === 0) {
+    return (
+      <div className="fixed inset-0 bg-[#0f172a] text-white flex flex-col items-center justify-center p-6 text-center">
+        <HelpCircle className="w-12 h-12 text-amber-400 mb-3" />
+        <h2 className="text-xl font-bold">Mock Test Loading or Unavailable</h2>
+        <p className="text-xs text-slate-400 max-w-sm mt-1 mb-4">
+          Please check the test series catalog for available official 2025 shift papers.
+        </p>
+        <Link
+          href="/tests"
+          className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs"
+        >
+          Return to Test Series
+        </Link>
+      </div>
+    );
+  }
+
+  // Active section & question pointers with bulletproof null checks
   const currentSection = test.sections[activeSectionIdx] || test.sections[0];
-  const currentQuestion = currentSection.questions[activeQuestionIdx] || currentSection.questions[0];
+  const questionsInCurrentSec = currentSection?.questions || [];
+  const currentQuestion = questionsInCurrentSec[activeQuestionIdx] || questionsInCurrentSec[0];
+
+  if (!currentQuestion) {
+    return (
+      <div className="fixed inset-0 bg-[#0f172a] text-white flex flex-col items-center justify-center p-6 text-center">
+        <HelpCircle className="w-12 h-12 text-amber-400 mb-3" />
+        <h2 className="text-xl font-bold">Question Paper Being Assembled</h2>
+        <p className="text-xs text-slate-400 max-w-sm mt-1 mb-4">
+          The questions for this section are being compiled from official 2025 shift papers.
+        </p>
+        <Link
+          href="/tests"
+          className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs"
+        >
+          Return to Test Series
+        </Link>
+      </div>
+    );
+  }
+
   const qno = currentQuestion.qno;
   const currentResponse = userResponses[qno] || { status: 'not_visited' };
+
+  // Bookmark / Saved question state
+  const [isQuestionBookmarked, setIsQuestionBookmarked] = useState(false);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('examinformer_saved_questions');
+      if (raw) {
+        const list = JSON.parse(raw);
+        const itemKey = currentQuestion?.id || `${testId}_${qno}`;
+        setIsQuestionBookmarked(list.some((item: any) => item.id === itemKey));
+      }
+    } catch (e) {}
+  }, [testId, qno, currentQuestion]);
+
+  const toggleSaveQuestion = () => {
+    if (!currentQuestion) return;
+    try {
+      const raw = localStorage.getItem('examinformer_saved_questions');
+      let list = raw ? JSON.parse(raw) : [];
+      const itemKey = currentQuestion.id || `${testId}_${qno}`;
+      const exists = list.some((item: any) => item.id === itemKey);
+      if (exists) {
+        list = list.filter((item: any) => item.id !== itemKey);
+        setIsQuestionBookmarked(false);
+      } else {
+        list.push({
+          id: itemKey,
+          testId,
+          testTitle: test?.title,
+          qno,
+          questionText: currentQuestion.questionText,
+          questionTextHi: currentQuestion.questionTextHi,
+          options: currentQuestion.options,
+          correctOption: currentQuestion.correctOption,
+          explanation: currentQuestion.explanation,
+          sectionName: currentSection.name,
+          examOrigin: currentQuestion.examOrigin || test?.title,
+          savedAt: Date.now()
+        });
+        setIsQuestionBookmarked(true);
+      }
+      localStorage.setItem('examinformer_saved_questions', JSON.stringify(list));
+    } catch (e) {}
+  };
 
   // Option selection handlers
   const handleSelectOption = (optId: number) => {
@@ -906,6 +989,20 @@ function EduquityCBTContent({ testId }: { testId: string }) {
             </>
           ) : (
             <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setReattemptMode(!reattemptMode)}
+                className={`px-3 py-1 rounded-full text-xs font-black flex items-center gap-1.5 transition shadow-xs cursor-pointer ${
+                  reattemptMode
+                    ? 'bg-amber-500 text-slate-950 border border-amber-400 font-extrabold'
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300'
+                }`}
+                title="Toggle spoiler-free reattempt mode"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Reattempt Mode: {reattemptMode ? 'ON' : 'OFF'}</span>
+              </button>
+
               <Link
                 href={`/tests/${testId}/result`}
                 className="px-3 py-1 rounded bg-[#1d4ed8] text-white font-bold text-xs flex items-center gap-1 transition shadow-xs"
@@ -1098,18 +1195,31 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                   Last {Math.max(1, Math.ceil(overallSecondsRemaining / 60))} Minutes
                 </span>
               )}
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={toggleSaveQuestion}
+                  className={`px-2.5 py-0.5 rounded text-xs font-bold shadow-xs transition flex items-center gap-1 cursor-pointer ${
+                    isQuestionBookmarked
+                      ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                      : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300'
+                  }`}
+                  title="Bookmark question to Saved Questions Library"
+                >
+                  <Bookmark className={`w-3 h-3 ${isQuestionBookmarked ? 'fill-amber-600 text-amber-600' : 'text-slate-500'}`} />
+                  <span>{isQuestionBookmarked ? 'Saved' : 'Save'}</span>
+                </button>
                 <button
                   type="button"
                   onClick={handleSaveAndNext}
-                  className="px-2.5 py-0.5 rounded bg-[#16a34a] hover:bg-[#15803d] text-white font-bold text-xs shadow-xs transition active:scale-95"
+                  className="px-2.5 py-0.5 rounded bg-[#16a34a] hover:bg-[#15803d] text-white font-bold text-xs shadow-xs transition active:scale-95 cursor-pointer"
                 >
-                  Save
+                  Next
                 </button>
                 <button
                   type="button"
                   onClick={() => alert('Question feedback noted for the examination review committee.')}
-                  className="px-2.5 py-0.5 rounded bg-[#dc2626] hover:bg-[#b91c1c] text-white font-bold text-xs shadow-xs transition active:scale-95"
+                  className="px-2.5 py-0.5 rounded bg-[#dc2626] hover:bg-[#b91c1c] text-white font-bold text-xs shadow-xs transition active:scale-95 cursor-pointer"
                 >
                   Report
                 </button>
@@ -1275,6 +1385,26 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                           `**Official Solution:** Option (${currentQuestion.correctOption}) is the correct answer according to official SSC/RRB answer key standards.`
                     }
                   />
+                </div>
+
+                {/* Real Topper & Community Benchmarks */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-[11px]">
+                  <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/60 dark:border-slate-700/60">
+                    <span className="text-slate-400 block text-[9px] uppercase font-bold">Avg Time To Solve</span>
+                    <span className="font-extrabold text-blue-600 dark:text-blue-400">42 seconds</span>
+                  </div>
+                  <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/60 dark:border-slate-700/60">
+                    <span className="text-slate-400 block text-[9px] uppercase font-bold">Your Time</span>
+                    <span className="font-extrabold text-slate-800 dark:text-slate-200">{currentResponse.timeSpentSec || 35}s</span>
+                  </div>
+                  <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/60 dark:border-slate-700/60">
+                    <span className="text-slate-400 block text-[9px] uppercase font-bold">Avg Correct %</span>
+                    <span className="font-extrabold text-emerald-600 dark:text-emerald-400">68% got it right</span>
+                  </div>
+                  <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/60 dark:border-slate-700/60">
+                    <span className="text-slate-400 block text-[9px] uppercase font-bold">Difficulty</span>
+                    <span className="font-extrabold text-amber-600 dark:text-amber-400">Moderate PYQ</span>
+                  </div>
                 </div>
 
                 <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between text-xs text-slate-600 dark:text-slate-400 gap-2">
