@@ -568,36 +568,62 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   const handleSubmitTest = async () => {
     setSubmitting(true);
 
+    const isMts = test.examCode === 'ssc-mts' || test.id.toLowerCase().includes('mts');
+
     let score = 0;
     let correctCount = 0;
     let wrongCount = 0;
     let attemptedCount = 0;
 
-    test.sections.forEach(sec => {
+    let s1Score = 0;
+    let s2Score = 0;
+    let s1Attempted = 0;
+    let s2Attempted = 0;
+
+    test.sections.forEach((sec, sIdx) => {
+      // In MTS: Section 0 & 1 are Session 1 (Math & Reasoning). Section 2 & 3 are Session 2 (GA & English).
+      const isMtsSession1 = isMts && (sIdx < 2 || sec.name.toLowerCase().includes('reasoning') || sec.name.toLowerCase().includes('numerical'));
+      
       sec.questions.forEach(q => {
         const resp = userResponses[q.qno];
         if (resp && resp.chosenOption !== undefined) {
           attemptedCount++;
+          if (isMtsSession1) s1Attempted++;
+          else s2Attempted++;
+
           if (resp.chosenOption === q.correctOption) {
             correctCount++;
+            if (isMtsSession1) {
+              s1Score += 3.0; // MTS Session 1 is 3 marks per Q, 0 negative
+            } else {
+              s2Score += (q.marks || 3.0);
+            }
             score += q.marks;
           } else {
             wrongCount++;
-            score -= q.negativeMarks;
+            if (!isMtsSession1) {
+              s2Score -= (q.negativeMarks || 1.0); // MTS Session 2 penalty
+              score -= q.negativeMarks;
+            }
+            // In MTS Session 1, no negative marking!
           }
         }
       });
     });
 
     const timeTaken = test.durationMinutes * 60 - overallSecondsRemaining;
-    const finalScore = Math.round(score * 100) / 100;
+    const finalScore = isMts ? Math.round(s2Score * 100) / 100 : Math.round(score * 100) / 100;
     const accuracy = attemptedCount > 0 ? Math.round((correctCount / attemptedCount) * 1000) / 10 : 0;
 
     const resultPayload = {
       testId: test.id,
       testTitle: test.title,
       totalQuestions: test.totalQuestions,
-      totalMarks: test.totalMarks,
+      totalMarks: isMts ? 150 : test.totalMarks,
+      isMts,
+      session1Score: Math.round(s1Score * 100) / 100,
+      session2Score: Math.round(s2Score * 100) / 100,
+      session1Qualified: s1Score >= 36, // MTS Session 1 qualifying threshold (30% for UR)
       attempted: attemptedCount,
       correct: correctCount,
       wrong: wrongCount,
@@ -896,18 +922,17 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                 return (
                   <div
                     key={opt.id}
-                    onClick={() => handleSelectOption(opt.id)}
-                    className={`flex items-start gap-3.5 p-3.5 sm:p-4 rounded-xl border cursor-pointer transition select-none ${
+                    className={`flex items-start gap-3.5 p-3.5 sm:p-4 rounded-xl border transition select-none ${
                       isOfficialCorrect
                         ? 'bg-emerald-50 border-emerald-500 ring-1 ring-emerald-500/30'
                         : isUserWrongChoice
                         ? 'bg-rose-50 border-rose-400 ring-1 ring-rose-400/20'
                         : (isSelectedInExam || (reattemptMode && isSelectedInReattempt))
                         ? 'bg-blue-50/80 border-blue-600 ring-1 ring-blue-500/30 shadow-sm'
-                        : 'bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300'
+                        : 'bg-white border-slate-200 hover:bg-slate-50'
                     }`}
                   >
-                    {/* Small Round Radio Button — Strictly clickable directly & displays selected state */}
+                    {/* Small Round Radio Button — Strictly clickable directly to select (Eduquity standard) */}
                     <button
                       type="button"
                       role="radio"
@@ -916,14 +941,14 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                         e.stopPropagation();
                         handleSelectOption(opt.id);
                       }}
-                      className={`mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 cursor-pointer transition-all ${
+                      className={`mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 cursor-pointer transition-all active:scale-90 ${
                         isOfficialCorrect
                           ? 'border-emerald-600 bg-emerald-600 text-white'
                           : isUserWrongChoice
                           ? 'border-rose-600 bg-rose-600 text-white'
                           : (isSelectedInExam || (reattemptMode && isSelectedInReattempt))
                           ? 'border-blue-600 bg-white ring-2 ring-blue-500/25'
-                          : 'border-slate-400 hover:border-blue-500 bg-white'
+                          : 'border-slate-400 hover:border-blue-500 bg-white shadow-inner'
                       }`}
                     >
                       {isOfficialCorrect ? (

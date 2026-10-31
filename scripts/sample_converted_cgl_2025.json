@@ -1,0 +1,3214 @@
+{
+  "id": "cgl-2025-12-sep-shift-1",
+  "title": "SSC CGL 2025 (Held On: 12 Sept, 2025 Shift 1)",
+  "examCode": "ssc-cgl-tier1",
+  "examFamily": "ssc",
+  "type": "full_mock",
+  "durationMinutes": 60,
+  "totalMarks": 200,
+  "totalQuestions": 100,
+  "isPublished": true,
+  "hasSectionalTiming": true,
+  "sectionalTimingMinutes": 15,
+  "sections": [
+    {
+      "id": "sec_1",
+      "name": "General Intelligence and Reasoning",
+      "questions": [
+        {
+          "id": "cgl-2025-12-sep-shift-1_q1",
+          "qno": 1,
+          "questionText": "In the following question, select the related word from the given alternatives.\n\n**Watt : Power :: Pascal : ?**",
+          "questionTextHi": "निम्नलिखित प्रश्न में दिए गए विकल्पों में से संबंधित शब्द का चयन कीजिए।\n\n**वाट : शक्ति :: पास्कल : ?**",
+          "options": [
+            {
+              "id": 1,
+              "text": "Energy",
+              "textHi": "ऊर्जा"
+            },
+            {
+              "id": 2,
+              "text": "Temperature",
+              "textHi": "तापमान"
+            },
+            {
+              "id": 3,
+              "text": "Pressure",
+              "textHi": "दबाव"
+            },
+            {
+              "id": 4,
+              "text": "Force",
+              "textHi": "बल"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "The logic follows here is:\n\nWatt : Power → Watt is SI unit of Power.\n\nSimilarly,\n\nPascal : ? → Pascal  is SI unit of Pressure.\n\nHence, the correct answer is **\"Option 3\"**",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q2",
+          "qno": 2,
+          "questionText": "In the following question, select the related word from the given alternatives.\n\n**Mekong : Tibet :: Amazon : ?**",
+          "questionTextHi": "निम्नलिखित प्रश्न में दिए गए विकल्पों में से संबंधित शब्द का चयन कीजिए।\n\n**मेकांग : तिब्बत :: अमेज़न : ?**",
+          "options": [
+            {
+              "id": 1,
+              "text": "Chile",
+              "textHi": "चिली"
+            },
+            {
+              "id": 2,
+              "text": "Peru",
+              "textHi": "पेरू"
+            },
+            {
+              "id": 3,
+              "text": "Colombia",
+              "textHi": "कोलंबिया"
+            },
+            {
+              "id": 4,
+              "text": "Ecuador",
+              "textHi": "इक्वेडोर"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "The logic follows here, \n\nPeru, because the Mekong River originates in Tibet, similarly the Amazon River originates in the Andes mountains, primarily in Peru, making Peru the analogous origin point for the Amazon\n\n**Mekong : Tibet (Origin) :: Amazon : Peru (Origin)**\n\nHence, the correct answer is **\"Option 2\"**",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q3",
+          "qno": 3,
+          "questionText": "Select the letter-cluster from among the given options that can replace the question mark (?) in the following series.\n\n**C G K, G K O, K O S, O S W, ?**",
+          "questionTextHi": "दिए गए विकल्पों में से उस अक्षर-समूह का चयन करें जो निम्नलिखित शृंखला में प्रश्न चिह्न (?) के स्थान पर आ सकता है।\n\n**C G K, G K O, K O S, O S W, ?**",
+          "options": [
+            {
+              "id": 1,
+              "text": "SDA",
+              "textHi": "SDA"
+            },
+            {
+              "id": 2,
+              "text": "KNB",
+              "textHi": "KNB"
+            },
+            {
+              "id": 3,
+              "text": "SWA",
+              "textHi": "SWA"
+            },
+            {
+              "id": 4,
+              "text": "KJH",
+              "textHi": "KJH"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "The pattern followed here is\n\nHence, the correct answer is **\"Option 3\"**",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q4",
+          "qno": 4,
+          "questionText": "Select the letter-cluster from among the given options that can replace the question mark (?) in the following series.\n\n**MIN, NJM, OKL, PLK, ?**",
+          "questionTextHi": "दिए गए विकल्पों में से उस अक्षर-समूह का चयन करें जो निम्नलिखित शृंखला में प्रश्न चिह्न (?) को प्रतिस्थापित कर सकता है।\n\n**MIN, NJM, OKL, PLK, ?**",
+          "options": [
+            {
+              "id": 1,
+              "text": "QWS",
+              "textHi": "QWS"
+            },
+            {
+              "id": 2,
+              "text": "HGF",
+              "textHi": "HGF"
+            },
+            {
+              "id": 3,
+              "text": "QMJ",
+              "textHi": "QMJ"
+            },
+            {
+              "id": 4,
+              "text": "UJH",
+              "textHi": "UJH"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "The pattern followed here is\n\nHence, the correct answer is **\"Option 3\"**",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q5",
+          "qno": 5,
+          "questionText": "Select the letter-cluster from among the given options that can replace the question mark (?) in the following series.\n\n**BRF , EUH , HXJ , KAL , ?**",
+          "questionTextHi": "दिए गए विकल्पों में से उस अक्षर-समूह का चयन करें जो निम्नलिखित शृंखला में प्रश्न चिह्न (?) को प्रतिस्थापित कर सकता है।\n\n**BRF , EUH , HXJ , KAL , ?**",
+          "options": [
+            {
+              "id": 1,
+              "text": "NMB",
+              "textHi": "NMB"
+            },
+            {
+              "id": 2,
+              "text": "NKH",
+              "textHi": "NKH"
+            },
+            {
+              "id": 3,
+              "text": "NHG",
+              "textHi": "NHG"
+            },
+            {
+              "id": 4,
+              "text": "NDN",
+              "textHi": "NDN"
+            }
+          ],
+          "correctOption": 4,
+          "explanation": "The pattern followed here is\n\nHence, the correct answer is **\"Option 4\"**",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q6",
+          "qno": 6,
+          "questionText": "Select the letter-cluster from among the given options that can replace the question mark (?) in the following series:\n\n**WZWT, WVOH, WRGV, WNYJ, ?**",
+          "questionTextHi": "दिए गए विकल्पों में से उस अक्षर-समूह का चयन करें जो निम्नलिखित शृंखला में प्रश्न चिह्न (?) को प्रतिस्थापित कर सकता है:\n\n**WZWT, WVOH, WRGV, WNYJ, ?**",
+          "options": [
+            {
+              "id": 1,
+              "text": "W J Q X",
+              "textHi": "W J Q X"
+            },
+            {
+              "id": 2,
+              "text": "W J Q W",
+              "textHi": "W J Q W"
+            },
+            {
+              "id": 3,
+              "text": "W H P X",
+              "textHi": "W H P X"
+            },
+            {
+              "id": 4,
+              "text": "W J P X",
+              "textHi": "W J P X"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "The pattern followed here is\n\nHence, the correct answer is **\"Option 1\"**",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q7",
+          "qno": 7,
+          "questionText": "Select the letter-cluster from among the given options that can replace the question mark (?) in the following series:\n\n**MCFI, NEKP, OGPW, PIUD, ?**",
+          "questionTextHi": "दिए गए विकल्पों में से उस अक्षर-समूह का चयन करें जो निम्नलिखित शृंखला में प्रश्न चिह्न (?) को प्रतिस्थापित कर सकता है:\n\n**MCFI, NEKP, OGPW, PIUD, ?**",
+          "options": [
+            {
+              "id": 1,
+              "text": "N K Y D",
+              "textHi": "N K Y D"
+            },
+            {
+              "id": 2,
+              "text": "Q L Y L",
+              "textHi": "Q L Y L"
+            },
+            {
+              "id": 3,
+              "text": "Q K Z K",
+              "textHi": "Q K Z K"
+            },
+            {
+              "id": 4,
+              "text": "Q K Z L",
+              "textHi": "Q K Z L"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "The pattern followed here is\n\nHence, the correct answer is **\"Option 3\"**",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q8",
+          "qno": 8,
+          "questionText": "What comes next: **3, 12, 7, 16, 11, 20, 15, ?**",
+          "questionTextHi": "इसके बाद क्या आएगा: **3, 12, 7, 16, 11, 20, 15, ?**",
+          "options": [
+            {
+              "id": 1,
+              "text": "16",
+              "textHi": "16"
+            },
+            {
+              "id": 2,
+              "text": "24",
+              "textHi": "24"
+            },
+            {
+              "id": 3,
+              "text": "14",
+              "textHi": "14"
+            },
+            {
+              "id": 4,
+              "text": "18",
+              "textHi": "18"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "The logic follows here, \n\nHence, the correct answer is **\"Option 2\"**",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q9",
+          "qno": 9,
+          "questionText": "Each of the letters in the word **STUDENT **is arranged in alphabetical order. How many letters are there in the English alphabetical series between the letter that is second from the left and the one that is fourth from the right in the new letter-cluster formed?",
+          "questionTextHi": "शब्द **STUDENT **में प्रत्येक अक्षर को वर्णानुक्रम में व्यवस्थित किया गया है। नए अक्षर-समूह में बायें से दूसरे अक्षर और दायें से चौथे अक्षर के बीच अंग्रेजी वर्णमाला शृंखला में कितने अक्षर हैं?",
+          "options": [
+            {
+              "id": 1,
+              "text": "17",
+              "textHi": "17"
+            },
+            {
+              "id": 2,
+              "text": "13",
+              "textHi": "13"
+            },
+            {
+              "id": 3,
+              "text": "11",
+              "textHi": "11"
+            },
+            {
+              "id": 4,
+              "text": "15",
+              "textHi": "15"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$35",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q10",
+          "qno": 10,
+          "questionText": "**Which of the following addresses are identical to each other:**\n\n1. Arjun Mehta A-101, Emerald Towers, Surat, 395001\n\n2. Arjun Mehta A-101, Emerald Tower, Surat, 395001\n\n3. Arjun M. A-101, Emerald Tower, Surat, 395001\n\n4. Arjun Mehta A-101, Emerald Tower, Surat, 395001",
+          "questionTextHi": "**निम्नलिखित में से कौन से पते एक जैसे हैं:**\n\n1. Arjun Mehta A-101, Emerald Towers, Surat, 395001\n\n2. Arjun Mehta A-101, Emerald Tower, Surat, 395001\n\n3. Arjun M. A-101, Emerald Tower, Surat, 395001\n\n4. Arjun Mehta A-101, Emerald Tower, Surat, 395001",
+          "options": [
+            {
+              "id": 1,
+              "text": "1 and 2",
+              "textHi": "1 और 2"
+            },
+            {
+              "id": 2,
+              "text": "1 and 3",
+              "textHi": "1 और 3"
+            },
+            {
+              "id": 3,
+              "text": "2 and 4",
+              "textHi": "2 और 4"
+            },
+            {
+              "id": 4,
+              "text": "3 and 4",
+              "textHi": "3 और 4"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "The following addresses are identical\n\n**2. Arjun Mehta A-101, Emerald Tower, Surat, 395001**\n\n**4. Arjun Mehta A-101, Emerald Tower, Surat, 395001**\n\nHence, the correct answer is **\"Option 3\"**",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q11",
+          "qno": 11,
+          "questionText": "**Which of the following is/are identical to the address given:** Meenal Gupta 102, Silver Oaks, Sector 12, Noida, 201301\n\n1. Meenal Gupta 102, Silver Oaks, Sector 12, Noida, 201301\n\n2. Meenal Gupta 102, Silver Oaks, Sector-12, Noida, 201301\n\n3. Meenal Gupta 102, Silver Oaks, Sector 12, Noida 201301\n\n4. Meenal Gupta 102, Silver Oaks, Sector 12, Noida, 201302",
+          "questionTextHi": "**निम्नलिखित में से कौन-सा/से पते दिए गए पते के समान है/हैं: **Meenal Gupta 102, Silver Oaks, Sector 12, Noida, 201301\n\n1. Meenal Gupta 102, Silver Oaks, Sector 12, Noida, 201301\n\n2. Meenal Gupta 102, Silver Oaks, Sector-12, Noida, 201301\n\n3. Meenal Gupta 102, Silver Oaks, Sector 12, Noida 201301\n\n4. Meenal Gupta 102, Silver Oaks, Sector 12, Noida, 201302",
+          "options": [
+            {
+              "id": 1,
+              "text": "1",
+              "textHi": "1"
+            },
+            {
+              "id": 2,
+              "text": "3",
+              "textHi": "3"
+            },
+            {
+              "id": 3,
+              "text": "2",
+              "textHi": "2"
+            },
+            {
+              "id": 4,
+              "text": "4",
+              "textHi": "4"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$37",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q12",
+          "qno": 12,
+          "questionText": "Find the option that best completes the analogy.\n\n**AG : IO :: CM : ?**",
+          "questionTextHi": "वह विकल्प ज्ञात कीजिए जो सादृश्य को सर्वोत्तम रूप से पूरा करता है।\n\n**AG : IO :: CM : ?**",
+          "options": [
+            {
+              "id": 1,
+              "text": "KO",
+              "textHi": "KO"
+            },
+            {
+              "id": 2,
+              "text": "KU",
+              "textHi": "KU"
+            },
+            {
+              "id": 3,
+              "text": "KS",
+              "textHi": "KS"
+            },
+            {
+              "id": 4,
+              "text": "KW",
+              "textHi": "KW"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$39",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q13",
+          "qno": 13,
+          "questionText": "A is facing North. B is seated second to the right of A. Who is sitting immediately to the left of B?",
+          "questionTextHi": "A उत्तर दिशा के सम्मुख बैठा है। B, A के दायें से दूसरे स्थान पर बैठा है। B के ठीक बायें कौन बैठा है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "The person seated to the immediate right of A",
+              "textHi": "A के ठीक दायें बैठा व्यक्ति"
+            },
+            {
+              "id": 2,
+              "text": "The person seated opposite to A",
+              "textHi": "A के विपरीत बैठा व्यक्ति"
+            },
+            {
+              "id": 3,
+              "text": "The person seated to the immediate left of A",
+              "textHi": "A के तत्काल बायें बैठा व्यक्ति"
+            },
+            {
+              "id": 4,
+              "text": "Cannot be determined",
+              "textHi": "तय नहीं किया जा सकता"
+            }
+          ],
+          "correctOption": 4,
+          "explanation": "$3d",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q14",
+          "qno": 14,
+          "questionText": "In the following question, the second word is related to the first word by a specific pattern of letter transformation. Identify the same pattern and apply it to the third word to find the correct option that completes the analogy.\n\n**TIME : VJOG :: WORD : ?**",
+          "questionTextHi": "निम्नलिखित प्रश्न में, दूसरा शब्द पहले शब्द से अक्षर परिवर्तन के एक विशिष्ट पैटर्न द्वारा संबंधित है। उसी पैटर्न को पहचानिए और उसे तीसरे शब्द पर लागू करके सही विकल्प चुनिए जो सादृश्य को पूरा करता है।\n\n**TIME : VJOG :: WORD : ?**",
+          "options": [
+            {
+              "id": 1,
+              "text": "YPTF",
+              "textHi": "YPTF"
+            },
+            {
+              "id": 2,
+              "text": "YQTG",
+              "textHi": "YQTG"
+            },
+            {
+              "id": 3,
+              "text": "YPSF",
+              "textHi": "YPSF"
+            },
+            {
+              "id": 4,
+              "text": "ZPSF",
+              "textHi": "ZPSF"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$3b",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q15",
+          "qno": 15,
+          "questionText": "In each of the following questions, a specific pattern such as reversal or rearrangement has been applied to the first word to get the second. Apply the same pattern to the third word and find the correct answer from the given options. **GNIDAER : READING :: NOITULOS : ?**",
+          "questionTextHi": "निम्नलिखित प्रत्येक प्रश्न में, पहले शब्द पर उलटफेर या पुनर्व्यवस्था जैसी एक विशिष्ट पद्धति लागू करके दूसरा शब्द प्राप्त किया गया है। तीसरे शब्द पर भी समान पद्धति लागू करें और दिए गए विकल्पों में से सही उत्तर चुनें। GNIDAER : READING :: NOITULOS : ?",
+          "options": [
+            {
+              "id": 1,
+              "text": "SOLUTION",
+              "textHi": "SOLUTION"
+            },
+            {
+              "id": 2,
+              "text": "SOLUNOIT",
+              "textHi": "SOLUNOIT"
+            },
+            {
+              "id": 3,
+              "text": "NOILOSUT",
+              "textHi": "NOILOSUT"
+            },
+            {
+              "id": 4,
+              "text": "POLLUTION",
+              "textHi": "POLLUTION"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$41",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q16",
+          "qno": 16,
+          "questionText": "In each of the following questions, the first word is coded to form the second word using a specific rearrangement and/or substitution rule. Apply the same rule to the third word to determine the correct corresponding word from the given alternatives.\n\n**AYRRJC :: CATTLE :: NCPDCAR : ?**",
+          "questionTextHi": "निम्नलिखित प्रत्येक प्रश्न में, पहले शब्द को एक विशिष्ट पुनर्व्यवस्था और/या प्रतिस्थापन नियम का उपयोग करके दूसरे शब्द के रूप में कूटबद्ध किया गया है। दिए गए विकल्पों में से सही संगत शब्द ज्ञात करने के लिए यही नियम तीसरे शब्द पर भी लागू कीजिए।\n\n**AYRRJC :: CATTLE :: NCPDCAR : ?**",
+          "options": [
+            {
+              "id": 1,
+              "text": "SUBJECTS",
+              "textHi": "SUBJECTS"
+            },
+            {
+              "id": 2,
+              "text": "NEGLECT",
+              "textHi": "NEGLECT"
+            },
+            {
+              "id": 3,
+              "text": "PERFECT",
+              "textHi": "PERFECT"
+            },
+            {
+              "id": 4,
+              "text": "OPERATE",
+              "textHi": "OPERATE"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$3f",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q17",
+          "qno": 17,
+          "questionText": "Identify the odd one: **2, 3, 5, 7, 11, 13, 17, 20**",
+          "questionTextHi": "भिन्न को पहचानें: 2, 3, 5, 7, 11, 13, 17, 20",
+          "options": [
+            {
+              "id": 1,
+              "text": "17",
+              "textHi": "17"
+            },
+            {
+              "id": 2,
+              "text": "13",
+              "textHi": "13"
+            },
+            {
+              "id": 3,
+              "text": "20",
+              "textHi": "20"
+            },
+            {
+              "id": 4,
+              "text": "11",
+              "textHi": "11"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "The logic follows here, \n\n\t2, 3, 5, 7, 11, 13, 17 → all are prime numbers\n\t20 → not a prime number (it is composite)\n\t20 is odd one.\n\nHence, the correct answer is **\"Option 3\"**",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q18",
+          "qno": 18,
+          "questionText": "Which of the following is the odd one out?",
+          "questionTextHi": "निम्नलिखित में से कौन-सा विकल्प भिन्न है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "2, 3, 5",
+              "textHi": "2, 3, 5"
+            },
+            {
+              "id": 2,
+              "text": "11, 13, 17",
+              "textHi": "11, 13, 17"
+            },
+            {
+              "id": 3,
+              "text": "4, 6, 8",
+              "textHi": "4, 6, 8"
+            },
+            {
+              "id": 4,
+              "text": "7, 19, 23",
+              "textHi": "7, 19, 23"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "The logic follows here,\n\nOption 1. 2, 3, 5 → all are prime numbers\n\nOption 2. 11, 13, 17 → all are prime numbers\n\n**Option 3. 4, 6, 8 → all are composite numbers**\n\nOption 4. 7, 19, 23 → all are prime numbers\n\nHence, the correct answer is **\"Option 3\"**",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q19",
+          "qno": 19,
+          "questionText": "Rani said, \"The man in the photo is my mother's son-in-law.\" Who is the man to Rani?",
+          "questionTextHi": "रानी ने कहा, \"फोटो में दिख रहा आदमी मेरी माता का दामाद है।\" रानी के लिए वह आदमी कौन है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Husband",
+              "textHi": "पति"
+            },
+            {
+              "id": 2,
+              "text": "Father",
+              "textHi": "पिता"
+            },
+            {
+              "id": 3,
+              "text": "Uncle",
+              "textHi": "चाचा"
+            },
+            {
+              "id": 4,
+              "text": "Cousin",
+              "textHi": "चचेरा"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "Family Chart:\n\nAs per the given information:\n\nThus, the man is Rani's husband.\n\nHence, the correct answer is **\"Option 1\"**",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q20",
+          "qno": 20,
+          "questionText": "In each of the following questions, a group of three numbers/symbols is given in each option. Identify the group that does NOT follow the same pattern as the others.",
+          "questionTextHi": "निम्नलिखित प्रत्येक प्रश्न में, प्रत्येक विकल्प में तीन संख्याओं/प्रतीकों का एक समूह दिया गया है। उस समूह की पहचान कीजिए जो अन्य के समान पैटर्न का अनुसरण नहीं करता है।",
+          "options": [
+            {
+              "id": 1,
+              "text": "K11 : I9 : G7",
+              "textHi": "K11 : I9 : G7"
+            },
+            {
+              "id": 2,
+              "text": "M13 : K11 : I9",
+              "textHi": "M13 : K11 : I9"
+            },
+            {
+              "id": 3,
+              "text": "O15 : M13 : K11",
+              "textHi": "O15 : M13 : K11"
+            },
+            {
+              "id": 4,
+              "text": "N14 : K11 : H8",
+              "textHi": "N14 : K11 : H8"
+            }
+          ],
+          "correctOption": 4,
+          "explanation": "$43",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q21",
+          "qno": 21,
+          "questionText": "In each of the following questions, a group of three numbers/symbols is given in each option. Identify the group that does NOT follow the same pattern as the others.",
+          "questionTextHi": "निम्नलिखित प्रत्येक प्रश्न में, प्रत्येक विकल्प में तीन संख्याओं/प्रतीकों का एक समूह दिया गया है। उस समूह की पहचान कीजिए जो अन्य के समान स्वरूप का पालन नहीं करता है।",
+          "options": [
+            {
+              "id": 1,
+              "text": "A1@ : B2# : C3$",
+              "textHi": "A1@ : B2# : C3$"
+            },
+            {
+              "id": 2,
+              "text": "D4% : E5^ : F6&amp;",
+              "textHi": "D4% : E5^ : F6&amp;"
+            },
+            {
+              "id": 3,
+              "text": "G7* : H8( : I9)",
+              "textHi": "G7* : H8( : I9)"
+            },
+            {
+              "id": 4,
+              "text": "J10_ : K11@ : L12@",
+              "textHi": "J10_ : K11@ : L12@"
+            }
+          ],
+          "correctOption": 4,
+          "explanation": "$47",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q22",
+          "qno": 22,
+          "questionText": "Pointing to a man, a woman said, \"His mother is the only daughter of my father.\" How is the man related to the woman?",
+          "questionTextHi": "एक आदमी की ओर इशारा करते हुए, एक महिला ने कहा, \"उसकी माता मेरे पिता की इकलौती पुत्री है।\" वह आदमी उस महिला से किस प्रकार संबंधित है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Son",
+              "textHi": "पुत्र"
+            },
+            {
+              "id": 2,
+              "text": "Nephew",
+              "textHi": "भतीजा"
+            },
+            {
+              "id": 3,
+              "text": "Cousin",
+              "textHi": "चचेरा भाई"
+            },
+            {
+              "id": 4,
+              "text": "Grandson",
+              "textHi": "पोता"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$45",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q23",
+          "qno": 23,
+          "questionText": "Pointing to a woman, John says, \"She is the wife of my uncle's only son.\" How is the woman related to John?",
+          "questionTextHi": "एक महिला की ओर इशारा करते हुए जॉन कहता है, \"वह मेरे चाचा के इकलौते पुत्र की पत्नी है।\" वह महिला जॉन से किस प्रकार संबंधित है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Sister",
+              "textHi": "बहन"
+            },
+            {
+              "id": 2,
+              "text": "Cousin",
+              "textHi": "चचेरा"
+            },
+            {
+              "id": 3,
+              "text": "Sister-in-law",
+              "textHi": "भाभी"
+            },
+            {
+              "id": 4,
+              "text": "Niece",
+              "textHi": "भतीजी"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$49",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q24",
+          "qno": 24,
+          "questionText": "A man said, \"My mother's husband's only son is the father of your sister's brother.\" How is the man related to you?",
+          "questionTextHi": "एक आदमी ने कहा, \"मेरी माता के पति का इकलौता पुत्र आपकी बहन के भाई का पिता है।\" वह आदमी आपसे किस प्रकार संबंधित है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Uncle",
+              "textHi": "चाचा"
+            },
+            {
+              "id": 2,
+              "text": "Father",
+              "textHi": "पिता"
+            },
+            {
+              "id": 3,
+              "text": "Grandfather",
+              "textHi": "दादा"
+            },
+            {
+              "id": 4,
+              "text": "Brother",
+              "textHi": "भाई"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$4b",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q25",
+          "qno": 25,
+          "questionText": "If # = ×, @ = -, $ = +, then evaluate: 9 # 2 @ 3 $ 1",
+          "questionTextHi": "यदि # = ×, @ = -, $ = + है, तो मूल्यांकन करें: 9 # 2 @ 3 $ 1",
+          "options": [
+            {
+              "id": 1,
+              "text": "18",
+              "textHi": "18"
+            },
+            {
+              "id": 2,
+              "text": "14",
+              "textHi": "14"
+            },
+            {
+              "id": 3,
+              "text": "16",
+              "textHi": "16"
+            },
+            {
+              "id": 4,
+              "text": "17",
+              "textHi": "17"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$4d",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Intelligence and Reasoning"
+        }
+      ]
+    },
+    {
+      "id": "sec_2",
+      "name": "General Awareness",
+      "questions": [
+        {
+          "id": "cgl-2025-12-sep-shift-1_q26",
+          "qno": 26,
+          "questionText": "Which of the following features distinguishes the Elephanta Caves from other rock-cut sites of early India?",
+          "questionTextHi": "निम्नलिखित में से कौन-सी विशेषता एलिफेंटा गुफाओं को प्रारंभिक भारत के अन्य चट्टान-कट स्थलों से अलग करती है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "They are primarily Buddhist caves with large stupas.",
+              "textHi": "ये मुख्यत: बड़े स्तूपों वाली बौद्ध गुफाएँ हैं।"
+            },
+            {
+              "id": 2,
+              "text": "The caves focus on Shaivite themes and feature sculptural depth through light and shadow.",
+              "textHi": "ये गुफाएँ शैव विषयवस्तु पर केंद्रित हैं तथा इनमें प्रकाश और छाया के माध्यम से मूर्तिकला की गहराई दिखाई देती है।"
+            },
+            {
+              "id": 3,
+              "text": "They contain a mix of Jain and Vaishnavite depictions in pillar halls.",
+              "textHi": "इनमें स्तंभ कक्षों में जैन और वैष्णव चित्रण का मिश्रण है।"
+            },
+            {
+              "id": 4,
+              "text": "The caves are entirely monolithic structures from the Mauryan period.",
+              "textHi": "ये गुफाएँ मौर्य काल की पूर्णत: अखंड संरचनाएँ हैं।"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$59",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q27",
+          "qno": 27,
+          "questionText": "Read the statements about the Goncha Festival of Bastar:\n\n1.) Tupki, a mock gun made of bamboo, uses Goncha fruit as bullets.\n\n2.) The chariot procession was started by Chalukya rulers.\n\n3.) Rath Yatra begins on Ashadh Shukla Dashmi and ends on Dutiya.\n\nWhich of the above statements are **correct?**",
+          "questionTextHi": "बस्तर के गोंचा उत्सव के बारे में कथन पढ़ें:\n\n1.) तुपकी, बांस से बनी एक नकली बंदूक है, जिसमें गोलियों के रूप में गोंचा फल का उपयोग किया जाता है।\n\n2.) रथ यात्रा चालुक्य शासकों द्वारा शुरू की गई थी।\n\n3.) रथ यात्रा आषाढ़ शुक्ल दशमी को शुरू होती है और दुतिया पर समाप्त होती है।\n\nउपर्युक्त कथनों में से कौन-सा **सही **है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Only 1 and 2",
+              "textHi": "केवल 1 और 2"
+            },
+            {
+              "id": 2,
+              "text": "Only 2 and 3",
+              "textHi": "केवल 2 और 3"
+            },
+            {
+              "id": 3,
+              "text": "Only 1 and 3",
+              "textHi": "केवल 1 और 3"
+            },
+            {
+              "id": 4,
+              "text": "1, 2 and 3 are correct",
+              "textHi": "1, 2 और 3 सही है।"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$5c",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q28",
+          "qno": 28,
+          "questionText": "**Fill in the blanks:**\n\nIn Carnatic music, a laghu with five beats is known as ____ jaati.",
+          "questionTextHi": "**रिक्त स्थान भरें:**\n\nकर्नाटक संगीत में, पाँच ताल वाले लघु को ____ जाति के नाम से जाना जाता है।",
+          "options": [
+            {
+              "id": 1,
+              "text": "Tishra",
+              "textHi": "तिशरा"
+            },
+            {
+              "id": 2,
+              "text": "Chaturashra",
+              "textHi": "चतुराश्र"
+            },
+            {
+              "id": 3,
+              "text": "Khanda",
+              "textHi": "खंडा"
+            },
+            {
+              "id": 4,
+              "text": "Mishra",
+              "textHi": "मिश्रा"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$55",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q29",
+          "qno": 29,
+          "questionText": "Which of the following statements about Judo is **correct**?",
+          "questionTextHi": "जूदो के बारे में निम्नलिखित में से कौन-सा कथन **सही **है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Judo was introduced in 1882 by Jigoro Kano in Japan.",
+              "textHi": "जूदो की शुरुआत 1882 में जापान में जिगोरो कानो द्वारा की गई थी।"
+            },
+            {
+              "id": 2,
+              "text": "India's first National Judo Championship was held in 1970 at Delhi University.",
+              "textHi": "भारत की पहली राष्ट्रीय जूडो चैंपियनशिप 1970 में दिल्ली विश्वविद्यालय में आयोजित की गई थी।"
+            },
+            {
+              "id": 3,
+              "text": "Kalpana Devi won gold at the 2010 Judo World Cup.",
+              "textHi": "कल्पना देवी ने 2010 जूडो विश्व कप में स्वर्ण पदक जीता।"
+            },
+            {
+              "id": 4,
+              "text": "Judo became an Olympic sport in 1965.",
+              "textHi": "जूदो 1965 में ओलंपिक खेल बन गया।"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$5f",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q30",
+          "qno": 30,
+          "questionText": "Where and when will the 59th National Cross Country Championships - 2025 be held?",
+          "questionTextHi": "59वीं राष्ट्रीय क्रॉस कंट्री चैंपियनशिप - 2025 कहाँ और कब आयोजित की जाएगी?",
+          "options": [
+            {
+              "id": 1,
+              "text": "10th January 2025, Lucknow, Uttar Pradesh",
+              "textHi": "10 जनवरी 2025, लखनऊ, उत्तर प्रदेश"
+            },
+            {
+              "id": 2,
+              "text": "12th January 2025, Meerut, Uttar Pradesh",
+              "textHi": "12 जनवरी 2025, मेरठ, उत्तर प्रदेश"
+            },
+            {
+              "id": 3,
+              "text": "15th January 2025, Kanpur, Uttar Pradesh",
+              "textHi": "15 जनवरी 2025, कानपुर, उत्तर प्रदेश"
+            },
+            {
+              "id": 4,
+              "text": "12th January 2025, Jaipur, Rajasthan",
+              "textHi": "12 जनवरी 2025, जयपुर, राजस्थान"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$64",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q31",
+          "qno": 31,
+          "questionText": "What is the core structural focus of the 2024 India-UAE Bilateral Investment Treaty (BIT) within India's international investment strategy?",
+          "questionTextHi": "भारत की अंतर्राष्ट्रीय निवेश रणनीति के अंतर्गत 2024 भारत-UAE द्विपक्षीय निवेश संधि (बीआईटी) का मुख्य संरचनात्मक फोकस क्या है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Proposes joint sovereign funds and links INR swap with UAE banks.",
+              "textHi": "संयुक्त संप्रभु निधि का प्रस्ताव तथा UAE बैंकों के साथ आईएनआर स्वैप को जोड़ना।"
+            },
+            {
+              "id": 2,
+              "text": "Focuses on pre-establishment rights and UAE-based arbitration.",
+              "textHi": "पूर्व-स्थापना अधिकारों और UAE-आधारित मध्यस्थता पर ध्यान केंद्रित करता है।"
+            },
+            {
+              "id": 3,
+              "text": "Assures post-establishment investor confidence via standard and national treatment.",
+              "textHi": "मानक और राष्ट्रीय उपचार के माध्यम से स्थापना के बाद निवेशकों का विश्वास सुनिश्चित करता है।"
+            },
+            {
+              "id": 4,
+              "text": "Aims at GCC-wide tax regulation under India-led digital framework.",
+              "textHi": "इसका उद्देश्य भारत के नेतृत्व वाले डिजिटल ढांचे के तहत जीसीसी-व्यापी कर विनियमन करना है।"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$69",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q32",
+          "qno": 32,
+          "questionText": "**Fill in the blanks:**\n\nThe Santosh Trophy 2022-23 final was uniquely held in _____, where Karnataka defeated Meghalaya to win the title after 54 years.",
+          "questionTextHi": "**रिक्त स्थान भरें:**\n\nसंतोष ट्रॉफी 2022-23 का फाइनल अनोखे ढंग से _____ में आयोजित किया गया, जहाँ कर्नाटक ने मेघालय को हराकर 54 वर्षों के बाद खिताब जीता।",
+          "options": [
+            {
+              "id": 1,
+              "text": "Dubai",
+              "textHi": "दुबई"
+            },
+            {
+              "id": 2,
+              "text": "Riyadh",
+              "textHi": "रियाद"
+            },
+            {
+              "id": 3,
+              "text": "Doha",
+              "textHi": "दोहा"
+            },
+            {
+              "id": 4,
+              "text": "Muscat",
+              "textHi": "मस्कट"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$6e",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q33",
+          "qno": 33,
+          "questionText": "Which of the following statements best captures the essence of \"Landscapes of Loss: The Story of an Indian Drought\" by Kavitha Iyer?",
+          "questionTextHi": "निम्नलिखित में से कौन सा कथन कविता अय्यर द्वारा लिखित \"लैंडस्केप्स ऑफ लॉस: द स्टोरी ऑफ एन इंडियन ड्रॉट\" के सार को सबसे अच्छी तरह से दर्शाता है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "A study on drought's human and ecological impacts in India.",
+              "textHi": "भारत में सूखे के मानवीय और पारिस्थितिक प्रभावों पर एक अध्ययन।"
+            },
+            {
+              "id": 2,
+              "text": "A fictional story about a family in a drought-hit area.",
+              "textHi": "सूखा प्रभावित क्षेत्र के एक परिवार की काल्पनिक कहानी।"
+            },
+            {
+              "id": 3,
+              "text": "A history of monsoon patterns and ancient agriculture in India.",
+              "textHi": "भारत में मानसून पैटर्न और प्राचीन कृषि का इतिहास।"
+            },
+            {
+              "id": 4,
+              "text": "A colonial-era policy analysis of water management.",
+              "textHi": "जल प्रबंधन का औपनिवेशिक युग का नीति विश्लेषण।"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$7d",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q34",
+          "qno": 34,
+          "questionText": "Consider the following statements about glacial landforms:\n\n**Statement 1: **Hanging valleys are often found opening into main glacial valleys at higher elevations.\n\n**Statement 2:** Spurs of such hanging valleys are frequently truncated into triangular facets.\n\nWhich of the following Statements is/are **Correct**?",
+          "questionTextHi": "हिमनदीय भू-आकृतियों के बारे में निम्नलिखित कथनों पर विचार कीजिए:\n\n**कथन 1:** निलंबी घाटियाँ प्रायः ऊँचे स्थानों पर मुख्य हिमनदीय घाटियों में खुलती हुई पाई जाती हैं।\n\n**कथन 2:** ऐसी निलंबी घाटियों के स्पर प्रायः त्रिकोणीय फलकों में विभाजित हो जाते हैं।\n\nनिम्नलिखित में से कौन सा/से कथन **सत्य **है/हैं?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Only 1",
+              "textHi": "केवल 1"
+            },
+            {
+              "id": 2,
+              "text": "Only 2",
+              "textHi": "केवल 2"
+            },
+            {
+              "id": 3,
+              "text": "1 and 2 are correct",
+              "textHi": "1 और 2 सही हैं।"
+            },
+            {
+              "id": 4,
+              "text": "Neither 1 nor 2 are correct",
+              "textHi": "न तो 1 और न ही 2 सही हैं।"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$75",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q35",
+          "qno": 35,
+          "questionText": "What is the primary function of the Crew Escape System (CES) on ISRO's Human Rated LVM3 (HLVM3) rocket?",
+          "questionTextHi": "इसरो के मानव रेटेड एलवीएम3 (HLVM3) रॉकेट पर क्रू एस्केप सिस्टम (CES) का प्राथमिक कार्य क्या है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "To guide the crew module into its designated Low Earth Orbit.",
+              "textHi": "क्रू मॉड्यूल को उसकी निर्दिष्ट निम्न पृथ्वी कक्षा में ले जाने के लिए मार्गदर्शन करना।"
+            },
+            {
+              "id": 2,
+              "text": "To eject the crew module to safety during launch emergencies.",
+              "textHi": "प्रक्षेपण आपातस्थिति के दौरान क्रू मॉड्यूल को सुरक्षित स्थान पर निकालना।"
+            },
+            {
+              "id": 3,
+              "text": "To assist in docking the crew module with a space station.",
+              "textHi": "अंतरिक्ष स्टेशन के साथ क्रू मॉड्यूल को डॉक करने में सहायता करना।"
+            },
+            {
+              "id": 4,
+              "text": "To provide thermal shielding during re-entry into Earth's atmosphere.",
+              "textHi": "पृथ्वी के वायुमंडल में पुनः प्रवेश के दौरान तापीय परिरक्षण प्रदान करना।"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$70",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q36",
+          "qno": 36,
+          "questionText": "Which of the following statements about Justice Sanjiv Khanna is/are **true**?\n\n1. He is the 51st Chief Justice of India\n\n2. He succeeded Justice D.Y. Chandrachud\n\n3. He served as CJI from 2023",
+          "questionTextHi": "न्यायमूर्ति संजीव खन्ना के बारे में निम्नलिखित में से कौन सा/से कथन सत्य है/हैं?\n\n1. वे भारत के 51वें मुख्य न्यायाधीश हैं।\n\n2. उन्होंने न्यायमूर्ति डी.वाई. चंद्रचूड़ का स्थान लिया।\n\n3. उन्होंने 2023 से मुख्य न्यायाधीश के रूप में कार्य किया।",
+          "options": [
+            {
+              "id": 1,
+              "text": "1 and 2 only",
+              "textHi": "केवल 1 और 2"
+            },
+            {
+              "id": 2,
+              "text": "2 and 3 only",
+              "textHi": "केवल 2 और 3"
+            },
+            {
+              "id": 3,
+              "text": "1 and 3 only",
+              "textHi": "केवल 1 और 3"
+            },
+            {
+              "id": 4,
+              "text": "1, 2, and 3 all are true",
+              "textHi": "1, 2, और 3 सभी सत्य हैं।"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$85",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q37",
+          "qno": 37,
+          "questionText": "Which of the following objectives are part of the National Population Policy (NPP) 2000?\n\n1. Providing free and compulsory education up to 14 years of age\n\n2. Increasing fertility rate to ensure demographic dividend\n\n3. Reducing infant mortality rate below 30 per 1000 live births\n\n4. Promoting delayed marriage for girls",
+          "questionTextHi": "निम्नलिखित में से कौन-से उद्देश्य राष्ट्रीय जनसंख्या नीति (NPP) 2000 का हिस्सा हैं?\n\n1. 14 वर्ष की आयु तक निःशुल्क और अनिवार्य शिक्षा प्रदान करना।\n\n2. जनसांख्यिकीय लाभांश सुनिश्चित करने के लिए प्रजनन दर में वृद्धि।\n\n3. शिशु मृत्यु दर को प्रति 1000 जीवित जन्मों पर 30 से कम करना।\n\n4. लड़कियों के लिए देर से विवाह को बढ़ावा देना।",
+          "options": [
+            {
+              "id": 1,
+              "text": "Only 1 and 2 are correct",
+              "textHi": "केवल 1 और 2 सही हैं।"
+            },
+            {
+              "id": 2,
+              "text": "Only 1 and 3 are correct",
+              "textHi": "केवल 1 और 3 सही हैं।"
+            },
+            {
+              "id": 3,
+              "text": "Only 1, 3 and 4 are correct",
+              "textHi": "केवल 1, 3 और 4 सही हैं।"
+            },
+            {
+              "id": 4,
+              "text": "1, 2, 3 and 4 all are correct",
+              "textHi": "1, 2, 3 और 4 सभी सही हैं।"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$88",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q38",
+          "qno": 38,
+          "questionText": "Which pathway in cellular respiration generates the most ATP?",
+          "questionTextHi": "कोशिकीय श्वसन में कौन सा मार्ग सबसे अधिक ATP उत्पन्न करता है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Glycolysis",
+              "textHi": "ग्लाइकोलाइसिस"
+            },
+            {
+              "id": 2,
+              "text": "Krebs cycle",
+              "textHi": "क्रेब्स चक्र"
+            },
+            {
+              "id": 3,
+              "text": "Electron transport chain",
+              "textHi": "इलेक्ट्रॉन परिवहन शृंखला"
+            },
+            {
+              "id": 4,
+              "text": "Fermentation",
+              "textHi": "किण्वन"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$8d",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q39",
+          "qno": 39,
+          "questionText": "Arrange the following events in chronological order:\n\na. Eastern Zonal Council meeting 2022\n\nb. States Reorganisation Act passed\n\nc. First Central Zonal Council meeting",
+          "questionTextHi": "निम्नलिखित घटनाओं को कालानुक्रमिक क्रम में व्यवस्थित करें:\n\na. पूर्वी क्षेत्रीय परिषद की बैठक 2022\n\nb. राज्य पुनर्गठन अधिनियम पारित\n\nc. मध्य क्षेत्रीय परिषद की पहली बैठक",
+          "options": [
+            {
+              "id": 1,
+              "text": "b-c-a",
+              "textHi": "b-c-a"
+            },
+            {
+              "id": 2,
+              "text": "c-b-a",
+              "textHi": "c-b-a"
+            },
+            {
+              "id": 3,
+              "text": "a-b-c",
+              "textHi": "a-b-c"
+            },
+            {
+              "id": 4,
+              "text": "b-a-c",
+              "textHi": "b-a-c"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$95",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q40",
+          "qno": 40,
+          "questionText": "Which of the following most **accurately **describes the legal character of the right to property under Article 300A of the Indian Constitution?",
+          "questionTextHi": "निम्नलिखित में से कौन-सा कथन भारतीय संविधान के अनुच्छेद 300A के तहत संपत्ति के अधिकार के कानूनी चरित्र का सबसे **सटीक **वर्णन करता है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "It is a fundamental right that guarantees compensation for all property acquisitions.",
+              "textHi": "यह एक मौलिक अधिकार है जो सभी संपत्ति अधिग्रहण के लिए मुआवजे की गारंटी देता है।"
+            },
+            {
+              "id": 2,
+              "text": "It allows the State to deprive a person of property by any law, even without due process.",
+              "textHi": "यह राज्य को किसी भी कानून द्वारा, यहाँ तक कि बिना किसी उचित प्रक्रिया के भी, किसी व्यक्ति को उसकी संपत्ति से वंचित करने की अनुमति देता है।"
+            },
+            {
+              "id": 3,
+              "text": "It is a constitutional legal right that permits deprivation only by authority of law.",
+              "textHi": "यह एक संवैधानिक कानूनी अधिकार है जो केवल कानून के प्राधिकार द्वारा ही वंचित करने की अनुमति देता है।"
+            },
+            {
+              "id": 4,
+              "text": "It permits citizens to claim property protection under Article 32 before the Supreme Court.",
+              "textHi": "यह नागरिकों को अनुच्छेद 32 के अंतर्गत सर्वोच्च न्यायालय में संपत्ति संरक्षण का दावा करने की अनुमति देता है।"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$90",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q41",
+          "qno": 41,
+          "questionText": "For a rigid body, the angular velocity of any particle about a given axis of rotation is:",
+          "questionTextHi": "किसी दृढ़ पिंड के लिए, किसी दिए गए घूर्णन अक्ष के परितः किसी कण का कोणीय वेग है:",
+          "options": [
+            {
+              "id": 1,
+              "text": "Proportional to its distance from the axis",
+              "textHi": "अक्ष से इसकी दूरी के समानुपाती"
+            },
+            {
+              "id": 2,
+              "text": "The same for all particles",
+              "textHi": "सभी कणों के लिए समान"
+            },
+            {
+              "id": 3,
+              "text": "Inversely proportional to its distance from the axis",
+              "textHi": "अक्ष से इसकी दूरी के व्युत्क्रमानुपाती"
+            },
+            {
+              "id": 4,
+              "text": "Always zero",
+              "textHi": "हमेशा शून्य"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$9a",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q42",
+          "qno": 42,
+          "questionText": "The Bharatiya Sakshya Adhiniyam (BSA) places emphasis on the use of technology to ensure the authenticity of evidence. This is particularly relevant for:",
+          "questionTextHi": "भारतीय साक्ष्य अधिनियम (BSA) साक्ष्य की प्रामाणिकता सुनिश्चित करने के लिए प्रौद्योगिकी के उपयोग पर जोर देता है। यह विशेष रूप से निम्नलिखित के लिए प्रासंगिक है:",
+          "options": [
+            {
+              "id": 1,
+              "text": "Physical exhibits from crime scenes.",
+              "textHi": "अपराध स्थलों से भौतिक प्रदर्शन।"
+            },
+            {
+              "id": 2,
+              "text": "Hand-written diaries.",
+              "textHi": "हस्तलिखित डायरियाँ।"
+            },
+            {
+              "id": 3,
+              "text": "Digital and electronic evidence.",
+              "textHi": "डिजिटल और इलेक्ट्रॉनिक साक्ष्य।"
+            },
+            {
+              "id": 4,
+              "text": "Oral confessions.",
+              "textHi": "मौखिक स्वीकारोक्ति।"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$98",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q43",
+          "qno": 43,
+          "questionText": "Read the below statements marked as Assertion (A) and Reason (R). Mark the correct options:\n\n**Assertion (A) : **The One Nation One Ration Card ensures portability of food grains.\n\n**Reason (R) :** It uses Aadhaar-enabled biometric authentication.",
+          "questionTextHi": "नीचे दिए गए कथनों को अभिकथन (A) और कारण (R) से चिह्नित करके पढ़िए। सही विकल्पों को चिह्नित कीजिए:\n\n**अभिकथन (A):** एक राष्ट्र एक राशन कार्ड खाद्यान्न की पोर्टेबिलिटी सुनिश्चित करता है।\n\n**कारण (R): **यह आधार-सक्षम बायोमीट्रिक प्रमाणीकरण का उपयोग करता है।",
+          "options": [
+            {
+              "id": 1,
+              "text": "Both A and R are true, and R is the correct explanation of A",
+              "textHi": "A और R दोनों सत्य हैं, और R, A का सही स्पष्टीकरण है।"
+            },
+            {
+              "id": 2,
+              "text": "Both A and R are true, but R is not the correct explanation of A",
+              "textHi": "A और R दोनों सत्य हैं, लेकिन R, A का सही स्पष्टीकरण नहीं है।"
+            },
+            {
+              "id": 3,
+              "text": "A is true, but R is false",
+              "textHi": "A सत्य है, लेकिन R असत्य है।"
+            },
+            {
+              "id": 4,
+              "text": "A is false, but R is true",
+              "textHi": "A असत्य है, लेकिन R सत्य है।"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$9d",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q44",
+          "qno": 44,
+          "questionText": "Cheraw, the bamboo dance performed using crossed bamboo sticks, is a folk dance of which state?",
+          "questionTextHi": "चेराव, बांस की छड़ियों का उपयोग करके किया जाने वाला बांस नृत्य, किस राज्य का लोक नृत्य है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Mizoram",
+              "textHi": "मिजोरम"
+            },
+            {
+              "id": 2,
+              "text": "Meghalaya",
+              "textHi": "मेघालय"
+            },
+            {
+              "id": 3,
+              "text": "Arunachal Pradesh",
+              "textHi": "अरुणाचल प्रदेश"
+            },
+            {
+              "id": 4,
+              "text": "Sikkim",
+              "textHi": "सिक्किम"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$a2",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q45",
+          "qno": 45,
+          "questionText": "What is a key factor assessed in the Global Firepower Military Strength Ranking 2025?",
+          "questionTextHi": "ग्लोबल फायरपावर मिलिट्री स्ट्रेंथ रैंकिंग 2025 में मूल्यांकन किया जाने वाला प्रमुख कारक क्या है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Economic Stability",
+              "textHi": "आर्थिक स्थिरता"
+            },
+            {
+              "id": 2,
+              "text": "Cultural Influence",
+              "textHi": "सांस्कृतिक प्रभाव"
+            },
+            {
+              "id": 3,
+              "text": "Defense Budget",
+              "textHi": "रक्षा बजट"
+            },
+            {
+              "id": 4,
+              "text": "Healthcare Spending",
+              "textHi": "स्वास्थ्य सेवा पर खर्च"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$a7",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q46",
+          "qno": 46,
+          "questionText": "Which of the following **correctly **describes cooperative sector industries?",
+          "questionTextHi": "निम्नलिखित में से कौन सा सहकारी क्षेत्र के उद्योगों का **सही **वर्णन करता है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Owned and operated by central government agencies.",
+              "textHi": "केंद्रीय सरकारी एजेंसियों के स्वामित्व और संचालन में।"
+            },
+            {
+              "id": 2,
+              "text": "Operated solely for export purposes.",
+              "textHi": "केवल निर्यात प्रयोजनों के लिए संचालित।"
+            },
+            {
+              "id": 3,
+              "text": "Owned by workers or suppliers sharing profits and losses",
+              "textHi": "लाभ और हानि को साझा करने वाले श्रमिकों या आपूर्तिकर्ताओं के स्वामित्व में"
+            },
+            {
+              "id": 4,
+              "text": "Maintained by foreign companies with Indian partnerships.",
+              "textHi": "भारतीय साझेदारी के साथ विदेशी कंपनियों द्वारा अनुरक्षित।"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$b2",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q47",
+          "qno": 47,
+          "questionText": "Education is now placed under which list after the 42nd Amendment?",
+          "questionTextHi": "भारतीय संविधान में 42वें संशोधन के बाद शिक्षा को अब किस सूची में रखा गया है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Union List",
+              "textHi": "संघ सूची"
+            },
+            {
+              "id": 2,
+              "text": "State List",
+              "textHi": "राज्य सूची"
+            },
+            {
+              "id": 3,
+              "text": "Concurrent List",
+              "textHi": "समवर्ती सूची"
+            },
+            {
+              "id": 4,
+              "text": "None of these",
+              "textHi": "इनमें से कोई नहीं"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$af",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q48",
+          "qno": 48,
+          "questionText": "What is the main objective of the National Framework for Climate Services (NFCS) launched in 2024?",
+          "questionTextHi": "2024 में शुरू किए गए जलवायु सेवाओं के लिए राष्ट्रीय ढांचे (NFCS) का मुख्य उद्देश्य क्या है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "To set emission trading targets",
+              "textHi": "उत्सर्जन व्यापार लक्ष्य निर्धारित करना।"
+            },
+            {
+              "id": 2,
+              "text": "To regulate groundwater quality",
+              "textHi": "भूजल की गुणवत्ता को विनियमित करने के लिए।"
+            },
+            {
+              "id": 3,
+              "text": "To deliver sector-specific climate information services",
+              "textHi": "क्षेत्र-विशिष्ट जलवायु सूचना सेवाएं प्रदान करना।"
+            },
+            {
+              "id": 4,
+              "text": "To mandate carbon offsetting in the private sector",
+              "textHi": "निजी क्षेत्र में कार्बन ऑफसेटिंग को अनिवार्य बनाना।"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$102",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q49",
+          "qno": 49,
+          "questionText": "Argon is produced in Earth's crust via?",
+          "questionTextHi": "भू - पर्पटी में आर्गन का उत्पादन किसके माध्यम से होता है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Decay of K-40",
+              "textHi": "K-40 का क्षय"
+            },
+            {
+              "id": 2,
+              "text": "Volcanoes",
+              "textHi": "ज्वालामुखी"
+            },
+            {
+              "id": 3,
+              "text": "Photosynthesis",
+              "textHi": "प्रकाश संश्लेषण"
+            },
+            {
+              "id": 4,
+              "text": "Cosmic rays",
+              "textHi": "ब्रह्मांडीय किरणें"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$107",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q50",
+          "qno": 50,
+          "questionText": "Which of the following is true about Fundamental Rights and DPSPs?",
+          "questionTextHi": "मौलिक अधिकारों और DPSP के बारे में निम्नलिखित में से कौन-सा कथन सत्य है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Both are justiciable and enforceable by courts",
+              "textHi": "दोनों ही न्यायालयों द्वारा न्यायोचित और प्रवर्तनीय हैं।"
+            },
+            {
+              "id": 2,
+              "text": "DPSPs override Fundamental Rights when in conflict",
+              "textHi": "संघर्ष की स्थिति में DPSP मौलिक अधिकारों को दरकिनार कर देते हैं।"
+            },
+            {
+              "id": 3,
+              "text": "Fundamental Rights are justiciable, but DPSPs are not",
+              "textHi": "मौलिक अधिकार न्यायोचित हैं, लेकिन DPSP नहीं।"
+            },
+            {
+              "id": 4,
+              "text": "DPSPs are guaranteed by the Constitution;Fundamental Rights are optional",
+              "textHi": "DPSP को संविधान द्वारा गारंटी दी गई है; मौलिक अधिकार वैकल्पिक हैं।"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$10a",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "General Awareness"
+        }
+      ]
+    },
+    {
+      "id": "sec_3",
+      "name": "Quantitative Aptitude",
+      "questions": [
+        {
+          "id": "cgl-2025-12-sep-shift-1_q51",
+          "qno": 51,
+          "questionText": "Arrange the fractions \\(\\frac{5}9, \\frac{4}7, \\frac{3}5\\) and, \\(\\frac{2}3\\)  in ascending order.",
+          "questionTextHi": "भिन्नों \\(\\frac{5}9, \\frac{4}7, \\frac{3}5\\) और, \\(\\frac{2}3\\) को आरोही क्रम में व्यवस्थित करें।",
+          "options": [
+            {
+              "id": 1,
+              "text": "\\(\\frac{3}{5}, \\frac{4}{7}, \\frac{2}{3}, \\frac{5}{9}\\)",
+              "textHi": "\\(\\frac{3}{5}, \\frac{4}{7}, \\frac{2}{3}, \\frac{5}{9}\\)"
+            },
+            {
+              "id": 2,
+              "text": "\\(\\frac{5}{9}, \\frac{4}{7}, \\frac{3}{5}, \\frac{2}{3}\\)",
+              "textHi": "\\(\\frac{5}{9}, \\frac{4}{7}, \\frac{3}{5}, \\frac{2}{3}\\)"
+            },
+            {
+              "id": 3,
+              "text": "\\( \\frac{2}{3}, \\frac{3}{5}, \\frac{4}{7}, \\frac{5}{9} \\)",
+              "textHi": "\\( \\frac{2}{3}, \\frac{3}{5}, \\frac{4}{7}, \\frac{5}{9} \\)"
+            },
+            {
+              "id": 4,
+              "text": "\\(\\frac{4}7, \\frac{5}9, \\frac{3}3, \\frac{3}5\\)",
+              "textHi": "\\(\\frac{4}7, \\frac{5}9, \\frac{3}3, \\frac{3}5\\)"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$b6",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q52",
+          "qno": 52,
+          "questionText": "Simplify: (\\(2\\frac{1}2\\) + 3.6) &ndash; 1.9",
+          "questionTextHi": "सरल करें: (\\(2\\frac{1}2\\) + 3.6) - 1.9",
+          "options": [
+            {
+              "id": 1,
+              "text": "4.2",
+              "textHi": "4.2"
+            },
+            {
+              "id": 2,
+              "text": "5.2",
+              "textHi": "5.2"
+            },
+            {
+              "id": 3,
+              "text": "6.2",
+              "textHi": "6.2"
+            },
+            {
+              "id": 4,
+              "text": "7.2",
+              "textHi": "7.2"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$b9",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q53",
+          "qno": 53,
+          "questionText": "Evaluate: \\(7 \\frac{1}{4} - \\left[ \\frac{5}{6} \\div \\left\\{ \\frac{1}{3} - \\left( \\frac{1}{2} \\times \\left( \\frac{3}{4} - \\frac{1}{2} \\right) \\right) \\right\\} \\right]\\)",
+          "questionTextHi": "\\(7 \\frac{1}{4} - \\left[ \\frac{5}{6} \\div \\left\\{ \\frac{1}{3} - \\left( \\frac{1}{2} \\times \\left( \\frac{3}{4} - \\frac{1}{2} \\right) \\right) \\right\\} \\right]\\) का मूल्यांकन करें।",
+          "options": [
+            {
+              "id": 1,
+              "text": "\\(-3\\frac{1}4\\)",
+              "textHi": "\\(-3\\frac{1}4\\)"
+            },
+            {
+              "id": 2,
+              "text": "\\(3\\frac{1}4\\)",
+              "textHi": "\\(3\\frac{1}4\\)"
+            },
+            {
+              "id": 3,
+              "text": "\\(-2\\frac{3}4\\)",
+              "textHi": "\\(-2\\frac{3}4\\)"
+            },
+            {
+              "id": 4,
+              "text": "\\(2\\frac{3}4\\)",
+              "textHi": "\\(2\\frac{3}4\\)"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$be",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q54",
+          "qno": 54,
+          "questionText": "$2e",
+          "questionTextHi": "$2f",
+          "options": [
+            {
+              "id": 1,
+              "text": "11:12",
+              "textHi": "11:12"
+            },
+            {
+              "id": 2,
+              "text": "12:11",
+              "textHi": "12:11"
+            },
+            {
+              "id": 3,
+              "text": "7:6",
+              "textHi": "7:6"
+            },
+            {
+              "id": 4,
+              "text": "6:7",
+              "textHi": "6:7"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$bc",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q55",
+          "qno": 55,
+          "questionText": "Arvind started a business by investing ₹80,000. After 4 months, Bhavin joined with ₹1,20,000. At the end of 8 months from the start, Chandan joined with ₹1,60,000. If the total profit is ₹1,05,000 at the end of the year, find the share of Chandan.",
+          "questionTextHi": "अरविंद ने ₹80,000 निवेश करके एक व्यवसाय शुरू किया है। 4 महीने बाद, भाविन ₹1,20,000 के साथ शामिल हो जाता है। शुरुआत से 8 महीने के अंत में, चंदन ₹1,60,000 के साथ शामिल हो जाता है। यदि कुल लाभ ₹1,05,000 है, तो चंदन का हिस्सा ज्ञात कीजिए।",
+          "options": [
+            {
+              "id": 1,
+              "text": "₹26,500",
+              "textHi": "₹26,500"
+            },
+            {
+              "id": 2,
+              "text": "₹26,000",
+              "textHi": "₹26,000"
+            },
+            {
+              "id": 3,
+              "text": "₹26,200",
+              "textHi": "₹26,200"
+            },
+            {
+              "id": 4,
+              "text": "₹26,250",
+              "textHi": "₹26,250"
+            }
+          ],
+          "correctOption": 4,
+          "explanation": "$c5",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q56",
+          "qno": 56,
+          "questionText": "A and B start a business. A invests ₹80,000 for 9 months, B invests ₹1,20,000 for 6 months. What is B's share of a ₹45,000 profit?",
+          "questionTextHi": "A और B एक व्यवसाय शुरू करते हैं। A, 9 महीने के लिए ₹80,000 का निवेश करता है, B, 6 महीने के लिए ₹1,20,000 का निवेश करता है। ₹45,000 के लाभ में B का हिस्सा क्या है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "₹26,500",
+              "textHi": "₹26,500"
+            },
+            {
+              "id": 2,
+              "text": "₹28,000",
+              "textHi": "₹28,000"
+            },
+            {
+              "id": 3,
+              "text": "₹36,000",
+              "textHi": "₹36,000"
+            },
+            {
+              "id": 4,
+              "text": "₹22,500",
+              "textHi": "₹22,500"
+            }
+          ],
+          "correctOption": 4,
+          "explanation": "$c1",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q57",
+          "qno": 57,
+          "questionText": "What is the average of all integers between 100 and 250 that are exactly divisible by 11?",
+          "questionTextHi": "100 और 250 के बीच उन सभी पूर्णांकों का औसत क्या है जो 11 से पूर्णतः विभाज्य हैं?",
+          "options": [
+            {
+              "id": 1,
+              "text": "176",
+              "textHi": "176"
+            },
+            {
+              "id": 2,
+              "text": "186",
+              "textHi": "186"
+            },
+            {
+              "id": 3,
+              "text": "196",
+              "textHi": "196"
+            },
+            {
+              "id": 4,
+              "text": "146",
+              "textHi": "146"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$c3",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q58",
+          "qno": 58,
+          "questionText": "The average of 15 numbers is 80. The average of the first 6 numbers is 72. The average of the next 6 numbers is 25% more than the average of the first 6 numbers. The 13th number is 8 more than the 15th number, and the 14th number is 10 less than the 15th number. What is the average of the 13th and 14th numbers?",
+          "questionTextHi": "15 संख्याओं का औसत 80 है। पहली 6 संख्याओं का औसत 72 है। अगली 6 संख्याओं का औसत पहली 6 संख्याओं के औसत से 25% अधिक है। 13वीं संख्या, 15वीं संख्या से 8 अधिक है, और 14वीं संख्या, 15वीं संख्या से 10 कम है। 13वीं और 14वीं संख्याओं का औसत क्या है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "70.89",
+              "textHi": "70.89"
+            },
+            {
+              "id": 2,
+              "text": "85",
+              "textHi": "85"
+            },
+            {
+              "id": 3,
+              "text": "75.67",
+              "textHi": "75.67"
+            },
+            {
+              "id": 4,
+              "text": "80.65",
+              "textHi": "80.65"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$c7",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q59",
+          "qno": 59,
+          "questionText": "A landlord bought a flat for ₹8,00,000. He wants to earn a 9% annual return on his investment after paying ₹2,000 per month for maintenance. What should be the monthly rent he charges?",
+          "questionTextHi": "एक मकान मालिक ने ₹8,00,000 में एक फ्लैट खरीदा है। वह रखरखाव के लिए प्रत्येक महीने ₹2,000 का भुगतान करने के बाद, अपने निवेश पर 9% वार्षिक रिटर्न कमाना चाहता है। उसे प्रत्येक महीने कितना किराया लेना चाहिए?",
+          "options": [
+            {
+              "id": 1,
+              "text": "₹7,000",
+              "textHi": "₹7,000"
+            },
+            {
+              "id": 2,
+              "text": "₹7,500",
+              "textHi": "₹7,500"
+            },
+            {
+              "id": 3,
+              "text": "₹8,000",
+              "textHi": "₹8,000"
+            },
+            {
+              "id": 4,
+              "text": "₹8,500",
+              "textHi": "₹8,500"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$c9",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q60",
+          "qno": 60,
+          "questionText": "An amount is said to double in 5 years with compound interest. How many years will it take for the amount to grow to 8 times its original value?",
+          "questionTextHi": "कहा जाता है कि एक राशि चक्रवृद्धि ब्याज के साथ 5 वर्षों में दोगुनी हो जाती है। राशि को अपने वास्तविक मूल्य से 8 गुना बढ़ने में कितने वर्ष लगेंगे?",
+          "options": [
+            {
+              "id": 1,
+              "text": "15",
+              "textHi": "15"
+            },
+            {
+              "id": 2,
+              "text": "16",
+              "textHi": "16"
+            },
+            {
+              "id": 3,
+              "text": "17",
+              "textHi": "17"
+            },
+            {
+              "id": 4,
+              "text": "18",
+              "textHi": "18"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$cb",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q61",
+          "qno": 61,
+          "questionText": "A sum becomes ₹6,600 in 2 years and ₹7,920 in 3 years at compound interest. What is the original principal?",
+          "questionTextHi": "चक्रवृद्धि ब्याज पर एक धनराशि 2 वर्ष में ₹6,600 तथा 3 वर्ष में ₹7,920 हो जाती है। मूलधन क्या है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "₹4,000.33",
+              "textHi": "₹4,000.33"
+            },
+            {
+              "id": 2,
+              "text": "₹5,583.33",
+              "textHi": "₹5,583.33"
+            },
+            {
+              "id": 3,
+              "text": "₹4,583.33",
+              "textHi": "₹4,583.33"
+            },
+            {
+              "id": 4,
+              "text": "₹6,583.33",
+              "textHi": "₹6,583.33"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$cd",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q62",
+          "qno": 62,
+          "questionText": "Suman purchased 25 liters of milk at ₹45 per liter and another 15 liters of milk at ₹50 per liter. She combined both quantities and then sold the entire mixture at ₹48 per liter. What was her total profit or loss?",
+          "questionTextHi": "सुमन ने 25 लीटर दूध ₹45 प्रति लीटर की दर से और 15 लीटर दूध ₹50 प्रति लीटर की दर से खरीदा है। वह दोनों मात्राओं को मिलाता है और फिर पूरे मिश्रण को ₹48 प्रति लीटर की दर से बेचता है। उसका कुल लाभ या हानि क्या थी?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Loss of ₹45",
+              "textHi": "₹45 की हानि"
+            },
+            {
+              "id": 2,
+              "text": "Profit of ₹45",
+              "textHi": "₹45 का लाभ"
+            },
+            {
+              "id": 3,
+              "text": "Profit of ₹90",
+              "textHi": "₹90 का लाभ"
+            },
+            {
+              "id": 4,
+              "text": "Loss of ₹90",
+              "textHi": "₹90 की हानि"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$d1",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q63",
+          "qno": 63,
+          "questionText": "A toy manufacturer produced 1200 toy cars at a total cost of ₹90,000. He donated 200 cars to a charity event. For the rest, he announced a 10% discount on the market price of ₹120 per car. He also offered 2 toy cars free for every 8 toy cars purchased. If all 1200 toy cars were distributed, what is his overall gain or loss percentage?",
+          "questionTextHi": "एक खिलौना निर्माता ₹90,000 की कुल लागत से 1200 खिलौना कारें बनाता है। वह 200 कारें एक चैरिटी कार्यक्रम में दान कर देता है। शेष के लिए, वह ₹120 प्रति कार के बाजार मूल्य पर 10% की छूट की घोषणा करता है। वह खरीदी गई प्रत्येक 8 खिलौना कारों के लिए 2 खिलौना कारें मुफ्त देने की भी पेशकश करता है। यदि सभी 1200 खिलौना कारें वितरित की गई हैं, तो उसका कुल लाभ या हानि प्रतिशत क्या है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "4% loss",
+              "textHi": "4% हानि"
+            },
+            {
+              "id": 2,
+              "text": "4% profit",
+              "textHi": "4% लाभ"
+            },
+            {
+              "id": 3,
+              "text": "5% loss",
+              "textHi": "5% हानि"
+            },
+            {
+              "id": 4,
+              "text": "5% profit",
+              "textHi": "5% लाभ"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$cf",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q64",
+          "qno": 64,
+          "questionText": "A retailer marks an air conditioner 80% above its cost price. He offers a first discount of 25% on the marked price. During a festive offer, an additional discount of 10% is applied on the already discounted price. If the final selling price is ₹15,552, what is the approximate cost price of the air conditioner?\"",
+          "questionTextHi": "एक रिटेलर एक एयर कंडीशनर की कीमत उसकी लागत कीमत से 80% ज़्यादा रखता है। वह अंकित मूल्य पर 25% की पहली छूट प्रदान करता है। एक त्योहारी ऑफ़र के दौरान, पहले से छूटे वाले मूल्य पर 10% की अतिरिक्त छूट लागू की जाती है। यदि अंतिम विक्रय मूल्य ₹15,552 है, तो एयर कंडीशनर का अनुमानित क्रय मूल्य क्या है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "₹9,000",
+              "textHi": "₹9,000"
+            },
+            {
+              "id": 2,
+              "text": "₹9,200",
+              "textHi": "₹9,200"
+            },
+            {
+              "id": 3,
+              "text": "₹12,800",
+              "textHi": "₹12,800"
+            },
+            {
+              "id": 4,
+              "text": "₹10,000",
+              "textHi": "₹10,000"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$d3",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q65",
+          "qno": 65,
+          "questionText": "A 40-liter mixture contains juice and water in the ratio 5:3. How much water (in liters) must be added to this mixture to change the ratio of juice to water to 2:3?",
+          "questionTextHi": "40 लीटर के मिश्रण में जूस और पानी का अनुपात 5:3 है। जूस और पानी का अनुपात 2:3 करने के लिए इस मिश्रण में कितना पानी (लीटर में) मिलाया जाना चाहिए?",
+          "options": [
+            {
+              "id": 1,
+              "text": "15.5 litres",
+              "textHi": "15.5 लीटर"
+            },
+            {
+              "id": 2,
+              "text": "22.5 litres",
+              "textHi": "22.5 लीटर"
+            },
+            {
+              "id": 3,
+              "text": "25 litres",
+              "textHi": "25 लीटर"
+            },
+            {
+              "id": 4,
+              "text": "30 litres",
+              "textHi": "30 लीटर"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$d5",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q66",
+          "qno": 66,
+          "questionText": "A is able to complete a task in 15 days, while B takes 20 days to finish the same task. If they collaborate and work together for 4 days, what fraction of the work will still remain?",
+          "questionTextHi": "A किसी कार्य को 15 दिन में पूरा कर सकता है, जबकि B को उस कार्य में 20 दिन लगते हैं। यदि वे मिलकर 4 दिन कार्य करें, तो कार्य का कितना भाग शेष रह जाएगा?",
+          "options": [
+            {
+              "id": 1,
+              "text": "\\(\\frac{1}4\\)",
+              "textHi": "\\(\\frac{1}4\\)"
+            },
+            {
+              "id": 2,
+              "text": "\\(\\frac{7}{15}\\)",
+              "textHi": "\\(\\frac{7}{15}\\)"
+            },
+            {
+              "id": 3,
+              "text": "\\(\\frac{8}{15}\\)",
+              "textHi": "\\(\\frac{8}{15}\\)"
+            },
+            {
+              "id": 4,
+              "text": "\\(\\frac{11}{15}\\)",
+              "textHi": "\\(\\frac{11}{15}\\)"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$d7",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q67",
+          "qno": 67,
+          "questionText": "Two oils priced at ₹90 per kg and ₹150 per kg are blended and sold at ₹144 per kg, achieving a profit margin of 20%. What is the ratio of the two oils in the mixture?",
+          "questionTextHi": "₹90 प्रति किलोग्राम और ₹150 प्रति किलोग्राम मूल्य वाले दो तेलों को मिश्रित करके ₹144 प्रति किलोग्राम की दर से बेचा जाता है, जिससे 20% का लाभ प्राप्त होता है। मिश्रण में दोनों तेलों का अनुपात क्या है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "1 : 1",
+              "textHi": "1 : 1"
+            },
+            {
+              "id": 2,
+              "text": "2 : 1",
+              "textHi": "2 : 1"
+            },
+            {
+              "id": 3,
+              "text": "3 : 2",
+              "textHi": "3 : 2"
+            },
+            {
+              "id": 4,
+              "text": "4 : 1",
+              "textHi": "4 : 1"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$db",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q68",
+          "qno": 68,
+          "questionText": "Three pipes, A, B, and C are capable of filling a tank in 6, 8, and 12 hours, respectively. When all three pipes are opened together, they operate for 2 hours before pipe C is closed. How much additional time will it take to completely fill the tank after that?",
+          "questionTextHi": "तीन पाइप, A, B और C, एक टंकी को क्रमशः 6, 8 और 12 घंटे में भर सकते हैं। जब तीनों पाइप एक साथ खोले जाते हैं, तो वे 2 घंटे तक चलते हैं, जिसके बाद पाइप C को बंद कर दिया जाता है। इसके बाद टंकी को पूरी तरह भरने में कितना अतिरिक्त समय लगेगा?",
+          "options": [
+            {
+              "id": 1,
+              "text": "\\(\\frac{6}7\\) hours",
+              "textHi": "\\(\\frac{6}7\\) घंटे"
+            },
+            {
+              "id": 2,
+              "text": "\\(\\frac{2}6\\) hours",
+              "textHi": "\\(\\frac{2}6\\) घंटे"
+            },
+            {
+              "id": 3,
+              "text": "\\(\\frac{3}5\\) hours",
+              "textHi": "\\(\\frac{3}5\\) घंटे"
+            },
+            {
+              "id": 4,
+              "text": "\\(\\frac{9}2\\) hours",
+              "textHi": "\\(\\frac{9}2\\) घंटे"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$d9",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q69",
+          "qno": 69,
+          "questionText": "A bullet train covers a fixed distance in 30 minutes at an average speed of 240 km/h. Due to track maintenance, it needs to be diverted, increasing the distance by 20%. If the train needs to arrive at its destination on time (i.e., in 30 minutes), what should its new average speed be in km/h?",
+          "questionTextHi": "एक बुलेट ट्रेन 240 किमी/घंटा की औसत गति से 30 मिनट में एक निश्चित दूरी तय करती है। ट्रैक रखरखाव के कारण, इसे डायवर्ट करने की आवश्यकता है, जिससे दूरी 20% बढ़ जाती है। यदि ट्रेन को समय पर (अर्थात, 30 मिनट में) अपने गंतव्य पर पहुँचना है, तो इसकी नई औसत गति किमी/घंटा में क्या होनी चाहिए?",
+          "options": [
+            {
+              "id": 1,
+              "text": "280 km/h",
+              "textHi": "280 किमी/घंटा"
+            },
+            {
+              "id": 2,
+              "text": "300 km/h",
+              "textHi": "300किमी/घंटा"
+            },
+            {
+              "id": 3,
+              "text": "288 km/h",
+              "textHi": "288किमी/घंटा"
+            },
+            {
+              "id": 4,
+              "text": "320 km/h",
+              "textHi": "320 किमी/घंटा"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$dd",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q70",
+          "qno": 70,
+          "questionText": "Two cars, X and Y, start from points 360 km apart and travel at constant speeds. If they move towards each other, they meet in 4 hours. If they move in the same direction, they meet in 12 hours. What is the speed of car X? (Assume X is the faster car).",
+          "questionTextHi": "दो कारें, X और Y, 360 किमी दूर स्थित बिंदुओं से चलना शुरू करती हैं और समान गति से यात्रा करती हैं। यदि वे एक-दूसरे की ओर बढ़ती हैं, तो वे 4 घंटे में मिलती हैं। यदि वे एक ही दिशा में चलती हैं, तो वे 12 घंटे में मिलती हैं। कार X की गति क्या है? (मान लें कि X तेज कार है)।",
+          "options": [
+            {
+              "id": 1,
+              "text": "60 km/h",
+              "textHi": "60 किमी/घंटा"
+            },
+            {
+              "id": 2,
+              "text": "75 km/h",
+              "textHi": "75 किमी/घंटा"
+            },
+            {
+              "id": 3,
+              "text": "45 km/h",
+              "textHi": "45 किमी/घंटा"
+            },
+            {
+              "id": 4,
+              "text": "90 km/h",
+              "textHi": "90 किमी/घंटा"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$df",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q71",
+          "qno": 71,
+          "questionText": "A circular pizza having a radius of 21 cm. If 75% of it is eaten, what is the area of pizza remaining?",
+          "questionTextHi": "एक वृत्ताकार पिज़्ज़ा जिसकी त्रिज्या 21 सेमी है। यदि इसका 75% भाग खा लिया जाता है, तो शेष बचे पिज़्ज़ा का क्षेत्रफल क्या है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "173.25 cm&sup2;",
+              "textHi": "173.25 सेमी&sup2;"
+            },
+            {
+              "id": 2,
+              "text": "346.5 cm&sup2;",
+              "textHi": "346.5 सेमी&sup2;"
+            },
+            {
+              "id": 3,
+              "text": "432.25 cm&sup2;",
+              "textHi": "432.25 सेमी&sup2;"
+            },
+            {
+              "id": 4,
+              "text": "115.5 cm&sup2;",
+              "textHi": "115.5 सेमी&sup2;"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$e3",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q72",
+          "qno": 72,
+          "questionText": "A ring-shaped disc has outer radius 10 cm and inner radius 7 cm. What is the approximate ratio of the ring's area to the whole outer circle?",
+          "questionTextHi": "एक वलय के आकार की डिस्क की बाहरी त्रिज्या 10 सेमी और आंतरिक त्रिज्या 7 सेमी है। वलय के क्षेत्रफल और पूरे बाहरी वृत्त के क्षेत्रफल का अनुमानित अनुपात क्या है?",
+          "options": [
+            {
+              "id": 1,
+              "text": "1:2",
+              "textHi": "1:2"
+            },
+            {
+              "id": 2,
+              "text": "2:3",
+              "textHi": "2:3"
+            },
+            {
+              "id": 3,
+              "text": "3:4",
+              "textHi": "3:4"
+            },
+            {
+              "id": 4,
+              "text": "4:5",
+              "textHi": "4:5"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$e5",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q73",
+          "qno": 73,
+          "questionText": "A bicycle wheel having a radius of 35 cm. What percentage of its circumference is covered in a quarter turn? (Use &pi;=22/7)",
+          "questionTextHi": "एक साइकिल के पहिये की त्रिज्या 35 सेमी है। एक चौथाई चक्कर में इसकी परिधि का कितना प्रतिशत भाग तय होता है? (&pi; = 22/7 का प्रयोग करें)",
+          "options": [
+            {
+              "id": 1,
+              "text": "15%",
+              "textHi": "15%"
+            },
+            {
+              "id": 2,
+              "text": "25%",
+              "textHi": "25%"
+            },
+            {
+              "id": 3,
+              "text": "30%",
+              "textHi": "30%"
+            },
+            {
+              "id": 4,
+              "text": "35%",
+              "textHi": "35%"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$e1",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q74",
+          "qno": 74,
+          "questionText": "The line y = mx + 5 passes through (1,8). Find m.",
+          "questionTextHi": "रेखा y = mx + 5 बिंदु (1,8) से होकर जाती है। m ज्ञात कीजिए।",
+          "options": [
+            {
+              "id": 1,
+              "text": "5",
+              "textHi": "5"
+            },
+            {
+              "id": 2,
+              "text": "4",
+              "textHi": "4"
+            },
+            {
+              "id": 3,
+              "text": "3",
+              "textHi": "3"
+            },
+            {
+              "id": 4,
+              "text": "2",
+              "textHi": "2"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$e7",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q75",
+          "qno": 75,
+          "questionText": "\\(31 ^ 3 + 18 ^ 3 - 37 ^ 3 + 210 \\) is equal to:",
+          "questionTextHi": "\\(31 ^ 3 + 18 ^ 3 - 37 ^ 3 + 210\\) का मान किसके बराबर है:",
+          "options": [
+            {
+              "id": 1,
+              "text": "-36810",
+              "textHi": "-36810"
+            },
+            {
+              "id": 2,
+              "text": "-14820",
+              "textHi": "-14820"
+            },
+            {
+              "id": 3,
+              "text": "-45670",
+              "textHi": "-45670"
+            },
+            {
+              "id": 4,
+              "text": "-23450",
+              "textHi": "-23450"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$10f",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "Quantitative Aptitude"
+        }
+      ]
+    },
+    {
+      "id": "sec_4",
+      "name": "English Comprehension",
+      "questions": [
+        {
+          "id": "cgl-2025-12-sep-shift-1_q76",
+          "qno": 76,
+          "questionText": "Select the most appropriate synonym of the given word:\n\n**PERFIDIOUS**",
+          "options": [
+            {
+              "id": 1,
+              "text": "Honest"
+            },
+            {
+              "id": 2,
+              "text": "Faithful"
+            },
+            {
+              "id": 3,
+              "text": "Treacherous"
+            },
+            {
+              "id": 4,
+              "text": "Loyal"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$e9",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q77",
+          "qno": 77,
+          "questionText": "Choose the correct meaning of idiom:\n\n**Hobson's choice**",
+          "options": [
+            {
+              "id": 1,
+              "text": "A dilemma between two evils"
+            },
+            {
+              "id": 2,
+              "text": "A free and fair decision"
+            },
+            {
+              "id": 3,
+              "text": "No real choice at all"
+            },
+            {
+              "id": 4,
+              "text": "A selection made under duress"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$ea",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q78",
+          "qno": 78,
+          "questionText": "Select the most appropriate antonym of the given word.\n\n**Perfidious**",
+          "options": [
+            {
+              "id": 1,
+              "text": "Betraying"
+            },
+            {
+              "id": 2,
+              "text": "Faithless"
+            },
+            {
+              "id": 3,
+              "text": "Loyal"
+            },
+            {
+              "id": 4,
+              "text": "Treacherous"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$ed",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q79",
+          "qno": 79,
+          "questionText": "Identify the **misspelt **word.",
+          "options": [
+            {
+              "id": 1,
+              "text": "Vicereine"
+            },
+            {
+              "id": 2,
+              "text": "Floccinaucinihilipilification"
+            },
+            {
+              "id": 3,
+              "text": "Defenestrate"
+            },
+            {
+              "id": 4,
+              "text": "Quintessance"
+            }
+          ],
+          "correctOption": 4,
+          "explanation": "$ec",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q80",
+          "qno": 80,
+          "questionText": "Spot the **correct spelling** of a CSF-shunt procedure.",
+          "options": [
+            {
+              "id": 1,
+              "text": "Ventriculoperitoneal"
+            },
+            {
+              "id": 2,
+              "text": "Ventriculoperitonal"
+            },
+            {
+              "id": 3,
+              "text": "Ventriculaperitoneal"
+            },
+            {
+              "id": 4,
+              "text": "Ventriculoperetoneal"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$eb",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q81",
+          "qno": 81,
+          "questionText": "Choose the correct **one-word substitute** for:\n\n'An official reprimand or strong criticism'.",
+          "options": [
+            {
+              "id": 1,
+              "text": "Accusation"
+            },
+            {
+              "id": 2,
+              "text": "Denunciation"
+            },
+            {
+              "id": 3,
+              "text": "Censure"
+            },
+            {
+              "id": 4,
+              "text": "Indictment"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$ef",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q82",
+          "qno": 82,
+          "questionText": "**Select the correct option:**\n\nThe startup scaled so rapidly that its infrastructure could ____ keep pace.",
+          "options": [
+            {
+              "id": 1,
+              "text": "barely"
+            },
+            {
+              "id": 2,
+              "text": "merely"
+            },
+            {
+              "id": 3,
+              "text": "scarcely"
+            },
+            {
+              "id": 4,
+              "text": "all but"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$ee",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q83",
+          "qno": 83,
+          "questionText": "**Select the correct option:**\n\nRare though the phenomenon is, it can occur ___ prolonged drought conditions.",
+          "options": [
+            {
+              "id": 1,
+              "text": "towards"
+            },
+            {
+              "id": 2,
+              "text": "amid"
+            },
+            {
+              "id": 3,
+              "text": "among"
+            },
+            {
+              "id": 4,
+              "text": "under"
+            }
+          ],
+          "correctOption": 4,
+          "explanation": "$f1",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q84",
+          "qno": 84,
+          "questionText": "**Select the correct option:**\n\nWhile the proposal appeared pragmatic on paper, its implementation proved ____ complicated than expected.",
+          "options": [
+            {
+              "id": 1,
+              "text": "less"
+            },
+            {
+              "id": 2,
+              "text": "more"
+            },
+            {
+              "id": 3,
+              "text": "much"
+            },
+            {
+              "id": 4,
+              "text": "rather"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$f0",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q85",
+          "qno": 85,
+          "questionText": "**Find the part of the sentence that contains an error: **\n\nThat the report failed to address the root causes (1)/ of the community unrest were surprising (2)/ given the exhaustive data (3)/ compiled over several months. (4)",
+          "options": [
+            {
+              "id": 1,
+              "text": "(1)"
+            },
+            {
+              "id": 2,
+              "text": "(2)"
+            },
+            {
+              "id": 3,
+              "text": "(3)"
+            },
+            {
+              "id": 4,
+              "text": "(4)"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$f2",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q86",
+          "qno": 86,
+          "questionText": "**Find the part of the sentence that contains an error:**\n\nWhat renders the draft legislation particularly contentious is not its proposed realignment of fiscal powers per se, (1)/ but that it presumes, without empirical substantiation, (2)/ a fiscal equivalence among states whose developmental baselines are (3)/ incommensurable by any normative metric. (4)",
+          "options": [
+            {
+              "id": 1,
+              "text": "(1)"
+            },
+            {
+              "id": 2,
+              "text": "(2)"
+            },
+            {
+              "id": 3,
+              "text": "(3)"
+            },
+            {
+              "id": 4,
+              "text": "(4)"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$f3",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q87",
+          "qno": 87,
+          "questionText": "**Change the following from active to passive:**\n\nThey have been neglecting maintenance of the archives for years.",
+          "options": [
+            {
+              "id": 1,
+              "text": "Maintenance of the archives had been neglected by them for years."
+            },
+            {
+              "id": 2,
+              "text": "Maintenance of the archives is being neglected by them for years."
+            },
+            {
+              "id": 3,
+              "text": "Maintenance of the archives was being neglected by them for years."
+            },
+            {
+              "id": 4,
+              "text": "Maintenance of the archives has been being neglected by them for years."
+            }
+          ],
+          "correctOption": 4,
+          "explanation": "$f4",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q88",
+          "qno": 88,
+          "questionText": "**Select the sentence containing the homonym of the highlighted word:**\n\nThe choir began the **introit **at the priest's signal.",
+          "options": [
+            {
+              "id": 1,
+              "text": "The child sang the introit during the intermission."
+            },
+            {
+              "id": 2,
+              "text": "The introit was replaced by an organ improvisation."
+            },
+            {
+              "id": 3,
+              "text": "The missal included Latin text for the introit."
+            },
+            {
+              "id": 4,
+              "text": "The cantor rehearsed the Sunday introit."
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$f5",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q89",
+          "qno": 89,
+          "questionText": "**Convert the sentence provided below from its passive voice structure to an active voice structure:**\n\nIt was being suggested by multiple sources that the operation had been compromised internally.",
+          "options": [
+            {
+              "id": 1,
+              "text": "Multiple sources were suggesting that the operation had been compromised internally."
+            },
+            {
+              "id": 2,
+              "text": "The operation was compromised, multiple sources suggested."
+            },
+            {
+              "id": 3,
+              "text": "The sources were suggesting an operation compromise."
+            },
+            {
+              "id": 4,
+              "text": "The operation had compromised multiple internal sources."
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$f7",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q90",
+          "qno": 90,
+          "questionText": "According to the passage, how is wisdom primarily acquired?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Through textbooks"
+            },
+            {
+              "id": 2,
+              "text": "Through emotional detachment"
+            },
+            {
+              "id": 3,
+              "text": "Through experience and reflection"
+            },
+            {
+              "id": 4,
+              "text": "Through algorithmic thinking"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$f6",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q91",
+          "qno": 91,
+          "questionText": "What does the author mean by \"wisdom enriches the soul\"?",
+          "options": [
+            {
+              "id": 1,
+              "text": "It enhances academic success"
+            },
+            {
+              "id": 2,
+              "text": "It fosters deeper moral insight"
+            },
+            {
+              "id": 3,
+              "text": "It improves verbal expression"
+            },
+            {
+              "id": 4,
+              "text": "It sharpens mathematical skills"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$f9",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q92",
+          "qno": 92,
+          "questionText": "Who, according to the author, can be wise despite lacking formal education?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Scientists"
+            },
+            {
+              "id": 2,
+              "text": "School children"
+            },
+            {
+              "id": 3,
+              "text": "Elders and artisans"
+            },
+            {
+              "id": 4,
+              "text": "Technocrats"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$f8",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q93",
+          "qno": 93,
+          "questionText": "What is the central contrast drawn in the passage?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Education vs. career"
+            },
+            {
+              "id": 2,
+              "text": "Intelligence vs. memory"
+            },
+            {
+              "id": 3,
+              "text": "Reading vs. writing"
+            },
+            {
+              "id": 4,
+              "text": "Formal learning vs. applied wisdom"
+            }
+          ],
+          "correctOption": 4,
+          "explanation": "$fb",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q94",
+          "qno": 94,
+          "questionText": "According to the author, why has the gap between education and wisdom widened in recent times?",
+          "options": [
+            {
+              "id": 1,
+              "text": "Due to overuse of social media"
+            },
+            {
+              "id": 2,
+              "text": "Because wisdom is no longer valued"
+            },
+            {
+              "id": 3,
+              "text": "Because of rote learning and algorithmic methods"
+            },
+            {
+              "id": 4,
+              "text": "Because people stop learning after school"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$fa",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q95",
+          "qno": 95,
+          "questionText": "Choose the most suitable option to replace the highlighted part of the sentence:\n\nShe has the reputation ***to be a kind woman.***",
+          "options": [
+            {
+              "id": 1,
+              "text": "to have kindness"
+            },
+            {
+              "id": 2,
+              "text": "of being a kind woman"
+            },
+            {
+              "id": 3,
+              "text": "of being the kind woman"
+            },
+            {
+              "id": 4,
+              "text": "to be kind-hearted"
+            }
+          ],
+          "correctOption": 2,
+          "explanation": "$fc",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q96",
+          "qno": 96,
+          "questionText": "Choose the most suitable option to replace the highlighted part of the sentence:\n\nThe doctor advised him ***to avoid eating sweets and doing exercise regularly.***",
+          "options": [
+            {
+              "id": 1,
+              "text": "avoiding sweets and doing regular exercise"
+            },
+            {
+              "id": 2,
+              "text": "to avoid sweets and to exercises regularly"
+            },
+            {
+              "id": 3,
+              "text": "to avoid eating sweets and to exercise regularly"
+            },
+            {
+              "id": 4,
+              "text": "to not eat sweets and do exercises"
+            }
+          ],
+          "correctOption": 3,
+          "explanation": "$fd",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q97",
+          "qno": 97,
+          "questionText": "**A sentence is provided in direct speech. From the four given options, choose the one that most accurately conveys the sentence in its corresponding indirect speech.**\n\nHe asked me, \"Have you done your homework?\"",
+          "options": [
+            {
+              "id": 1,
+              "text": "He asked me if I had done my homework."
+            },
+            {
+              "id": 2,
+              "text": "He asked me have I done my homework."
+            },
+            {
+              "id": 3,
+              "text": "He asked me whether I have done my homework."
+            },
+            {
+              "id": 4,
+              "text": "He asked me whether had I done my homework."
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$fe",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q98",
+          "qno": 98,
+          "questionText": "**A sentence is provided in indirect speech. From the four given options, choose the one that most accurately conveys the sentence in its corresponding direct speech.**\n\nHe said that he would join the meeting after lunch.",
+          "options": [
+            {
+              "id": 1,
+              "text": "\"I will join the meeting after lunch,\" he said."
+            },
+            {
+              "id": 2,
+              "text": "\"I would join the meeting after lunch,\" he said."
+            },
+            {
+              "id": 3,
+              "text": "\"I shall join the meeting after lunch,\" he said."
+            },
+            {
+              "id": 4,
+              "text": "\"I can join the meeting after lunch,\" he said."
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$ff",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q99",
+          "qno": 99,
+          "questionText": "**Rearrange the following sentences in correct order to make a logical passage:**\n\n1. A media strategy was framed based on outreach results.\n\n2. Demographic metrics were tracked from campaign dashboards.\n\n3. User interactions were collected across platforms.\n\n4. Analysts segmented users by age and behavior.",
+          "options": [
+            {
+              "id": 1,
+              "text": "3-2-4-1"
+            },
+            {
+              "id": 2,
+              "text": "2-3-1-4"
+            },
+            {
+              "id": 3,
+              "text": "3-1-4-2"
+            },
+            {
+              "id": 4,
+              "text": "4-1-2-3"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$100",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        },
+        {
+          "id": "cgl-2025-12-sep-shift-1_q100",
+          "qno": 100,
+          "questionText": "**Rearrange the following sentences to form a coherent paragraph:**\n\n1. It is a process that involves the systematic and objective investigation of a subject to discover new facts or to confirm existing ones.\n\n2. Research is a foundational pillar of academic and scientific progress.\n\n3. This can be either theoretical, aiming to expand knowledge, or applied, seeking to solve a practical problem.\n\n4. The findings of this investigation are then documented and peer-reviewed to ensure validity and credibility.",
+          "options": [
+            {
+              "id": 1,
+              "text": "2, 1, 3, 4"
+            },
+            {
+              "id": 2,
+              "text": "1, 2, 4, 3"
+            },
+            {
+              "id": 3,
+              "text": "4, 3, 2, 1"
+            },
+            {
+              "id": 4,
+              "text": "3, 4, 1, 2"
+            }
+          ],
+          "correctOption": 1,
+          "explanation": "$101",
+          "marks": 2,
+          "negativeMarks": 0.5,
+          "sectionName": "English Comprehension"
+        }
+      ]
+    }
+  ]
+}

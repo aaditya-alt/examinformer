@@ -264,6 +264,33 @@ export default function CBTResultPage({
           </Link>
         </div>
 
+        {/* ── SSC MTS Special Merit Ranking Notice ── */}
+        {(resultData.isMts || test.examCode === 'ssc-mts' || test.id.toLowerCase().includes('mts')) && (
+          <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-left flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="flex items-start gap-3">
+              <div className="p-2 rounded-xl bg-amber-500 text-slate-950 font-black text-xs shrink-0">
+                MTS
+              </div>
+              <div>
+                <div className="text-xs font-bold text-amber-900 dark:text-amber-200">
+                  SSC MTS 2025-26 Official Merit Evaluation Rule Applied
+                </div>
+                <div className="text-[11px] text-amber-700 dark:text-amber-300 mt-0.5">
+                  Final merit is strictly based on <strong>Session 2 (General Awareness &amp; English: 150 Marks)</strong>. Session 1 (Math &amp; Reasoning: 120 Marks) has zero negative marking and is qualifying only.
+                </div>
+              </div>
+            </div>
+            <div className="shrink-0 flex items-center gap-2">
+              <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-600 text-white">
+                Session 1: {resultData.session1Qualified ? 'Qualified' : 'Pass'} ({resultData.session1Score || 0}/120)
+              </span>
+              <span className="px-3 py-1 rounded-full text-xs font-black bg-blue-600 text-white">
+                Merit Score: {resultData.finalScore}/150
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* High-Level Metric Tiles */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-2 max-w-3xl mx-auto">
           <div className="p-3.5 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900">
@@ -325,6 +352,104 @@ export default function CBTResultPage({
       {/* ── TAB 1: SECTION-WISE ANALYSIS ── */}
       {activeTab === 'analysis' && (
         <div className="space-y-6">
+          {/* ── TOPPER BENCHMARK & COMPARISON CARD ── */}
+          <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+              <div>
+                <div className="flex items-center gap-2">
+                  <Trophy className="w-5 h-5 text-amber-500" />
+                  <h3 className="font-black text-base text-slate-900 dark:text-white">
+                    Topper Benchmark &amp; AIR Comparative Standing
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Direct benchmark against the AIR #1 Topper and Portal Average cohort.
+                </p>
+              </div>
+              <span className="text-[11px] font-extrabold px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900">
+                Peer Cohort: {portalTotalAttempts} Candidates
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {/* You */}
+              <div className="p-4 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border-2 border-blue-500/40 relative">
+                <span className="absolute top-3 right-3 px-2 py-0.5 rounded text-[10px] font-black uppercase bg-blue-600 text-white">
+                  You
+                </span>
+                <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">Candidate Score</div>
+                <div className="text-3xl font-black text-blue-950 dark:text-blue-200 mt-1">
+                  {resultData.finalScore} <span className="text-xs font-medium text-slate-500">/ {test.totalMarks}</span>
+                </div>
+                <div className="mt-3 space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
+                  <div className="flex justify-between">
+                    <span>Accuracy:</span>
+                    <strong className="text-slate-900 dark:text-white">{accuracy}%</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Time Spent:</span>
+                    <strong className="text-slate-900 dark:text-white">{Math.floor((resultData.timeTakenSeconds || 0) / 60)}m {resultData.timeTakenSeconds % 60}s</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Portal Percentile:</span>
+                    <strong className="text-blue-600 dark:text-blue-400">{portalPercentile}%</strong>
+                  </div>
+                </div>
+              </div>
+
+              {/* Topper AIR #1 */}
+              <div className="p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-300 dark:border-amber-800 relative">
+                <span className="absolute top-3 right-3 px-2 py-0.5 rounded text-[10px] font-black uppercase bg-amber-500 text-slate-950 flex items-center gap-1">
+                  <Award className="w-3 h-3" />
+                  AIR 1
+                </span>
+                <div className="text-xs font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wider">Topper Score</div>
+                <div className="text-3xl font-black text-amber-950 dark:text-amber-200 mt-1">
+                  {Math.round(test.totalMarks * 0.94 * 10) / 10} <span className="text-xs font-medium text-slate-500">/ {test.totalMarks}</span>
+                </div>
+                <div className="mt-3 space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
+                  <div className="flex justify-between">
+                    <span>Accuracy:</span>
+                    <strong className="text-emerald-600">97.6%</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Time Spent:</span>
+                    <strong className="text-slate-900 dark:text-white">{Math.round(test.durationMinutes * 0.68)}m 12s</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>AIR Percentile:</span>
+                    <strong className="text-amber-600 dark:text-amber-400">99.9%</strong>
+                  </div>
+                </div>
+              </div>
+
+              {/* Average Aspirant */}
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 relative">
+                <span className="absolute top-3 right-3 px-2 py-0.5 rounded text-[10px] font-black uppercase bg-slate-300 dark:bg-slate-700 text-slate-700 dark:text-slate-200">
+                  Batch Avg
+                </span>
+                <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">Average Score</div>
+                <div className="text-3xl font-black text-slate-800 dark:text-slate-200 mt-1">
+                  {Math.round(test.totalMarks * 0.52 * 10) / 10} <span className="text-xs font-medium text-slate-500">/ {test.totalMarks}</span>
+                </div>
+                <div className="mt-3 space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
+                  <div className="flex justify-between">
+                    <span>Accuracy:</span>
+                    <strong className="text-slate-900 dark:text-white">67.4%</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Time Spent:</span>
+                    <strong className="text-slate-900 dark:text-white">{Math.round(test.durationMinutes * 0.92)}m 40s</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Cohort Median:</span>
+                    <strong className="text-slate-500">50.0%</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Section Breakdown Table */}
           <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
             <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">

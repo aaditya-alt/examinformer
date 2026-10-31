@@ -105,18 +105,18 @@ export const EXAM_REGISTRY: ExamDefinition[] = [
     shortName: 'CPO Tier-1',
     family: 'ssc',
     tier: 'Tier-1',
-    totalQuestions: 200,
+    totalQuestions: 100,
     durationMinutes: 120,
-    totalMarks: 200,
+    totalMarks: 100,
     marksPerCorrect: 1.0,
     negativePerWrong: 0.25,
     sections: [
-      { name: 'General Intelligence and Reasoning', questionCount: 50, marks: 50 },
-      { name: 'General Knowledge and General Awareness', questionCount: 50, marks: 50 },
-      { name: 'Quantitative Aptitude', questionCount: 50, marks: 50 },
-      { name: 'English Comprehension', questionCount: 50, marks: 50 },
+      { name: 'General Intelligence and Reasoning', questionCount: 25, marks: 25 },
+      { name: 'General Knowledge and General Awareness', questionCount: 25, marks: 25 },
+      { name: 'Quantitative Aptitude', questionCount: 25, marks: 25 },
+      { name: 'English Comprehension', questionCount: 25, marks: 25 },
     ],
-    description: 'Sub-Inspector in Delhi Police, CISF, BSF, CRPF, ITBP, SSB recruitment examination.'
+    description: 'Updated official SSC CPO pattern: 100 Questions / 100 Marks with 0.25 negative marking.'
   },
   {
     id: 'ssc-cpo-tier2',
@@ -142,14 +142,14 @@ export const EXAM_REGISTRY: ExamDefinition[] = [
     tier: 'Session 1 & 2',
     totalQuestions: 90,
     durationMinutes: 90,
-    totalMarks: 270,
+    totalMarks: 150, // Merit based exclusively on Session 2 (150 Marks)
     marksPerCorrect: 3.0,
     negativePerWrong: 1.0,
     sections: [
-      { name: 'Session 1: Numerical Ability & Reasoning (No Negative)', questionCount: 40, marks: 120 },
-      { name: 'Session 2: General Awareness & English Language', questionCount: 50, marks: 150 },
+      { name: 'Session 1: Numerical Ability & Reasoning (Qualifying Only, No Negative)', questionCount: 40, marks: 120 },
+      { name: 'Session 2: General Awareness & English Language (Merit Determining)', questionCount: 50, marks: 150 },
     ],
-    description: 'Official MTS two-session pattern. Session 1 is qualifying (no negative marking).'
+    description: 'Official MTS pattern: Final merit is prepared solely on Session 2 performance (150 Marks). Session 1 is qualifying only with zero negative marking.'
   },
   {
     id: 'ssc-gd',
