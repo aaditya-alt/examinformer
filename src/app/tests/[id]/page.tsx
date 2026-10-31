@@ -94,6 +94,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   const [languageModalOpen, setLanguageModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [sectionAlertMsg, setSectionAlertMsg] = useState<string | null>(null);
+  const [isQuestionBookmarked, setIsQuestionBookmarked] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -273,6 +274,22 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     return () => clearInterval(interval);
   }, [isSolutionMode, user, test, isPaused, sectionSecondsRemaining, activeSectionIdx, preTestStep]);
 
+  // 5. Bookmark sync with localStorage & candidate profile
+  useEffect(() => {
+    if (!test || !test.sections) return;
+    const curSec = test.sections[activeSectionIdx] || test.sections[0];
+    const curQ = curSec?.questions?.[activeQuestionIdx] || curSec?.questions?.[0];
+    if (!curQ) return;
+    const itemKey = curQ.id || `${testId}_${curQ.qno}`;
+    try {
+      const raw = localStorage.getItem('examinformer_saved_questions');
+      if (raw) {
+        const list = JSON.parse(raw);
+        setIsQuestionBookmarked(list.some((item: any) => item.id === itemKey || item.questionId === itemKey));
+      }
+    } catch (e) {}
+  }, [testId, activeSectionIdx, activeQuestionIdx, test]);
+
   const handleSectionTimeExpired = () => {
     if (!test) return;
     setLockedSections(prev => ({ ...prev, [activeSectionIdx]: true }));
@@ -378,188 +395,12 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     return `${h.toString().padStart(2, '0')} : ${m.toString().padStart(2, '0')} : ${s.toString().padStart(2, '0')}`;
   };
 
-  if (loading) {
-    return (
-      <div className="fixed inset-0 bg-[#0f172a] flex flex-col items-center justify-center text-white z-50">
-        <div className="w-10 h-10 border-3 border-sky-400 border-t-transparent rounded-full animate-spin mb-3" />
-        <h2 className="text-base font-bold">Initializing Eduquity Assessment Hall...</h2>
-        <p className="text-xs text-slate-400 mt-1">Validating candidate station &amp; loading encrypted question paper</p>
-      </div>
-    );
-  }
-
-  if (!test) {
-    return (
-      <div className="fixed inset-0 bg-[#0f172a] flex flex-col items-center justify-center text-white z-50 p-4 text-center">
-        <AlertTriangle className="w-10 h-10 text-rose-500 mb-3" />
-        <h2 className="text-lg font-bold">Test Paper Not Available</h2>
-        <p className="text-xs text-slate-400 mt-1">The requested CBT mock test was not found.</p>
-        <button
-          onClick={() => router.push('/tests')}
-          className="mt-5 px-5 py-2 rounded-xl bg-sky-600 text-white font-bold text-xs"
-        >
-          Back to Tests
-        </button>
-      </div>
-    );
-  }
-
-  // ── ENFORCE RULE 2: Solutions are LOCKED until candidate completes & submits test! ──
-  if (isSolutionMode && !testResultCache) {
-    return (
-      <div className="fixed inset-0 z-50 bg-[#0a1120] text-white flex flex-col items-center justify-center p-4">
-        <div className="w-full max-w-md p-8 rounded-2xl bg-[#111e38] border border-slate-700/80 shadow-2xl text-center space-y-6">
-          <div className="w-14 h-14 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
-            <Lock className="w-8 h-8" />
-          </div>
-
-          <div className="space-y-1.5">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400 px-3 py-1 rounded-full bg-amber-950/80 border border-amber-800">
-              Solutions Strictly Locked
-            </span>
-            <h2 className="text-2xl font-black text-white pt-2">
-              Attempt Required First
-            </h2>
-            <p className="text-xs text-slate-300 leading-relaxed max-w-sm mx-auto">
-              To protect test integrity and simulate the real examination, answers and step-by-step solutions are <strong>only unlocked after you submit</strong> your test.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-[#0c1527] border border-slate-800 text-left space-y-2 text-xs text-slate-300">
-            <div className="flex items-center justify-between text-[11px] text-slate-400">
-              <span>Test Title:</span>
-              <strong className="text-white truncate max-w-[200px]">{test.title}</strong>
-            </div>
-            <div className="flex items-center justify-between text-[11px] text-slate-400">
-              <span>Total Questions:</span>
-              <strong className="text-white">{test.totalQuestions} Questions</strong>
-            </div>
-            <div className="flex items-center justify-between text-[11px] text-slate-400">
-              <span>Duration:</span>
-              <strong className="text-white">{test.durationMinutes} Minutes</strong>
-            </div>
-          </div>
-
-          <div className="space-y-3 pt-2">
-            <Link
-              href={`/tests/${testId}`}
-              className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2"
-            >
-              <Play className="w-4 h-4 fill-current" />
-              <span>Start &amp; Attempt Examination</span>
-            </Link>
-
-            <Link
-              href="/tests"
-              className="block w-full py-2.5 rounded-xl border border-slate-700 text-slate-400 hover:text-white text-xs font-semibold"
-            >
-              Back to Tests
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Auth Gate only for taking test
-  if (!user && !isSolutionMode) {
-    return (
-      <div className="fixed inset-0 z-50 bg-[#0a1120] text-white flex flex-col items-center justify-center p-4">
-        <div className="w-full max-w-md p-8 rounded-2xl bg-[#111e38] border border-slate-700/80 shadow-2xl text-center space-y-6">
-          <div className="w-14 h-14 mx-auto rounded-2xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400">
-            <ShieldCheck className="w-8 h-8" />
-          </div>
-
-          <div className="space-y-1.5">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-sky-400 px-3 py-1 rounded-full bg-sky-950/80 border border-sky-800">
-              Candidate Login Required
-            </span>
-            <h2 className="text-2xl font-black text-white pt-2">
-              Sign In to Begin Test
-            </h2>
-            <p className="text-xs text-slate-300 leading-relaxed max-w-sm mx-auto">
-              Sign in to take <strong>{test.title}</strong>. This allows you to pause &amp; resume at any time and saves your scorecard &amp; shift rank.
-            </p>
-          </div>
-
-          <div className="space-y-3 pt-2">
-            <button
-              onClick={() => openAuthModal('Sign in or register to begin this official examination.')}
-              className="w-full py-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2"
-            >
-              <LogIn className="w-4 h-4" />
-              <span>Sign In / Register</span>
-            </button>
-
-            <button
-              onClick={() => router.push('/tests')}
-              className="w-full py-2.5 rounded-xl border border-slate-700 text-slate-400 hover:text-white text-xs font-semibold"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!test || !test.sections || test.sections.length === 0) {
-    return (
-      <div className="fixed inset-0 bg-[#0f172a] text-white flex flex-col items-center justify-center p-6 text-center">
-        <HelpCircle className="w-12 h-12 text-amber-400 mb-3" />
-        <h2 className="text-xl font-bold">Mock Test Loading or Unavailable</h2>
-        <p className="text-xs text-slate-400 max-w-sm mt-1 mb-4">
-          Please check the test series catalog for available official 2025 shift papers.
-        </p>
-        <Link
-          href="/tests"
-          className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs"
-        >
-          Return to Test Series
-        </Link>
-      </div>
-    );
-  }
-
-  // Active section & question pointers with bulletproof null checks
-  const currentSection = test.sections[activeSectionIdx] || test.sections[0];
-  const questionsInCurrentSec = currentSection?.questions || [];
-  const currentQuestion = questionsInCurrentSec[activeQuestionIdx] || questionsInCurrentSec[0];
-
-  if (!currentQuestion) {
-    return (
-      <div className="fixed inset-0 bg-[#0f172a] text-white flex flex-col items-center justify-center p-6 text-center">
-        <HelpCircle className="w-12 h-12 text-amber-400 mb-3" />
-        <h2 className="text-xl font-bold">Question Paper Being Assembled</h2>
-        <p className="text-xs text-slate-400 max-w-sm mt-1 mb-4">
-          The questions for this section are being compiled from official 2025 shift papers.
-        </p>
-        <Link
-          href="/tests"
-          className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs"
-        >
-          Return to Test Series
-        </Link>
-      </div>
-    );
-  }
-
-  const qno = currentQuestion.qno;
+  // Safe section & question pointers
+  const currentSection = test?.sections?.[activeSectionIdx] || test?.sections?.[0];
+  const sectionQuestions = currentSection?.questions || [];
+  const currentQuestion = sectionQuestions[activeQuestionIdx] || sectionQuestions[0];
+  const qno = currentQuestion?.qno || 1;
   const currentResponse = userResponses[qno] || { status: 'not_visited' };
-
-  // Bookmark / Saved question state
-  const [isQuestionBookmarked, setIsQuestionBookmarked] = useState(false);
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem('examinformer_saved_questions');
-      if (raw) {
-        const list = JSON.parse(raw);
-        const itemKey = currentQuestion?.id || `${testId}_${qno}`;
-        setIsQuestionBookmarked(list.some((item: any) => item.id === itemKey));
-      }
-    } catch (e) {}
-  }, [testId, qno, currentQuestion]);
 
   const toggleSaveQuestion = async () => {
     if (!currentQuestion) return;
@@ -744,7 +585,6 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   const countMarkedAnswered = allResponses.filter(r => r.status === 'marked_answered').length;
 
   // Active section counts for Eduquity "PART Analysis" box
-  const sectionQuestions = currentSection.questions;
   const secAnswered = sectionQuestions.filter(q => {
     const r = userResponses[q.qno];
     return r && (r.status === 'answered' || r.status === 'marked_answered');
@@ -876,16 +716,16 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   ).length;
 
   const currentSectionStats = {
-    answered: currentSection.questions.filter(
+    answered: sectionQuestions.filter(
       (q) => userResponses[q.qno]?.status === 'answered' || userResponses[q.qno]?.status === 'answered_review'
     ).length,
-    notAnswered: currentSection.questions.filter(
+    notAnswered: sectionQuestions.filter(
       (q) => userResponses[q.qno]?.status === 'not_answered'
     ).length,
-    review: currentSection.questions.filter(
+    review: sectionQuestions.filter(
       (q) => userResponses[q.qno]?.status === 'review' || userResponses[q.qno]?.status === 'answered_review'
     ).length,
-    notVisited: currentSection.questions.filter(
+    notVisited: sectionQuestions.filter(
       (q) => !userResponses[q.qno] || userResponses[q.qno]?.status === 'not_visited'
     ).length
   };
@@ -897,8 +737,95 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     backgroundRepeat: 'repeat'
   };
 
-  // ── STRICT CANDIDATE ENROLLMENT GATE ──
-  if (!user && !isSolutionMode && !loading) {
+  // ── CONDITIONAL DISPLAY SCREENS (ORDERED STRICTLY BELOW ALL HOOKS) ──
+
+  // 1. Initial Assessment Hall Loading
+  if (loading) {
+    return (
+      <div className="fixed inset-0 bg-[#0f172a] flex flex-col items-center justify-center text-white z-50">
+        <div className="w-10 h-10 border-3 border-sky-400 border-t-transparent rounded-full animate-spin mb-3" />
+        <h2 className="text-base font-bold">Initializing Eduquity Assessment Hall...</h2>
+        <p className="text-xs text-slate-400 mt-1">Validating candidate station &amp; loading encrypted question paper</p>
+      </div>
+    );
+  }
+
+  // 2. Test Paper Not Available
+  if (!test || !test.sections || test.sections.length === 0) {
+    return (
+      <div className="fixed inset-0 bg-[#0f172a] flex flex-col items-center justify-center text-white z-50 p-4 text-center">
+        <AlertTriangle className="w-10 h-10 text-rose-500 mb-3" />
+        <h2 className="text-lg font-bold">Test Paper Not Available</h2>
+        <p className="text-xs text-slate-400 mt-1">The requested CBT mock test was not found.</p>
+        <button
+          onClick={() => router.push('/tests')}
+          className="mt-5 px-5 py-2 rounded-xl bg-sky-600 text-white font-bold text-xs cursor-pointer"
+        >
+          Back to Tests
+        </button>
+      </div>
+    );
+  }
+
+  // 3. Solutions Locked Screen (Enforce Rule 2: Unlocked only after submission)
+  if (isSolutionMode && !testResultCache) {
+    return (
+      <div className="fixed inset-0 z-50 bg-[#0a1120] text-white flex flex-col items-center justify-center p-4">
+        <div className="w-full max-w-md p-8 rounded-2xl bg-[#111e38] border border-slate-700/80 shadow-2xl text-center space-y-6">
+          <div className="w-14 h-14 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+            <Lock className="w-8 h-8" />
+          </div>
+
+          <div className="space-y-1.5">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400 px-3 py-1 rounded-full bg-amber-950/80 border border-amber-800">
+              Solutions Strictly Locked
+            </span>
+            <h2 className="text-2xl font-black text-white pt-2">
+              Attempt Required First
+            </h2>
+            <p className="text-xs text-slate-300 leading-relaxed max-w-sm mx-auto">
+              To protect test integrity and simulate the real examination, answers and step-by-step solutions are <strong>only unlocked after you submit</strong> your test.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-[#0c1527] border border-slate-800 text-left space-y-2 text-xs text-slate-300">
+            <div className="flex items-center justify-between text-[11px] text-slate-400">
+              <span>Test Title:</span>
+              <strong className="text-white truncate max-w-[200px]">{test.title}</strong>
+            </div>
+            <div className="flex items-center justify-between text-[11px] text-slate-400">
+              <span>Total Questions:</span>
+              <strong className="text-white">{test.totalQuestions} Questions</strong>
+            </div>
+            <div className="flex items-center justify-between text-[11px] text-slate-400">
+              <span>Duration:</span>
+              <strong className="text-white">{test.durationMinutes} Minutes</strong>
+            </div>
+          </div>
+
+          <div className="space-y-3 pt-2">
+            <Link
+              href={`/tests/${testId}`}
+              className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2"
+            >
+              <Play className="w-4 h-4 fill-current" />
+              <span>Start &amp; Attempt Examination</span>
+            </Link>
+
+            <Link
+              href="/tests"
+              className="block w-full py-2.5 rounded-xl border border-slate-700 text-slate-400 hover:text-white text-xs font-semibold"
+            >
+              Back to Tests
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 4. Strict Candidate Enrollment Gate
+  if (!user && !isSolutionMode) {
     return (
       <div className="fixed inset-0 z-[120] bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4">
         <div className="w-full max-w-md p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl text-center space-y-5 animate-in zoom-in-95">
@@ -934,8 +861,27 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     );
   }
 
-  // ── PRE-TEST INSTRUCTIONS MODAL (Matching User Screenshots 1 & 2) ──
-  if (test && !isSolutionMode && preTestStep !== 'started') {
+  // 5. Question Assembler Guard
+  if (!currentQuestion) {
+    return (
+      <div className="fixed inset-0 bg-[#0f172a] text-white flex flex-col items-center justify-center p-6 text-center">
+        <HelpCircle className="w-12 h-12 text-amber-400 mb-3" />
+        <h2 className="text-xl font-bold">Question Paper Being Assembled</h2>
+        <p className="text-xs text-slate-400 max-w-sm mt-1 mb-4">
+          The questions for this section are being compiled from official 2025 shift papers.
+        </p>
+        <Link
+          href="/tests"
+          className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs"
+        >
+          Return to Test Series
+        </Link>
+      </div>
+    );
+  }
+
+  // 6. Pre-Test Instructions Screen (Screenshots 1 & 2)
+  if (!isSolutionMode && preTestStep !== 'started') {
     return (
       <PreTestInstructions
         test={test}
