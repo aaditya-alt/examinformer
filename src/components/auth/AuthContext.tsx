@@ -5,19 +5,21 @@ import { supabase } from '@/lib/supabase';
 
 export interface UserProfile {
   id: string;
-  email?: string;
+  email: string;
   name: string;
-  rollNumber?: string;
+  phone: string;
+  rollNumber: string;
   category?: string;
+  createdAt?: string;
 }
 
 interface AuthContextType {
   user: UserProfile | null;
   loading: boolean;
-  signIn: (email: string, pass: string) => Promise<{ error?: string }>;
-  signUp: (email: string, pass: string, name: string) => Promise<{ error?: string }>;
+  signIn: (emailOrPhone: string, pass: string) => Promise<{ error?: string }>;
+  signUp: (data: { name: string; email: string; phone: string; pass: string }) => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
-  guestLogin: (name: string) => void;
+  updateProfile: (data: Partial<UserProfile>) => void;
   openAuthModal: (message?: string) => void;
   closeAuthModal: () => void;
   authModalOpen: boolean;
@@ -30,7 +32,7 @@ const AuthContext = createContext<AuthContextType>({
   signIn: async () => ({}),
   signUp: async () => ({}),
   signOut: async () => {},
-  guestLogin: () => {},
+  updateProfile: () => {},
   openAuthModal: () => {},
   closeAuthModal: () => {},
   authModalOpen: false,
@@ -44,26 +46,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [authModalMessage, setAuthModalMessage] = useState('');
 
   useEffect(() => {
-    // Check local session first
+    // 1. Check local session
     const savedUser = localStorage.getItem('ei_user_profile');
     if (savedUser) {
       try {
-        setUser(JSON.parse(savedUser));
+        const parsed = JSON.parse(savedUser);
+        if (parsed && parsed.name && (parsed.email || parsed.phone)) {
+          setUser(parsed);
+        }
       } catch (e) {
         localStorage.removeItem('ei_user_profile');
       }
     }
 
-    // If Supabase client exists, check Supabase auth
+    // 2. Supabase session check if configured
     if (supabase) {
       supabase.auth.getSession().then(({ data: { session } }) => {
         if (session?.user) {
+          const meta = session.user.user_metadata || {};
           const profile: UserProfile = {
             id: session.user.id,
-            email: session.user.email,
-            name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'Candidate',
-            rollNumber: session.user.user_metadata?.roll_number || '2402' + Math.floor(100000 + Math.random() * 900000),
-            category: session.user.user_metadata?.category || 'UR'
+            email: session.user.email || '',
+            name: meta.full_name || meta.name || session.user.email?.split('@')[0] || 'Candidate',
+            phone: meta.phone || '9990287066',
+            rollNumber: meta.roll_number || '2402' + Math.floor(100000 + Math.random() * 900000),
+            category: meta.category || 'UR',
+            createdAt: session.user.created_at
           };
           setUser(profile);
           localStorage.setItem('ei_user_profile', JSON.stringify(profile));
@@ -73,17 +81,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
         if (session?.user) {
+          const meta = session.user.user_metadata || {};
           const profile: UserProfile = {
             id: session.user.id,
-            email: session.user.email,
-            name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'Candidate',
-            rollNumber: session.user.user_metadata?.roll_number || '2402' + Math.floor(100000 + Math.random() * 900000),
-            category: session.user.user_metadata?.category || 'UR'
+            email: session.user.email || '',
+            name: meta.full_name || meta.name || session.user.email?.split('@')[0] || 'Candidate',
+            phone: meta.phone || '9990287066',
+            rollNumber: meta.roll_number || '2402' + Math.floor(100000 + Math.random() * 900000),
+            category: meta.category || 'UR',
+            createdAt: session.user.created_at
           };
           setUser(profile);
           localStorage.setItem('ei_user_profile', JSON.stringify(profile));
-        } else {
-          // don't wipe if guest was manually set
         }
       });
 
@@ -93,17 +102,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const signIn = async (email: string, pass: string) => {
+  const signIn = async (emailOrPhone: string, pass: string) => {
+    const input = emailOrPhone.trim();
+    // Check if input is phone or email
+    const isEmail = input.includes('@');
+    const targetEmail = isEmail ? input : `${input}@candidate.examinformer.in`;
+
     if (supabase) {
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
-      if (error) return { error: error.message };
-      if (data.user) {
+      const { data, error } = await supabase.auth.signInWithPassword({ email: targetEmail, password: pass });
+      if (!error && data.user) {
+        const meta = data.user.user_metadata || {};
         const profile: UserProfile = {
           id: data.user.id,
-          email: data.user.email,
-          name: data.user.user_metadata?.full_name || data.user.email?.split('@')[0] || 'Candidate',
-          rollNumber: data.user.user_metadata?.roll_number || '2402' + Math.floor(100000 + Math.random() * 900000),
-          category: data.user.user_metadata?.category || 'UR'
+          email: data.user.email || '',
+          name: meta.full_name || meta.name || input.split('@')[0] || 'Candidate',
+          phone: meta.phone || (isEmail ? '' : input),
+          rollNumber: meta.roll_number || '2402' + Math.floor(100000 + Math.random() * 900000),
+          category: meta.category || 'UR'
         };
         setUser(profile);
         localStorage.setItem('ei_user_profile', JSON.stringify(profile));
@@ -111,11 +126,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return {};
       }
     }
-    // Fallback local signin
+
+    // Seamless Local Fallback Authentication
+    const storedUsersRaw = localStorage.getItem('ei_registered_accounts');
+    const registeredList: any[] = storedUsersRaw ? JSON.parse(storedUsersRaw) : [];
+    const matched = registeredList.find(
+      (u) => (u.email.toLowerCase() === input.toLowerCase() || u.phone === input) && u.password === pass
+    );
+
+    if (matched) {
+      const profile: UserProfile = {
+        id: matched.id,
+        email: matched.email,
+        name: matched.name,
+        phone: matched.phone,
+        rollNumber: matched.rollNumber,
+        category: matched.category || 'UR'
+      };
+      setUser(profile);
+      localStorage.setItem('ei_user_profile', JSON.stringify(profile));
+      setAuthModalOpen(false);
+      return {};
+    }
+
+    // If new credentials in local fallback, create instant candidate session
     const fallbackProfile: UserProfile = {
       id: 'usr_' + Date.now(),
-      email,
-      name: email.split('@')[0] || 'Candidate',
+      email: isEmail ? input : `${input}@student.in`,
+      name: isEmail ? input.split('@')[0] : `Aspirant ${input.slice(-4)}`,
+      phone: isEmail ? '9990287066' : input,
       rollNumber: '2402' + Math.floor(100000 + Math.random() * 900000),
       category: 'UR'
     };
@@ -125,52 +164,64 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return {};
   };
 
-  const signUp = async (email: string, pass: string, name: string) => {
-    if (supabase) {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password: pass,
-        options: { data: { full_name: name } }
-      });
-      if (error) return { error: error.message };
-      if (data.user) {
-        const profile: UserProfile = {
-          id: data.user.id,
-          email: data.user.email,
-          name: name || data.user.email?.split('@')[0] || 'Candidate',
-          rollNumber: '2402' + Math.floor(100000 + Math.random() * 900000),
-          category: 'UR'
-        };
-        setUser(profile);
-        localStorage.setItem('ei_user_profile', JSON.stringify(profile));
-        setAuthModalOpen(false);
-        return {};
-      }
-    }
-    const fallbackProfile: UserProfile = {
-      id: 'usr_' + Date.now(),
-      email,
-      name,
-      rollNumber: '2402' + Math.floor(100000 + Math.random() * 900000),
-      category: 'UR'
-    };
-    setUser(fallbackProfile);
-    localStorage.setItem('ei_user_profile', JSON.stringify(fallbackProfile));
-    setAuthModalOpen(false);
-    return {};
-  };
+  const signUp = async ({ name, email, phone, pass }: { name: string; email: string; phone: string; pass: string }) => {
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanPhone = phone.trim();
+    const cleanName = name.trim();
+    const rollNumber = '2402' + Math.floor(100000 + Math.random() * 900000);
 
-  const guestLogin = (name: string) => {
-    const candidateName = name.trim() || 'Aspirant ' + Math.floor(1000 + Math.random() * 9000);
     const profile: UserProfile = {
-      id: 'guest_' + Date.now(),
-      name: candidateName,
-      rollNumber: '2402' + Math.floor(100000 + Math.random() * 900000),
-      category: 'UR'
+      id: 'usr_' + Date.now(),
+      email: cleanEmail,
+      name: cleanName,
+      phone: cleanPhone,
+      rollNumber,
+      category: 'UR',
+      createdAt: new Date().toISOString()
     };
+
+    // Save to local registry
+    try {
+      const storedUsersRaw = localStorage.getItem('ei_registered_accounts');
+      const registeredList: any[] = storedUsersRaw ? JSON.parse(storedUsersRaw) : [];
+      registeredList.push({ ...profile, password: pass });
+      localStorage.setItem('ei_registered_accounts', JSON.stringify(registeredList));
+    } catch {}
+
+    // Register to Supabase without email confirmation barrier
+    if (supabase) {
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email: cleanEmail,
+          password: pass,
+          options: {
+            data: {
+              full_name: cleanName,
+              phone: cleanPhone,
+              roll_number: rollNumber
+            }
+          }
+        });
+        if (data?.user) {
+          profile.id = data.user.id;
+        }
+      } catch (err) {
+        console.warn('Supabase signup fallback to local account:', err);
+      }
+    }
+
+    // Set user directly into active session
     setUser(profile);
     localStorage.setItem('ei_user_profile', JSON.stringify(profile));
     setAuthModalOpen(false);
+    return {};
+  };
+
+  const updateProfile = (data: Partial<UserProfile>) => {
+    if (!user) return;
+    const updated = { ...user, ...data };
+    setUser(updated);
+    localStorage.setItem('ei_user_profile', JSON.stringify(updated));
   };
 
   const signOut = async () => {
@@ -182,7 +233,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const openAuthModal = (message?: string) => {
-    setAuthModalMessage(message || 'Please log in to start taking this CBT exam.');
+    setAuthModalMessage(message || 'Account Required: Please log in or create an account with your Name, Email, Phone and Password to take CBT mock tests.');
     setAuthModalOpen(true);
   };
 
@@ -199,7 +250,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signIn,
         signUp,
         signOut,
-        guestLogin,
+        updateProfile,
         openAuthModal,
         closeAuthModal,
         authModalOpen,

@@ -109,8 +109,35 @@ export function getTestById(id: string): CBTTest | undefined {
     return test;
   }
 
-  // 4. Dynamic Sectional Test (sec-ssc-cgl-tier1-quantitative-aptitude)
+  // 4. Dynamic Sectional Test from an Authentic Shift or Registry
   if (id.startsWith('sec-')) {
+    const shiftMatch = id.match(/^sec-(.+)-sec-(\d+)$/);
+    if (shiftMatch) {
+      const parentId = shiftMatch[1];
+      const secIdx = parseInt(shiftMatch[2], 10);
+      const parent = getTestById(parentId);
+      if (parent && parent.sections[secIdx]) {
+        const targetSec = parent.sections[secIdx];
+        const duration = parent.examCode.includes('tier2') ? 30 : 15;
+        const singleSec: CBTTest = {
+          id,
+          title: `${targetSec.name} — ${parent.title} (Sectional Mock)`,
+          examCode: parent.examCode,
+          examFamily: parent.examFamily,
+          type: 'sectional',
+          durationMinutes: duration,
+          totalMarks: targetSec.questions.length * 2,
+          totalQuestions: targetSec.questions.length,
+          isPublished: true,
+          hasSectionalTiming: true,
+          sectionalTimingMinutes: duration,
+          sections: [targetSec]
+        };
+        testsStore.set(id, singleSec);
+        return singleSec;
+      }
+    }
+
     const parts = id.split('-');
     const examCode = `${parts[1]}-${parts[2]}-${parts[3] || 'tier1'}`;
     const sectionName = parts.slice(3).join(' ').replace(/\b\w/g, (c) => c.toUpperCase());

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { CBTTest, CBTQuestion } from '@/lib/types/cbt';
 import { MathRenderer } from '@/components/MathRenderer';
+import { PreTestInstructions } from '@/components/PreTestInstructions';
 import { useAuth } from '@/components/auth/AuthContext';
 import { supabase } from '@/lib/supabase';
 import {
@@ -74,6 +75,9 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   const [sectionSecondsRemaining, setSectionSecondsRemaining] = useState<number>(900);
   const [lockedSections, setLockedSections] = useState<Record<number, boolean>>({});
 
+  // Pre-test instructions step state (1: Overview & Checklist, 2: Symbols & Declaration, 'started': Test Hall)
+  const [preTestStep, setPreTestStep] = useState<1 | 2 | 'started'>('started');
+
   // Pause & Resume States
   const [isPaused, setIsPaused] = useState(false);
   const [pauseModalOpen, setPauseModalOpen] = useState(false);
@@ -95,6 +99,35 @@ function EduquityCBTContent({ testId }: { testId: string }) {
 
   // Storage key for pause/resume state
   const pauseStorageKey = user ? `cbt_paused_session_${testId}_${user.id}` : `cbt_paused_session_${testId}_guest`;
+
+  const getExamSectionTimingMinutes = (testObj: CBTTest | null, sIdx: number): number => {
+    if (!testObj) return 15;
+    const code = (testObj.examCode || '').toLowerCase();
+    const secName = (testObj.sections[sIdx]?.name || '').toLowerCase();
+
+    // SSC CGL Tier 1 / CHSL Tier 1: 15 min each
+    if (code.includes('cgl-tier1') || code.includes('chsl-tier1') || code.includes('tier1')) {
+      return 15;
+    }
+    // SSC CGL Tier 2 (Mains): 30 min math, 30 min reasoning, 40 min english, 20 min gk
+    if (code.includes('cgl-tier2') || code.includes('tier2')) {
+      if (secName.includes('math') || secName.includes('numerical')) return 30;
+      if (secName.includes('reason') || secName.includes('intelligence')) return 30;
+      if (secName.includes('english') || secName.includes('comprehension')) return 40;
+      if (secName.includes('awareness') || secName.includes('gk') || secName.includes('ga')) return 20;
+      return 30;
+    }
+    // SSC CHSL Tier 2: 60m math & reasoning, 60m english & ga, 15m computer
+    if (code.includes('chsl-tier2')) {
+      if (secName.includes('computer')) return 15;
+      return 60;
+    }
+    // SSC MTS: Session 1 (45m), Session 2 (45m)
+    if (code.includes('mts')) {
+      return 45;
+    }
+    return testObj.sectionalTimingMinutes || 15;
+  };
 
   // 1. Fetch test data and verify solution access or restore paused session
   useEffect(() => {
@@ -141,6 +174,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                   setActiveSectionIdx(parsed.activeSectionIdx || 0);
                   setActiveQuestionIdx(parsed.activeQuestionIdx || 0);
                   setUserResponses(parsed.userResponses || {});
+                  setPreTestStep('started');
                   return;
                 }
               } catch (err) {
@@ -148,9 +182,10 @@ function EduquityCBTContent({ testId }: { testId: string }) {
               }
             }
 
-            // Fresh session initialization
+            // Fresh session initialization: Show Pre-Test Instructions
+            setPreTestStep(1);
             setOverallSecondsRemaining(t.durationMinutes * 60);
-            const secMins = t.sectionalTimingMinutes || (t.hasSectionalTiming ? Math.floor(t.durationMinutes / Math.max(1, t.sections.length)) : 15);
+            const secMins = getExamSectionTimingMinutes(t, 0);
             setSectionSecondsRemaining(secMins * 60);
 
             const initialMap: Record<number, any> = {};
@@ -191,7 +226,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
 
   // 3. Overall Timer countdown (Only in Exam Mode and when not paused)
   useEffect(() => {
-    if (isSolutionMode || !user || !test || isPaused || overallSecondsRemaining <= 0) return;
+    if (isSolutionMode || !user || !test || isPaused || overallSecondsRemaining <= 0 || preTestStep !== 'started') return;
     const interval = setInterval(() => {
       setOverallSecondsRemaining(prev => {
         if (prev <= 1) {
@@ -203,11 +238,11 @@ function EduquityCBTContent({ testId }: { testId: string }) {
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, [isSolutionMode, user, test, isPaused, overallSecondsRemaining]);
+  }, [isSolutionMode, user, test, isPaused, overallSecondsRemaining, preTestStep]);
 
   // 4. Sectional Timer countdown (Only in Exam Mode and when not paused)
   useEffect(() => {
-    if (isSolutionMode || !user || !test || !test.hasSectionalTiming || isPaused || sectionSecondsRemaining <= 0) return;
+    if (isSolutionMode || !user || !test || !test.hasSectionalTiming || isPaused || sectionSecondsRemaining <= 0 || preTestStep !== 'started') return;
 
     const interval = setInterval(() => {
       setSectionSecondsRemaining(prev => {
@@ -220,7 +255,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isSolutionMode, user, test, isPaused, sectionSecondsRemaining, activeSectionIdx]);
+  }, [isSolutionMode, user, test, isPaused, sectionSecondsRemaining, activeSectionIdx, preTestStep]);
 
   const handleSectionTimeExpired = () => {
     if (!test) return;
@@ -231,10 +266,10 @@ function EduquityCBTContent({ testId }: { testId: string }) {
       setActiveSectionIdx(nextIdx);
       setActiveQuestionIdx(0);
 
-      const secMins = test.sectionalTimingMinutes || 15;
+      const secMins = getExamSectionTimingMinutes(test, nextIdx);
       setSectionSecondsRemaining(secMins * 60);
 
-      setSectionAlertMsg(`Time expired for ${test.sections[activeSectionIdx].name}! Auto-advanced to next section.`);
+      setSectionAlertMsg(`Time expired for section "${test.sections[activeSectionIdx].name}". Eduquity has transitioned you to "${test.sections[nextIdx].name}".`);
       setTimeout(() => setSectionAlertMsg(null), 5000);
     } else {
       handleSubmitTest();
@@ -690,10 +725,67 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     ).length
   };
 
+  const candidatePhone = user?.phone || user?.rollNumber || 'CANDIDATE';
+
   const watermarkStyle = {
-    backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='130'><text x='30' y='70' fill='rgba(100,116,139,0.06)' font-size='16' font-family='sans-serif' font-weight='bold' transform='rotate(-22 120 65)'>${encodeURIComponent(user?.rollNumber || '9990287066')}</text></svg>")`,
+    backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='130'><text x='30' y='70' fill='rgba(100,116,139,0.06)' font-size='16' font-family='sans-serif' font-weight='bold' transform='rotate(-22 120 65)'>${encodeURIComponent(candidatePhone)}</text></svg>")`,
     backgroundRepeat: 'repeat'
   };
+
+  // ── STRICT CANDIDATE ENROLLMENT GATE ──
+  if (!user && !isSolutionMode && !loading) {
+    return (
+      <div className="fixed inset-0 z-[120] bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div className="w-full max-w-md p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl text-center space-y-5 animate-in zoom-in-95">
+          <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto shadow-inner">
+            <ShieldCheck className="w-8 h-8" />
+          </div>
+
+          <div className="space-y-2">
+            <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              Candidate Account Required
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-sm mx-auto">
+              Without an enrolled candidate account nobody can attempt CBT mock examinations. Please register with your Name, Email, Mobile Number and Password to proceed.
+            </p>
+          </div>
+
+          <div className="pt-2 space-y-2.5">
+            <button
+              onClick={() => openAuthModal('Account Required: Please register or sign in to start taking official CBT exams.')}
+              className="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-sm btn-3d-primary cursor-pointer shadow-lg"
+            >
+              Enroll &amp; Access Test Hall
+            </button>
+            <button
+              onClick={() => router.push('/tests')}
+              className="w-full py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs hover:bg-slate-50 transition cursor-pointer"
+            >
+              Back to Tests Catalog
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── PRE-TEST INSTRUCTIONS MODAL (Matching User Screenshots 1 & 2) ──
+  if (test && !isSolutionMode && preTestStep !== 'started') {
+    return (
+      <PreTestInstructions
+        test={test}
+        language={language}
+        onLanguageChange={(lang) => setLanguage(lang)}
+        onStartTest={() => {
+          setPreTestStep('started');
+          setOverallSecondsRemaining(test.durationMinutes * 60);
+          const initialSecMins = getExamSectionTimingMinutes(test, 0);
+          setSectionSecondsRemaining(initialSecMins * 60);
+        }}
+        onCancel={() => router.push('/tests')}
+      />
+    );
+  }
 
   return (
     <div
@@ -745,9 +837,16 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                 <Pause className="w-3.5 h-3.5 fill-current" />
               </button>
               {/* Official Yellow Timer Box */}
-              <div className="bg-[#fffbeb] border border-[#fef08a] px-3 py-0.5 rounded text-center leading-none min-w-[75px] shadow-xs">
-                <div className="text-[9px] text-slate-600 font-semibold tracking-wider">Time Left</div>
-                <div className="text-sm sm:text-base font-black text-rose-600 font-mono tracking-wider">
+              <div className="bg-[#fffbeb] border border-[#fef08a] px-3 py-0.5 rounded text-center leading-none min-w-[90px] shadow-xs">
+                <div className="text-[9px] text-slate-600 font-semibold tracking-wider flex items-center justify-center gap-1">
+                  <span>Time Left</span>
+                  {test.hasSectionalTiming && (
+                    <span className="text-[8px] bg-rose-100 text-rose-800 px-1 rounded font-bold">
+                      SEC: {formatTimeEduquity(sectionSecondsRemaining)}
+                    </span>
+                  )}
+                </div>
+                <div className="text-sm sm:text-base font-black text-rose-600 font-mono tracking-wider mt-0.5">
                   {formatTimeEduquity(overallSecondsRemaining)}
                 </div>
               </div>
@@ -958,7 +1057,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
           <div
             className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-6 pb-24"
             style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='130'%3E%3Ctext x='15' y='75' fill='%2394a3b8' opacity='0.16' font-family='sans-serif' font-weight='900' font-size='19' transform='rotate(-22 15 75)'%3E9990287066%3C/text%3E%3C/svg%3E")`,
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='130'%3E%3Ctext x='15' y='75' fill='%2394a3b8' opacity='0.16' font-family='sans-serif' font-weight='900' font-size='19' transform='rotate(-22 15 75)'%3E${encodeURIComponent(candidatePhone)}%3C/text%3E%3C/svg%3E")`,
               backgroundRepeat: 'repeat'
             }}
           >
