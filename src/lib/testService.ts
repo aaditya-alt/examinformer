@@ -11,10 +11,10 @@ import {
   generateSmartFullMock
 } from './questionBank';
 
-export * from './types/cbt';
+import { testsStore, registerNewTest, deleteTest } from './testStore';
 
-// In-memory cache for actively loaded tests
-const testsStore = new Map<string, CBTTest>();
+export * from './types/cbt';
+export { testsStore, registerNewTest, deleteTest };
 
 export function getAvailableTests(filterExam?: string): CBTTest[] {
   const all = testsCatalog as unknown as CBTTest[];
@@ -202,12 +202,4 @@ export function getTestById(id: string): CBTTest | undefined {
   return undefined;
 }
 
-export function registerNewTest(newTest: CBTTest): boolean {
-  if (!newTest.id || !newTest.title) return false;
-  testsStore.set(newTest.id, newTest);
-  return true;
-}
 
-export function deleteTest(id: string): boolean {
-  return testsStore.delete(id);
-}

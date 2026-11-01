@@ -1,7 +1,7 @@
 import { UniversalResponseSheet, ParsedQuestion, ParsedSection, parseResponseSheet } from './parsers/universalParser';
 import { supabase, isSupabaseConfigured } from './supabase';
 import type { CBTTest } from '@/lib/types/cbt';
-import { registerNewTest } from './testService';
+import { registerNewTest } from './testStore';
 import https from 'https';
 import http from 'http';
 import zlib from 'zlib';

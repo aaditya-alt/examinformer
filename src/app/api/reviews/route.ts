@@ -6,7 +6,7 @@ import path from 'path';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const REVIEWS_FILE = path.join(process.cwd(), 'src', 'data', 'student-reviews.json');
+const REVIEWS_FILE = path.join(process.cwd(), 'src', 'storage', 'student-reviews.json');
 
 const INITIAL_DUMMY_REVIEWS = [
   {

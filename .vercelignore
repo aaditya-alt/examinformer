@@ -1,0 +1,6 @@
+.git
+scripts/
+supabase/
+.env*
+!public/
+README.md
