@@ -128,6 +128,25 @@ const MASTER_SERIES_CATALOG: ExamSeriesItem[] = [
   }
 ];
 
+function extractTestExamYear(title: string, examCode?: string, testId?: string): string {
+  if (title.includes('—') || title.includes(' - ')) {
+    const delimiter = title.includes('—') ? '—' : ' - ';
+    const parts = title.split(delimiter);
+    const datePart = parts[parts.length - 1];
+    const dateYear = datePart.match(/(202\d)/);
+    if (dateYear) return dateYear[1];
+  }
+  const matches = title.match(/(202\d)/g);
+  if (matches && matches.length > 0) {
+    return matches[matches.length - 1];
+  }
+  const idMatch = (testId || '').match(/(202\d)/);
+  if (idMatch) return idMatch[1];
+  const codeMatch = (examCode || '').match(/(202\d)/);
+  if (codeMatch) return codeMatch[1];
+  return '';
+}
+
 function TestsExplorerContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -285,45 +304,52 @@ function TestsExplorerContent() {
 
     return allTests.filter((t) => {
       const code = (t.examCode || '').toLowerCase();
-      const matchesExam =
-        code.includes(codePattern) ||
-        (codePattern === 'rrb-ntpc-grad' && (code.includes('rrb-ntpc-grad') || code === 'rrb-ntpc-cbt1')) ||
-        (codePattern === 'rrb-ntpc-ug' && code.includes('rrb-ntpc-ug'));
+      const id = (t.id || '').toLowerCase();
+      const title = (t.title || '').toLowerCase();
+      const isUg = id.includes('ug') || title.includes('under graduate') || title.includes(' ug') || title.includes('(ug)');
+
+      let matchesExam = false;
+      if (codePattern === 'rrb-ntpc-grad') {
+        // Strictly only Graduate level papers; exclude all UG papers!
+        matchesExam = !isUg && (id.includes('grad') || title.includes('graduate') || code === 'rrb-ntpc-cbt1' || code.includes('grad') || code.includes('rrb-ntpc'));
+      } else if (codePattern === 'rrb-ntpc-ug') {
+        // Strictly only Under Graduate (UG) papers
+        matchesExam = isUg && (id.includes('ntpc') || code.includes('ntpc') || title.includes('ntpc'));
+      } else {
+        matchesExam = code.includes(codePattern) || id.includes(codePattern);
+      }
+
       if (!matchesExam) return false;
 
       if (activeCategoryTab === 'pyq_tier2') {
-        return code.includes('tier2') || code.includes('cbt2');
+        return code.includes('tier2') || code.includes('cbt2') || id.includes('cbt2') || id.includes('tier2');
       } else if (activeCategoryTab === 'pyq_tier1' || activeCategoryTab === 'pyst_tier1') {
-        if (code.includes('tier2') || code.includes('cbt2')) return false;
+        if (code.includes('tier2') || code.includes('cbt2') || id.includes('cbt2') || id.includes('tier2')) return false;
         return true;
       }
       return true;
     });
   }, [allTests, selectedSeries, activeCategoryTab]);
 
-  // Compute ONLY the REAL years that actually exist in baseCategoryTests
+  // Compute ONLY the REAL years that actually exist in baseCategoryTests (extracting true exam shift year)
   const realAvailableYears = useMemo(() => {
     const yrSet = new Set<string>();
     baseCategoryTests.forEach((t) => {
-      const m = t.title.match(/(202\d)/);
-      if (m) yrSet.add(m[1]);
+      const yr = extractTestExamYear(t.title, t.examCode, t.id);
+      if (yr) yrSet.add(yr);
     });
-    // Filter out any year that has 0 matching tests
-    return Array.from(yrSet)
-      .filter((yr) => baseCategoryTests.some((t) => t.title.includes(yr)))
-      .sort()
-      .reverse();
+    return Array.from(yrSet).sort().reverse();
   }, [baseCategoryTests]);
 
   // Compute filtered test list for selected series, category, year & search
   const currentSeriesTests = useMemo(() => {
     let list = [...baseCategoryTests];
 
-    // Real Year Filter
+    // Real Year Filter (using exact extracted exam shift year)
     if (selectedYear !== 'all') {
       list = list.filter((t) => {
-        const titleLower = t.title.toLowerCase();
-        return titleLower.includes(selectedYear) || (t.examCode || '').includes(selectedYear);
+        const yr = extractTestExamYear(t.title, t.examCode, t.id);
+        return yr === selectedYear;
       });
     }
 

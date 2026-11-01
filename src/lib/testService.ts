@@ -301,7 +301,7 @@ export async function getTestById(id: string): Promise<CBTTest | undefined> {
     if (shiftMatch) {
       const parentId = shiftMatch[1];
       const secIdx = parseInt(shiftMatch[2], 10);
-      const parent = getTestById(parentId);
+      const parent = await getTestById(parentId);
       if (parent && parent.sections[secIdx]) {
         const targetSec = parent.sections[secIdx];
         const duration = parent.examCode.includes('tier2') ? 30 : 15;

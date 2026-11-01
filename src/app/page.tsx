@@ -12,7 +12,14 @@ import {
   ShieldCheck,
   Clock,
   TrendingUp,
-  ChevronRight
+  ChevronRight,
+  CheckCircle2,
+  Monitor,
+  BarChart3,
+  BookOpen,
+  Timer,
+  Smartphone,
+  Sparkles
 } from 'lucide-react';
 
 interface HomeSeriesItem {
@@ -128,12 +135,13 @@ export default function HomePage() {
       ───────────────────────────────────────────────────────────── */}
       <section className="bg-white dark:bg-[#0f1117] border-b border-slate-200/90 dark:border-slate-800 pt-10 pb-12 shadow-2xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <div className="space-y-2">
-            <h1 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
-              Mock Test Series for Government Exams
+          <div className="space-y-3">
+            <h1 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
+              Prepare Better. Practice Smarter.<br />
+              <span className="text-[#0891b2] dark:text-[#06b6d4]">Crack Your Exam.</span>
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
-              Authentic previous-year test series for SSC and Railways — attempt timed mocks with Eduquity right-palette CBT simulator, sectional timers, and instant section-wise analysis.
+              Attempt Real Exam-Level Mock Tests for SSC &amp; Railway Exams. Practice Previous Year Questions with a Real CBT Experience, Sectional Timers and Detailed Performance Analysis.
             </p>
           </div>
 
@@ -247,6 +255,104 @@ export default function HomePage() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────
+          SECTION: WHY MOCKYODDHA (6 CORE PILLARS)
+      ───────────────────────────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14">
+        <div className="text-center space-y-3 max-w-2xl mx-auto mb-10">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-50 dark:bg-cyan-950/70 border border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 text-xs font-black uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
+            <span>Built For Serious Aspirants</span>
+          </div>
+          <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+            Why MockYoddha?
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            The all-in-one preparation ecosystem engineered to replicate real commission testing environments with zero error tolerance.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {/* 1. Authentic PYQs */}
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200/90 dark:border-slate-800 hover:border-cyan-500/80 transition-all hover:shadow-md space-y-3 group">
+            <div className="w-12 h-12 rounded-xl bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-200/60 dark:border-cyan-800/80 text-cyan-600 dark:text-cyan-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <CheckCircle2 className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-extrabold text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+              Authentic PYQs
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              100% genuine questions from official SSC and Railway commission shifts with verified answer keys, detailed explanations, and zero ambiguity.
+            </p>
+          </div>
+
+          {/* 2. REAL CBT Interface */}
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200/90 dark:border-slate-800 hover:border-cyan-500/80 transition-all hover:shadow-md space-y-3 group">
+            <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200/60 dark:border-blue-800/80 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <Monitor className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-extrabold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              REAL CBT Interface
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Exact 1:1 simulation of official TCS iON and Eduquity examination screens with candidate watermark, question palette, and section switches.
+            </p>
+          </div>
+
+          {/* 3. Smart Analytics */}
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200/90 dark:border-slate-800 hover:border-cyan-500/80 transition-all hover:shadow-md space-y-3 group">
+            <div className="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-950/60 border border-purple-200/60 dark:border-purple-800/80 text-purple-600 dark:text-purple-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <BarChart3 className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-extrabold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+              Smart Analytics
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Instant section-wise accuracy, All India Rank (AIR), percentile metrics, time spent per question, and weak-area diagnosis.
+            </p>
+          </div>
+
+          {/* 4. Chapterwise Practice */}
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200/90 dark:border-slate-800 hover:border-cyan-500/80 transition-all hover:shadow-md space-y-3 group">
+            <div className="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200/60 dark:border-amber-800/80 text-amber-600 dark:text-amber-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <BookOpen className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-extrabold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+              Chapterwise Practice
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Target individual subjects and topics with custom question counts and duration controls to master specific chapters before full mock tests.
+            </p>
+          </div>
+
+          {/* 5. Timed Mock Tests */}
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200/90 dark:border-slate-800 hover:border-cyan-500/80 transition-all hover:shadow-md space-y-3 group">
+            <div className="w-12 h-12 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200/60 dark:border-rose-800/80 text-rose-600 dark:text-rose-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <Timer className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-extrabold text-slate-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">
+              Timed Mock Tests
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Strict sectional time caps (15 mins/section for CGL/CHSL) and full 90-minute countdowns for Railway exams with auto-submission upon expiry.
+            </p>
+          </div>
+
+          {/* 6. Mobile Friendly */}
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200/90 dark:border-slate-800 hover:border-cyan-500/80 transition-all hover:shadow-md space-y-3 group">
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200/60 dark:border-emerald-800/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <Smartphone className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-extrabold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+              Mobile Friendly
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Ultra-responsive, clean, and fast design engineered for flawless mock practice on smartphones, tablets, and desktops without lag.
+            </p>
+          </div>
         </div>
       </section>
 

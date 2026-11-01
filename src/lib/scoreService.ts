@@ -155,6 +155,24 @@ export async function fetchUrlContent(url: string, maxRedirects = 5): Promise<st
     throw new Error('Invalid URL format. Please enter a valid URL starting with http:// or https://');
   }
 
+  const browserHeaders: Record<string, string> = {
+    'User-Agent':
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+    'Accept':
+      'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'Accept-Language': 'en-US,en;q=0.9,hi;q=0.8',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Cache-Control': 'max-age=0',
+    'Sec-Ch-Ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+    'Sec-Ch-Ua-Mobile': '?0',
+    'Sec-Ch-Ua-Platform': '"Windows"',
+    'Sec-Fetch-Dest': 'document',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-Site': 'none',
+    'Sec-Fetch-User': '?1',
+    'Upgrade-Insecure-Requests': '1'
+  };
+
   // 1. Try modern native fetch first (handles gzip, deflate, brotli, and redirects automatically)
   try {
     const controller = new AbortController();
@@ -162,15 +180,7 @@ export async function fetchUrlContent(url: string, maxRedirects = 5): Promise<st
 
     const res = await fetch(cleanUrl, {
       signal: controller.signal,
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
-        'Accept':
-          'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.9,hi;q=0.8',
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache'
-      },
+      headers: browserHeaders,
       redirect: 'follow'
     });
     clearTimeout(timeout);
@@ -200,16 +210,7 @@ export async function fetchUrlContent(url: string, maxRedirects = 5): Promise<st
       cleanUrl,
       {
         rejectUnauthorized: false,
-        headers: {
-          'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
-          'Accept':
-            'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-          'Accept-Language': 'en-US,en;q=0.9,hi;q=0.8',
-          'Accept-Encoding': 'gzip, deflate, br',
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache'
-        }
+        headers: browserHeaders
       },
       res => {
         if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
@@ -217,7 +218,7 @@ export async function fetchUrlContent(url: string, maxRedirects = 5): Promise<st
           return resolve(fetchUrlContent(nextUrl, maxRedirects - 1));
         }
         if (res.statusCode && res.statusCode !== 200) {
-          return reject(new Error(`Government portal returned HTTP ${res.statusCode}`));
+          return reject(new Error(`Government portal returned HTTP ${res.statusCode}. Please verify your link is valid and active.`));
         }
 
         const encoding = (res.headers['content-encoding'] || '').toLowerCase();
@@ -471,33 +472,53 @@ export async function evaluateResponseSheet(
     evaluatedAt: result.evaluatedAt
   });
 
-  // Asynchronously sync to Supabase if configured
+  // Asynchronously sync to Supabase if configured (persisting candidate scorecard & profile)
   if (isSupabaseConfigured && supabase) {
     try {
-      await supabase.from('answer_key_submissions').insert({
+      const submissionRecord = {
         id: submissionId,
+        exam_id: sheet.meta.examName || (sheet.meta.examFamily === 'ssc' ? 'ssc-cgl' : 'rrb-ntpc'),
         exam_code: sheet.meta.examFamily === 'ssc' ? 'ssc-cgl' : 'rrb-ntpc',
         exam_family: sheet.meta.examFamily,
-        source_url: sheet.meta.sourceUrl,
-        roll_number: result.candidate.rollNumber,
-        candidate_name: result.candidate.name,
-        category: result.candidate.category,
-        state_zone: zone || result.candidate.venue,
-        exam_date: result.candidate.examDate,
-        shift_time: result.candidate.shiftTime,
-        venue_name: result.candidate.venue,
+        source_url: sheet.meta.sourceUrl || input.url || null,
+        roll_number: result.candidate.rollNumber || null,
+        candidate_name: result.candidate.name || null,
+        registration_number: sheet.meta.registrationNo || null,
+        category: result.candidate.category || null,
+        state_zone: zone || result.candidate.venue || null,
+        exam_date: result.candidate.examDate || null,
+        shift_time: result.candidate.shiftTime || null,
+        venue_name: result.candidate.venue || null,
         total_questions: grandTotal,
         attempted: grandAttempted,
         correct: grandCorrect,
         wrong: grandWrong,
         skipped: grandSkipped,
+        bonus: sheet.summary.bonus || 0,
         raw_score: result.metrics.rawScore,
         negative_marks: result.metrics.negativeMarks,
         final_score: result.metrics.finalScore,
         accuracy_percentage: result.metrics.accuracyPercentage,
         sections_data: sectionBreakdowns,
-        status: 'submitted'
-      });
+        status: 'submitted',
+        created_at: result.evaluatedAt
+      };
+
+      await supabase.from('answer_key_submissions').upsert(submissionRecord, { onConflict: 'id' });
+
+      // Keep candidate profile tracked in public.users
+      if (result.candidate.rollNumber || result.candidate.name) {
+        const userId = result.candidate.rollNumber
+          ? `user_${result.candidate.rollNumber.trim()}`
+          : `user_${submissionId.slice(0, 12)}`;
+        await supabase.from('users').upsert({
+          id: userId,
+          name: result.candidate.name || 'Candidate',
+          roll_number: result.candidate.rollNumber || 'N/A',
+          category: result.candidate.category || 'UR',
+          last_active_at: new Date().toISOString()
+        }, { onConflict: 'id' });
+      }
     } catch (err: any) {
       console.warn('Supabase submission save error:', err.message);
     }

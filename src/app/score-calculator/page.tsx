@@ -69,9 +69,7 @@ const RRB_ZONES = [
 export default function ScoreCalculatorPage() {
   const router = useRouter();
 
-  const [inputMode, setInputMode] = useState<'url' | 'html'>('url');
   const [answerKeyUrl, setAnswerKeyUrl] = useState('');
-  const [pastedHtml, setPastedHtml] = useState('');
   const [rollInput, setRollInput] = useState('');
   const [rollLoading, setRollLoading] = useState(false);
   const [savedSession, setSavedSession] = useState<any>(null);
@@ -164,22 +162,17 @@ export default function ScoreCalculatorPage() {
     e.preventDefault();
     setErrorMessage('');
 
-    if (inputMode === 'url' && !answerKeyUrl.trim()) {
+    if (!answerKeyUrl.trim()) {
       setErrorMessage('Please enter your official Answer Key / Response Sheet URL.');
-      return;
-    }
-    if (inputMode === 'html' && !pastedHtml.trim()) {
-      setErrorMessage('Please paste your Response Sheet HTML source code.');
       return;
     }
 
     try {
       setLoading(true);
-      setLoadingStep(inputMode === 'url' ? 'Connecting to official portal response sheet...' : 'Reading response sheet HTML...');
+      setLoadingStep('Connecting to official examination response sheet...');
 
       const payload = {
-        url: inputMode === 'url' ? answerKeyUrl.trim() : undefined,
-        htmlContent: inputMode === 'html' ? pastedHtml.trim() : undefined,
+        url: answerKeyUrl.trim(),
         examFamily: currentExam.family,
         examTitle: currentExam.name,
         category: selectedCategory,
@@ -299,88 +292,37 @@ export default function ScoreCalculatorPage() {
         )}
 
         <form onSubmit={handleCalculate} className="space-y-6">
-          {/* Submission Mode Toggle: URL or Paste HTML */}
-          <div className="flex items-center gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl max-w-sm">
-            <button
-              type="button"
-              onClick={() => setInputMode('url')}
-              className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition cursor-pointer ${
-                inputMode === 'url'
-                  ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
-                  : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
-              }`}
-            >
-              Answer Key Link (URL)
-            </button>
-            <button
-              type="button"
-              onClick={() => setInputMode('html')}
-              className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition cursor-pointer ${
-                inputMode === 'html'
-                  ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
-                  : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
-              }`}
-            >
-              Paste HTML Source (100% Reliable)
-            </button>
-          </div>
-
           {/* Answer Key URL Input */}
-          {inputMode === 'url' ? (
-            <div className="space-y-2">
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                <LinkIcon className="w-3.5 h-3.5 text-blue-600" />
-                <span>Official Answer Key URL / Response Sheet Link</span>
-                <span className="text-rose-500">*</span>
-              </label>
-              <div className="relative">
-                <input
-                  type="url"
-                  value={answerKeyUrl}
-                  onChange={(e) => setAnswerKeyUrl(e.target.value)}
-                  placeholder="https://rrb.digialm.com/... or https://ssc.digialm.com/... or https://...cbexams.com/..."
-                  className="w-full px-4 py-3 text-xs sm:text-sm font-mono rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 pr-10"
-                  required
-                />
-                {answerKeyUrl && (
-                  <button
-                    type="button"
-                    onClick={() => setAnswerKeyUrl('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold"
-                  >
-                    ✕
-                  </button>
-                )}
-              </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                <span>Supports all official Railway DigiALM, SSC DigiALM, and multi-part challenge links. If your live session is expired or government server times out, use the &quot;Paste HTML Source&quot; tab!</span>
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <Layers className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Paste Response Sheet HTML Source Code</span>
-                  <span className="text-rose-500">*</span>
-                </div>
-                <span className="text-[11px] text-slate-400 lowercase font-normal">Press Ctrl+U on answer key, then Ctrl+A &rarr; Ctrl+C</span>
-              </label>
-              <textarea
-                value={pastedHtml}
-                onChange={(e) => setPastedHtml(e.target.value)}
-                placeholder="Paste the full HTML page source code here (starts with &lt;!DOCTYPE html&gt; or &lt;html&gt;)..."
-                rows={6}
+          <div className="space-y-2">
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+              <LinkIcon className="w-3.5 h-3.5 text-blue-600" />
+              <span>Official Answer Key URL / Response Sheet Link</span>
+              <span className="text-rose-500">*</span>
+            </label>
+            <div className="relative">
+              <input
+                type="url"
+                value={answerKeyUrl}
+                onChange={(e) => setAnswerKeyUrl(e.target.value)}
+                placeholder="https://rrb.digialm.com/... or https://ssc.digialm.com/... or https://ssc.cbexams.com/..."
+                className="w-full px-4 py-3 text-xs sm:text-sm font-mono rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 pr-10"
                 required
-                className="w-full px-4 py-3 text-xs font-mono rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 resize-y"
               />
-              <p className="text-[11px] text-emerald-600 dark:text-emerald-400 flex items-center gap-1 font-medium">
-                <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-                <span>Works 100% of the time even if government servers block IP or answer key link expires!</span>
-              </p>
+              {answerKeyUrl && (
+                <button
+                  type="button"
+                  onClick={() => setAnswerKeyUrl('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold"
+                >
+                  ✕
+                </button>
+              )}
             </div>
-          )}
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <span>Works directly with all official Railway DigiALM, SSC DigiALM, and cbexams candidate response links.</span>
+            </p>
+          </div>
 
           {/* Exam & Profile Configuration Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
