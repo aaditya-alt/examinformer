@@ -10,7 +10,6 @@ import { BorderlandDrawer } from './BorderlandDrawer';
 import {
   Globe,
   Menu,
-  ShieldCheck,
   User as UserIcon
 } from 'lucide-react';
 
@@ -100,16 +99,6 @@ export function Navbar() {
                   </option>
                 </select>
               </div>
-
-              {/* Admin Portal Quick Link */}
-              <Link
-                href="/admin"
-                title="Admin Control Center"
-                className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-red-200 dark:border-red-900/60 bg-red-50/60 dark:bg-red-950/30 text-red-700 dark:text-red-300 text-xs font-bold hover:bg-red-100 transition"
-              >
-                <ShieldCheck className="w-3.5 h-3.5 text-red-600" />
-                <span>Admin</span>
-              </Link>
 
               {/* Theme Toggle */}
               <ThemeToggle />
