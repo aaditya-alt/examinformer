@@ -40,8 +40,7 @@ function ScorecardContent() {
   const [reattemptAnswers, setReattemptAnswers] = useState<Record<number, number>>({});
   const [paletteExpanded, setPaletteExpanded] = useState(false);
   const [reportTarget, setReportTarget] = useState<{ qno: number; text: string } | null>(null);
-  const [pushingToTest, setPushingToTest] = useState(false);
-  const [pushedTestInfo, setPushedTestInfo] = useState<{ testId: string; message: string } | null>(null);
+  const [printMode, setPrintMode] = useState<'scorecard' | 'paper'>('scorecard');
 
   useEffect(() => {
     // 1. Try to load from session storage first (instant)
@@ -77,31 +76,18 @@ function ScorecardContent() {
     }
   }, [id]);
 
-  const handlePushToTest = async () => {
-    if (!data?.id) return;
-    try {
-      setPushingToTest(true);
-      const res = await fetch('/api/admin/push-to-test', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ submissionId: data.id })
-      });
-      const json = await res.json();
-      if (json.success) {
-        setPushedTestInfo({ testId: json.testId, message: json.message });
-        confetti({ particleCount: 80, spread: 80, origin: { y: 0.5 } });
-      } else {
-        alert(json.error || 'Failed to push to test series.');
-      }
-    } catch (err: any) {
-      alert(err.message || 'Error occurred while pushing to mock tests.');
-    } finally {
-      setPushingToTest(false);
-    }
+  const handlePrintScorecardOnly = () => {
+    setPrintMode('scorecard');
+    setTimeout(() => {
+      window.print();
+    }, 150);
   };
 
-  const handlePrint = () => {
-    window.print();
+  const handlePrintFullPaper = () => {
+    setPrintMode('paper');
+    setTimeout(() => {
+      window.print();
+    }, 150);
   };
 
   if (loading) {
@@ -159,63 +145,26 @@ function ScorecardContent() {
           <span>Evaluate Another Response Sheet</span>
         </Link>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
-            onClick={handlePushToTest}
-            disabled={pushingToTest || !!pushedTestInfo}
-            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm ${
-              pushedTestInfo
-                ? 'bg-emerald-600 text-white cursor-default'
-                : 'bg-indigo-600 hover:bg-indigo-700 text-white'
-            }`}
+            onClick={handlePrintScorecardOnly}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white transition shadow-sm cursor-pointer active:scale-95"
+            title="Download or Print only the official marks & rank scorecard"
           >
-            {pushedTestInfo ? (
-              <>
-                <Check className="w-3.5 h-3.5" />
-                <span>Pushed to Mocks!</span>
-              </>
-            ) : (
-              <>
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>{pushingToTest ? 'Publishing...' : '⚡ Push to Mock Tests'}</span>
-              </>
-            )}
+            <Printer className="w-3.5 h-3.5" />
+            <span>Download Scorecard Only</span>
           </button>
 
           <button
-            onClick={handlePrint}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 transition"
+            onClick={handlePrintFullPaper}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 transition cursor-pointer active:scale-95"
+            title="Download or Print full question paper with options and solutions"
           >
-            <Printer className="w-3.5 h-3.5" />
-            <span>Print Official Scorecard</span>
+            <BookOpen className="w-3.5 h-3.5" />
+            <span>Download Paper &amp; Solutions</span>
           </button>
         </div>
       </div>
-
-      {/* Push Notification Banner */}
-      {pushedTestInfo && (
-        <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 flex items-center justify-between gap-4 no-print">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0">
-              <CheckCircle2 className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="text-xs sm:text-sm font-bold text-emerald-900 dark:text-emerald-200">
-                Official Paper Added to CBT Test Series!
-              </div>
-              <div className="text-xs text-emerald-700 dark:text-emerald-300">
-                {pushedTestInfo.message}
-              </div>
-            </div>
-          </div>
-          <Link
-            href={`/tests/${pushedTestInfo.testId}`}
-            className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm shrink-0"
-          >
-            Attempt Test Now &rarr;
-          </Link>
-        </div>
-      )}
 
       {/* Official Scorecard Container - Matching Official Format */}
       <div className="space-y-3">
@@ -425,8 +374,8 @@ function ScorecardContent() {
         </div>
       </div>
 
-      {/* Full Question Paper Review Module */}
-      <div className="space-y-6">
+      {/* Full Question Paper Review Module (Hidden in print when downloading Scorecard only) */}
+      <div className={`space-y-6 ${printMode === 'scorecard' ? 'print:hidden' : ''}`}>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">

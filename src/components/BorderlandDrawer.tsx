@@ -16,6 +16,7 @@ import {
   X,
   Compass,
   ChevronRight,
+  ShieldCheck,
   User as UserIcon
 } from 'lucide-react';
 
@@ -48,8 +49,9 @@ export function BorderlandDrawer({ isOpen, onClose }: BorderlandDrawerProps) {
     { label: 'Home', href: '/', icon: Home },
     { label: 'Test Series', href: '/tests', icon: Calendar },
     { label: 'Saved Questions', href: '/saved-questions', icon: Bookmark },
-    { label: 'Attempt History', href: '/profile', icon: History },
+    { label: 'Attempt History', href: '/my-tests', icon: History },
     { label: 'Score Calculator', href: '/score-calculator', icon: Calculator },
+    { label: 'Admin Portal', href: '/admin', icon: ShieldCheck },
   ];
 
   return (

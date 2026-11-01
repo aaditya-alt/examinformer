@@ -27,7 +27,8 @@ import {
   ArrowRight,
   Check,
   Zap,
-  Edit3
+  Edit3,
+  Download
 } from 'lucide-react';
 
 interface Candidate {
@@ -83,6 +84,30 @@ interface QuestionReport {
   createdAt: string;
 }
 
+interface ShiftDifficultyAnalytic {
+  shiftKey: string;
+  examTitle: string;
+  examFamily: string;
+  examDate: string;
+  shiftTime: string;
+  candidateCount: number;
+  averageScore: number;
+  highestScore: number;
+  lowestScore: number;
+  averageAccuracy: number;
+  difficultyLevel: 'Hard' | 'Moderate' | 'Easy';
+  difficultyTag: string;
+  normalizationDelta: number;
+  hardestSection: string;
+  easiestSection: string;
+  scoreDistribution: {
+    below40: number;
+    range40to60: number;
+    range60to80: number;
+    above80: number;
+  };
+}
+
 const TEST_SERIES_OPTIONS = [
   { id: 'rrb-ntpc-grad', name: 'RRB NTPC Graduate Level' },
   { id: 'rrb-ntpc-ug', name: 'RRB NTPC Under Graduate' },
@@ -115,11 +140,15 @@ export default function AdminDashboardPage() {
     hourlyActivity: { hour: number; label: string; count: number; totalSeconds: number }[];
     dayWiseActivity: { date: string; attempts: number; activeUsers: number; totalHours: number }[];
     uniqueShifts: UniqueShift[];
+    shiftDifficultyAnalytics?: ShiftDifficultyAnalytic[];
     questionReports: QuestionReport[];
   } | null>(null);
 
-  const [activeTab, setActiveTab] = useState<'shifts' | 'users' | 'activity' | 'reports' | 'attempts'>('shifts');
+  const [activeTab, setActiveTab] = useState<'shifts' | 'difficulty' | 'users' | 'activity' | 'reports' | 'attempts'>('shifts');
   const [searchQuery, setSearchQuery] = useState('');
+  const [difficultyExamFilter, setDifficultyExamFilter] = useState('all');
+  const [generatingReport, setGeneratingReport] = useState(false);
+  const [difficultyMsg, setDifficultyMsg] = useState<string | null>(null);
 
   // Shift assignment state
   const [targetSeriesMap, setTargetSeriesMap] = useState<Record<string, string>>({});
@@ -249,6 +278,59 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const handleGenerateBenchmarks = async () => {
+    setGeneratingReport(true);
+    setDifficultyMsg(null);
+    try {
+      const res = await fetch('/api/admin/shift-difficulty', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'save_benchmarks' })
+      });
+      const json = await res.json();
+      if (json.success) {
+        setDifficultyMsg(json.message);
+        fetchDashboardData();
+      } else {
+        alert(json.error || 'Failed to generate benchmarks.');
+      }
+    } catch (err: any) {
+      alert(err.message || 'Error generating benchmarks.');
+    } finally {
+      setGeneratingReport(false);
+    }
+  };
+
+  const handleExportShiftCSV = () => {
+    if (!data?.shiftDifficultyAnalytics || data.shiftDifficultyAnalytics.length === 0) {
+      alert('No shift difficulty data available to export.');
+      return;
+    }
+    const headers = ['Shift Key', 'Exam', 'Date', 'Shift Time', 'Candidates', 'Avg Score', 'Min Score', 'Max Score', 'Avg Accuracy (%)', 'Difficulty', 'Normalization Delta', 'Hardest Section'];
+    const rows = data.shiftDifficultyAnalytics.map(s => [
+      `"${s.shiftKey}"`,
+      `"${s.examTitle}"`,
+      `"${s.examDate}"`,
+      `"${s.shiftTime}"`,
+      s.candidateCount,
+      s.averageScore,
+      s.lowestScore,
+      s.highestScore,
+      s.averageAccuracy,
+      `"${s.difficultyLevel}"`,
+      s.normalizationDelta,
+      `"${s.hardestSection}"`
+    ]);
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `mockyoddha_shift_difficulty_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const formatSeconds = (sec: number) => {
     const hrs = Math.floor(sec / 3600);
     const mins = Math.floor((sec % 3600) / 60);
@@ -374,6 +456,18 @@ export default function AdminDashboardPage() {
           >
             <Sparkles className="w-4 h-4" />
             <span>Answer Key Pipeline &amp; Mock Generator ({data?.overview.uniqueShiftsCount || 0})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('difficulty')}
+            className={`pb-3 border-b-2 flex items-center gap-2 transition whitespace-nowrap cursor-pointer ${
+              activeTab === 'difficulty'
+                ? 'border-red-600 text-red-600 dark:text-red-400 font-extrabold'
+                : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <BarChart3 className="w-4 h-4" />
+            <span>Shift Difficulty &amp; Normalization ({data?.shiftDifficultyAnalytics?.length || 0})</span>
           </button>
 
           <button
@@ -528,6 +622,246 @@ export default function AdminDashboardPage() {
                     </div>
                   );
                 })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── TAB: SHIFT DIFFICULTY & NORMALIZATION MATRIX ── */}
+        {activeTab === 'difficulty' && (
+          <div className="space-y-4">
+            {/* Header & Controls */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse" />
+                  <h3 className="font-black text-base text-slate-900 dark:text-white">
+                    Shift-wise Difficulty &amp; Normalization Matrix
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Dynamic difficulty benchmarks calculated across all candidate response sheets. Hard shifts receive positive normalization scaling.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleGenerateBenchmarks}
+                  disabled={generatingReport}
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-700 hover:to-rose-800 text-white font-extrabold text-xs flex items-center gap-2 shadow-sm transition active:scale-95 cursor-pointer disabled:opacity-50"
+                >
+                  <Zap className={`w-3.5 h-3.5 fill-current ${generatingReport ? 'animate-spin' : ''}`} />
+                  <span>{generatingReport ? 'Computing Matrix...' : 'Generate & Publish Benchmarks'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleExportShiftCSV}
+                  className="px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer"
+                  title="Export complete shift comparison table to CSV"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Export CSV</span>
+                </button>
+              </div>
+            </div>
+
+            {difficultyMsg && (
+              <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 text-xs font-bold flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>{difficultyMsg}</span>
+              </div>
+            )}
+
+            {/* Shift Summary Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+              <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div className="text-[11px] font-bold text-slate-500 uppercase">Analyzed Shifts</div>
+                <div className="text-2xl font-black text-slate-900 dark:text-white mt-1">
+                  {data?.shiftDifficultyAnalytics?.length || 0}
+                </div>
+                <div className="text-[10px] text-slate-400 mt-0.5">Across all official dates</div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div className="text-[11px] font-bold text-slate-500 uppercase flex items-center justify-between">
+                  <span>Tough Shifts</span>
+                  <span className="w-2 h-2 rounded-full bg-rose-500" />
+                </div>
+                <div className="text-2xl font-black text-rose-600 mt-1">
+                  {data?.shiftDifficultyAnalytics?.filter(s => s.difficultyLevel === 'Hard').length || 0}
+                </div>
+                <div className="text-[10px] text-rose-500 mt-0.5">Bonus Normalization</div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div className="text-[11px] font-bold text-slate-500 uppercase flex items-center justify-between">
+                  <span>Moderate Shifts</span>
+                  <span className="w-2 h-2 rounded-full bg-amber-500" />
+                </div>
+                <div className="text-2xl font-black text-amber-500 mt-1">
+                  {data?.shiftDifficultyAnalytics?.filter(s => s.difficultyLevel === 'Moderate').length || 0}
+                </div>
+                <div className="text-[10px] text-amber-500 mt-0.5">Standard Cutoff Range</div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div className="text-[11px] font-bold text-slate-500 uppercase flex items-center justify-between">
+                  <span>Easy Shifts</span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                </div>
+                <div className="text-2xl font-black text-emerald-600 mt-1">
+                  {data?.shiftDifficultyAnalytics?.filter(s => s.difficultyLevel === 'Easy').length || 0}
+                </div>
+                <div className="text-[10px] text-emerald-500 mt-0.5">High Raw Scores</div>
+              </div>
+            </div>
+
+            {/* Exam Filter Pills */}
+            <div className="flex items-center gap-1.5 overflow-x-auto p-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">
+                Filter Exam:
+              </span>
+              {[
+                { id: 'all', name: 'All Exams' },
+                { id: 'rrb-ntpc-ug', name: 'RRB NTPC UG' },
+                { id: 'rrb-ntpc-grad', name: 'RRB NTPC Graduate' },
+                { id: 'rrb-group-d', name: 'RRB Group D' },
+                { id: 'ssc-cgl', name: 'SSC CGL' },
+                { id: 'ssc-chsl', name: 'SSC CHSL' }
+              ].map(f => (
+                <button
+                  key={f.id}
+                  onClick={() => setDifficultyExamFilter(f.id)}
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
+                    difficultyExamFilter === f.id
+                      ? 'bg-red-600 text-white font-bold shadow-xs'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  {f.name}
+                </button>
+              ))}
+            </div>
+
+            {/* Shift Comparison Table */}
+            {(!data?.shiftDifficultyAnalytics || data.shiftDifficultyAnalytics.length === 0) ? (
+              <div className="p-12 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+                <BarChart3 className="w-10 h-10 text-slate-400 mx-auto" />
+                <h4 className="font-extrabold text-sm text-slate-800 dark:text-slate-200">
+                  No Shift Submissions Recorded Yet
+                </h4>
+                <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                  When candidates evaluate their official DigiALM or SSC response sheets, shift analytics and difficulty matrices will be computed here automatically.
+                </p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                <table className="w-full text-xs text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-500 uppercase font-black border-b border-slate-200 dark:border-slate-800 text-[10px] tracking-wider">
+                    <tr>
+                      <th className="px-4 py-3.5">Shift &amp; Exam</th>
+                      <th className="px-3 py-3.5 text-center">Candidates</th>
+                      <th className="px-3 py-3.5 text-center">Average Score</th>
+                      <th className="px-3 py-3.5 text-center">Score Range (Min–Max)</th>
+                      <th className="px-3 py-3.5 text-center">Accuracy</th>
+                      <th className="px-4 py-3.5 text-center">Difficulty Rating</th>
+                      <th className="px-3 py-3.5 text-center">Normalization Delta</th>
+                      <th className="px-4 py-3.5">Hardest Section</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    {data.shiftDifficultyAnalytics
+                      .filter(s => {
+                        if (difficultyExamFilter === 'all') return true;
+                        return (s.examFamily || '').toLowerCase().includes(difficultyExamFilter) ||
+                               (s.shiftKey || '').toLowerCase().includes(difficultyExamFilter);
+                      })
+                      .map((shift, idx) => {
+                        const isHard = shift.difficultyLevel === 'Hard';
+                        const isEasy = shift.difficultyLevel === 'Easy';
+
+                        return (
+                          <tr key={idx} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
+                            <td className="px-4 py-3.5">
+                              <div className="font-extrabold text-slate-900 dark:text-white">
+                                {shift.examTitle}
+                              </div>
+                              <div className="text-[11px] text-slate-500 flex items-center gap-2 mt-0.5">
+                                <span>📅 {shift.examDate}</span>
+                                <span>⏰ {shift.shiftTime}</span>
+                              </div>
+                            </td>
+
+                            <td className="px-3 py-3.5 text-center">
+                              <span className="font-black text-sm text-slate-900 dark:text-white">
+                                {shift.candidateCount}
+                              </span>
+                              <span className="block text-[10px] text-slate-400">students</span>
+                            </td>
+
+                            <td className="px-3 py-3.5 text-center">
+                              <span className={`inline-block px-2.5 py-1 rounded-lg font-black text-xs ${
+                                isHard
+                                  ? 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'
+                                  : isEasy
+                                  ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                                  : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+                              }`}>
+                                {shift.averageScore}
+                              </span>
+                            </td>
+
+                            <td className="px-3 py-3.5 text-center font-mono font-bold text-slate-700 dark:text-slate-300">
+                              {shift.lowestScore} &rarr; {shift.highestScore}
+                            </td>
+
+                            <td className="px-3 py-3.5 text-center font-bold text-emerald-600 dark:text-emerald-400">
+                              {shift.averageAccuracy}%
+                            </td>
+
+                            <td className="px-4 py-3.5 text-center">
+                              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider border ${
+                                isHard
+                                  ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border-rose-200 dark:border-rose-900'
+                                  : isEasy
+                                  ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-200 dark:border-emerald-900'
+                                  : 'bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border-amber-200 dark:border-amber-900'
+                              }`}>
+                                <span className={`w-1.5 h-1.5 rounded-full ${
+                                  isHard ? 'bg-rose-600' : isEasy ? 'bg-emerald-600' : 'bg-amber-500'
+                                }`} />
+                                <span>{shift.difficultyLevel}</span>
+                              </span>
+                            </td>
+
+                            <td className="px-3 py-3.5 text-center">
+                              <span className={`font-black text-xs ${
+                                shift.normalizationDelta > 0
+                                  ? 'text-emerald-600 dark:text-emerald-400'
+                                  : shift.normalizationDelta < 0
+                                  ? 'text-rose-600 dark:text-rose-400'
+                                  : 'text-slate-500'
+                              }`}>
+                                {shift.normalizationDelta > 0 ? `+${shift.normalizationDelta}` : shift.normalizationDelta}
+                              </span>
+                            </td>
+
+                            <td className="px-4 py-3.5 text-slate-700 dark:text-slate-300 font-medium">
+                              {shift.hardestSection !== 'N/A' ? (
+                                <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[11px] font-bold">
+                                  {shift.hardestSection}
+                                </span>
+                              ) : (
+                                <span className="text-slate-400 text-[11px]">—</span>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
               </div>
             )}
           </div>

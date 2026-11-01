@@ -124,6 +124,14 @@ export function Footer() {
           </div>
           <div className="flex items-center gap-4 text-slate-400">
             <span>Server Status: Operational</span>
+            <span>&bull;</span>
+            <Link
+              href="/admin"
+              className="text-slate-500 hover:text-red-600 dark:hover:text-red-400 font-bold transition flex items-center gap-1"
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Admin Portal</span>
+            </Link>
           </div>
         </div>
       </div>

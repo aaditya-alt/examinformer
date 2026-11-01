@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin, supabase } from '@/lib/supabase';
-import { getUniqueShiftSubmissions } from '@/lib/scoreService';
+import { getUniqueShiftSubmissions, computeShiftDifficultyAnalytics } from '@/lib/scoreService';
 import fs from 'fs';
 import path from 'path';
 
@@ -163,6 +163,7 @@ export async function GET() {
       hourlyActivity,
       dayWiseActivity,
       uniqueShifts,
+      shiftDifficultyAnalytics: computeShiftDifficultyAnalytics(),
       questionReports
     });
   } catch (err: any) {

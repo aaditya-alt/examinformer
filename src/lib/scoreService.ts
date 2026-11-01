@@ -842,3 +842,162 @@ export async function getSubmissionByRollNumber(rollNumber: string): Promise<Eva
 
   return undefined;
 }
+
+export interface ShiftDifficultyAnalytic {
+  shiftKey: string;
+  examTitle: string;
+  examFamily: string;
+  examDate: string;
+  shiftTime: string;
+  candidateCount: number;
+  averageScore: number;
+  highestScore: number;
+  lowestScore: number;
+  averageAccuracy: number;
+  difficultyLevel: 'Hard' | 'Moderate' | 'Easy';
+  difficultyTag: string;
+  normalizationDelta: number;
+  hardestSection: string;
+  easiestSection: string;
+  scoreDistribution: {
+    below40: number;
+    range40to60: number;
+    range60to80: number;
+    above80: number;
+  };
+}
+
+export function computeShiftDifficultyAnalytics(): ShiftDifficultyAnalytic[] {
+  const allSubmissions = Array.from(localSubmissionsCache.values());
+  const shiftGroups = new Map<string, {
+    shiftKey: string;
+    examTitle: string;
+    examFamily: string;
+    examDate: string;
+    shiftTime: string;
+    scores: number[];
+    accuracies: number[];
+    sectionScores: Record<string, { sum: number; count: number }>;
+  }>();
+
+  for (const sub of allSubmissions) {
+    const examCode = sub.parsed?.meta?.examFamily || 'exam';
+    const examTitle = sub.parsed?.meta?.examTitle || (sub.candidate?.examDate ? `${examCode.toUpperCase()} Shift` : 'Official Exam');
+    const examDate = sub.candidate?.examDate || '2026';
+    const shiftTime = sub.candidate?.shiftTime || 'Shift-1';
+    const key = `${examCode}_${examDate}_${shiftTime}`.toLowerCase().replace(/\s+/g, '_');
+
+    if (!shiftGroups.has(key)) {
+      shiftGroups.set(key, {
+        shiftKey: key,
+        examTitle,
+        examFamily: examCode,
+        examDate,
+        shiftTime,
+        scores: [],
+        accuracies: [],
+        sectionScores: {}
+      });
+    }
+
+    const group = shiftGroups.get(key)!;
+    const finalScore = Number(sub.metrics?.finalScore ?? sub.parsed?.summary?.finalScore ?? 0);
+    const accuracy = Number(sub.metrics?.accuracyPercentage ?? sub.parsed?.summary?.accuracy ?? 0);
+    group.scores.push(finalScore);
+    group.accuracies.push(accuracy);
+
+    // Section breakdown
+    if (sub.sections && Array.isArray(sub.sections)) {
+      sub.sections.forEach(sec => {
+        if (!group.sectionScores[sec.name]) {
+          group.sectionScores[sec.name] = { sum: 0, count: 0 };
+        }
+        group.sectionScores[sec.name].sum += Number(sec.rawScore || 0);
+        group.sectionScores[sec.name].count++;
+      });
+    }
+  }
+
+  // Calculate overall average across all submissions to establish normalization baseline
+  const totalAllScores = allSubmissions.map(s => Number(s.metrics?.finalScore ?? s.parsed?.summary?.finalScore ?? 0));
+  const globalBenchmarkMean = totalAllScores.length > 0
+    ? totalAllScores.reduce((a, b) => a + b, 0) / totalAllScores.length
+    : 55;
+
+  const results: ShiftDifficultyAnalytic[] = [];
+
+  for (const group of shiftGroups.values()) {
+    const count = group.scores.length;
+    if (count === 0) continue;
+
+    const avgScore = Math.round((group.scores.reduce((a, b) => a + b, 0) / count) * 10) / 10;
+    const highestScore = Math.max(...group.scores);
+    const lowestScore = Math.min(...group.scores);
+    const avgAccuracy = Math.round((group.accuracies.reduce((a, b) => a + b, 0) / count) * 10) / 10;
+    
+    // Normalization delta compared to overall mean
+    const normalizationDelta = Math.round((globalBenchmarkMean - avgScore) * 10) / 10;
+
+    // Difficulty categorization
+    let difficultyLevel: 'Hard' | 'Moderate' | 'Easy' = 'Moderate';
+    let difficultyTag = 'Moderate Shift (Standard Normalization)';
+
+    if (avgScore < 45 || (normalizationDelta > 5)) {
+      difficultyLevel = 'Hard';
+      difficultyTag = 'Tough Shift (Highest Normalization Bonus)';
+    } else if (avgScore > 62 || (normalizationDelta < -5)) {
+      difficultyLevel = 'Easy';
+      difficultyTag = 'Easy Shift (High-Scoring Cutoff)';
+    }
+
+    // Section analysis
+    let hardestSection = 'N/A';
+    let easiestSection = 'N/A';
+    let minSecAvg = Infinity;
+    let maxSecAvg = -Infinity;
+
+    for (const [secName, secData] of Object.entries(group.sectionScores)) {
+      if (secData.count > 0) {
+        const secAvg = secData.sum / secData.count;
+        if (secAvg < minSecAvg) {
+          minSecAvg = secAvg;
+          hardestSection = secName;
+        }
+        if (secAvg > maxSecAvg) {
+          maxSecAvg = secAvg;
+          easiestSection = secName;
+        }
+      }
+    }
+
+    // Distribution
+    const distribution = {
+      below40: group.scores.filter(s => s < 40).length,
+      range40to60: group.scores.filter(s => s >= 40 && s <= 60).length,
+      range60to80: group.scores.filter(s => s > 60 && s <= 80).length,
+      above80: group.scores.filter(s => s > 80).length
+    };
+
+    results.push({
+      shiftKey: group.shiftKey,
+      examTitle: group.examTitle,
+      examFamily: group.examFamily,
+      examDate: group.examDate,
+      shiftTime: group.shiftTime,
+      candidateCount: count,
+      averageScore: avgScore,
+      highestScore,
+      lowestScore,
+      averageAccuracy: avgAccuracy,
+      difficultyLevel,
+      difficultyTag,
+      normalizationDelta,
+      hardestSection,
+      easiestSection,
+      scoreDistribution: distribution
+    });
+  }
+
+  // Sort by hardest shift first (lowest average score)
+  return results.sort((a, b) => a.averageScore - b.averageScore);
+}

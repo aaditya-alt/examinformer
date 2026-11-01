@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/auth/AuthContext';
@@ -22,7 +22,13 @@ import {
   LogIn,
   AlertCircle,
   Play,
-  Pause
+  Search,
+  Filter,
+  Layers,
+  FileText,
+  Target,
+  ChevronRight,
+  ListFilter
 } from 'lucide-react';
 
 interface AttemptRecord {
@@ -47,6 +53,27 @@ interface PausedTestRecord {
   storageKey: string;
 }
 
+function getTestType(testId: string): 'full' | 'sectional' | 'topic' {
+  if (testId.startsWith('sec-') || testId.includes('-sec-')) return 'sectional';
+  if (testId.startsWith('drill-') || testId.includes('topic') || testId.includes('drill')) return 'topic';
+  return 'full';
+}
+
+function getExamCategory(testId: string, testTitle?: string): string {
+  const s = (testId + ' ' + (testTitle || '')).toLowerCase();
+  if (s.includes('ntpc-ug') || s.includes('under graduate')) return 'RRB NTPC Under Graduate';
+  if (s.includes('ntpc-grad') || s.includes('graduate level') || s.includes('ntpc graduate')) return 'RRB NTPC Graduate';
+  if (s.includes('group-d') || s.includes('level-1')) return 'RRB Group D';
+  if (s.includes('alp')) return 'RRB ALP';
+  if (s.includes('section-controller') || s.includes('section controller')) return 'RRB Section Controller';
+  if (s.includes('cgl')) return 'SSC CGL';
+  if (s.includes('chsl')) return 'SSC CHSL';
+  if (s.includes('mts')) return 'SSC MTS';
+  if (s.includes('ssc')) return 'SSC Other';
+  if (s.includes('rrb')) return 'RRB Other';
+  return 'General Practice';
+}
+
 export default function MyTestsDashboardPage() {
   const router = useRouter();
   const { user, openAuthModal } = useAuth();
@@ -54,6 +81,12 @@ export default function MyTestsDashboardPage() {
   const [pausedTests, setPausedTests] = useState<PausedTestRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  // Filters
+  const [activeTypeTab, setActiveTypeTab] = useState<'all' | 'full' | 'sectional' | 'topic'>('all');
+  const [selectedExamFilter, setSelectedExamFilter] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [groupByExam, setGroupByExam] = useState(true);
 
   useEffect(() => {
     loadUserAttempts();
@@ -179,9 +212,57 @@ export default function MyTestsDashboardPage() {
     return `${m}m ${s}s`;
   };
 
+  // Summary Metrics
+  const totalCount = attempts.length;
+  const avgScore = totalCount > 0
+    ? Math.round(attempts.reduce((acc, a) => acc + (Number(a.total_score) || 0), 0) / totalCount * 10) / 10
+    : 0;
+  const avgAccuracy = totalCount > 0
+    ? Math.round(attempts.reduce((acc, a) => acc + (Number(a.accuracy) || 0), 0) / totalCount * 10) / 10
+    : 0;
+  const totalStudyTimeSec = attempts.reduce((acc, a) => acc + (Number(a.time_taken_seconds) || 0), 0);
+
+  // Available exam categories present in candidate's attempts
+  const availableExams = useMemo(() => {
+    const set = new Set<string>();
+    attempts.forEach(a => set.add(getExamCategory(a.test_id, a.test_title)));
+    return Array.from(set);
+  }, [attempts]);
+
+  // Filtered attempts
+  const filteredAttempts = useMemo(() => {
+    return attempts.filter(att => {
+      const type = getTestType(att.test_id);
+      if (activeTypeTab !== 'all' && type !== activeTypeTab) return false;
+
+      const exam = getExamCategory(att.test_id, att.test_title);
+      if (selectedExamFilter !== 'all' && exam !== selectedExamFilter) return false;
+
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchesTitle = (att.test_title || '').toLowerCase().includes(q);
+        const matchesId = att.test_id.toLowerCase().includes(q);
+        if (!matchesTitle && !matchesId) return false;
+      }
+
+      return true;
+    });
+  }, [attempts, activeTypeTab, selectedExamFilter, searchQuery]);
+
+  // Grouped by Exam
+  const groupedAttempts = useMemo(() => {
+    const map: Record<string, AttemptRecord[]> = {};
+    filteredAttempts.forEach(att => {
+      const exam = getExamCategory(att.test_id, att.test_title);
+      if (!map[exam]) map[exam] = [];
+      map[exam].push(att);
+    });
+    return map;
+  }, [filteredAttempts]);
+
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
-      {/* Dashboard Top Header (ExamGoal Aesthetic) */}
+      {/* Dashboard Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-6">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase tracking-wider mb-2">
@@ -192,7 +273,7 @@ export default function MyTestsDashboardPage() {
             My Attempted Tests &amp; Performance History
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Access your past mock test submissions, review detailed question-by-question solutions, or retake tests anytime.
+            Review detailed question-by-question solutions, examine your scorecards, or resume paused mock exams.
           </p>
         </div>
 
@@ -216,6 +297,53 @@ export default function MyTestsDashboardPage() {
             <span>Sign In to Sync History</span>
           </button>
         )}
+      </div>
+
+      {/* KPI Performance Summary Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="text-[11px] font-bold text-slate-500 uppercase flex items-center justify-between">
+            <span>Tests Attempted</span>
+            <BookOpen className="w-4 h-4 text-blue-500" />
+          </div>
+          <div className="text-2xl font-black text-slate-900 dark:text-white mt-1">
+            {totalCount}
+          </div>
+          <div className="text-[10px] text-slate-400 mt-0.5">Across all exams</div>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="text-[11px] font-bold text-slate-500 uppercase flex items-center justify-between">
+            <span>Average Score</span>
+            <Award className="w-4 h-4 text-amber-500" />
+          </div>
+          <div className="text-2xl font-black text-blue-600 dark:text-blue-400 mt-1">
+            {avgScore}
+          </div>
+          <div className="text-[10px] text-slate-400 mt-0.5">Based on completed papers</div>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="text-[11px] font-bold text-slate-500 uppercase flex items-center justify-between">
+            <span>Average Accuracy</span>
+            <TrendingUp className="w-4 h-4 text-emerald-500" />
+          </div>
+          <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
+            {avgAccuracy}%
+          </div>
+          <div className="text-[10px] text-slate-400 mt-0.5">Correct answer ratio</div>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="text-[11px] font-bold text-slate-500 uppercase flex items-center justify-between">
+            <span>Total Practice Time</span>
+            <Clock className="w-4 h-4 text-purple-500" />
+          </div>
+          <div className="text-2xl font-black text-slate-900 dark:text-white mt-1">
+            {Math.floor(totalStudyTimeSec / 3600)}h {Math.floor((totalStudyTimeSec % 3600) / 60)}m
+          </div>
+          <div className="text-[10px] text-slate-400 mt-0.5">In CBT examination hall</div>
+        </div>
       </div>
 
       {/* Main Content Area */}
@@ -297,8 +425,98 @@ export default function MyTestsDashboardPage() {
             </div>
           )}
 
+          {/* Alignment & Filter Controls */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              {/* Type Filter Tabs: All, Full Mock, Sectional, Topic */}
+              <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-slate-800/80 text-xs font-bold self-start overflow-x-auto max-w-full">
+                {[
+                  { key: 'all', label: 'All Attempts', count: attempts.length },
+                  { key: 'full', label: 'Full Mocks', count: attempts.filter(a => getTestType(a.test_id) === 'full').length },
+                  { key: 'sectional', label: 'Sectional Tests', count: attempts.filter(a => getTestType(a.test_id) === 'sectional').length },
+                  { key: 'topic', label: 'Topic Drills', count: attempts.filter(a => getTestType(a.test_id) === 'topic').length }
+                ].map(t => (
+                  <button
+                    key={t.key}
+                    onClick={() => setActiveTypeTab(t.key as any)}
+                    className={`px-3 py-1.5 rounded-lg transition whitespace-nowrap cursor-pointer ${
+                      activeTypeTab === t.key
+                        ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs font-black'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <span>{t.label}</span>
+                    <span className="ml-1.5 text-[10px] px-1.5 py-0.2 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">
+                      {t.count}
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              {/* View Toggle & Search */}
+              <div className="flex items-center gap-2.5 w-full md:w-auto">
+                <div className="relative flex-1 md:w-56">
+                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search test name..."
+                    className="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setGroupByExam(!groupByExam)}
+                  className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition flex items-center gap-1.5 shrink-0 cursor-pointer ${
+                    groupByExam
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300'
+                      : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                  }`}
+                  title="Toggle between grouped by exam or flat list"
+                >
+                  <Layers className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">{groupByExam ? 'Grouped by Exam' : 'Flat List'}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Exam Category Pills */}
+            {availableExams.length > 1 && (
+              <div className="flex items-center gap-1.5 overflow-x-auto pt-1 pb-0.5 text-xs">
+                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">
+                  Exam Filter:
+                </span>
+                <button
+                  onClick={() => setSelectedExamFilter('all')}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
+                    selectedExamFilter === 'all'
+                      ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  All Exams
+                </button>
+                {availableExams.map(exam => (
+                  <button
+                    key={exam}
+                    onClick={() => setSelectedExamFilter(exam)}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
+                      selectedExamFilter === exam
+                        ? 'bg-blue-600 text-white font-bold'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    {exam}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Completed Tests List or Empty State */}
-          {attempts.length === 0 ? (
+          {filteredAttempts.length === 0 ? (
             /* Empty State */
             <div className="p-8 sm:p-14 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-5 card-3d max-w-xl mx-auto">
               <div className="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 mx-auto flex items-center justify-center">
@@ -306,10 +524,12 @@ export default function MyTestsDashboardPage() {
               </div>
               <div className="space-y-1.5">
                 <h3 className="font-extrabold text-lg text-slate-900 dark:text-white">
-                  No Completed Tests Yet
+                  No Matching Tests Found
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm mx-auto">
-                  Take an official 2026 CBT mock test to see your score, live shift rank, and question derivations here.
+                  {attempts.length === 0
+                    ? "You haven't attempted any tests yet. Take an official 2026 CBT mock test to see your score, live shift rank, and question derivations here."
+                    : 'No test attempts match the selected type or exam filter. Try resetting your search filters.'}
                 </p>
               </div>
               <Link
@@ -321,92 +541,168 @@ export default function MyTestsDashboardPage() {
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
+          ) : groupByExam ? (
+            /* Grouped View by Exam Series */
+            <div className="space-y-6">
+              {Object.entries(groupedAttempts).map(([examName, examAttempts]) => (
+                <div
+                  key={examName}
+                  className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden"
+                >
+                  {/* Group Header */}
+                  <div className="p-4 sm:p-5 bg-slate-50/80 dark:bg-slate-800/50 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
+                        <Layers className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h3 className="font-black text-sm text-slate-900 dark:text-white">
+                          {examName}
+                        </h3>
+                        <p className="text-[11px] text-slate-500">
+                          {examAttempts.length} {examAttempts.length === 1 ? 'Attempt' : 'Attempts'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-900">
+                      Avg Score: {Math.round(examAttempts.reduce((acc, a) => acc + a.total_score, 0) / examAttempts.length * 10) / 10}
+                    </span>
+                  </div>
+
+                  {/* Cards inside group */}
+                  <div className="p-4 sm:p-5 space-y-3">
+                    {examAttempts.map(att => (
+                      <AttemptCard
+                        key={att.id}
+                        att={att}
+                        deletingId={deletingId}
+                        handleDeleteAttempt={handleDeleteAttempt}
+                        formatSeconds={formatSeconds}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : (
-            /* Attempts List */
+            /* Flat Chronological List */
             <div className="space-y-4">
               <div className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
-                <span>Completed Test Attempts ({attempts.length})</span>
+                <span>Completed Test Attempts ({filteredAttempts.length})</span>
                 <span>Sorted by Most Recent</span>
               </div>
 
               <div className="grid grid-cols-1 gap-4">
-            {attempts.map((att) => (
-              <div
-                key={att.id}
-                className="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 card-3d flex flex-col md:flex-row md:items-center justify-between gap-5"
-              >
-                {/* Attempt Details */}
-                <div className="space-y-2 flex-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
-                      {att.test_id.toUpperCase()}
-                    </span>
-                    <span className="text-[11px] text-slate-500 flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5" />
-                      {new Date(att.created_at).toLocaleDateString('en-IN', {
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric'
-                      })}
-                    </span>
-                  </div>
-
-                  <h3 className="font-extrabold text-base text-slate-900 dark:text-white">
-                    {att.test_title || `Official Paper Attempt — ${att.test_id}`}
-                  </h3>
-
-                  {/* Metrics Row */}
-                  <div className="flex flex-wrap items-center gap-4 text-xs pt-1">
-                    <div className="flex items-center gap-1 font-bold text-slate-900 dark:text-white">
-                      <Award className="w-4 h-4 text-blue-600" />
-                      <span>Score: <strong className="text-blue-600 dark:text-blue-400">{att.total_score}</strong></span>
-                    </div>
-                    <div className="flex items-center gap-1 font-bold text-slate-900 dark:text-white">
-                      <TrendingUp className="w-4 h-4 text-emerald-600" />
-                      <span>Accuracy: <strong className="text-emerald-600">{att.accuracy}%</strong></span>
-                    </div>
-                    <div className="flex items-center gap-1 text-slate-500">
-                      <Clock className="w-3.5 h-3.5" />
-                      <span>Time: {formatSeconds(att.time_taken_seconds || 1800)}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex items-center gap-2 shrink-0 flex-wrap">
-                  <Link
-                    href={`/tests/${att.test_id}/result`}
-                    className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs flex items-center gap-1.5 btn-3d-primary cursor-pointer"
-                  >
-                    <BarChart2 className="w-3.5 h-3.5" />
-                    <span>View Scorecard</span>
-                  </Link>
-
-                  <Link
-                    href={`/tests/${att.test_id}?mode=solution`}
-                    className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs flex items-center gap-1.5 border border-slate-200 dark:border-slate-700 transition active:scale-95"
-                  >
-                    <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                    <span>Solutions &amp; Reattempt</span>
-                  </Link>
-
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteAttempt(att)}
-                    disabled={deletingId === att.id}
-                    title="Retake test (clears this attempt)"
-                    className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-slate-400 hover:text-rose-600 transition"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
+                {filteredAttempts.map(att => (
+                  <AttemptCard
+                    key={att.id}
+                    att={att}
+                    deletingId={deletingId}
+                    handleDeleteAttempt={handleDeleteAttempt}
+                    formatSeconds={formatSeconds}
+                  />
+                ))}
               </div>
             </div>
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+function AttemptCard({
+  att,
+  deletingId,
+  handleDeleteAttempt,
+  formatSeconds
+}: {
+  att: AttemptRecord;
+  deletingId: string | null;
+  handleDeleteAttempt: (att: AttemptRecord) => void;
+  formatSeconds: (sec: number) => string;
+}) {
+  const testType = getTestType(att.test_id);
+
+  let typeBadgeBg = 'bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-900';
+  let typeLabel = 'Full Shift Mock';
+
+  if (testType === 'sectional') {
+    typeBadgeBg = 'bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-900';
+    typeLabel = 'Sectional Test';
+  } else if (testType === 'topic') {
+    typeBadgeBg = 'bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-900';
+    typeLabel = 'Topic Practice Drill';
+  }
+
+  return (
+    <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs hover:border-slate-300 dark:hover:border-slate-700 transition flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Details */}
+      <div className="space-y-1.5 flex-1 min-w-0">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded border ${typeBadgeBg}`}>
+            {typeLabel}
+          </span>
+          <span className="text-[11px] text-slate-500 flex items-center gap-1">
+            <Calendar className="w-3.5 h-3.5" />
+            {new Date(att.created_at).toLocaleDateString('en-IN', {
+              day: 'numeric',
+              month: 'short',
+              year: 'numeric'
+            })}
+          </span>
+        </div>
+
+        <h4 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white truncate">
+          {att.test_title || `Official Paper Attempt — ${att.test_id}`}
+        </h4>
+
+        {/* Metrics Row */}
+        <div className="flex flex-wrap items-center gap-4 text-xs pt-1">
+          <div className="flex items-center gap-1 font-bold text-slate-900 dark:text-white">
+            <Award className="w-4 h-4 text-blue-600" />
+            <span>Score: <strong className="text-blue-600 dark:text-blue-400">{att.total_score}</strong></span>
+          </div>
+          <div className="flex items-center gap-1 font-bold text-slate-900 dark:text-white">
+            <TrendingUp className="w-4 h-4 text-emerald-600" />
+            <span>Accuracy: <strong className="text-emerald-600">{att.accuracy}%</strong></span>
+          </div>
+          <div className="flex items-center gap-1 text-slate-500">
+            <Clock className="w-3.5 h-3.5" />
+            <span>Time: {formatSeconds(att.time_taken_seconds || 1800)}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center gap-2 shrink-0 flex-wrap">
+        <Link
+          href={`/tests/${att.test_id}/result`}
+          className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs flex items-center gap-1.5 shadow-sm transition active:scale-95"
+        >
+          <BarChart2 className="w-3.5 h-3.5" />
+          <span>Scorecard</span>
+        </Link>
+
+        <Link
+          href={`/tests/${att.test_id}?mode=solution`}
+          className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs flex items-center gap-1.5 border border-slate-200 dark:border-slate-700 transition active:scale-95"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+          <span>Solutions &amp; Reattempt</span>
+        </Link>
+
+        <button
+          type="button"
+          onClick={() => handleDeleteAttempt(att)}
+          disabled={deletingId === att.id}
+          title="Retake test (clears this attempt)"
+          className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-slate-400 hover:text-rose-600 transition"
+        >
+          <Trash2 className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   );
 }
