@@ -237,7 +237,19 @@ function EduquityCBTContent({ testId }: { testId: string }) {
       }
     }
 
-    fetch(`/api/tests/${testId}`)
+    // Pass candidate's already mastered questions to exclude from topic drills
+    let fetchUrl = `/api/tests/${testId}`;
+    if (testId.startsWith('topic-') || testId.startsWith('ch-')) {
+      try {
+        const mastery = JSON.parse(localStorage.getItem('mm_user_question_mastery') || '{}');
+        const correctIds = Object.keys(mastery).filter((id: string) => mastery[id] === 'correct');
+        if (correctIds.length > 0) {
+          fetchUrl += `?excludeIds=${encodeURIComponent(correctIds.slice(-80).join(','))}`;
+        }
+      } catch (e) {}
+    }
+
+    fetch(fetchUrl)
       .then(res => res.json())
       .then(json => {
         if (json.success && json.data) {
@@ -742,6 +754,26 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     const timeTaken = test.durationMinutes * 60 - overallSecondsRemaining;
     const finalScore = isMts ? Math.round(s2Score * 100) / 100 : Math.round(score * 100) / 100;
     const accuracy = attemptedCount > 0 ? Math.round((correctCount / attemptedCount) * 1000) / 10 : 0;
+
+    // Save anti-repetition question mastery for adaptive topic drills
+    try {
+      const existingMastery = JSON.parse(localStorage.getItem('mm_user_question_mastery') || '{}');
+      test.sections.forEach(sec => {
+        sec.questions.forEach(q => {
+          const resp = userResponses[q.qno];
+          if (resp && resp.chosenOption !== undefined) {
+            if (resp.chosenOption === q.correctOption) {
+              existingMastery[q.id] = 'correct';
+            } else {
+              existingMastery[q.id] = 'wrong';
+            }
+          } else {
+            existingMastery[q.id] = 'unattempted';
+          }
+        });
+      });
+      localStorage.setItem('mm_user_question_mastery', JSON.stringify(existingMastery));
+    } catch (e) {}
 
     const resultPayload = {
       testId: test.id,

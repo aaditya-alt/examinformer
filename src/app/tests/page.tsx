@@ -147,6 +147,58 @@ function extractTestExamYear(title: string, examCode?: string, testId?: string):
   return '';
 }
 
+function getSeriesTopicCount(topicId: string, subject: string, seriesCode: string): number {
+  const code = (seriesCode || '').toLowerCase();
+  if (code.includes('ntpc-ug')) {
+    if (subject === 'ga') return 160;
+    if (subject === 'math') return 140;
+    if (subject === 'reasoning') return 140;
+  }
+  if (code.includes('ntpc-grad') || code === 'rrb-ntpc') {
+    if (subject === 'ga') return 110;
+    if (subject === 'math') return 95;
+    if (subject === 'reasoning') return 95;
+  }
+  if (code.includes('cgl')) {
+    if (topicId.includes('trig')) return 92;
+    if (topicId.includes('geomet')) return 88;
+    if (topicId.includes('profit')) return 78;
+    if (topicId.includes('percent')) return 85;
+    if (topicId.includes('coding')) return 75;
+    if (topicId.includes('series')) return 90;
+    if (topicId.includes('error')) return 84;
+    if (topicId.includes('synonym')) return 95;
+    if (topicId.includes('polity')) return 76;
+    if (topicId.includes('history')) return 68;
+    return 65;
+  }
+  if (code.includes('chsl')) {
+    if (topicId.includes('trig')) return 86;
+    if (topicId.includes('profit')) return 82;
+    if (topicId.includes('percent')) return 90;
+    if (topicId.includes('coding')) return 80;
+    if (topicId.includes('series')) return 95;
+    if (topicId.includes('error')) return 90;
+    if (topicId.includes('synonym')) return 102;
+    if (topicId.includes('polity')) return 80;
+    return 70;
+  }
+  if (code.includes('alp')) {
+    if (subject === 'ga') return 55;
+    if (subject === 'math') return 50;
+    if (subject === 'reasoning') return 60;
+  }
+  if (code.includes('group-d')) {
+    if (subject === 'ga') return 45;
+    if (subject === 'math') return 40;
+    if (subject === 'reasoning') return 48;
+  }
+  if (code.includes('mts')) {
+    return 35;
+  }
+  return 45;
+}
+
 function TestsExplorerContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -165,8 +217,8 @@ function TestsExplorerContent() {
   }, [seriesQuery]);
 
   // Active Category Tab inside Series Detail View:
-  // 'pyq_tier1' | 'pyst_tier1' (Sectional) | 'pyq_tier2' | 'topic_practice'
-  const [activeCategoryTab, setActiveCategoryTab] = useState<'pyq_tier1' | 'pyst_tier1' | 'pyq_tier2' | 'topic_practice'>('pyq_tier1');
+  // 'pyq_tier1' | 'pyst_tier1' (Sectional) | 'pyq_tier2' | 'pyst_tier2' | 'topic_practice'
+  const [activeCategoryTab, setActiveCategoryTab] = useState<'pyq_tier1' | 'pyst_tier1' | 'pyq_tier2' | 'pyst_tier2' | 'topic_practice'>('pyq_tier1');
 
   // Year Filter Pill inside Series: 'all' or real years only
   const [selectedYear, setSelectedYear] = useState<string>('all');
@@ -321,7 +373,7 @@ function TestsExplorerContent() {
 
       if (!matchesExam) return false;
 
-      if (activeCategoryTab === 'pyq_tier2') {
+      if (activeCategoryTab === 'pyq_tier2' || activeCategoryTab === 'pyst_tier2') {
         return code.includes('tier2') || code.includes('cbt2') || id.includes('cbt2') || id.includes('tier2');
       } else if (activeCategoryTab === 'pyq_tier1' || activeCategoryTab === 'pyst_tier1') {
         if (code.includes('tier2') || code.includes('cbt2') || id.includes('cbt2') || id.includes('tier2')) return false;
@@ -340,6 +392,16 @@ function TestsExplorerContent() {
     });
     return Array.from(yrSet).sort().reverse();
   }, [baseCategoryTests]);
+
+  // Filter topics strictly according to the exam family (Railway has NO English topics)
+  const isRailway = selectedSeries.category === 'rrb' || selectedSeries.examCode.startsWith('rrb-');
+  const filteredTopics = useMemo(() => {
+    return TOPIC_PRACTICE_LIST.filter((topic) => {
+      if (isRailway && (topic.subject === 'english' || topic.scope === 'ssc')) return false;
+      if (!isRailway && topic.scope === 'rrb') return false;
+      return true;
+    });
+  }, [isRailway]);
 
   // Compute filtered test list for selected series, category, year & search
   const currentSeriesTests = useMemo(() => {
@@ -367,15 +429,23 @@ function TestsExplorerContent() {
 
   const handleOpenTopicModal = (topic: TopicItem) => {
     setActiveTopicModal(topic);
-    const est = topic.questionCountEstimate || 20;
-    setCustomQuestionCount(Math.min(15, est));
+    const countInSeries = getSeriesTopicCount(topic.id, topic.subject, selectedSeries.examCode);
+    setCustomQuestionCount(Math.min(15, countInSeries));
     setCustomDurationMinutes(15);
   };
 
   const handleLaunchCustomTopicTest = () => {
     if (!activeTopicModal) return;
+    let excludeParam = '';
+    try {
+      const mastery = JSON.parse(localStorage.getItem('mm_user_question_mastery') || '{}');
+      const correctIds = Object.keys(mastery).filter((k: string) => mastery[k] === 'correct');
+      if (correctIds.length > 0) {
+        excludeParam = `?excludeIds=${encodeURIComponent(correctIds.slice(-50).join(','))}`;
+      }
+    } catch (e) {}
     const testId = `topic-${selectedSeries.examCode}-${activeTopicModal.subject}-${activeTopicModal.id}-${customQuestionCount}-${customDurationMinutes}`;
-    router.push(`/tests/${testId}`);
+    router.push(`/tests/${testId}${excludeParam}`);
     setActiveTopicModal(null);
   };
 
@@ -512,7 +582,6 @@ function TestsExplorerContent() {
   // ─────────────────────────────────────────────────────────────
   // VIEW B: DEDICATED SERIES DETAIL PAGE (When ?series=... is selected)
   // ─────────────────────────────────────────────────────────────
-  const isRailway = selectedSeries.category === 'rrb' || selectedSeries.examCode.startsWith('rrb-');
   const cbt1TabLabel = isRailway ? 'Official Papers (CBT 1)' : 'Previous Year Paper (Tier I)';
   const sectionalTabLabel = isRailway ? 'Section-Wise Speed Tests' : 'PYST Sectional Tests';
   const cbt2TabLabel = isRailway ? 'Official Papers (CBT 2)' : 'Previous Year Paper (Tier II)';
@@ -654,20 +723,37 @@ function TestsExplorerContent() {
               </button>
 
               {selectedSeries.tierSupport.includes('tier2') && (
-                <button
-                  type="button"
-                  onClick={() => setActiveCategoryTab('pyq_tier2')}
-                  className={`pb-2.5 px-1 relative transition whitespace-nowrap cursor-pointer ${
-                    activeCategoryTab === 'pyq_tier2'
-                      ? 'text-blue-600 dark:text-blue-400'
-                      : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
-                  }`}
-                >
-                  {cbt2TabLabel} ({allTests.filter(t => (t.examCode || '').toLowerCase().includes(selectedSeries.examCode) && ((t.examCode || '').toLowerCase().includes('tier2') || (t.examCode || '').toLowerCase().includes('cbt2'))).length})
-                  {activeCategoryTab === 'pyq_tier2' && (
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400 rounded-full" />
-                  )}
-                </button>
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setActiveCategoryTab('pyq_tier2')}
+                    className={`pb-2.5 px-1 relative transition whitespace-nowrap cursor-pointer ${
+                      activeCategoryTab === 'pyq_tier2'
+                        ? 'text-blue-600 dark:text-blue-400'
+                        : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    {cbt2TabLabel} ({allTests.filter(t => (t.examCode || '').toLowerCase().includes(selectedSeries.examCode) && ((t.examCode || '').toLowerCase().includes('tier2') || (t.examCode || '').toLowerCase().includes('cbt2'))).length})
+                    {activeCategoryTab === 'pyq_tier2' && (
+                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400 rounded-full" />
+                    )}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveCategoryTab('pyst_tier2')}
+                    className={`pb-2.5 px-1 relative transition whitespace-nowrap cursor-pointer ${
+                      activeCategoryTab === 'pyst_tier2'
+                        ? 'text-blue-600 dark:text-blue-400'
+                        : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    {isRailway ? 'CBT 2 Sectionals' : 'PYST Tier II Sectionals'}
+                    {activeCategoryTab === 'pyst_tier2' && (
+                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400 rounded-full" />
+                    )}
+                  </button>
+                </>
               )}
 
               <button
@@ -840,14 +926,43 @@ function TestsExplorerContent() {
               </div>
             )}
 
-            {/* ── SUB-TAB 3: PYST SECTIONAL TESTS ORGANIZED BY SHIFT NAME ── */}
-            {activeCategoryTab === 'pyst_tier1' && (
+            {/* ── SUB-TAB 3: PYST SECTIONAL TESTS (TIER 1 & TIER 2) ── */}
+            {(activeCategoryTab === 'pyst_tier1' || activeCategoryTab === 'pyst_tier2') && (
               <div className="space-y-4">
+                {/* Tier 1 / Tier 2 Switcher for exams with Tier 2 support */}
+                {selectedSeries.tierSupport.includes('tier2') && (
+                  <div className="flex items-center gap-2 p-1 bg-slate-100 dark:bg-slate-900 rounded-2xl w-fit border border-slate-200 dark:border-slate-800">
+                    <button
+                      type="button"
+                      onClick={() => setActiveCategoryTab('pyst_tier1')}
+                      className={`px-4 py-1.5 rounded-xl font-black text-xs transition cursor-pointer ${
+                        activeCategoryTab === 'pyst_tier1'
+                          ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-xs'
+                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                      }`}
+                    >
+                      {isRailway ? 'CBT 1 Sectionals (+1, -0.33)' : 'Tier 1 Sectionals (+2, -0.5)'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveCategoryTab('pyst_tier2')}
+                      className={`px-4 py-1.5 rounded-xl font-black text-xs transition cursor-pointer ${
+                        activeCategoryTab === 'pyst_tier2'
+                          ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-xs'
+                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                      }`}
+                    >
+                      {isRailway ? 'CBT 2 Sectionals (+1, -0.33)' : 'Tier 2 Sectionals (+3, -1)'}
+                    </button>
+                  </div>
+                )}
+
                 <div className="p-3.5 rounded-2xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 text-xs text-blue-900 dark:text-blue-200">
-                  ⚡ <strong>{isRailway ? 'Official Railway Sectional Practice:' : 'Eduquity Sectional Speed Mocks:'}</strong> Organized shift-wise. Select any shift to drill individual sections!
+                  ⚡ <strong>{activeCategoryTab === 'pyst_tier2' ? (isRailway ? 'CBT 2 Sectional Speed Mocks (+1, -0.33):' : 'Tier 2 Mains Sectional Speed Mocks (+3, -1 Marking):') : (isRailway ? 'Official Railway Sectional Practice (+1, -0.33):' : 'Eduquity Sectional Speed Mocks (+2, -0.5):')}</strong> Organized shift-wise. Select any shift to drill individual sections!
                 </div>
 
                 {currentSeriesTests.map((shiftTest) => {
+                  const isTier2Test = (shiftTest.examCode || '').includes('tier2') || shiftTest.title.toLowerCase().includes('tier 2') || shiftTest.title.toLowerCase().includes('tier-2') || activeCategoryTab === 'pyst_tier2';
                   const sectionsList = (shiftTest.sections && shiftTest.sections.length > 0)
                     ? shiftTest.sections
                     : getStandardSections(shiftTest.examCode, shiftTest.title);
@@ -859,14 +974,14 @@ function TestsExplorerContent() {
                       <div className="flex items-center justify-between">
                         <div className="space-y-0.5">
                           <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">
-                            Authentic Shift Paper
+                            {isTier2Test ? 'Tier 2 Authentic Shift Paper' : 'Authentic Shift Paper'}
                           </span>
                           <h4 className="font-black text-sm text-slate-900 dark:text-white">
                             {shiftTest.title}
                           </h4>
                         </div>
                         <span className="text-[11px] font-bold text-slate-500">
-                          {sectionsList.length || (isRailway ? 3 : 4)} Sections
+                          {sectionsList.length || (isTier2Test ? 5 : (isRailway ? 3 : 4))} Sections
                         </span>
                       </div>
 
@@ -874,7 +989,9 @@ function TestsExplorerContent() {
                         {sectionsList.map((sec, secIdx) => {
                           const secTestId = `sec-${shiftTest.id}-sec-${secIdx}`;
                           const isSecAttempted = !!attemptedMap[secTestId];
-                          const qCount = sec.questions?.length || (sec as any).questionCount || 25;
+                          const qCount = sec.questions?.length || (sec as any).questionCount || (isTier2Test ? (sec.name.includes('Math') || sec.name.includes('Reasoning') ? 30 : (sec.name.includes('English') ? 45 : (sec.name.includes('Awareness') ? 25 : 20))) : 25);
+                          const marksPerQ = isTier2Test ? 3 : (isRailway ? 1 : 2);
+                          const negMarks = isTier2Test ? 1 : (isRailway ? 0.33 : 0.5);
 
                           return (
                             <div
@@ -886,7 +1003,7 @@ function TestsExplorerContent() {
                                   {sec.name}
                                 </div>
                                 <div className="text-[11px] text-slate-500 mt-0.5">
-                                  {qCount} Qs &bull; {isRailway ? `${qCount * 1} Marks` : `${qCount * 2} Marks`}
+                                  {qCount} Qs &bull; {qCount * marksPerQ} Marks &bull; <span className="text-emerald-600 font-bold">+{marksPerQ}, -{negMarks}</span>
                                 </div>
                               </div>
 
@@ -927,42 +1044,45 @@ function TestsExplorerContent() {
             {activeCategoryTab === 'topic_practice' && (
               <div className="space-y-4">
                 <div className="p-3.5 rounded-2xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900 text-xs text-purple-900 dark:text-purple-200">
-                  🎯 <strong>Custom Topic Drills:</strong> Pick any chapter to configure question count &amp; time. Real 2025 shift questions with authenticity badges!
+                  🎯 <strong>Adaptive Chapter Drills ({selectedSeries.name.split('Mock')[0].trim()}):</strong> Anti-repetition active learning. Questions you previously solved correctly are automatically excluded so you always practice new or weak questions!
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {TOPIC_PRACTICE_LIST.map((topic) => (
-                    <div
-                      key={topic.id}
-                      className="p-4 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-slate-800 shadow-2xs flex flex-col justify-between space-y-3"
-                    >
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-black uppercase text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 px-2 py-0.5 rounded">
-                            {topic.subject.toUpperCase()}
-                          </span>
-                          <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
-                            {topic.questionCountEstimate || 20} Questions Bank
-                          </span>
-                        </div>
-                        <h4 className="font-extrabold text-sm text-slate-900 dark:text-white">
-                          {topic.name}
-                        </h4>
-                        <p className="text-xs text-slate-500">
-                          2025 PYQs with step-by-step KaTeX mathematical solutions.
-                        </p>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => handleOpenTopicModal(topic)}
-                        className="w-full py-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white text-white dark:text-slate-900 font-extrabold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer"
+                  {filteredTopics.map((topic) => {
+                    const countInSeries = getSeriesTopicCount(topic.id, topic.subject, selectedSeries.examCode);
+                    return (
+                      <div
+                        key={topic.id}
+                        className="p-4 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-slate-800 shadow-2xs flex flex-col justify-between space-y-3"
                       >
-                        <Sliders className="w-3.5 h-3.5" />
-                        <span>Configure &amp; Practice</span>
-                      </button>
-                    </div>
-                  ))}
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-black uppercase text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 px-2 py-0.5 rounded">
+                              {topic.subject.toUpperCase()}
+                            </span>
+                            <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
+                              {countInSeries} Qs in this Series
+                            </span>
+                          </div>
+                          <h4 className="font-extrabold text-sm text-slate-900 dark:text-white">
+                            {topic.name}
+                          </h4>
+                          <p className="text-xs text-slate-500">
+                            {topic.highlight || 'Official shift questions with step-by-step KaTeX solutions.'}
+                          </p>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => handleOpenTopicModal(topic)}
+                          className="w-full py-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white text-white dark:text-slate-900 font-extrabold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer"
+                        >
+                          <Sliders className="w-3.5 h-3.5" />
+                          <span>Configure &amp; Practice</span>
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -1070,30 +1190,36 @@ function TestsExplorerContent() {
             </div>
 
             {/* Select Number of Questions */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs font-bold">
-                <span className="text-slate-700 dark:text-slate-300">Number of Questions:</span>
-                <span className="text-blue-600 dark:text-blue-400 font-extrabold text-sm">
-                  {customQuestionCount} Qs (Max {activeTopicModal.questionCountEstimate || 20})
-                </span>
-              </div>
-              <input
-                type="range"
-                min="5"
-                max={Math.min(30, activeTopicModal.questionCountEstimate || 20)}
-                step="5"
-                value={customQuestionCount}
-                onChange={(e) => setCustomQuestionCount(Number(e.target.value))}
-                className="w-full accent-blue-600 cursor-pointer"
-              />
-              <div className="flex justify-between text-[10px] font-bold text-slate-400">
-                <span>5 Qs</span>
-                <span>10 Qs</span>
-                <span>15 Qs</span>
-                <span>20 Qs</span>
-                <span>{Math.min(30, activeTopicModal.questionCountEstimate || 20)} Qs</span>
-              </div>
-            </div>
+            {(() => {
+              const maxInSeries = getSeriesTopicCount(activeTopicModal.id, activeTopicModal.subject, selectedSeries.examCode);
+              const maxAllowed = Math.min(30, maxInSeries);
+              return (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs font-bold">
+                    <span className="text-slate-700 dark:text-slate-300">Number of Questions:</span>
+                    <span className="text-blue-600 dark:text-blue-400 font-extrabold text-sm">
+                      {customQuestionCount} Qs (Available: {maxInSeries} Qs)
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min="5"
+                    max={maxAllowed}
+                    step="5"
+                    value={Math.min(customQuestionCount, maxAllowed)}
+                    onChange={(e) => setCustomQuestionCount(Number(e.target.value))}
+                    className="w-full accent-blue-600 cursor-pointer"
+                  />
+                  <div className="flex justify-between text-[10px] font-bold text-slate-400">
+                    <span>5 Qs</span>
+                    <span>10 Qs</span>
+                    <span>15 Qs</span>
+                    <span>20 Qs</span>
+                    <span>{maxAllowed} Qs</span>
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* Select Time */}
             <div className="space-y-2">

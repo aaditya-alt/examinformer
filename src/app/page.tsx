@@ -38,7 +38,7 @@ const REAL_SERIES_CATALOG: HomeSeriesItem[] = [
     id: 'ssc-cgl-series',
     examCode: 'ssc-cgl',
     name: 'SSC CGL Mock Test Series 2026 (Tier I & Tier II) PYQs',
-    testCount: '46 Official 2025 Shifts & Sectionals',
+    testCount: '46 Official Shifts (Tier 1 & Tier 2)',
     category: 'ssc',
     logoType: 'ssc',
     tierSupport: 'Tier I & Tier II'
@@ -47,7 +47,7 @@ const REAL_SERIES_CATALOG: HomeSeriesItem[] = [
     id: 'ssc-chsl-series',
     examCode: 'ssc-chsl',
     name: 'SSC CHSL Mock Test Series 2026 (Tier I & Tier II) PYQs',
-    testCount: '50 Official 2025 Shifts & Sectionals',
+    testCount: '51 Official Shifts (Tier 1 & Tier 2)',
     category: 'ssc',
     logoType: 'ssc',
     tierSupport: 'Tier I & Tier II'
@@ -56,7 +56,7 @@ const REAL_SERIES_CATALOG: HomeSeriesItem[] = [
     id: 'ssc-mts-series',
     examCode: 'ssc-mts',
     name: 'SSC MTS & Havaldar Mock Test Series 2026 PYQs',
-    testCount: '16 Official 2025 Shifts & Sectionals',
+    testCount: '16 Official Shifts (Session 1 & 2)',
     category: 'ssc',
     logoType: 'ssc',
     tierSupport: 'Session 1 & 2'
@@ -65,7 +65,7 @@ const REAL_SERIES_CATALOG: HomeSeriesItem[] = [
     id: 'rrb-ntpc-ug-series',
     examCode: 'rrb-ntpc-ug',
     name: 'RRB NTPC Under Graduate (UG) 2025-26 (CBT 1 & 2)',
-    testCount: '32 Official Shifts (Section-Wise)',
+    testCount: '97 Official Shifts (CBT 1 & CBT 2)',
     category: 'rrb',
     logoType: 'rrb',
     tierSupport: 'CBT 1 & CBT 2'
@@ -74,7 +74,7 @@ const REAL_SERIES_CATALOG: HomeSeriesItem[] = [
     id: 'rrb-ntpc-grad-series',
     examCode: 'rrb-ntpc-grad',
     name: 'RRB NTPC Graduate 2025-26 (CBT 1 & 2)',
-    testCount: '56 Official Shifts (Mixed Format)',
+    testCount: '54 Official Shifts (CBT 1 & CBT 2)',
     category: 'rrb',
     logoType: 'rrb',
     tierSupport: 'CBT 1 & CBT 2'
@@ -83,7 +83,7 @@ const REAL_SERIES_CATALOG: HomeSeriesItem[] = [
     id: 'rrb-group-d-series',
     examCode: 'rrb-group-d',
     name: 'RRB Group D Mock Test Series 2025-26 (RRC Level-1)',
-    testCount: '20 Official 2025-26 Shifts (4 Subjects)',
+    testCount: '20 Official Shifts (Level-1)',
     category: 'rrb',
     logoType: 'rrb',
     tierSupport: 'CBT 1'
@@ -101,7 +101,7 @@ const REAL_SERIES_CATALOG: HomeSeriesItem[] = [
     id: 'rrb-alp-series',
     examCode: 'rrb-alp',
     name: 'RRB ALP (CBT 1 + CBT 2) Mock Test Series 2026',
-    testCount: '22 Official 2026 Shifts & Trade Tests',
+    testCount: '40 Official Shifts (CBT 1 & CBT 2)',
     category: 'rrb',
     logoType: 'rrb',
     tierSupport: 'Stage 1 & 2'
@@ -222,7 +222,7 @@ export default function HomePage() {
                   <ExamLogo type={series.logoType} size="sm" />
                 </div>
 
-                <div className="flex-1 min-w-0 pr-6">
+                <div className="flex-1 min-w-0">
                   <h3 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white leading-snug group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors line-clamp-2">
                     {series.name}
                   </h3>
@@ -231,16 +231,7 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                  className="absolute right-4 top-4 w-7 h-7 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center transition"
-                  aria-label="Bookmark"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
+
               </div>
 
               <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800/80 text-[11px] text-slate-500">
