@@ -70,6 +70,8 @@ export default function ScoreCalculatorPage() {
   const router = useRouter();
 
   const [answerKeyUrl, setAnswerKeyUrl] = useState('');
+  const [pastedHtml, setPastedHtml] = useState('');
+  const [showHtmlPaste, setShowHtmlPaste] = useState(false);
   const [rollInput, setRollInput] = useState('');
   const [rollLoading, setRollLoading] = useState(false);
   const [savedSession, setSavedSession] = useState<any>(null);
@@ -162,8 +164,8 @@ export default function ScoreCalculatorPage() {
     e.preventDefault();
     setErrorMessage('');
 
-    if (!answerKeyUrl.trim()) {
-      setErrorMessage('Please enter your official Answer Key / Response Sheet URL.');
+    if (!answerKeyUrl.trim() && !pastedHtml.trim()) {
+      setErrorMessage('Please enter your official Answer Key URL, or paste your Response Sheet HTML.');
       return;
     }
 
@@ -172,7 +174,8 @@ export default function ScoreCalculatorPage() {
       setLoadingStep('Connecting to official examination response sheet...');
 
       const payload = {
-        url: answerKeyUrl.trim(),
+        url: answerKeyUrl.trim() || undefined,
+        htmlContent: pastedHtml.trim() || undefined,
         examFamily: currentExam.family,
         examTitle: currentExam.name,
         category: selectedCategory,
@@ -322,6 +325,35 @@ export default function ScoreCalculatorPage() {
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
               <span>Works directly with all official Railway DigiALM, SSC DigiALM, and cbexams candidate response links.</span>
             </p>
+
+            {/* Optional Fallback for Expired Sessions or Government Portal HTTP 400 Errors */}
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => setShowHtmlPaste(!showHtmlPaste)}
+                className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
+              >
+                <span>{showHtmlPaste ? '▲ Hide HTML Paste Option' : '▼ Facing portal error, expired session, or HTTP 400? Click to paste HTML directly'}</span>
+              </button>
+
+              {showHtmlPaste && (
+                <div className="mt-2.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
+                  <div className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                    Paste Response Sheet HTML Source Code (100% Guaranteed Backup):
+                  </div>
+                  <textarea
+                    value={pastedHtml}
+                    onChange={(e) => setPastedHtml(e.target.value)}
+                    placeholder="Press Ctrl+U on your official answer key, press Ctrl+A, copy and paste here..."
+                    rows={4}
+                    className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+                  />
+                  <div className="text-[10px] text-slate-500">
+                    Bypasses government portal session expiries, timeouts, and network firewalls.
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Exam & Profile Configuration Grid */}

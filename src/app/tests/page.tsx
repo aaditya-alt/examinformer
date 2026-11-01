@@ -848,7 +848,9 @@ function TestsExplorerContent() {
                 </div>
 
                 {currentSeriesTests.map((shiftTest) => {
-                  const sectionsList = shiftTest.sections || [];
+                  const sectionsList = (shiftTest.sections && shiftTest.sections.length > 0)
+                    ? shiftTest.sections
+                    : getStandardSections(shiftTest.examCode, shiftTest.title);
                   return (
                     <div
                       key={shiftTest.id}

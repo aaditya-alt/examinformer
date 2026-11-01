@@ -149,111 +149,156 @@ function savePortalSubmission(record: StoredPortalSubmission) {
 /**
  * Robust government portal URL fetcher with SSL verification bypass, Gzip/Brotli decompression & redirect following
  */
+/**
+ * Robust government portal URL fetcher with SSL verification bypass, Gzip/Brotli decompression & multiple fallback attempts
+ */
 export async function fetchUrlContent(url: string, maxRedirects = 5): Promise<string> {
-  const cleanUrl = url.trim().replace(/^['"]|['"]$/g, '');
+  let cleanUrl = url.trim();
+  // Strip surrounding quotes, angle brackets, markdown wrappers, trailing punctuation
+  cleanUrl = cleanUrl.replace(/^[<"'s]+|[>"'s\.,;]+$/g, '');
+  cleanUrl = cleanUrl.replace(/[\r\n\t]/g, '');
+
   if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
-    throw new Error('Invalid URL format. Please enter a valid URL starting with http:// or https://');
+    if (cleanUrl.startsWith('//')) {
+      cleanUrl = 'https:' + cleanUrl;
+    } else {
+      cleanUrl = 'https://' + cleanUrl;
+    }
   }
 
-  const browserHeaders: Record<string, string> = {
+  // Handle Google Drive shared link
+  if (cleanUrl.includes('drive.google.com/file/d/')) {
+    const fileIdMatch = cleanUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+    if (fileIdMatch) {
+      cleanUrl = `https://drive.google.com/uc?export=download&id=${fileIdMatch[1]}`;
+    }
+  }
+
+  const standardHeaders = {
     'User-Agent':
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
     'Accept':
-      'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+      'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
     'Accept-Language': 'en-US,en;q=0.9,hi;q=0.8',
-    'Accept-Encoding': 'gzip, deflate, br',
-    'Cache-Control': 'max-age=0',
-    'Sec-Ch-Ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
-    'Sec-Ch-Ua-Mobile': '?0',
-    'Sec-Ch-Ua-Platform': '"Windows"',
-    'Sec-Fetch-Dest': 'document',
-    'Sec-Fetch-Mode': 'navigate',
-    'Sec-Fetch-Site': 'none',
-    'Sec-Fetch-User': '?1',
+    'Connection': 'keep-alive',
     'Upgrade-Insecure-Requests': '1'
   };
 
-  // 1. Try modern native fetch first (handles gzip, deflate, brotli, and redirects automatically)
+  // URL candidates: original URL, then normalized path without double slashes
+  const candidateUrls = [cleanUrl];
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 25000);
+    const u = new URL(cleanUrl);
+    const normPath = u.pathname.replace(/\/+/g, '/');
+    if (normPath !== u.pathname) {
+      const uNorm = new URL(cleanUrl);
+      uNorm.pathname = normPath;
+      candidateUrls.push(uNorm.toString());
+    }
+  } catch {}
 
-    const res = await fetch(cleanUrl, {
-      signal: controller.signal,
-      headers: browserHeaders,
-      redirect: 'follow'
+  let lastError: any = null;
+
+  // 1. Try modern native fetch across candidate URLs
+  for (const candidate of candidateUrls) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 20000);
+
+      const res = await fetch(candidate, {
+        signal: controller.signal,
+        headers: standardHeaders,
+        redirect: 'follow'
+      });
+      clearTimeout(timeout);
+
+      if (res.ok) {
+        const text = await res.text();
+        if (text && text.trim().length > 100) {
+          return text;
+        }
+      } else {
+        lastError = new Error(`Government portal returned HTTP ${res.status}`);
+      }
+    } catch (err: any) {
+      lastError = err;
+    }
+  }
+
+  // Helper for stream fallback
+  const fetchStream = (targetUrl: string, redirectsLeft: number): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      if (redirectsLeft <= 0) return reject(new Error('Too many redirects while accessing response sheet'));
+      let urlObj: URL;
+      try {
+        urlObj = new URL(targetUrl);
+      } catch {
+        return reject(new Error('Invalid URL format. Please enter a valid URL starting with https://'));
+      }
+
+      const client = urlObj.protocol === 'https:' ? https : http;
+      const req = client.get(
+        targetUrl,
+        {
+          rejectUnauthorized: false,
+          headers: standardHeaders
+        },
+        res => {
+          if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+            const nextUrl = new URL(res.headers.location, targetUrl).toString();
+            return resolve(fetchStream(nextUrl, redirectsLeft - 1));
+          }
+          if (res.statusCode && res.statusCode !== 200) {
+            return reject(new Error(`Government portal returned HTTP ${res.statusCode}. Please verify your link is valid and active.`));
+          }
+
+          const encoding = (res.headers['content-encoding'] || '').toLowerCase();
+          let stream: any = res;
+
+          if (encoding.includes('gzip')) {
+            stream = res.pipe(zlib.createGunzip());
+          } else if (encoding.includes('deflate')) {
+            stream = res.pipe(zlib.createInflate());
+          } else if (encoding.includes('br')) {
+            stream = res.pipe(zlib.createBrotliDecompress());
+          }
+
+          let data = '';
+          stream.setEncoding('utf8');
+          stream.on('data', (chunk: string) => (data += chunk));
+          stream.on('end', () => resolve(data));
+          stream.on('error', (err: any) => reject(new Error(`Failed to decompress response: ${err.message}`)));
+        }
+      );
+
+      req.on('error', err => {
+        reject(new Error(`Failed to connect to answer key portal: ${err.message}`));
+      });
+
+      req.setTimeout(25000, () => {
+        req.destroy();
+        reject(new Error('Connection to examination portal timed out after 25 seconds.'));
+      });
     });
-    clearTimeout(timeout);
+  };
 
-    if (res.ok) {
-      const text = await res.text();
+  // 2. Try stream fallback across candidate URLs
+  for (const candidate of candidateUrls) {
+    try {
+      const text = await fetchStream(candidate, maxRedirects);
       if (text && text.trim().length > 100) {
         return text;
       }
+    } catch (err: any) {
+      lastError = err;
     }
-  } catch (fetchErr: any) {
-    console.warn('Native fetch attempt failed, trying fallback stream fetcher:', fetchErr?.message);
   }
 
-  // 2. Fallback stream fetcher with explicit zlib decompression & SSL bypass
-  return new Promise((resolve, reject) => {
-    if (maxRedirects <= 0) return reject(new Error('Too many redirects while accessing response sheet'));
-    let urlObj: URL;
-    try {
-      urlObj = new URL(cleanUrl);
-    } catch {
-      return reject(new Error('Invalid URL format. Please enter a valid URL starting with https://'));
-    }
-
-    const client = urlObj.protocol === 'https:' ? https : http;
-    const req = client.get(
-      cleanUrl,
-      {
-        rejectUnauthorized: false,
-        headers: browserHeaders
-      },
-      res => {
-        if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-          const nextUrl = new URL(res.headers.location, cleanUrl).toString();
-          return resolve(fetchUrlContent(nextUrl, maxRedirects - 1));
-        }
-        if (res.statusCode && res.statusCode !== 200) {
-          return reject(new Error(`Government portal returned HTTP ${res.statusCode}. Please verify your link is valid and active.`));
-        }
-
-        const encoding = (res.headers['content-encoding'] || '').toLowerCase();
-        let stream: any = res;
-
-        if (encoding.includes('gzip')) {
-          stream = res.pipe(zlib.createGunzip());
-        } else if (encoding.includes('deflate')) {
-          stream = res.pipe(zlib.createInflate());
-        } else if (encoding.includes('br')) {
-          stream = res.pipe(zlib.createBrotliDecompress());
-        }
-
-        let data = '';
-        stream.setEncoding('utf8');
-        stream.on('data', (chunk: string) => (data += chunk));
-        stream.on('end', () => resolve(data));
-        stream.on('error', (err: any) => reject(new Error(`Failed to decompress response: ${err.message}`)));
-      }
-    );
-
-    req.on('error', err => {
-      reject(new Error(`Failed to connect to answer key portal: ${err.message}`));
-    });
-
-    req.setTimeout(25000, () => {
-      req.destroy();
-      reject(new Error('Connection to examination portal timed out after 25 seconds.'));
-    });
-  });
+  throw new Error(
+    lastError?.message ||
+    'Could not load answer key from URL. The examination challenge session may have closed on the commission portal, or the server returned HTTP 400. You can paste the HTML response sheet directly to calculate your score!'
+  );
 }
 
-/**
- * Top-level evaluation function used by API routes
- */
 export async function evaluateAnswerKey(input: EvaluationInput): Promise<EvaluationResult> {
   let html = input.htmlContent || '';
   if (!html && input.url) {

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import testsCatalog from '@/data/tests-catalog.json';
-import { supabase, isSupabaseConfigured } from './supabase';
+import { supabase, supabaseAdmin, isSupabaseConfigured } from './supabase';
 import { CBTTest, CBTSection, CBTQuestion } from './types/cbt';
 import {
   EXAM_REGISTRY,
@@ -15,6 +15,63 @@ import { testsStore, registerNewTest, deleteTest } from './testStore';
 
 export * from './types/cbt';
 export { testsStore, registerNewTest, deleteTest };
+
+export function getStandardSections(examCode?: string, title?: string): CBTSection[] {
+  const code = (examCode || '').toLowerCase();
+  const t = (title || '').toLowerCase();
+  const isSSC = code.includes('ssc') || t.includes('ssc');
+  const isRailway = code.includes('rrb') || t.includes('rrb') || t.includes('railway') || t.includes('alp') || t.includes('group d') || t.includes('ntpc');
+
+  if (isRailway) {
+    if (code.includes('alp') || t.includes('alp')) {
+      return [
+        { id: 'sec_1', name: 'Mathematics', questions: [] },
+        { id: 'sec_2', name: 'General Intelligence & Reasoning', questions: [] },
+        { id: 'sec_3', name: 'General Science', questions: [] },
+        { id: 'sec_4', name: 'General Awareness & Current Affairs', questions: [] }
+      ];
+    }
+    if (code.includes('group-d') || t.includes('group d') || t.includes('level-1')) {
+      return [
+        { id: 'sec_1', name: 'General Science', questions: [] },
+        { id: 'sec_2', name: 'Mathematics', questions: [] },
+        { id: 'sec_3', name: 'General Intelligence and Reasoning', questions: [] },
+        { id: 'sec_4', name: 'General Awareness and Current Affairs', questions: [] }
+      ];
+    }
+    // NTPC UG & Graduate
+    return [
+      { id: 'sec_1', name: 'General Awareness', questions: [] },
+      { id: 'sec_2', name: 'Mathematics', questions: [] },
+      { id: 'sec_3', name: 'General Intelligence and Reasoning', questions: [] }
+    ];
+  }
+
+  if (isSSC) {
+    if (code.includes('mts') || t.includes('mts')) {
+      return [
+        { id: 'sec_1', name: 'Numerical and Mathematical Ability', questions: [] },
+        { id: 'sec_2', name: 'Reasoning Ability and Problem Solving', questions: [] },
+        { id: 'sec_3', name: 'General Awareness', questions: [] },
+        { id: 'sec_4', name: 'English Language and Comprehension', questions: [] }
+      ];
+    }
+    // CGL, CHSL, etc.
+    return [
+      { id: 'sec_1', name: 'General Intelligence & Reasoning', questions: [] },
+      { id: 'sec_2', name: 'General Awareness', questions: [] },
+      { id: 'sec_3', name: 'Quantitative Aptitude', questions: [] },
+      { id: 'sec_4', name: 'English Comprehension', questions: [] }
+    ];
+  }
+
+  return [
+    { id: 'sec_1', name: 'General Intelligence & Reasoning', questions: [] },
+    { id: 'sec_2', name: 'General Awareness', questions: [] },
+    { id: 'sec_3', name: 'Quantitative Aptitude', questions: [] },
+    { id: 'sec_4', name: 'English Comprehension', questions: [] }
+  ];
+}
 
 export async function getAvailableTests(filterExam?: string): Promise<CBTTest[]> {
   // 1. Fetch from Supabase tests table
@@ -36,7 +93,8 @@ export async function getAvailableTests(filterExam?: string): Promise<CBTTest[]>
           durationMinutes: t.duration_minutes || 60,
           totalMarks: t.total_marks || 100,
           totalQuestions: t.total_questions || 100,
-          isPublished: t.is_published ?? true
+          isPublished: t.is_published ?? true,
+          sections: getStandardSections(t.exam_code, t.title)
         })) as unknown as CBTTest[];
 
         if (filterExam && filterExam !== 'all') {
@@ -66,24 +124,78 @@ export async function getAvailableTests(filterExam?: string): Promise<CBTTest[]>
 }
 
 export async function getTestById(id: string): Promise<CBTTest | undefined> {
-  if (testsStore.has(id)) {
-    return testsStore.get(id);
+  const cleanId = decodeURIComponent(id || '').trim();
+
+  // Check runtime memory store
+  if (testsStore.has(cleanId)) {
+    return testsStore.get(cleanId);
   }
 
-  // 1. Fetch from Supabase
-  if (isSupabaseConfigured && supabase) {
+  // 1. Dynamic Sectional Test (e.g. sec-rrb-ntpc-grad-2025-shift-1-sec-0)
+  if (cleanId.startsWith('sec-')) {
+    const shiftMatch = cleanId.match(/^sec-(.+)-sec-(\d+)$/);
+    if (shiftMatch) {
+      const parentId = shiftMatch[1];
+      const secIdx = parseInt(shiftMatch[2], 10);
+      const parent = await getTestById(parentId);
+      if (parent && parent.sections && parent.sections[secIdx]) {
+        const targetSec = parent.sections[secIdx];
+        const isRailway = (parent.examFamily === 'rrb' || (parent.examCode || '').toLowerCase().includes('rrb'));
+        const duration = (parent.examCode || '').includes('tier2') ? 30 : 15;
+        const questionsList = targetSec.questions || [];
+        const count = questionsList.length || 25;
+        const marksPerQ = isRailway ? 1 : 2;
+        const singleSec: CBTTest = {
+          id: cleanId,
+          title: `${targetSec.name} — ${parent.title} (Sectional Mock)`,
+          examCode: parent.examCode || 'ssc-cgl',
+          examFamily: isRailway ? 'rrb' : 'ssc',
+          type: 'sectional',
+          durationMinutes: duration,
+          totalMarks: count * marksPerQ,
+          totalQuestions: count,
+          positiveMarks: isRailway ? 1 : 2,
+          negativeMarks: isRailway ? Number((1 / 3).toFixed(2)) : 0.5,
+          isPublished: true,
+          hasSectionalTiming: true,
+          sectionalTimingMinutes: duration,
+          sections: [{
+            id: targetSec.id || `sec-${secIdx}`,
+            name: targetSec.name,
+            questions: questionsList
+          }]
+        };
+        testsStore.set(cleanId, singleSec);
+        return singleSec;
+      }
+    }
+  }
+
+  // 2. Fetch full shift from Supabase tests and questions table
+  const client = supabaseAdmin || supabase;
+  if (client) {
     try {
-      const { data: testRow, error: tErr } = await supabase
+      // Look up test record by exact id or like id
+      let { data: testRow } = await client
         .from('tests')
         .select('*')
-        .eq('id', id)
+        .eq('id', cleanId)
         .maybeSingle();
 
-      if (testRow && !tErr) {
-        const { data: qRows, error: qErr } = await supabase
+      if (!testRow) {
+        const { data: rowAlt } = await client
+          .from('tests')
+          .select('*')
+          .ilike('id', cleanId.replace(/_/g, '-'))
+          .maybeSingle();
+        testRow = rowAlt;
+      }
+
+      if (testRow) {
+        const { data: qRows, error: qErr } = await client
           .from('questions')
           .select('*')
-          .eq('test_id', id)
+          .eq('test_id', testRow.id)
           .order('question_number', { ascending: true });
 
         if (qRows && !qErr && qRows.length > 0) {
@@ -184,67 +296,20 @@ export async function getTestById(id: string): Promise<CBTTest | undefined> {
             sections
           };
 
-          testsStore.set(id, cbtTest);
+          testsStore.set(cleanId, cbtTest);
+          testsStore.set(testRow.id, cbtTest);
           return cbtTest;
         }
       }
     } catch (err) {
-      console.warn(`Supabase load failed for test ${id}:`, err);
+      console.warn(`Supabase load failed for test ${cleanId}:`, err);
     }
   }
 
-  // 1. Direct path lookup in src/data/tests/<id>.json
-  try {
-    let filePath = path.join(process.cwd(), 'src/data/tests', `${id}.json`);
-    if (!fs.existsSync(filePath)) {
-      filePath = path.resolve(__dirname, '../data/tests', `${id}.json`);
-    }
-    if (fs.existsSync(filePath)) {
-      const fileContent = fs.readFileSync(filePath, 'utf8');
-      const test = JSON.parse(fileContent) as CBTTest;
-      test.sections?.forEach((sec) => {
-        sec.questions?.forEach((q) => {
-          if (!q.examOrigin) {
-            q.examOrigin = test.title;
-          }
-        });
-      });
-      testsStore.set(id, test);
-      return test;
-    }
-  } catch (err) {
-    console.warn(`Could not load test ${id} from disk:`, err);
-  }
-
-  // 2. Dynamic Chapter Test (ch-math-algebra-20)
-  if (id.startsWith('ch-')) {
-    const parts = id.split('-');
-    const subject = parts[1] as 'math' | 'reasoning' | 'english' | 'ga';
-    const count = parseInt(parts[parts.length - 1], 10) || 20;
-    const chapterSlug = parts.slice(2, -1).join('-');
-
-    const availableChapters = CHAPTER_TAXONOMY[subject] || [];
-    const matchedChapter =
-      availableChapters.find(
-        (ch) =>
-          encodeURIComponent(ch).replace(/%20/g, '-').toLowerCase() === chapterSlug ||
-          ch.toLowerCase().includes(chapterSlug.replace(/-/g, ' ').toLowerCase())
-      ) || availableChapters[0] || 'Chapter Practice';
-
-    const test = generateChapterTest(subject, matchedChapter, count);
-    test.id = id;
-    test.sections?.forEach(sec => {
-      sec.questions?.forEach(q => {
-        if (!q.examOrigin) q.examOrigin = `Official 2025 ${matchedChapter} Shift Question`;
-      });
-    });
-    testsStore.set(id, test);
-    return test;
-  }
-
-  // 3. Dynamic Topic Test (topic-ssc-cgl-math-trigonometry-20-15 or topic-math-trigonometry-20-15)
-  if (id.startsWith('topic-')) {
-    const rawParts = id.substring('topic-'.length).split('-');
+  // 3. Dynamic Chapter or Topic Test (ch-... or topic-...)
+  if (cleanId.startsWith('ch-') || cleanId.startsWith('topic-')) {
+    const isTopic = cleanId.startsWith('topic-');
+    const rawParts = cleanId.replace(/^ch-|^topic-/, '').split('-');
     let duration = 15;
     let count = 20;
     const tokens = [...rawParts];
@@ -283,83 +348,12 @@ export async function getTestById(id: string): Promise<CBTTest | undefined> {
       ) || availableChapters[0] || 'Topic Practice';
 
     const test = generateChapterTest(subject, matchedChapter, count, duration, examFilter);
-    test.id = id;
+    test.id = cleanId;
     test.durationMinutes = duration;
     test.title = `${matchedChapter} — Official PYQ Topic Drill (${test.totalQuestions} Qs • ${duration} Mins)`;
-    test.sections?.forEach(sec => {
-      sec.questions?.forEach(q => {
-        if (!q.examOrigin) q.examOrigin = `Official 2025 ${matchedChapter} Shift Question`;
-      });
-    });
-    testsStore.set(id, test);
-    return test;
-  }
-
-  // 4. Dynamic Sectional Test from an Authentic Shift or Registry
-  if (id.startsWith('sec-')) {
-    const shiftMatch = id.match(/^sec-(.+)-sec-(\d+)$/);
-    if (shiftMatch) {
-      const parentId = shiftMatch[1];
-      const secIdx = parseInt(shiftMatch[2], 10);
-      const parent = await getTestById(parentId);
-      if (parent && parent.sections[secIdx]) {
-        const targetSec = parent.sections[secIdx];
-        const duration = parent.examCode.includes('tier2') ? 30 : 15;
-        const questionsList = targetSec.questions || [];
-        const count = questionsList.length || 25;
-        const marksPerQ = (parent.examFamily === 'rrb' || parent.examCode.toLowerCase().includes('rrb')) ? 1 : 2;
-        const singleSec: CBTTest = {
-          id,
-          title: `${targetSec.name} — ${parent.title} (Sectional Mock)`,
-          examCode: parent.examCode,
-          examFamily: parent.examFamily,
-          type: 'sectional',
-          durationMinutes: duration,
-          totalMarks: count * marksPerQ,
-          totalQuestions: count,
-          isPublished: true,
-          hasSectionalTiming: true,
-          sectionalTimingMinutes: duration,
-          sections: [{
-            id: targetSec.id || `sec-${secIdx}`,
-            name: targetSec.name,
-            questions: questionsList
-          }]
-        };
-        testsStore.set(id, singleSec);
-        return singleSec;
-      }
-    }
-
-    const parts = id.split('-');
-    const examCode = `${parts[1]}-${parts[2]}-${parts[3] || 'tier1'}`;
-    const sectionName = parts.slice(3).join(' ').replace(/\b\w/g, (c) => c.toUpperCase());
-    const test = generateSectionalTest(examCode, sectionName || 'Sectional Speed Booster');
-    test.id = id;
-    test.sections?.forEach(sec => {
-      sec.questions?.forEach(q => {
-        if (!q.examOrigin) q.examOrigin = `Official 2025 ${examCode.toUpperCase()} Shift Paper`;
-      });
-    });
-    testsStore.set(id, test);
-    return test;
-  }
-
-  // 5. Smart Generated Full Mock (gen-ssc-cgl-tier1 or smart-mock-ssc-cgl-tier1)
-  if (id.startsWith('gen-') || id.startsWith('smart-mock-')) {
-    const examCode = id.replace('gen-', '').replace('smart-mock-', '');
-    const test = generateSmartFullMock(examCode);
-    test.id = id;
-    test.sections?.forEach(sec => {
-      sec.questions?.forEach(q => {
-        if (!q.examOrigin) q.examOrigin = `Official 2025 Paper: ${examCode.toUpperCase()}`;
-      });
-    });
-    testsStore.set(id, test);
+    testsStore.set(cleanId, test);
     return test;
   }
 
   return undefined;
 }
-
-
