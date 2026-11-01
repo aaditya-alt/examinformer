@@ -107,6 +107,19 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     const code = (testObj.examCode || '').toLowerCase();
     const id = (testObj.id || '').toLowerCase();
     const title = (testObj.title || '').toLowerCase();
+    const family = (testObj.examFamily || '').toLowerCase();
+
+    // All Railway / RRB exams (NTPC UG, NTPC Graduate, Group D, ALP, Section Controller) strictly have NO sectional timer!
+    if (
+      family === 'rrb' ||
+      code.includes('rrb') ||
+      id.includes('rrb') ||
+      title.includes('rrb') ||
+      title.includes('railway')
+    ) {
+      return false;
+    }
+
     // SSC CGL Tier 1 & Tier 2, SSC CHSL Tier 1 & Tier 2, MTS, CPO, GD, and any sectional mock
     if (
       code.includes('cgl') ||
@@ -129,8 +142,8 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     ) {
       return true;
     }
-    // Any test that defines sectional timing or has multiple sections
-    return Boolean(testObj.hasSectionalTiming || (testObj.sections && testObj.sections.length > 1));
+    // Any test that explicitly defines sectional timing
+    return Boolean(testObj.hasSectionalTiming);
   };
 
   const getExamSectionTimingMinutes = (testObj: CBTTest | null, sIdx: number): number => {
@@ -232,9 +245,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
           // Check if there is an existing paused session in localStorage
           if (!isSolutionMode) {
             const chosenLang = sessionStorage.getItem(`cbt_lang_${testId}`);
-            if (!chosenLang) {
-              setLanguageModalOpen(true);
-            } else {
+            if (chosenLang) {
               setLanguage(chosenLang as 'en' | 'hi');
             }
 
@@ -487,7 +498,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
         options: currentQuestion.options,
         correctOption: currentQuestion.correctOption,
         explanation: currentQuestion.explanation,
-        sectionName: currentSection.name,
+        sectionName: currentSection?.name || 'General Section',
         examOrigin: currentQuestion.examOrigin || test?.title,
         savedAt: Date.now()
       };
@@ -518,6 +529,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     if (isSolutionMode) {
       if (reattemptMode) {
         setReattemptChoices(prev => ({ ...prev, [qno]: optId }));
+        setRevealedPerQuestion(prev => ({ ...prev, [qno]: true }));
       }
       return;
     }
@@ -539,6 +551,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
           delete next[qno];
           return next;
         });
+        setRevealedPerQuestion(prev => ({ ...prev, [qno]: false }));
       }
       return;
     }
@@ -590,7 +603,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
       }
     } else {
       // In sectional timing: candidate reached the end of current section and must submit section or wait for timer
-      setSectionAlertMsg(`You have reached the last question of "${currentSection.name}". Click "Submit Section" when ready to proceed to the next section.`);
+      setSectionAlertMsg(`You have reached the last question of "${currentSection?.name || 'this section'}". Click "Submit Section" when ready to proceed to the next section.`);
       setTimeout(() => setSectionAlertMsg(null), 5000);
     }
   };
@@ -606,7 +619,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
       }
     } else {
       // In sectional timing: candidate cannot go back to previous section
-      setSectionAlertMsg(`You are on the first question of "${currentSection.name}". Previous sections are locked under official exam rules.`);
+      setSectionAlertMsg(`You are on the first question of "${currentSection?.name || 'this section'}". Previous sections are locked under official exam rules.`);
       setTimeout(() => setSectionAlertMsg(null), 4000);
     }
   };
@@ -648,7 +661,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   };
 
   const handleNextSection = () => {
-    if (activeSectionIdx < test.sections.length - 1) {
+    if (test && activeSectionIdx < test.sections.length - 1) {
       setActiveSectionIdx(activeSectionIdx + 1);
       setActiveQuestionIdx(0);
     }
@@ -678,6 +691,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
 
   // Submit test and persist to Supabase & session
   const handleSubmitTest = async () => {
+    if (!test) return;
     setSubmitting(true);
 
     const isMts = test.examCode === 'ssc-mts' || test.id.toLowerCase().includes('mts');
@@ -792,18 +806,18 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   const isQuestionSolutionVisible = Boolean(isSolutionMode && (!reattemptMode || revealedPerQuestion[qno]));
 
   const totalAnsweredCount = Object.values(userResponses).filter(
-    (r) => r.status === 'answered' || r.status === 'answered_review'
+    (r) => r.status === 'answered' || (r.status as string) === 'marked_answered'
   ).length;
 
   const currentSectionStats = {
     answered: sectionQuestions.filter(
-      (q) => userResponses[q.qno]?.status === 'answered' || userResponses[q.qno]?.status === 'answered_review'
+      (q) => userResponses[q.qno]?.status === 'answered' || (userResponses[q.qno]?.status as string) === 'marked_answered'
     ).length,
     notAnswered: sectionQuestions.filter(
       (q) => userResponses[q.qno]?.status === 'not_answered'
     ).length,
     review: sectionQuestions.filter(
-      (q) => userResponses[q.qno]?.status === 'review' || userResponses[q.qno]?.status === 'answered_review'
+      (q) => userResponses[q.qno]?.status === 'marked' || (userResponses[q.qno]?.status as string) === 'marked_answered'
     ).length,
     notVisited: sectionQuestions.filter(
       (q) => !userResponses[q.qno] || userResponses[q.qno]?.status === 'not_visited'
@@ -1008,7 +1022,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
 
         {/* Center: Title */}
         <div className="text-center font-bold text-xs sm:text-sm text-slate-800 truncate max-w-xs sm:max-w-md md:max-w-lg px-2">
-          {qno}) {currentSection.name || test.title} Practice
+          {qno}) {currentSection?.name || test?.title} Practice
         </div>
 
         {/* Right: Fullscreen, Pause, Timer */}
@@ -1348,8 +1362,11 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                 const isSelectedInReattempt = isSolutionMode && reattemptMode && reattemptChoices[qno] === opt.id;
                 
                 const isOfficialCorrect = isSolutionMode && isQuestionSolutionVisible && opt.id === currentQuestion?.correctOption;
-                const isUserAttempted = isSolutionMode && isQuestionSolutionVisible && currentResponse.chosenOption === opt.id;
-                const isUserWrongChoice = isSolutionMode && isUserAttempted && !isOfficialCorrect;
+                const isUserAttempted = isSolutionMode && isQuestionSolutionVisible && (
+                  reattemptMode ? (reattemptChoices[qno] === opt.id) : (currentResponse.chosenOption === opt.id)
+                );
+                const isUserWrongChoice = isSolutionMode && isQuestionSolutionVisible && isUserAttempted && !isOfficialCorrect;
+                const isUserCorrectChoice = isSolutionMode && isQuestionSolutionVisible && isUserAttempted && isOfficialCorrect;
 
                 return (
                   <div
@@ -1406,13 +1423,13 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                       {isOfficialCorrect && (
                         <span className="text-[11px] font-black uppercase text-emerald-700 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded shrink-0 flex items-center gap-1">
                           <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                          <span>Correct Answer</span>
+                          <span>{reattemptMode && isUserCorrectChoice ? 'Correct Choice!' : 'Correct Answer'}</span>
                         </span>
                       )}
                       {isUserWrongChoice && (
                         <span className="text-[11px] font-black uppercase text-rose-700 bg-rose-100 border border-rose-300 px-2 py-0.5 rounded shrink-0 flex items-center gap-1">
                           <XCircle className="w-3 h-3 text-rose-600" />
-                          <span>Your Attempt</span>
+                          <span>{reattemptMode ? 'Your Reattempt (Incorrect)' : 'Your Attempt'}</span>
                         </span>
                       )}
                     </div>
@@ -1487,7 +1504,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                     </span>
                   </div>
                   <div className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Section: <strong className="text-slate-700 dark:text-slate-300">{currentSection.name}</strong>
+                    Section: <strong className="text-slate-700 dark:text-slate-300">{currentSection?.name}</strong>
                   </div>
                 </div>
               </div>
@@ -1532,12 +1549,12 @@ function EduquityCBTContent({ testId }: { testId: string }) {
           <div className="px-4 py-3 bg-white border-b border-slate-200 flex items-center gap-2 shrink-0">
             <span className="text-[#1d4ed8] text-base font-black leading-none">▶</span>
             <h3 className="font-bold text-sm text-slate-900 tracking-tight truncate">
-              {currentSection.name}
+              {currentSection?.name}
             </h3>
           </div>
 
           {/* Section Part Quick Switcher */}
-          {test.sections.length > 1 && (
+          {test && test.sections.length > 1 && (
             <div className="p-2 bg-[#f8fafc] border-b border-slate-200 flex items-center gap-1 overflow-x-auto shrink-0">
               {test.sections.map((sec, idx) => {
                 const isActive = activeSectionIdx === idx;
@@ -1564,7 +1581,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
           {/* Question Number Palette Grid (5 columns per row, Eduquity standard) */}
           <div className="p-4 flex-1 overflow-y-auto">
             <div className="grid grid-cols-5 gap-2.5">
-              {currentSection.questions.map((q, idx) => {
+              {(currentSection?.questions || []).map((q, idx) => {
                 const targetQno = q.qno;
                 const resp = userResponses[targetQno];
                 const status = resp?.status || 'not_visited';
@@ -1610,7 +1627,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
           {/* Eduquity Section Analysis Card (Tan header bg-[#d7cdbd], red/orange digits) */}
           <div className="border-t border-slate-300 bg-white shrink-0">
             <div className="bg-[#d7cdbd] text-slate-900 text-xs font-bold py-1.5 px-4 text-left">
-              {currentSection.name} Analysis
+              {currentSection?.name} Analysis
             </div>
             {!isSolutionMode ? (
               <div className="p-3.5 text-xs space-y-2 font-bold text-slate-800 bg-white">
@@ -1678,7 +1695,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
 
               {/* Part Tabs on Mobile */}
               <div className="p-2 bg-slate-100 border-b border-slate-200 flex items-center gap-1 overflow-x-auto shrink-0">
-                {test.sections.map((sec, idx) => {
+                {(test?.sections || []).map((sec, idx) => {
                   const isActive = activeSectionIdx === idx;
                   const partLabel = `PART-${String.fromCharCode(65 + idx)}`;
                   return (
@@ -1702,13 +1719,13 @@ function EduquityCBTContent({ testId }: { testId: string }) {
 
               {/* Section Name on Mobile */}
               <div className="px-3 py-2 border-b border-slate-200 bg-white font-bold text-xs text-slate-800 truncate">
-                {currentSection.name}
+                {currentSection?.name}
               </div>
 
               {/* Grid on Mobile */}
               <div className="p-4 flex-1 overflow-y-auto">
                 <div className="grid grid-cols-5 gap-2.5">
-                  {currentSection.questions.map((q, idx) => {
+                  {(currentSection?.questions || []).map((q, idx) => {
                     const targetQno = q.qno;
                     const resp = userResponses[targetQno];
                     const status = resp?.status || 'not_visited';
@@ -1751,7 +1768,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
               {/* Mobile Eduquity Section Analysis */}
               <div className="bg-white border-t border-slate-300">
                 <div className="bg-[#d7cdbd] text-slate-900 text-xs font-bold py-1.5 px-3">
-                  {currentSection.name} Analysis
+                  {currentSection?.name} Analysis
                 </div>
                 <div className="p-3 text-xs space-y-1.5 font-bold text-slate-800">
                   <div className="flex items-center justify-between">
@@ -1862,52 +1879,6 @@ function EduquityCBTContent({ testId }: { testId: string }) {
               >
                 <RotateCcw className="w-4 h-4" />
                 <span>Start Fresh Attempt (Reset Timer)</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ── PRE-TEST LANGUAGE SELECTION PROMPT MODAL ── */}
-      {languageModalOpen && (
-        <div className="fixed inset-0 z-[200] bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 text-center shadow-2xl space-y-5 animate-in fade-in zoom-in-95 duration-200">
-            <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 mx-auto flex items-center justify-center border border-blue-200 dark:border-blue-900 shadow">
-              <FileText className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="text-lg font-black text-slate-900 dark:text-white">
-                Select Examination Language
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                परीक्षा का माध्यम चुनें (आप परीक्षा के दौरान भी कभी भी भाषा बदल सकते हैं)
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setLanguage('en');
-                  sessionStorage.setItem(`cbt_lang_${testId}`, 'en');
-                  setLanguageModalOpen(false);
-                }}
-                className="p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 hover:border-blue-600 dark:hover:border-blue-500 bg-white dark:bg-slate-800/60 text-slate-900 dark:text-white font-bold text-sm transition hover:shadow-md active:scale-95 flex flex-col items-center gap-1.5"
-              >
-                <span className="text-base font-black">English</span>
-                <span className="text-[11px] font-normal text-slate-500">Default (EN)</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setLanguage('hi');
-                  sessionStorage.setItem(`cbt_lang_${testId}`, 'hi');
-                  setLanguageModalOpen(false);
-                }}
-                className="p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 hover:border-blue-600 dark:hover:border-blue-500 bg-white dark:bg-slate-800/60 text-slate-900 dark:text-white font-bold text-sm transition hover:shadow-md active:scale-95 flex flex-col items-center gap-1.5"
-              >
-                <span className="text-base font-black">हिंदी</span>
-                <span className="text-[11px] font-normal text-slate-500">Hindi (HI)</span>
               </button>
             </div>
           </div>

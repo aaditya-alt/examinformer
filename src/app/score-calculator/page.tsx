@@ -11,7 +11,8 @@ import {
   HelpCircle,
   ShieldCheck,
   ArrowRight,
-  Layers
+  Layers,
+  BarChart3
 } from 'lucide-react';
 
 const EXAMS = [

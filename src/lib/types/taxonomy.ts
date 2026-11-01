@@ -193,9 +193,9 @@ export const EXAM_REGISTRY: ExamDefinition[] = [
 
   // ── RRB / Railway Exams ──
   {
-    id: 'rrb-ntpc-cbt1',
-    name: 'RRB NTPC Graduate & UG (CBT-1) Non-Technical Categories',
-    shortName: 'NTPC CBT-1',
+    id: 'rrb-ntpc-ug-cbt1',
+    name: 'RRB NTPC Under Graduate (UG) 2025-26 (CBT-1)',
+    shortName: 'NTPC UG CBT-1',
     family: 'rrb',
     tier: 'CBT-1',
     totalQuestions: 100,
@@ -203,17 +203,18 @@ export const EXAM_REGISTRY: ExamDefinition[] = [
     totalMarks: 100,
     marksPerCorrect: 1.0,
     negativePerWrong: 0.33,
+    hasSectionalTiming: false,
     sections: [
       { name: 'General Awareness', questionCount: 40, marks: 40 },
       { name: 'Mathematics', questionCount: 30, marks: 30 },
-      { name: 'General Intelligence & Reasoning', questionCount: 30, marks: 30 },
+      { name: 'General Intelligence and Reasoning', questionCount: 30, marks: 30 },
     ],
-    description: 'CEN 05/2024 & CEN 06/2024 Graduate and 12th Level CBT-1.'
+    description: 'Official RRB NTPC Under Graduate (12th Level) CBT-1 examination with strict section-wise structure.'
   },
   {
-    id: 'rrb-ntpc-cbt2',
-    name: 'RRB NTPC (CBT-2) Main Examination',
-    shortName: 'NTPC CBT-2',
+    id: 'rrb-ntpc-ug-cbt2',
+    name: 'RRB NTPC Under Graduate (UG) 2025-26 (CBT-2)',
+    shortName: 'NTPC UG CBT-2',
     family: 'rrb',
     tier: 'CBT-2',
     totalQuestions: 120,
@@ -221,16 +222,88 @@ export const EXAM_REGISTRY: ExamDefinition[] = [
     totalMarks: 120,
     marksPerCorrect: 1.0,
     negativePerWrong: 0.33,
+    hasSectionalTiming: false,
     sections: [
       { name: 'General Awareness', questionCount: 50, marks: 50 },
       { name: 'Mathematics', questionCount: 35, marks: 35 },
-      { name: 'General Intelligence & Reasoning', questionCount: 35, marks: 35 },
+      { name: 'General Intelligence and Reasoning', questionCount: 35, marks: 35 },
     ],
-    description: 'CBT-2 merit examination for Level 2, 3, 5 & 6 executive railway positions.'
+    description: 'Official RRB NTPC Under Graduate CBT-2 main merit test for Junior Clerk, Accounts Clerk, Trains Clerk.'
+  },
+  {
+    id: 'rrb-ntpc-grad-cbt1',
+    name: 'RRB NTPC Graduate 2025-26 (CBT-1)',
+    shortName: 'NTPC Grad CBT-1',
+    family: 'rrb',
+    tier: 'CBT-1',
+    totalQuestions: 100,
+    durationMinutes: 90,
+    totalMarks: 100,
+    marksPerCorrect: 1.0,
+    negativePerWrong: 0.33,
+    hasSectionalTiming: false,
+    sections: [
+      { name: 'Test', questionCount: 100, marks: 100 },
+    ],
+    description: 'Official RRB NTPC Graduate Level CBT-1 paper with authentic mixed question distribution.'
+  },
+  {
+    id: 'rrb-ntpc-grad-cbt2',
+    name: 'RRB NTPC Graduate 2025-26 (CBT-2)',
+    shortName: 'NTPC Grad CBT-2',
+    family: 'rrb',
+    tier: 'CBT-2',
+    totalQuestions: 120,
+    durationMinutes: 90,
+    totalMarks: 120,
+    marksPerCorrect: 1.0,
+    negativePerWrong: 0.33,
+    hasSectionalTiming: false,
+    sections: [
+      { name: 'Test', questionCount: 120, marks: 120 },
+    ],
+    description: 'Official RRB NTPC Graduate CBT-2 merit paper for Station Master, Goods Train Manager, Senior Clerk.'
+  },
+  {
+    id: 'rrb-group-d',
+    name: 'RRB Group D (RRC CEN 01/2025-26)',
+    shortName: 'RRB Group D',
+    family: 'rrb',
+    tier: 'CBT-1',
+    totalQuestions: 100,
+    durationMinutes: 90,
+    totalMarks: 100,
+    marksPerCorrect: 1.0,
+    negativePerWrong: 0.33,
+    hasSectionalTiming: false,
+    sections: [
+      { name: 'General Science', questionCount: 25, marks: 25 },
+      { name: 'Mathematics', questionCount: 25, marks: 25 },
+      { name: 'General Intelligence and Reasoning', questionCount: 30, marks: 30 },
+      { name: 'General Awareness and Current Affairs', questionCount: 20, marks: 20 },
+    ],
+    description: 'Track Maintainer Grade IV, Helper/Assistant in various railway technical departments.'
+  },
+  {
+    id: 'rrb-section-controller',
+    name: 'RRB Section Controller 2025-26',
+    shortName: 'Section Controller',
+    family: 'rrb',
+    tier: 'CBT-1',
+    totalQuestions: 100,
+    durationMinutes: 90,
+    totalMarks: 100,
+    marksPerCorrect: 1.0,
+    negativePerWrong: 0.33,
+    hasSectionalTiming: false,
+    sections: [
+      { name: 'General Section', questionCount: 100, marks: 100 },
+    ],
+    description: 'Specialized railway operating cadre test for Section Controllers and Operations.'
   },
   {
     id: 'rrb-alp-cbt1',
-    name: 'RRB Assistant Loco Pilot & Tech (CBT-1)',
+    name: 'RRB ALP 2025-26 (CBT-1)',
     shortName: 'RRB ALP CBT-1',
     family: 'rrb',
     tier: 'CBT-1',
@@ -239,6 +312,7 @@ export const EXAM_REGISTRY: ExamDefinition[] = [
     totalMarks: 75,
     marksPerCorrect: 1.0,
     negativePerWrong: 0.33,
+    hasSectionalTiming: false,
     sections: [
       { name: 'Mathematics', questionCount: 20, marks: 20 },
       { name: 'General Intelligence and Reasoning', questionCount: 25, marks: 25 },
@@ -248,41 +322,22 @@ export const EXAM_REGISTRY: ExamDefinition[] = [
     description: 'Assistant Loco Pilot & Technician Grade III first stage computer based test.'
   },
   {
-    id: 'rrb-group-d',
-    name: 'RRB Group D (RRC Level-1 Posts)',
-    shortName: 'RRB Group D',
+    id: 'rrb-alp-cbt2',
+    name: 'RRB ALP 2025-26 (CBT-2)',
+    shortName: 'RRB ALP CBT-2',
     family: 'rrb',
-    tier: 'CBT-1',
-    totalQuestions: 100,
-    durationMinutes: 90,
-    totalMarks: 100,
+    tier: 'CBT-2',
+    totalQuestions: 175,
+    durationMinutes: 150,
+    totalMarks: 175,
     marksPerCorrect: 1.0,
     negativePerWrong: 0.33,
+    hasSectionalTiming: false,
     sections: [
-      { name: 'General Science', questionCount: 25, marks: 25 },
-      { name: 'Mathematics', questionCount: 25, marks: 25 },
-      { name: 'General Intelligence and Reasoning', questionCount: 30, marks: 30 },
-      { name: 'General Awareness and Current Affairs', questionCount: 20, marks: 20 },
+      { name: 'Part A: Basic Science & Engineering, Math, Reasoning', questionCount: 100, marks: 100 },
+      { name: 'Part B: Relevant Technical Trade', questionCount: 75, marks: 75 },
     ],
-    description: 'Track Maintainer Grade IV, Helper/Assistant in various technical departments.'
-  },
-  {
-    id: 'rrb-section-controller',
-    name: 'RRB Section Controller & Station Master',
-    shortName: 'Section Controller',
-    family: 'rrb',
-    tier: 'CBT-1',
-    totalQuestions: 120,
-    durationMinutes: 90,
-    totalMarks: 120,
-    marksPerCorrect: 1.0,
-    negativePerWrong: 0.33,
-    sections: [
-      { name: 'Traffic & Railway Operating Concepts', questionCount: 40, marks: 40 },
-      { name: 'General Awareness & Indian Railways History', questionCount: 40, marks: 40 },
-      { name: 'Mathematics & Logical Reasoning', questionCount: 40, marks: 40 },
-    ],
-    description: 'Specialized railway operating cadre test for Section Controllers and Station Masters.'
+    description: 'Assistant Loco Pilot & Technician stage 2 examination for final merit.'
   }
 ];
 

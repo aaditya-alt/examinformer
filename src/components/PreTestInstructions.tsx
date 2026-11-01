@@ -85,8 +85,25 @@ export function PreTestInstructions({
     return test.sectionalTimingMinutes || Math.floor(test.durationMinutes / Math.max(1, test.sections.length));
   };
 
-  const positiveMarks = test.positiveMarks || (test.totalMarks / Math.max(1, test.totalQuestions));
-  const negativeMarks = test.negativeMarks || (positiveMarks === 2 ? 0.5 : positiveMarks === 3 ? 1.0 : 0.25);
+  const isRRB = (test.examFamily || '').toLowerCase() === 'rrb' ||
+                (test.examCode || '').toLowerCase().startsWith('rrb') ||
+                (test.id || '').toLowerCase().startsWith('rrb');
+
+  const positiveMarks = test.positiveMarks !== undefined
+    ? test.positiveMarks
+    : isRRB
+    ? 1.0
+    : (test.totalMarks / Math.max(1, test.totalQuestions));
+
+  const negativeMarks = test.negativeMarks !== undefined
+    ? test.negativeMarks
+    : isRRB
+    ? (1 / 3)
+    : positiveMarks === 2
+    ? 0.5
+    : positiveMarks === 3
+    ? 1.0
+    : 0.25;
 
   return (
     <div className="fixed inset-0 z-[110] bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-y-auto font-sans flex flex-col justify-between">
@@ -148,7 +165,7 @@ export function PreTestInstructions({
             <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs">
               <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Negative Marking</div>
               <div className="text-base sm:text-lg font-black text-rose-600 dark:text-rose-400 mt-0.5">
-                -{negativeMarks.toFixed(2)} Marks
+                -{negativeMarks > 0.32 && negativeMarks < 0.34 ? '1/3 (0.33)' : negativeMarks.toFixed(2)} Marks
               </div>
             </div>
           </div>
@@ -165,8 +182,8 @@ export function PreTestInstructions({
                     <th className="py-2.5 px-3">Section Name</th>
                     <th className="py-2.5 px-3 text-center">Questions</th>
                     <th className="py-2.5 px-3 text-center">Time</th>
-                    <th className="py-2.5 px-3 text-center">Marks</th>
-                    <th className="py-2.5 px-3 text-center">Negative</th>
+                    <th className="py-2.5 px-3 text-center">Marks (+ve)</th>
+                    <th className="py-2.5 px-3 text-center">Negative (-ve)</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
@@ -179,13 +196,13 @@ export function PreTestInstructions({
                         {sec.questions.length}
                       </td>
                       <td className="py-2.5 px-3 text-center text-slate-700 dark:text-slate-300">
-                        {getSectionTime(idx)} min
+                        {isRRB ? `${test.durationMinutes} min (Total)` : `${getSectionTime(idx)} min`}
                       </td>
                       <td className="py-2.5 px-3 text-center font-bold text-emerald-600 dark:text-emerald-400">
                         +{positiveMarks.toFixed(1).replace('.0', '')}
                       </td>
                       <td className="py-2.5 px-3 text-center font-bold text-rose-600 dark:text-rose-400">
-                        -{negativeMarks.toFixed(2)}
+                        -{negativeMarks > 0.32 && negativeMarks < 0.34 ? '1/3 (0.33)' : negativeMarks.toFixed(2)}
                       </td>
                     </tr>
                   ))}

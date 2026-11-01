@@ -82,12 +82,23 @@ export function getTestById(id: string): CBTTest | undefined {
     return test;
   }
 
-  // 3. Dynamic Topic Test (topic-math-trigonometry-10)
+  // 3. Dynamic Topic Test (topic-math-trigonometry-20-15 or topic-math-trigonometry-20)
   if (id.startsWith('topic-')) {
     const parts = id.split('-');
     const subject = parts[1] as 'math' | 'reasoning' | 'english' | 'ga';
-    const count = parseInt(parts[parts.length - 1], 10) || 10;
-    const topicSlug = parts.slice(2, -1).join('-');
+    let count = 20;
+    let duration = 15;
+    let topicSlug = '';
+
+    if (parts.length >= 5 && !isNaN(Number(parts[parts.length - 1])) && !isNaN(Number(parts[parts.length - 2]))) {
+      duration = parseInt(parts[parts.length - 1], 10);
+      count = parseInt(parts[parts.length - 2], 10);
+      topicSlug = parts.slice(2, -2).join('-');
+    } else {
+      count = parseInt(parts[parts.length - 1], 10) || 10;
+      duration = Math.max(10, count);
+      topicSlug = parts.slice(2, -1).join('-');
+    }
 
     const availableChapters = CHAPTER_TAXONOMY[subject] || [];
     const matchedChapter =
@@ -97,9 +108,10 @@ export function getTestById(id: string): CBTTest | undefined {
           ch.toLowerCase().includes(topicSlug.replace(/-/g, ' ').toLowerCase())
       ) || availableChapters[0] || 'Topic Practice';
 
-    const test = generateChapterTest(subject, matchedChapter, count);
+    const test = generateChapterTest(subject, matchedChapter, count, duration);
     test.id = id;
-    test.title = `${matchedChapter} — Official PYQ Topic Test (${count} Questions)`;
+    test.durationMinutes = duration;
+    test.title = `${matchedChapter} — Official PYQ Topic Drill (${count} Qs • ${duration} Mins)`;
     test.sections?.forEach(sec => {
       sec.questions?.forEach(q => {
         if (!q.examOrigin) q.examOrigin = `Official 2025 ${matchedChapter} Shift Question`;
@@ -121,6 +133,7 @@ export function getTestById(id: string): CBTTest | undefined {
         const duration = parent.examCode.includes('tier2') ? 30 : 15;
         const questionsList = targetSec.questions || [];
         const count = questionsList.length || 25;
+        const marksPerQ = (parent.examFamily === 'rrb' || parent.examCode.toLowerCase().includes('rrb')) ? 1 : 2;
         const singleSec: CBTTest = {
           id,
           title: `${targetSec.name} — ${parent.title} (Sectional Mock)`,
@@ -128,7 +141,7 @@ export function getTestById(id: string): CBTTest | undefined {
           examFamily: parent.examFamily,
           type: 'sectional',
           durationMinutes: duration,
-          totalMarks: count * 2,
+          totalMarks: count * marksPerQ,
           totalQuestions: count,
           isPublished: true,
           hasSectionalTiming: true,

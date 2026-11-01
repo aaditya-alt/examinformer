@@ -76,23 +76,53 @@ const MASTER_SERIES_CATALOG: ExamSeriesItem[] = [
     markingScheme: { correct: 3, negative: 1, duration: 90, questions: 90 }
   },
   {
-    id: 'rrb-ntpc-series',
-    examCode: 'rrb-ntpc',
-    name: 'RRB NTPC (Graduate & Under-Graduate CBT 1 & 2) PYQs',
-    badge: '56 Official Shifts & Sectionals',
+    id: 'rrb-ntpc-ug-series',
+    examCode: 'rrb-ntpc-ug',
+    name: 'RRB NTPC Under Graduate (UG) 2025-26 (CBT 1 & 2)',
+    badge: 'Official Shifts (Section-Wise)',
     category: 'rrb',
     logoType: 'rrb',
     tierSupport: ['tier1', 'tier2'],
     markingScheme: { correct: 1, negative: 0.33, duration: 90, questions: 100 }
   },
   {
-    id: 'rrb-alp-series',
-    examCode: 'rrb-alp',
-    name: 'RRB ALP (CBT 1 + CBT 2 + CBAT) Mock Test Series 2026',
-    badge: '11 Official Shifts & Speed Drills',
+    id: 'rrb-ntpc-grad-series',
+    examCode: 'rrb-ntpc-grad',
+    name: 'RRB NTPC Graduate 2025-26 (CBT 1 & 2)',
+    badge: 'Official Shifts (Mixed Format)',
+    category: 'rrb',
+    logoType: 'rrb',
+    tierSupport: ['tier1', 'tier2'],
+    markingScheme: { correct: 1, negative: 0.33, duration: 90, questions: 100 }
+  },
+  {
+    id: 'rrb-group-d-series',
+    examCode: 'rrb-group-d',
+    name: 'RRB Group D Mock Test Series 2025-26 (RRC Level-1)',
+    badge: 'Official 2025-26 Shifts (4 Subjects)',
     category: 'rrb',
     logoType: 'rrb',
     tierSupport: ['tier1'],
+    markingScheme: { correct: 1, negative: 0.33, duration: 90, questions: 100 }
+  },
+  {
+    id: 'rrb-section-controller-series',
+    examCode: 'rrb-section-controller',
+    name: 'RRB Section Controller 2025-26 Mock Test Series',
+    badge: 'Official Papers & Subject Tests',
+    category: 'rrb',
+    logoType: 'rrb',
+    tierSupport: ['tier1'],
+    markingScheme: { correct: 1, negative: 0.33, duration: 90, questions: 100 }
+  },
+  {
+    id: 'rrb-alp-series',
+    examCode: 'rrb-alp',
+    name: 'RRB ALP (CBT 1 + CBT 2) Mock Test Series 2026',
+    badge: 'Official 2026 Shifts & Trade Tests',
+    category: 'rrb',
+    logoType: 'rrb',
+    tierSupport: ['tier1', 'tier2'],
     markingScheme: { correct: 1, negative: 0.33, duration: 60, questions: 75 }
   }
 ];
@@ -196,8 +226,7 @@ function TestsExplorerContent() {
             });
             setAttemptedMap({ ...map });
           }
-        })
-        .catch((err) => console.warn('Supabase attempt read err:', err));
+        });
     }
 
     setAttemptedMap(map);
@@ -283,7 +312,7 @@ function TestsExplorerContent() {
 
   const handleLaunchCustomTopicTest = () => {
     if (!activeTopicModal) return;
-    const testId = `topic-${activeTopicModal.subject}-${activeTopicModal.id}-${customQuestionCount}`;
+    const testId = `topic-${activeTopicModal.subject}-${activeTopicModal.id}-${customQuestionCount}-${customDurationMinutes}`;
     router.push(`/tests/${testId}`);
     setActiveTopicModal(null);
   };
@@ -421,6 +450,11 @@ function TestsExplorerContent() {
   // ─────────────────────────────────────────────────────────────
   // VIEW B: DEDICATED SERIES DETAIL PAGE (When ?series=... is selected)
   // ─────────────────────────────────────────────────────────────
+  const isRailway = selectedSeries.category === 'rrb' || selectedSeries.examCode.startsWith('rrb-');
+  const cbt1TabLabel = isRailway ? 'Official Papers (CBT 1)' : 'Previous Year Paper (Tier I)';
+  const sectionalTabLabel = isRailway ? 'Section-Wise Speed Tests' : 'PYST Sectional Tests';
+  const cbt2TabLabel = isRailway ? 'Official Papers (CBT 2)' : 'Previous Year Paper (Tier II)';
+
   return (
     <div className="min-h-screen bg-[#f8fafc] dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 transition-colors pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
@@ -536,7 +570,7 @@ function TestsExplorerContent() {
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
-                Previous Year Paper (Tier I) ({allTests.filter(t => t.examCode.includes(selectedSeries.examCode) && !t.examCode.includes('tier2')).length})
+                {cbt1TabLabel} ({allTests.filter(t => (t.examCode || '').toLowerCase().includes(selectedSeries.examCode) && !(t.examCode || '').toLowerCase().includes('tier2') && !(t.examCode || '').toLowerCase().includes('cbt2')).length})
                 {activeCategoryTab === 'pyq_tier1' && (
                   <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400 rounded-full" />
                 )}
@@ -551,7 +585,7 @@ function TestsExplorerContent() {
                     : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
-                PYST Sectional Tests ({allTests.filter(t => t.examCode.includes(selectedSeries.examCode)).length * 4})
+                {sectionalTabLabel}
                 {activeCategoryTab === 'pyst_tier1' && (
                   <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400 rounded-full" />
                 )}
@@ -567,7 +601,7 @@ function TestsExplorerContent() {
                       : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  Previous Year Paper (Tier II)
+                  {cbt2TabLabel}
                   {activeCategoryTab === 'pyq_tier2' && (
                     <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400 rounded-full" />
                   )}
@@ -681,7 +715,7 @@ function TestsExplorerContent() {
 
                           <div className="text-[11px] text-slate-400 flex items-center gap-1">
                             <Globe className="w-3 h-3" />
-                            <span>English, Hindi &bull; 15-min Sectional Timer</span>
+                            <span>English, Hindi &bull; {isRailway ? 'Free Section Navigation (No Sectional Lock)' : '15-min Sectional Timer'}</span>
                           </div>
                         </div>
 
@@ -722,7 +756,7 @@ function TestsExplorerContent() {
             {activeCategoryTab === 'pyst_tier1' && (
               <div className="space-y-4">
                 <div className="p-3.5 rounded-2xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 text-xs text-blue-900 dark:text-blue-200">
-                  ⚡ <strong>Eduquity Sectional Speed Mocks:</strong> Organized shift-wise. Select any shift to drill its 4 individual 15-minute sections!
+                  ⚡ <strong>{isRailway ? 'Official Railway Sectional Practice:' : 'Eduquity Sectional Speed Mocks:'}</strong> Organized shift-wise. Select any shift to drill individual sections!
                 </div>
 
                 {currentSeriesTests.map((shiftTest) => {
@@ -742,7 +776,7 @@ function TestsExplorerContent() {
                           </h4>
                         </div>
                         <span className="text-[11px] font-bold text-slate-500">
-                          {sectionsList.length || 4} Sections &bull; 15 Mins Each
+                          {sectionsList.length || (isRailway ? 3 : 4)} Sections
                         </span>
                       </div>
 
@@ -762,7 +796,7 @@ function TestsExplorerContent() {
                                   {sec.name}
                                 </div>
                                 <div className="text-[11px] text-slate-500 mt-0.5">
-                                  {qCount} Qs &bull; 15 Mins &bull; {qCount * 2} Marks
+                                  {qCount} Qs &bull; {isRailway ? `${qCount * 1} Marks` : `${qCount * 2} Marks`}
                                 </div>
                               </div>
 
@@ -897,7 +931,7 @@ function TestsExplorerContent() {
               <ul className="space-y-2 text-xs text-slate-300 font-semibold">
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>15-min strict sectional timer</span>
+                  <span>{isRailway ? 'Free section switching (No sectional lock)' : '15-min strict sectional timer'}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0" />

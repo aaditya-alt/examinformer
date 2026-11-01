@@ -32,19 +32,25 @@ export function classifyQuestion(section: string, text: string): { subject: 'mat
   }
 
   // Mathematics
-  if (sec.includes('quant') || sec.includes('math') || sec.includes('arithmetic')) {
-    if (t.includes('sin') || t.includes('cos') || t.includes('tan') || t.includes('cot') || t.includes('sec') || t.includes('trigon')) return { subject: 'math', chapter: 'Trigonometry & Heights-Distances' };
-    if (t.includes('x^2') || t.includes('x +') || t.includes('algebra') || t.includes('polynomial') || t.includes('a^3')) return { subject: 'math', chapter: 'Algebra & Polynomials' };
-    if (t.includes('circle') || t.includes('triangle') || t.includes('chord') || t.includes('tangent') || t.includes('radius') || t.includes('hypotenuse')) return { subject: 'math', chapter: 'Geometry (Circles & Triangles)' };
-    if (t.includes('cube') || t.includes('cone') || t.includes('cylinder') || t.includes('sphere') || t.includes('surface area') || t.includes('volume') || t.includes('perimeter')) return { subject: 'math', chapter: 'Mensuration 2D & 3D' };
-    if (t.includes('interest') || t.includes('compound') || t.includes('simple interest') || t.includes('principal') || t.includes('rate of')) return { subject: 'math', chapter: 'Simple & Compound Interest' };
-    if (t.includes('profit') || t.includes('loss') || t.includes('cost price') || t.includes('selling price') || t.includes('discount') || t.includes('marked price')) return { subject: 'math', chapter: 'Profit, Loss & Discount' };
-    if (t.includes('work') || t.includes('pipe') || t.includes('cistern') || t.includes('days') || t.includes('together')) return { subject: 'math', chapter: 'Time and Work & Pipes-Cisterns' };
-    if (t.includes('speed') || t.includes('distance') || t.includes('train') || t.includes('boat') || t.includes('stream') || t.includes('km/h')) return { subject: 'math', chapter: 'Time, Speed and Distance & Trains' };
-    if (t.includes('percentage') || t.includes('%')) return { subject: 'math', chapter: 'Percentage & Applications' };
-    if (t.includes('ratio') || t.includes('proportion') || t.includes('partnership')) return { subject: 'math', chapter: 'Ratio, Proportion & Partnership' };
-    if (t.includes('average') || t.includes('mixture') || t.includes('alligation') || t.includes('mean')) return { subject: 'math', chapter: 'Average, Mixtures & Alligations' };
-    if (t.includes('chart') || t.includes('table') || t.includes('graph') || t.includes('histogram') || t.includes('pie chart')) return { subject: 'math', chapter: 'Data Interpretation (Charts & Tables)' };
+  if (sec.includes('quant') || sec.includes('math') || sec.includes('arithmetic') || sec.includes('numerical')) {
+    // Pure Trigonometry detection: require LaTeX math command or explicit trig angle / terms
+    const isTrig =
+      /\\(sin|cos|tan|cot|sec|csc)\b/i.test(t) ||
+      /\b(sin|cos|tan|cot|cosec|sec)\s*(²|³|\^[0-9]+|\b\d+°?|\(?θ|theta|alpha|beta|gamma|\([^\)]+\)|[A-Z]\b)/.test(t) ||
+      /\b(trigonometr|heights?\s+and\s+distance|angle\s+of\s+elevation|angle\s+of\s+depression)\b/i.test(t);
+
+    if (isTrig) return { subject: 'math', chapter: 'Trigonometry & Heights-Distances' };
+    if (/\b(pie chart|bar chart|histogram|table shows|given table|given graph|bar graph)\b/i.test(t)) return { subject: 'math', chapter: 'Data Interpretation (Charts & Tables)' };
+    if (/\b(compound interest|simple interest|sum of money|invested at|annually|per annum|half-yearly)\b/i.test(t)) return { subject: 'math', chapter: 'Simple & Compound Interest' };
+    if (/\b(profit|loss|cost price|selling price|marked price|discount|markup|dealer sells|shopkeeper)\b/i.test(t)) return { subject: 'math', chapter: 'Profit, Loss & Discount' };
+    if (/\b(pipe|pipes|cistern|fill a tank|empty a tank|work together|can complete a work|days to complete|efficiency)\b/i.test(t)) return { subject: 'math', chapter: 'Time and Work & Pipes-Cisterns' };
+    if (/\b(train|trains|km\/h|m\/s|speed of|distance between|boat|stream|upstream|downstream|relative speed)\b/i.test(t)) return { subject: 'math', chapter: 'Time, Speed and Distance & Trains' };
+    if (/\b(ratio|proportion|proportional|partnership|divided among|shares of)\b/i.test(t) || /\b\d+\s*:\s*\d+\b/.test(t)) return { subject: 'math', chapter: 'Ratio, Proportion & Partnership' };
+    if (/\b(percentage|percent|increased by|decreased by)\b/i.test(t) || t.includes('%')) return { subject: 'math', chapter: 'Percentage & Applications' };
+    if (/\b(average|mean|mixture|alligation|blended|weighted average)\b/i.test(t)) return { subject: 'math', chapter: 'Average, Mixtures & Alligations' };
+    if (/\b(circle|chord|tangent|radius|diameter|circumference|triangle|hypotenuse|rhombus|trapezium|parallelogram|cyclic quadrilateral)\b/i.test(t)) return { subject: 'math', chapter: 'Geometry (Circles & Triangles)' };
+    if (/\b(cylinder|cone|sphere|hemisphere|cuboid|cube|surface area|volume of|perimeter of)\b/i.test(t)) return { subject: 'math', chapter: 'Mensuration 2D & 3D' };
+    if (/x\^2|x\^3|a\^2|a\^3|\bx\s*[\+\-]\s*1\/x\b|algebra|polynomial/i.test(t)) return { subject: 'math', chapter: 'Algebra & Polynomials' };
     return { subject: 'math', chapter: 'Number System & Divisibility' };
   }
 
@@ -80,6 +86,13 @@ export function classifyQuestion(section: string, text: string): { subject: 'mat
   if (t.includes('gdp') || t.includes('inflation') || t.includes('rbi') || t.includes('bank') || t.includes('fiscal') || t.includes('budget') || t.includes('five year plan')) {
     return { subject: 'ga', chapter: 'Indian Economy & Banking' };
   }
+  if (sec.includes('science')) {
+    if (t.includes('cell') || t.includes('vitamin') || t.includes('disease') || t.includes('bacteria') || t.includes('virus') || t.includes('blood') || t.includes('plant') || t.includes('hormone') || t.includes('organ') || t.includes('human body')) {
+      return { subject: 'ga', chapter: 'General Science (Biology & Health)' };
+    }
+    return { subject: 'ga', chapter: 'General Science (Physics & Chemistry)' };
+  }
+
   if (t.includes('cell') || t.includes('vitamin') || t.includes('disease') || t.includes('bacteria') || t.includes('virus') || t.includes('blood') || t.includes('plant') || t.includes('hormone')) {
     return { subject: 'ga', chapter: 'General Science (Biology & Health)' };
   }
@@ -101,7 +114,7 @@ export function getMasterQuestionBank(): MappedQuestion[] {
   try {
     const testsDir = path.join(process.cwd(), 'src/data/tests');
     if (fs.existsSync(testsDir)) {
-      const files = fs.readdirSync(testsDir).slice(0, 45); // sample across 45 shifts to generate rich chapter rooms
+      const files = fs.readdirSync(testsDir);
       files.forEach((file) => {
         try {
           const t = JSON.parse(fs.readFileSync(path.join(testsDir, file), 'utf8'));
@@ -173,7 +186,12 @@ export function filterQuestionBank(filters: {
 }
 
 // Generate on-demand Chapter-Wise Practice Test
-export function generateChapterTest(subject: 'math' | 'reasoning' | 'english' | 'ga', chapter: string, count = 20): CBTTest {
+export function generateChapterTest(
+  subject: 'math' | 'reasoning' | 'english' | 'ga',
+  chapter: string,
+  count = 20,
+  durationMinutes?: number
+): CBTTest {
   let questions = filterQuestionBank({ subject, chapter });
   if (questions.length === 0) {
     questions = filterQuestionBank({ subject });
@@ -184,9 +202,9 @@ export function generateChapterTest(subject: 'math' | 'reasoning' | 'english' | 
   const selected = questions.length >= count ? questions.slice(0, count) : (questions.length > 0 ? questions : []);
   const safeCount = Math.max(1, selected.length);
 
-  const testId = `ch-${subject}-${encodeURIComponent(chapter).replace(/%20/g, '-').toLowerCase()}-${count}`;
-  const duration = Math.max(10, Math.round(safeCount * 1.2)); // ~1.2 mins per question
-  const totalMarks = selected.reduce((sum, q) => sum + q.marks, 0) || safeCount * 2;
+  const duration = durationMinutes || Math.max(10, Math.round(safeCount * 1.0));
+  const testId = `topic-${subject}-${encodeURIComponent(chapter).replace(/%20/g, '-').toLowerCase()}-${count}-${duration}`;
+  const totalMarks = safeCount * 2;
 
   const cbtQuestions: CBTQuestion[] = selected.map((q, idx) => ({
     id: q.id,
@@ -196,21 +214,23 @@ export function generateChapterTest(subject: 'math' | 'reasoning' | 'english' | 
     options: q.options,
     correctOption: q.correctOption,
     explanation: q.explanation,
-    marks: q.marks,
-    negativeMarks: q.negativeMarks,
+    marks: q.marks || 2,
+    negativeMarks: q.negativeMarks || 0.5,
     sectionName: chapter,
     examOrigin: `Official 2025 Paper: ${q.shift || q.examCode.toUpperCase()}`
   }));
 
   return {
     id: testId,
-    title: `${chapter} — Chapter-Wise PYQ Practice Test (${count} Questions)`,
+    title: `${chapter} — Practice Drill (${selected.length} Qs • ${duration} Mins)`,
     examCode: 'chapter-practice',
-    examFamily: subject === 'math' || subject === 'reasoning' ? 'ssc' : 'ssc',
+    examFamily: 'ssc',
     type: 'chapter',
     durationMinutes: duration,
     totalMarks,
     totalQuestions: selected.length,
+    positiveMarks: 2,
+    negativeMarks: 0.5,
     isPublished: true,
     sections: [
       {
