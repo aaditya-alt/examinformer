@@ -16,7 +16,44 @@ import { testsStore, registerNewTest, deleteTest } from './testStore';
 export * from './types/cbt';
 export { testsStore, registerNewTest, deleteTest };
 
-export function getAvailableTests(filterExam?: string): CBTTest[] {
+export async function getAvailableTests(filterExam?: string): Promise<CBTTest[]> {
+  // 1. Fetch from Supabase tests table
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('tests')
+        .select('*')
+        .eq('is_published', true)
+        .order('created_at', { ascending: false });
+
+      if (!error && Array.isArray(data) && data.length > 0) {
+        let mapped = data.map((t) => ({
+          id: t.id,
+          title: t.title,
+          examCode: t.exam_code,
+          examFamily: t.exam_code?.startsWith('rrb') ? 'rrb' : 'ssc',
+          type: t.type || 'pyq',
+          durationMinutes: t.duration_minutes || 60,
+          totalMarks: t.total_marks || 100,
+          totalQuestions: t.total_questions || 100,
+          isPublished: t.is_published ?? true
+        })) as unknown as CBTTest[];
+
+        if (filterExam && filterExam !== 'all') {
+          const filter = filterExam.toLowerCase();
+          mapped = mapped.filter((t) => {
+            const code = (t.examCode || '').toLowerCase();
+            return code.includes(filter) || t.examFamily === filter;
+          });
+        }
+        return mapped;
+      }
+    } catch (e) {
+      console.warn('Failed to query tests from Supabase:', e);
+    }
+  }
+
+  // Fallback to static catalog
   const all = testsCatalog as unknown as CBTTest[];
   if (filterExam && filterExam !== 'all') {
     return all.filter((t) => {
@@ -28,9 +65,132 @@ export function getAvailableTests(filterExam?: string): CBTTest[] {
   return all;
 }
 
-export function getTestById(id: string): CBTTest | undefined {
+export async function getTestById(id: string): Promise<CBTTest | undefined> {
   if (testsStore.has(id)) {
     return testsStore.get(id);
+  }
+
+  // 1. Fetch from Supabase
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data: testRow, error: tErr } = await supabase
+        .from('tests')
+        .select('*')
+        .eq('id', id)
+        .maybeSingle();
+
+      if (testRow && !tErr) {
+        const { data: qRows, error: qErr } = await supabase
+          .from('questions')
+          .select('*')
+          .eq('test_id', id)
+          .order('question_number', { ascending: true });
+
+        if (qRows && !qErr && qRows.length > 0) {
+          const isSSC = (testRow.exam_code || '').toLowerCase().includes('ssc') ||
+                        (testRow.title || '').toLowerCase().includes('ssc');
+          const isRailway = (testRow.exam_code || '').toLowerCase().includes('rrb') ||
+                            (testRow.title || '').toLowerCase().includes('rrb') ||
+                            (testRow.title || '').toLowerCase().includes('railway');
+
+          const getSectionName = (qno: number, totalQ: number, existingSec?: string): string => {
+            if (existingSec && existingSec !== 'null' && existingSec !== 'undefined' && existingSec.trim().length > 0) {
+              return existingSec;
+            }
+            if (isSSC) {
+              if (totalQ === 100) {
+                if (qno <= 25) return 'General Intelligence & Reasoning';
+                if (qno <= 50) return 'General Awareness';
+                if (qno <= 75) return 'Quantitative Aptitude';
+                return 'English Comprehension';
+              }
+              if (totalQ === 130 || totalQ === 150) {
+                if (qno <= 30) return 'Mathematical Abilities';
+                if (qno <= 60) return 'Reasoning and General Intelligence';
+                if (qno <= 105) return 'English Language and Comprehension';
+                if (qno <= 130) return 'General Awareness';
+                return 'Computer Knowledge';
+              }
+            }
+            if (isRailway) {
+              if (totalQ === 100) {
+                if (qno <= 40) return 'General Awareness';
+                if (qno <= 70) return 'Mathematics';
+                return 'General Intelligence and Reasoning';
+              }
+              if (totalQ === 75) {
+                if (qno <= 20) return 'Mathematics';
+                if (qno <= 45) return 'General Intelligence & Reasoning';
+                if (qno <= 65) return 'General Science';
+                return 'General Awareness & Current Affairs';
+              }
+            }
+            return 'General Section';
+          };
+
+          const sectionMap = new Map<string, CBTQuestion[]>();
+
+          qRows.forEach((q) => {
+            const secName = getSectionName(q.question_number, qRows.length, q.section_id);
+            if (!sectionMap.has(secName)) {
+              sectionMap.set(secName, []);
+            }
+
+            const rawOptions = Array.isArray(q.options) ? q.options : [];
+            const mappedOptions = rawOptions.map((o: any, idx: number) => ({
+              id: o.id || idx + 1,
+              text: o.text_en || o.text || `Option ${o.id || idx + 1}`,
+              textHi: o.text_hi || o.text_en || o.text || `Option ${o.id || idx + 1}`,
+              imageUrl: o.imageUrl
+            }));
+
+            sectionMap.get(secName)!.push({
+              id: q.id,
+              qno: q.question_number,
+              questionText: q.question_text_en || '',
+              questionTextHi: q.question_text_hi || q.question_text_en || '',
+              questionImages: q.question_images || [],
+              options: mappedOptions,
+              correctOption: q.correct_option_index || 1,
+              explanation: q.explanation_en || '',
+              explanationHi: q.explanation_hi || q.explanation_en || '',
+              marks: isSSC ? 2 : 1,
+              negativeMarks: isSSC ? 0.5 : Number((1 / 3).toFixed(2)),
+              sectionName: secName,
+              examOrigin: testRow.title
+            });
+          });
+
+          const sections: CBTSection[] = Array.from(sectionMap.entries()).map(([name, qs], idx) => ({
+            id: `sec_${idx + 1}`,
+            name,
+            questions: qs
+          }));
+
+          const cbtTest: CBTTest = {
+            id: testRow.id,
+            title: testRow.title,
+            examCode: testRow.exam_code,
+            examFamily: isRailway ? 'rrb' : 'ssc',
+            type: (testRow.type as any) || 'pyq',
+            durationMinutes: testRow.duration_minutes || (isRailway ? 90 : 60),
+            totalMarks: testRow.total_marks || (qRows.length * (isSSC ? 2 : 1)),
+            totalQuestions: testRow.total_questions || qRows.length,
+            positiveMarks: isSSC ? 2 : 1,
+            negativeMarks: isSSC ? 0.5 : Number((1 / 3).toFixed(2)),
+            hasSectionalTiming: isSSC,
+            sectionalTimingMinutes: isSSC ? 15 : undefined,
+            isPublished: testRow.is_published ?? true,
+            sections
+          };
+
+          testsStore.set(id, cbtTest);
+          return cbtTest;
+        }
+      }
+    } catch (err) {
+      console.warn(`Supabase load failed for test ${id}:`, err);
+    }
   }
 
   // 1. Direct path lookup in src/data/tests/<id>.json

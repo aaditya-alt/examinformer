@@ -1,12 +1,15 @@
 import { NextResponse } from 'next/server';
 import { getTestById } from '@/lib/testService';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const test = getTestById(id);
+  const test = await getTestById(id);
 
   if (!test) {
     return NextResponse.json({ error: 'Test not found' }, { status: 404 });

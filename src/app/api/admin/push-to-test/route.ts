@@ -3,7 +3,7 @@ import { pushAnswerKeyToMockTest } from '@/lib/scoreService';
 
 export async function POST(req: Request) {
   try {
-    const { submissionId, splitSections, targetExamCode, targetCategory, generateAISolutions } = await req.json();
+    const { submissionId, splitSections, targetExamCode, targetCategory, examYear, customTitle, generateAISolutions } = await req.json();
 
     if (!submissionId) {
       return NextResponse.json(
@@ -15,6 +15,8 @@ export async function POST(req: Request) {
     const result = await pushAnswerKeyToMockTest(submissionId, Boolean(splitSections), {
       targetExamCode,
       targetCategory,
+      examYear: examYear ? Number(examYear) : 2025,
+      customTitle,
       generateAISolutions: generateAISolutions !== false
     });
     return NextResponse.json({ success: true, ...result });

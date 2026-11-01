@@ -171,6 +171,8 @@ export default function AdminDashboardPage() {
   // Shift assignment state
   const [targetSeriesMap, setTargetSeriesMap] = useState<Record<string, string>>({});
   const [targetTierMap, setTargetTierMap] = useState<Record<string, 'pyq_tier1' | 'pyq_tier2'>>({});
+  const [targetYearMap, setTargetYearMap] = useState<Record<string, number>>({});
+  const [customTitleMap, setCustomTitleMap] = useState<Record<string, string>>({});
   const [convertingShiftKey, setConvertingShiftKey] = useState<string | null>(null);
   const [convertSuccessMsg, setConvertSuccessMsg] = useState<string | null>(null);
 
@@ -220,6 +222,8 @@ export default function AdminDashboardPage() {
 
     const targetCode = targetSeriesMap[shift.shiftKey] || (shift.examTitle?.toLowerCase().includes('graduate') ? 'rrb-ntpc-grad' : 'rrb-ntpc-ug');
     const targetTier = targetTierMap[shift.shiftKey] || 'pyq_tier1';
+    const targetYear = targetYearMap[shift.shiftKey] || (shift.examDate ? (parseInt(shift.examDate.slice(0, 4), 10) || 2025) : 2025);
+    const customTitle = customTitleMap[shift.shiftKey] || shift.examTitle;
 
     setConvertingShiftKey(shift.shiftKey);
     setConvertSuccessMsg(null);
@@ -232,6 +236,8 @@ export default function AdminDashboardPage() {
           submissionId,
           targetExamCode: targetCode,
           targetCategory: targetTier,
+          examYear: targetYear,
+          customTitle,
           generateAISolutions: true
         })
       });
@@ -709,6 +715,20 @@ export default function AdminDashboardPage() {
                         </div>
 
                         <div className="space-y-1">
+                          <label className="text-[10px] font-bold text-slate-500 uppercase block">Exam Year</label>
+                          <select
+                            value={targetYearMap[shift.shiftKey] || 2025}
+                            onChange={(e) => setTargetYearMap({ ...targetYearMap, [shift.shiftKey]: Number(e.target.value) })}
+                            className="px-2.5 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold"
+                          >
+                            <option value={2026}>2026</option>
+                            <option value={2025}>2025</option>
+                            <option value={2024}>2024</option>
+                            <option value={2023}>2023</option>
+                          </select>
+                        </div>
+
+                        <div className="space-y-1">
                           <label className="text-[10px] font-bold text-slate-500 uppercase block">Tier</label>
                           <select
                             value={currentTier}
@@ -718,6 +738,17 @@ export default function AdminDashboardPage() {
                             <option value="pyq_tier1">CBT-1 (Tier 1)</option>
                             <option value="pyq_tier2">CBT-2 (Tier 2)</option>
                           </select>
+                        </div>
+
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold text-slate-500 uppercase block">Custom Title (Optional)</label>
+                          <input
+                            type="text"
+                            placeholder={shift.examTitle || 'Shift Title'}
+                            value={customTitleMap[shift.shiftKey] || ''}
+                            onChange={(e) => setCustomTitleMap({ ...customTitleMap, [shift.shiftKey]: e.target.value })}
+                            className="px-2.5 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold w-48"
+                          />
                         </div>
 
                         <button

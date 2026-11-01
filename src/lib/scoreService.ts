@@ -516,6 +516,8 @@ export async function pushAnswerKeyToMockTest(
   options?: {
     targetExamCode?: string;
     targetCategory?: 'pyq_tier1' | 'pyq_tier2';
+    examYear?: number;
+    customTitle?: string;
     generateAISolutions?: boolean;
   }
 ): Promise<{ testId: string; sectionalTestIds?: string[]; message: string }> {
@@ -528,12 +530,12 @@ export async function pushAnswerKeyToMockTest(
   const targetCode = options?.targetExamCode || (isSSC ? 'ssc-cgl' : 'rrb-ntpc-grad');
   const targetCat = options?.targetCategory || 'pyq_tier1';
   const isRailway = targetCode.startsWith('rrb');
+  const examYear = options?.examYear || 2025;
 
   const testId = `${targetCode}-${targetCat === 'pyq_tier2' ? 'cbt2-' : ''}shift-${Date.now().toString().slice(-6)}`;
   const examTitle = sub.parsed.meta.examTitle || (isSSC ? 'SSC Exam' : 'RRB Examination');
   const shiftLabel = sub.parsed.meta.shiftTime ? `(${sub.parsed.meta.shiftTime})` : '';
-  const dateLabel = sub.parsed.meta.examDate ? sub.parsed.meta.examDate : '2026';
-  const testTitle = `${examTitle} - Official Shift ${dateLabel} ${shiftLabel}`.trim();
+  const testTitle = options?.customTitle || `${examTitle} - Official Shift ${examYear} ${shiftLabel}`.trim();
 
   // Helper to generate step-by-step AI explanation if missing
   const generateCleanSolution = (qno: number, secName: string, correctOpt: number, correctText: string): string => {
@@ -587,51 +589,11 @@ export async function pushAnswerKeyToMockTest(
     }))
   };
 
-  // Register in runtime memory
+  // Register in runtime memory store
   registerNewTest(newCBTTest);
-
-  // Write test file to disk
-  try {
-    const testFilePath = path.join(process.cwd(), 'src', 'data', 'tests', `${testId}.json`);
-    fs.writeFileSync(testFilePath, JSON.stringify(newCBTTest, null, 2), 'utf-8');
-
-    // Register into tests-catalog.json
-    const catalogPath = path.join(process.cwd(), 'src', 'data', 'tests-catalog.json');
-    if (fs.existsSync(catalogPath)) {
-      const catalogData = JSON.parse(fs.readFileSync(catalogPath, 'utf-8'));
-      const exists = catalogData.tests.some((t: any) => t.id === testId);
-      if (!exists) {
-        catalogData.tests.unshift({
-          id: testId,
-          title: testTitle,
-          examCode: targetCode,
-          type: 'pyq',
-          category: targetCat,
-          durationMinutes: newCBTTest.durationMinutes,
-          totalQuestions: newCBTTest.totalQuestions,
-          totalMarks: newCBTTest.totalMarks,
-          positiveMarks: newCBTTest.positiveMarks,
-          negativeMarks: newCBTTest.negativeMarks,
-          hasSectionalTiming: newCBTTest.hasSectionalTiming,
-          isPublished: true,
-          year: 2026,
-          sections: newCBTTest.sections.map(s => ({
-            id: s.id,
-            name: s.name,
-            questionCount: s.questions.length,
-            marks: s.questions.length * (newCBTTest.positiveMarks || 1)
-          }))
-        });
-        fs.writeFileSync(catalogPath, JSON.stringify(catalogData, null, 2), 'utf-8');
-      }
-    }
-  } catch (err: any) {
-    console.warn('Error saving generated test file:', err.message);
-  }
-
   sub.pushedToTestId = testId;
 
-  // Sync main test to Supabase if configured
+  // Sync main test to Supabase
   if (isSupabaseConfigured && supabase) {
     try {
       await supabase.from('tests').upsert({
@@ -646,16 +608,23 @@ export async function pushAnswerKeyToMockTest(
       });
 
       const questionInserts = newCBTTest.sections.flatMap(s => s.questions.map(q => ({
-        id: `${testId}_q_${q.qno}`,
+        id: `${testId}_q${q.qno}`,
         test_id: testId,
+        section_id: s.name,
         question_number: q.qno,
-        question_text_en: q.questionText,
-        options: q.options.map(o => ({ id: o.id, text_en: o.text })),
+        question_text_en: q.questionText || '',
+        question_text_hi: (q as any).questionTextHi || q.questionText || '',
+        options: q.options.map(o => ({ id: o.id, text_en: o.text || '', text_hi: (o as any).textHi || o.text || '' })),
         correct_option_index: q.correctOption,
-        explanation_en: q.explanation || ''
+        explanation_en: q.explanation || '',
+        explanation_hi: (q as any).explanationHi || q.explanation || '',
+        is_bonus: false
       })));
 
-      await supabase.from('questions').insert(questionInserts);
+      for (let b = 0; b < questionInserts.length; b += 50) {
+        const batch = questionInserts.slice(b, b + 50);
+        await supabase.from('questions').upsert(batch);
+      }
     } catch (e: any) {
       console.warn('Supabase test sync warning:', e.message);
     }
