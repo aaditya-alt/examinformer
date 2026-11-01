@@ -82,22 +82,36 @@ export function getTestById(id: string): CBTTest | undefined {
     return test;
   }
 
-  // 3. Dynamic Topic Test (topic-math-trigonometry-20-15 or topic-math-trigonometry-20)
+  // 3. Dynamic Topic Test (topic-ssc-cgl-math-trigonometry-20-15 or topic-math-trigonometry-20-15)
   if (id.startsWith('topic-')) {
-    const parts = id.split('-');
-    const subject = parts[1] as 'math' | 'reasoning' | 'english' | 'ga';
-    let count = 20;
+    const rawParts = id.substring('topic-'.length).split('-');
     let duration = 15;
+    let count = 20;
+    const tokens = [...rawParts];
+
+    if (tokens.length >= 3 && !isNaN(Number(tokens[tokens.length - 1])) && !isNaN(Number(tokens[tokens.length - 2]))) {
+      duration = parseInt(tokens.pop()!, 10);
+      count = parseInt(tokens.pop()!, 10);
+    } else if (tokens.length >= 2 && !isNaN(Number(tokens[tokens.length - 1]))) {
+      count = parseInt(tokens.pop()!, 10);
+      duration = Math.max(10, count);
+    }
+
+    const subjects = ['math', 'reasoning', 'english', 'ga'];
+    const subIdx = tokens.findIndex((t) => subjects.includes(t));
+    let examFilter: string | undefined = undefined;
+    let subject: 'math' | 'reasoning' | 'english' | 'ga' = 'math';
     let topicSlug = '';
 
-    if (parts.length >= 5 && !isNaN(Number(parts[parts.length - 1])) && !isNaN(Number(parts[parts.length - 2]))) {
-      duration = parseInt(parts[parts.length - 1], 10);
-      count = parseInt(parts[parts.length - 2], 10);
-      topicSlug = parts.slice(2, -2).join('-');
+    if (subIdx > 0) {
+      examFilter = tokens.slice(0, subIdx).join('-');
+      subject = tokens[subIdx] as any;
+      topicSlug = tokens.slice(subIdx + 1).join('-');
+    } else if (subIdx === 0) {
+      subject = tokens[0] as any;
+      topicSlug = tokens.slice(1).join('-');
     } else {
-      count = parseInt(parts[parts.length - 1], 10) || 10;
-      duration = Math.max(10, count);
-      topicSlug = parts.slice(2, -1).join('-');
+      topicSlug = tokens.join('-');
     }
 
     const availableChapters = CHAPTER_TAXONOMY[subject] || [];
@@ -108,10 +122,10 @@ export function getTestById(id: string): CBTTest | undefined {
           ch.toLowerCase().includes(topicSlug.replace(/-/g, ' ').toLowerCase())
       ) || availableChapters[0] || 'Topic Practice';
 
-    const test = generateChapterTest(subject, matchedChapter, count, duration);
+    const test = generateChapterTest(subject, matchedChapter, count, duration, examFilter);
     test.id = id;
     test.durationMinutes = duration;
-    test.title = `${matchedChapter} — Official PYQ Topic Drill (${count} Qs • ${duration} Mins)`;
+    test.title = `${matchedChapter} — Official PYQ Topic Drill (${test.totalQuestions} Qs • ${duration} Mins)`;
     test.sections?.forEach(sec => {
       sec.questions?.forEach(q => {
         if (!q.examOrigin) q.examOrigin = `Official 2025 ${matchedChapter} Shift Question`;

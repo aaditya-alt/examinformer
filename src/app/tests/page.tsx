@@ -139,7 +139,7 @@ function TestsExplorerContent() {
   const selectedSeries = useMemo(() => {
     if (!seriesQuery) return MASTER_SERIES_CATALOG[0];
     const found = MASTER_SERIES_CATALOG.find(
-      (item) => item.examCode === seriesQuery || item.id === seriesQuery
+      (item) => item.examCode === seriesQuery || item.id === seriesQuery || (seriesQuery === 'rrb-ntpc' && item.examCode === 'rrb-ntpc-grad')
     );
     return found || MASTER_SERIES_CATALOG[0];
   }, [seriesQuery]);
@@ -251,27 +251,16 @@ function TestsExplorerContent() {
     });
   }, [trendingFilter, seriesCatalogSearch]);
 
-  // Compute ONLY the REAL years that actually exist in the database for the active series
-  const realAvailableYears = useMemo(() => {
-    const yrSet = new Set<string>();
-    allTests.forEach((t) => {
-      const code = (t.examCode || '').toLowerCase();
-      if (code.includes(selectedSeries.examCode)) {
-        const m = t.title.match(/(202\d)/);
-        if (m) yrSet.add(m[1]);
-      }
-    });
-    const sorted = Array.from(yrSet).sort().reverse();
-    return sorted.length > 0 ? sorted : ['2025'];
-  }, [allTests, selectedSeries]);
-
-  // Compute test list for selected series & active category
-  const currentSeriesTests = useMemo(() => {
+  // Base tests for selected series & active category before year/text filters
+  const baseCategoryTests = useMemo(() => {
     const codePattern = selectedSeries.examCode;
 
-    let list = allTests.filter((t) => {
+    return allTests.filter((t) => {
       const code = (t.examCode || '').toLowerCase();
-      const matchesExam = code.includes(codePattern);
+      const matchesExam =
+        code.includes(codePattern) ||
+        (codePattern === 'rrb-ntpc-grad' && (code.includes('rrb-ntpc-grad') || code === 'rrb-ntpc-cbt1')) ||
+        (codePattern === 'rrb-ntpc-ug' && code.includes('rrb-ntpc-ug'));
       if (!matchesExam) return false;
 
       if (activeCategoryTab === 'pyq_tier2') {
@@ -282,6 +271,25 @@ function TestsExplorerContent() {
       }
       return true;
     });
+  }, [allTests, selectedSeries, activeCategoryTab]);
+
+  // Compute ONLY the REAL years that actually exist in baseCategoryTests
+  const realAvailableYears = useMemo(() => {
+    const yrSet = new Set<string>();
+    baseCategoryTests.forEach((t) => {
+      const m = t.title.match(/(202\d)/);
+      if (m) yrSet.add(m[1]);
+    });
+    // Filter out any year that has 0 matching tests
+    return Array.from(yrSet)
+      .filter((yr) => baseCategoryTests.some((t) => t.title.includes(yr)))
+      .sort()
+      .reverse();
+  }, [baseCategoryTests]);
+
+  // Compute filtered test list for selected series, category, year & search
+  const currentSeriesTests = useMemo(() => {
+    let list = [...baseCategoryTests];
 
     // Real Year Filter
     if (selectedYear !== 'all') {
@@ -301,7 +309,7 @@ function TestsExplorerContent() {
       return [...list].reverse();
     }
     return list;
-  }, [allTests, selectedSeries, activeCategoryTab, selectedYear, testSearchQuery, sortOrder]);
+  }, [baseCategoryTests, selectedYear, testSearchQuery, sortOrder]);
 
   const handleOpenTopicModal = (topic: TopicItem) => {
     setActiveTopicModal(topic);
@@ -312,7 +320,7 @@ function TestsExplorerContent() {
 
   const handleLaunchCustomTopicTest = () => {
     if (!activeTopicModal) return;
-    const testId = `topic-${activeTopicModal.subject}-${activeTopicModal.id}-${customQuestionCount}-${customDurationMinutes}`;
+    const testId = `topic-${selectedSeries.examCode}-${activeTopicModal.subject}-${activeTopicModal.id}-${customQuestionCount}-${customDurationMinutes}`;
     router.push(`/tests/${testId}`);
     setActiveTopicModal(null);
   };
@@ -601,7 +609,7 @@ function TestsExplorerContent() {
                       : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  {cbt2TabLabel}
+                  {cbt2TabLabel} ({allTests.filter(t => (t.examCode || '').toLowerCase().includes(selectedSeries.examCode) && ((t.examCode || '').toLowerCase().includes('tier2') || (t.examCode || '').toLowerCase().includes('cbt2'))).length})
                   {activeCategoryTab === 'pyq_tier2' && (
                     <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400 rounded-full" />
                   )}
@@ -625,7 +633,7 @@ function TestsExplorerContent() {
             </div>
 
             {/* Year Filter Pills: Strictly real available years */}
-            {activeCategoryTab !== 'topic_practice' && (
+            {activeCategoryTab !== 'topic_practice' && realAvailableYears.length > 0 && (
               <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
                 <button
                   type="button"
@@ -636,23 +644,27 @@ function TestsExplorerContent() {
                       : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50'
                   }`}
                 >
-                  All Available
+                  All Available ({baseCategoryTests.length})
                 </button>
 
-                {realAvailableYears.map((yr) => (
-                  <button
-                    key={yr}
-                    type="button"
-                    onClick={() => setSelectedYear(yr)}
-                    className={`px-3 py-1 rounded-full text-xs font-bold transition whitespace-nowrap cursor-pointer ${
-                      selectedYear === yr
-                        ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
-                        : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50'
-                    }`}
-                  >
-                    {yr} ({currentSeriesTests.filter(t => t.title.includes(yr)).length || currentSeriesTests.length})
-                  </button>
-                ))}
+                {realAvailableYears.map((yr) => {
+                  const countForYear = baseCategoryTests.filter((t) => t.title.includes(yr)).length;
+                  if (countForYear === 0) return null;
+                  return (
+                    <button
+                      key={yr}
+                      type="button"
+                      onClick={() => setSelectedYear(yr)}
+                      className={`px-3 py-1 rounded-full text-xs font-bold transition whitespace-nowrap cursor-pointer ${
+                        selectedYear === yr
+                          ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
+                          : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50'
+                      }`}
+                    >
+                      {yr} ({countForYear})
+                    </button>
+                  );
+                })}
               </div>
             )}
 

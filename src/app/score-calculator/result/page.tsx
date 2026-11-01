@@ -12,17 +12,14 @@ import {
   XCircle,
   HelpCircle,
   Printer,
-  Share2,
   Sparkles,
   ArrowLeft,
-  ChevronRight,
-  TrendingUp,
-  Percent,
   Clock,
   Layers,
-  FileText,
-  ShieldCheck,
-  Check
+  Check,
+  TrendingUp,
+  Percent,
+  Share2
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -45,9 +42,8 @@ function ScorecardContent() {
         if (!id || parsed.id === id) {
           setData(parsed);
           setLoading(false);
-          // Trigger celebratory confetti for high scores!
           if (parsed.parsed.summary.finalScore > 50) {
-            confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
+            confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
           }
           return;
         }
@@ -117,7 +113,7 @@ function ScorecardContent() {
         </div>
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Scorecard Not Found</h2>
         <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">
-          We could not locate this evaluation. Please submit your answer key again.
+          We could not locate this evaluation. Please submit your answer key link again.
         </p>
         <Link
           href="/score-calculator"
@@ -132,6 +128,7 @@ function ScorecardContent() {
 
   const { meta, summary, sections } = data.parsed;
   const { analytics } = data;
+  const isSSC = meta.examFamily === 'ssc';
 
   // Flatten all questions for review tab
   const allQuestions = sections.flatMap(sec => sec.questions);
@@ -141,23 +138,22 @@ function ScorecardContent() {
   });
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Top Navigation & Print Controls */}
       <div className="flex flex-wrap items-center justify-between gap-4 no-print">
         <Link
           href="/score-calculator"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition"
+          className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 transition"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Evaluate Another Response Sheet</span>
         </Link>
 
         <div className="flex items-center gap-2">
-          {/* Admin Push to Mock Test Button */}
           <button
             onClick={handlePushToTest}
             disabled={pushingToTest || !!pushedTestInfo}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition shadow-sm ${
+            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm ${
               pushedTestInfo
                 ? 'bg-emerald-600 text-white cursor-default'
                 : 'bg-indigo-600 hover:bg-indigo-700 text-white'
@@ -165,36 +161,36 @@ function ScorecardContent() {
           >
             {pushedTestInfo ? (
               <>
-                <Check className="w-4 h-4" />
+                <Check className="w-3.5 h-3.5" />
                 <span>Pushed to Mocks!</span>
               </>
             ) : (
               <>
-                <Sparkles className="w-4 h-4" />
-                <span>{pushingToTest ? 'Publishing...' : '⚡ Push to Mock Test Series'}</span>
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>{pushingToTest ? 'Publishing...' : '⚡ Push to Mock Tests'}</span>
               </>
             )}
           </button>
 
           <button
             onClick={handlePrint}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 transition"
           >
-            <Printer className="w-4 h-4" />
+            <Printer className="w-3.5 h-3.5" />
             <span>Print Official Scorecard</span>
           </button>
         </div>
       </div>
 
-      {/* Push Notification Banner if pushed */}
+      {/* Push Notification Banner */}
       {pushedTestInfo && (
-        <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 flex items-center justify-between gap-4">
+        <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 flex items-center justify-between gap-4 no-print">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0">
               <CheckCircle2 className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-sm font-bold text-emerald-900 dark:text-emerald-200">
+              <div className="text-xs sm:text-sm font-bold text-emerald-900 dark:text-emerald-200">
                 Official Paper Added to CBT Test Series!
               </div>
               <div className="text-xs text-emerald-700 dark:text-emerald-300">
@@ -204,169 +200,218 @@ function ScorecardContent() {
           </div>
           <Link
             href={`/tests/${pushedTestInfo.testId}`}
-            className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm"
+            className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm shrink-0"
           >
             Attempt Test Now &rarr;
           </Link>
         </div>
       )}
 
-      {/* Candidate Profile Details Card */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
-          <div>
-            <div className="flex items-center gap-2.5">
-              <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                {meta.candidateName || 'Candidate Response Sheet'}
-              </h1>
-              <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 uppercase">
-                {meta.category || 'UR'}
-              </span>
-            </div>
-            <div className="text-sm font-semibold text-slate-600 dark:text-slate-400 mt-1">
-              {meta.examTitle || 'Official Government Examination'}
-            </div>
+      {/* Official Scorecard Container - Matching Official Format */}
+      <div className="space-y-3">
+        {/* Title */}
+        <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white text-center tracking-tight">
+          {meta.examTitle || (isSSC ? 'Graduate Level' : 'RRB NTPC')}: Answer Key and Analysis by ExamInformer
+        </h1>
+
+        {/* Card with Red Border */}
+        <div className="max-w-2xl mx-auto border-[2.5px] border-red-700 bg-white dark:bg-slate-900 rounded-sm overflow-hidden shadow-lg">
+          {/* Header Banner */}
+          <div className="py-2.5 px-4 text-center font-bold text-slate-900 dark:text-white border-b-[2px] border-red-700 text-sm sm:text-base tracking-wide bg-slate-50 dark:bg-slate-800/80">
+            {isSSC ? 'SSC Exam Response Sheet' : 'Railway Exam Response Sheet'}
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="px-4 py-2 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700 text-xs">
-              <span className="text-slate-500 dark:text-slate-400">Roll No: </span>
-              <span className="font-mono font-bold text-slate-900 dark:text-white">{meta.rollNo || 'N/A'}</span>
-            </div>
-            {meta.stateZone && (
-              <div className="px-3 py-2 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300">
-                {meta.stateZone}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Exam Metadata Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 text-xs">
-          <div>
-            <div className="text-slate-500 dark:text-slate-400">Exam Date</div>
-            <div className="font-bold text-slate-800 dark:text-slate-200 mt-0.5">{meta.examDate || 'Verified Date'}</div>
-          </div>
-          <div>
-            <div className="text-slate-500 dark:text-slate-400">Exam Shift / Time</div>
-            <div className="font-bold text-slate-800 dark:text-slate-200 mt-0.5">{meta.shiftTime || 'Standard Shift'}</div>
-          </div>
-          <div className="col-span-2">
-            <div className="text-slate-500 dark:text-slate-400">Test Centre Venue</div>
-            <div className="font-bold text-slate-800 dark:text-slate-200 mt-0.5 truncate">{meta.venueName || 'Official Digital Zone Centre'}</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Hero Metric Cards Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-        {/* Net Final Marks */}
-        <div className="p-6 rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-lg shadow-blue-500/20 col-span-2 sm:col-span-1">
-          <div className="flex items-center justify-between text-blue-100 text-xs font-bold uppercase tracking-wider">
-            <span>Final Score</span>
-            <Trophy className="w-4 h-4" />
-          </div>
-          <div className="text-4xl sm:text-5xl font-black tracking-tight mt-3">
-            {summary.finalScore}
-          </div>
-          <div className="text-xs text-blue-100/90 mt-2 font-medium">
-            +{summary.rawScore} Raw &bull; -{summary.negativeMarks} Penalty
-          </div>
-        </div>
-
-        {/* All India Rank */}
-        <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
-          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">
-            <span>All India Rank</span>
-            <Award className="w-4 h-4 text-amber-500" />
-          </div>
-          <div className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight mt-3">
-            #{analytics.allIndiaRank}
-            <span className="text-xs font-normal text-slate-400 ml-1.5">/ {analytics.totalSubmissions}</span>
-          </div>
-          <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-2 flex items-center gap-1">
-            <TrendingUp className="w-3.5 h-3.5" />
-            <span>Top {(100 - analytics.percentile).toFixed(1)}% Aspirants</span>
-          </div>
-        </div>
-
-        {/* Shift Rank */}
-        <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
-          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">
-            <span>Shift Rank</span>
-            <Clock className="w-4 h-4 text-blue-500" />
-          </div>
-          <div className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight mt-3">
-            #{analytics.shiftRank}
-            <span className="text-xs font-normal text-slate-400 ml-1.5">/ {analytics.shiftTotal}</span>
-          </div>
-          <div className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-            Shift Avg: <span className="font-bold text-slate-700 dark:text-slate-300">{analytics.shiftAverageScore}</span> &bull; High: <span className="font-bold text-slate-700 dark:text-slate-300">{analytics.shiftTopperScore}</span>
-          </div>
-        </div>
-
-        {/* Category Percentile */}
-        <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
-          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">
-            <span>Accuracy &amp; Percentile</span>
-            <Percent className="w-4 h-4 text-emerald-500" />
-          </div>
-          <div className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight mt-3">
-            {summary.accuracy}%
-          </div>
-          <div className="text-xs font-bold text-slate-600 dark:text-slate-400 mt-2">
-            {summary.correct} Right &bull; {summary.wrong} Wrong &bull; {summary.skipped} Skipped
-          </div>
-        </div>
-      </div>
-
-      {/* Section-wise Detailed Breakdown Table */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden">
-        <h2 className="text-lg font-extrabold text-slate-900 dark:text-white mb-4">
-          Sectional Performance Analysis
-        </h2>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs sm:text-sm">
-            <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[11px] font-bold">
+          {/* Candidate Particulars Table */}
+          <table className="w-full text-xs sm:text-sm border-collapse border-b-[2px] border-red-700">
+            <tbody>
+              <tr className="border-b border-slate-300 dark:border-slate-700">
+                <td className="py-2 px-3.5 font-bold text-slate-900 dark:text-white w-1/3 border-r border-slate-300 dark:border-slate-700">
+                  Roll Number
+                </td>
+                <td className="py-2 px-3.5 font-mono font-bold text-slate-800 dark:text-slate-200">
+                  {meta.rollNo || 'N/A'}
+                </td>
+              </tr>
+              <tr className="border-b border-slate-300 dark:border-slate-700">
+                <td className="py-2 px-3.5 font-bold text-slate-900 dark:text-white border-r border-slate-300 dark:border-slate-700">
+                  Candidate Name
+                </td>
+                <td className="py-2 px-3.5 font-bold text-slate-900 dark:text-white uppercase">
+                  {meta.candidateName || 'N/A'}
+                </td>
+              </tr>
+              <tr className="border-b border-slate-300 dark:border-slate-700">
+                <td className="py-2 px-3.5 font-bold text-slate-900 dark:text-white border-r border-slate-300 dark:border-slate-700">
+                  Subject
+                </td>
+                <td className="py-2 px-3.5 text-slate-800 dark:text-slate-200">
+                  {meta.examTitle || 'Graduate Level'}
+                </td>
+              </tr>
+              <tr className="border-b border-slate-300 dark:border-slate-700">
+                <td className="py-2 px-3.5 font-bold text-slate-900 dark:text-white border-r border-slate-300 dark:border-slate-700">
+                  Exam Date
+                </td>
+                <td className="py-2 px-3.5 text-slate-800 dark:text-slate-200">
+                  {meta.examDate || 'N/A'}
+                </td>
+              </tr>
               <tr>
-                <th className="py-3 px-4 rounded-l-xl">Subject / Section</th>
-                <th className="py-3 px-3 text-center">Total Q</th>
-                <th className="py-3 px-3 text-center">Attempted</th>
-                <th className="py-3 px-3 text-center text-emerald-600">Correct</th>
-                <th className="py-3 px-3 text-center text-rose-600">Wrong</th>
-                <th className="py-3 px-3 text-center">Skipped</th>
-                <th className="py-3 px-3 text-center">Penalty</th>
-                <th className="py-3 px-4 text-right rounded-r-xl font-black">Net Marks</th>
+                <td className="py-2 px-3.5 font-bold text-slate-900 dark:text-white border-r border-slate-300 dark:border-slate-700">
+                  Exam Time
+                </td>
+                <td className="py-2 px-3.5 text-slate-800 dark:text-slate-200">
+                  {meta.shiftTime || 'Shift-1'}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          {/* Section Score Breakdown Table */}
+          <table className="w-full text-xs sm:text-sm border-collapse text-slate-900 dark:text-slate-100">
+            <thead>
+              <tr className="bg-[#b91c1c] text-white font-bold text-center">
+                <th className="py-2.5 px-3 text-left border-r border-red-800">Section</th>
+                <th className="py-2.5 px-2 w-14 border-r border-red-800">Total</th>
+                <th className="py-2.5 px-2 w-12 border-r border-red-800">NA</th>
+                <th className="py-2.5 px-2 w-14 border-r border-red-800">Right</th>
+                <th className="py-2.5 px-2 w-14 border-r border-red-800">Wrong</th>
+                <th className="py-2.5 px-2 w-16">Marks</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80 font-medium">
+            <tbody className="divide-y divide-slate-300 dark:divide-slate-700 bg-white dark:bg-slate-900">
               {sections.map((sec, idx) => (
-                <tr key={idx} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
-                  <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">{sec.name}</td>
-                  <td className="py-3.5 px-3 text-center text-slate-600 dark:text-slate-400">{sec.totalQuestions}</td>
-                  <td className="py-3.5 px-3 text-center">{sec.attempted}</td>
-                  <td className="py-3.5 px-3 text-center font-bold text-emerald-600">{sec.correct}</td>
-                  <td className="py-3.5 px-3 text-center font-bold text-rose-600">{sec.wrong}</td>
-                  <td className="py-3.5 px-3 text-center text-slate-400">{sec.skipped}</td>
-                  <td className="py-3.5 px-3 text-center text-rose-500">-{sec.negativeMarks}</td>
-                  <td className="py-3.5 px-4 text-right font-black text-blue-600 dark:text-blue-400">{sec.finalScore}</td>
+                <tr key={idx} className="border-b border-slate-300 dark:border-slate-700">
+                  <td className="py-2.5 px-3 font-medium text-slate-800 dark:text-slate-200 border-r border-slate-300 dark:border-slate-700">
+                    {sec.name}
+                  </td>
+                  <td className="py-2.5 px-2 text-center border-r border-slate-300 dark:border-slate-700">
+                    {sec.totalQuestions}
+                  </td>
+                  <td className="py-2.5 px-2 text-center border-r border-slate-300 dark:border-slate-700">
+                    {sec.skipped}
+                  </td>
+                  <td className="py-2.5 px-2 text-center border-r border-slate-300 dark:border-slate-700 font-semibold">
+                    {sec.correct}
+                  </td>
+                  <td className="py-2.5 px-2 text-center border-r border-slate-300 dark:border-slate-700 font-semibold text-rose-600 dark:text-rose-400">
+                    {sec.wrong}
+                  </td>
+                  <td className="py-2.5 px-2 text-center font-bold text-slate-900 dark:text-white">
+                    {sec.finalScore}
+                  </td>
                 </tr>
               ))}
             </tbody>
             <tfoot>
-              <tr className="border-t-2 border-slate-200 dark:border-slate-700 font-bold bg-slate-50/80 dark:bg-slate-800/40 text-slate-900 dark:text-white">
-                <td className="py-3 px-4 rounded-l-xl">Total Aggregate</td>
-                <td className="py-3 px-3 text-center">{summary.totalQuestions}</td>
-                <td className="py-3 px-3 text-center">{summary.attempted}</td>
-                <td className="py-3 px-3 text-center text-emerald-600">{summary.correct}</td>
-                <td className="py-3 px-3 text-center text-rose-600">{summary.wrong}</td>
-                <td className="py-3 px-3 text-center">{summary.skipped}</td>
-                <td className="py-3 px-3 text-center text-rose-600">-{summary.negativeMarks}</td>
-                <td className="py-3 px-4 text-right rounded-r-xl font-black text-base text-blue-600 dark:text-blue-400">{summary.finalScore}</td>
+              {/* Highlighted Yellow Total Row */}
+              <tr className="bg-[#ffff00] text-black font-black text-xs sm:text-sm border-t-[2px] border-slate-900">
+                <td className="py-3 px-3 text-center border-r border-slate-900 uppercase">
+                  Total
+                </td>
+                <td className="py-3 px-2 text-center border-r border-slate-900">
+                  {summary.totalQuestions}
+                </td>
+                <td className="py-3 px-2 text-center border-r border-slate-900">
+                  {summary.skipped}
+                </td>
+                <td className="py-3 px-2 text-center border-r border-slate-900">
+                  {summary.correct}
+                </td>
+                <td className="py-3 px-2 text-center border-r border-slate-900">
+                  {summary.wrong}
+                </td>
+                <td className="py-3 px-2 text-center text-sm sm:text-base font-black">
+                  {summary.finalScore.toFixed(2)}
+                </td>
               </tr>
             </tfoot>
           </table>
+        </div>
+
+        {/* Footnote */}
+        <div className="text-center text-xs text-slate-600 dark:text-slate-400 font-medium pt-1">
+          ⓘ Marking Scheme: +{data.ruleUsed.marksPerCorrect} for Correct, -{Number(data.ruleUsed.negativePerWrong.toFixed(2))} for Incorrect.
+        </div>
+      </div>
+
+      {/* Portal Rankings & Candidate Analytics Card */}
+      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100 dark:border-slate-800">
+          <div>
+            <h2 className="text-lg font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+              <Trophy className="w-5 h-5 text-amber-500" />
+              <span>Portal Rank &amp; Shift Analytics</span>
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Live ranking based on all candidates who have evaluated on ExamInformer / MockMatrix.
+            </p>
+          </div>
+          <span className="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 self-start sm:self-auto">
+            {meta.category || 'UR'} &bull; {meta.stateZone || 'All India'}
+          </span>
+        </div>
+
+        {/* Analytics Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {/* Portal Rank */}
+          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center justify-between">
+              <span>Portal Rank</span>
+              <Award className="w-4 h-4 text-amber-500" />
+            </div>
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-2">
+              #{analytics.allIndiaRank}
+              <span className="text-xs font-normal text-slate-400 ml-1">/ {analytics.totalSubmissions}</span>
+            </div>
+            <div className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 mt-1 flex items-center gap-1">
+              <TrendingUp className="w-3 h-3" />
+              <span>Top {(100 - analytics.percentile).toFixed(1)}%</span>
+            </div>
+          </div>
+
+          {/* Shift Rank */}
+          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center justify-between">
+              <span>Shift Rank</span>
+              <Clock className="w-4 h-4 text-blue-500" />
+            </div>
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-2">
+              #{analytics.shiftRank}
+              <span className="text-xs font-normal text-slate-400 ml-1">/ {analytics.shiftTotal}</span>
+            </div>
+            <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+              Shift Avg: <strong className="text-slate-700 dark:text-slate-300">{analytics.shiftAverageScore}</strong>
+            </div>
+          </div>
+
+          {/* Category Rank */}
+          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center justify-between">
+              <span>Category Rank</span>
+              <Layers className="w-4 h-4 text-purple-500" />
+            </div>
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-2">
+              #{analytics.categoryRank}
+            </div>
+            <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+              In Category: <strong className="text-slate-700 dark:text-slate-300">{meta.category || 'UR'}</strong>
+            </div>
+          </div>
+
+          {/* Accuracy */}
+          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center justify-between">
+              <span>Accuracy</span>
+              <Percent className="w-4 h-4 text-emerald-500" />
+            </div>
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-2">
+              {summary.accuracy}%
+            </div>
+            <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+              {summary.correct} Right &bull; {summary.wrong} Wrong
+            </div>
+          </div>
         </div>
       </div>
 
@@ -375,10 +420,10 @@ function ScorecardContent() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Detailed Question Paper Review
+              Detailed Question-by-Question Review
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Review every question with your recorded response vs the official commission answer key.
+              Review every response with chosen option vs official commission answer key.
             </p>
           </div>
 
@@ -388,7 +433,7 @@ function ScorecardContent() {
               { key: 'all', label: `All (${allQuestions.length})` },
               { key: 'correct', label: `Correct (${summary.correct})` },
               { key: 'wrong', label: `Wrong (${summary.wrong})` },
-              { key: 'skipped', label: `Skipped (${summary.skipped})` },
+              { key: 'skipped', label: `Not Answered (${summary.skipped})` },
               { key: 'bonus', label: `Bonus (${summary.bonus})` }
             ].map(f => (
               <button
@@ -417,7 +462,7 @@ function ScorecardContent() {
             return (
               <div
                 key={q.qno}
-                className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4"
+                className="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4"
               >
                 {/* Header status bar */}
                 <div className="flex items-center justify-between">
@@ -426,7 +471,7 @@ function ScorecardContent() {
                       {q.qno}
                     </span>
                     <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-                      {q.sectionName} &bull; ID: {q.questionId}
+                      {q.sectionName}
                     </span>
                   </div>
 
@@ -434,19 +479,19 @@ function ScorecardContent() {
                     {isCorrect && (
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 text-xs font-bold">
                         <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span>Correct</span>
+                        <span>Correct (+{data.ruleUsed.marksPerCorrect})</span>
                       </span>
                     )}
                     {isWrong && (
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/70 dark:text-rose-300 text-xs font-bold">
                         <XCircle className="w-3.5 h-3.5" />
-                        <span>Wrong (-Penalty)</span>
+                        <span>Wrong (-{Number(data.ruleUsed.negativePerWrong.toFixed(2))})</span>
                       </span>
                     )}
                     {isSkipped && (
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 text-xs font-bold">
                         <HelpCircle className="w-3.5 h-3.5" />
-                        <span>Not Answered</span>
+                        <span>Not Answered (0)</span>
                       </span>
                     )}
                     {isBonus && (
@@ -458,7 +503,7 @@ function ScorecardContent() {
                 </div>
 
                 {/* Question Text */}
-                <div className="text-sm font-semibold text-slate-900 dark:text-white leading-relaxed">
+                <div className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-white leading-relaxed">
                   <MathRenderer content={q.questionText} />
                 </div>
 
@@ -493,10 +538,10 @@ function ScorecardContent() {
                     return (
                       <div
                         key={opt.num}
-                        className={`p-3 rounded-2xl border text-xs flex items-center justify-between gap-2 transition ${optionBorder}`}
+                        className={`p-3 rounded-xl border text-xs flex items-center justify-between gap-2 transition ${optionBorder}`}
                       >
                         <div className="flex items-center gap-2.5">
-                          <span className="w-5 h-5 rounded-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center font-bold text-[10px]">
+                          <span className="w-5 h-5 rounded-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center font-bold text-[10px] shrink-0">
                             {opt.num}
                           </span>
                           <span><MathRenderer content={opt.text} /></span>

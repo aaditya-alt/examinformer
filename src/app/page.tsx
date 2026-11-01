@@ -54,19 +54,46 @@ const REAL_SERIES_CATALOG: HomeSeriesItem[] = [
     tierSupport: 'Session 1 & 2'
   },
   {
-    id: 'rrb-ntpc-series',
-    examCode: 'rrb-ntpc',
-    name: 'RRB NTPC (Graduate & Under-Graduate CBT 1 & 2) PYQs',
-    testCount: '56 Official 2025 Shifts & Sectionals',
+    id: 'rrb-ntpc-ug-series',
+    examCode: 'rrb-ntpc-ug',
+    name: 'RRB NTPC Under Graduate (UG) 2025-26 (CBT 1 & 2)',
+    testCount: '32 Official Shifts (Section-Wise)',
     category: 'rrb',
     logoType: 'rrb',
     tierSupport: 'CBT 1 & CBT 2'
   },
   {
+    id: 'rrb-ntpc-grad-series',
+    examCode: 'rrb-ntpc-grad',
+    name: 'RRB NTPC Graduate 2025-26 (CBT 1 & 2)',
+    testCount: '56 Official Shifts (Mixed Format)',
+    category: 'rrb',
+    logoType: 'rrb',
+    tierSupport: 'CBT 1 & CBT 2'
+  },
+  {
+    id: 'rrb-group-d-series',
+    examCode: 'rrb-group-d',
+    name: 'RRB Group D Mock Test Series 2025-26 (RRC Level-1)',
+    testCount: '20 Official 2025-26 Shifts (4 Subjects)',
+    category: 'rrb',
+    logoType: 'rrb',
+    tierSupport: 'CBT 1'
+  },
+  {
+    id: 'rrb-section-controller-series',
+    examCode: 'rrb-section-controller',
+    name: 'RRB Section Controller 2025-26 Mock Test Series',
+    testCount: '8 Full Tests & Subject Drills',
+    category: 'rrb',
+    logoType: 'rrb',
+    tierSupport: 'CBT 1'
+  },
+  {
     id: 'rrb-alp-series',
     examCode: 'rrb-alp',
-    name: 'RRB ALP (CBT 1 + CBT 2 + CBAT) Mock Test Series 2026',
-    testCount: '11 Official 2025 Shifts & Speed Drills',
+    name: 'RRB ALP (CBT 1 + CBT 2) Mock Test Series 2026',
+    testCount: '22 Official 2026 Shifts & Trade Tests',
     category: 'rrb',
     logoType: 'rrb',
     tierSupport: 'Stage 1 & 2'

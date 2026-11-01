@@ -2,6 +2,11 @@ import { UniversalResponseSheet, ParsedQuestion, ParsedSection, parseResponseShe
 import { supabase, isSupabaseConfigured } from './supabase';
 import type { CBTTest } from '@/lib/types/cbt';
 import { registerNewTest } from './testService';
+import https from 'https';
+import http from 'http';
+import fs from 'fs';
+import path from 'path';
+import * as cheerio from 'cheerio';
 
 export interface ScoreRule {
   marksPerCorrect: number;
@@ -95,6 +100,105 @@ export interface EvaluationInput {
 // In-memory store for fast evaluation & admin preview
 const localSubmissionsCache = new Map<string, EvaluationResult>();
 
+const SUBMISSIONS_FILE = path.join(process.cwd(), 'src', 'data', 'portal-submissions.json');
+
+export interface StoredPortalSubmission {
+  id: string;
+  rollNumber: string;
+  candidateName: string;
+  examFamily: string;
+  examTitle: string;
+  shiftKey: string;
+  category: string;
+  finalScore: number;
+  rawScore: number;
+  evaluatedAt: string;
+}
+
+function loadPortalSubmissions(): StoredPortalSubmission[] {
+  try {
+    if (fs.existsSync(SUBMISSIONS_FILE)) {
+      const data = fs.readFileSync(SUBMISSIONS_FILE, 'utf-8');
+      const list = JSON.parse(data);
+      if (Array.isArray(list)) return list;
+    }
+  } catch (e) {
+    console.warn('Could not read portal-submissions.json:', e);
+  }
+  return [];
+}
+
+function savePortalSubmission(record: StoredPortalSubmission) {
+  try {
+    const list = loadPortalSubmissions();
+    const existingIdx = list.findIndex(r => r.rollNumber && r.rollNumber === record.rollNumber);
+    if (existingIdx >= 0) {
+      list[existingIdx] = record;
+    } else {
+      list.push(record);
+    }
+    const dir = path.dirname(SUBMISSIONS_FILE);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(SUBMISSIONS_FILE, JSON.stringify(list, null, 2), 'utf-8');
+  } catch (e) {
+    console.warn('Could not save to portal-submissions.json:', e);
+  }
+}
+
+/**
+ * Robust government portal URL fetcher with SSL verification bypass & redirect following
+ */
+export function fetchUrlContent(url: string, maxRedirects = 5): Promise<string> {
+  return new Promise((resolve, reject) => {
+    if (maxRedirects <= 0) return reject(new Error('Too many redirects while accessing response sheet'));
+    let urlObj: URL;
+    try {
+      urlObj = new URL(url);
+    } catch {
+      return reject(new Error('Invalid URL format. Please enter a valid URL starting with https://'));
+    }
+
+    const client = urlObj.protocol === 'https:' ? https : http;
+    const req = client.get(
+      url,
+      {
+        rejectUnauthorized: false,
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+          'Accept':
+            'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.9,hi;q=0.8',
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
+      },
+      res => {
+        if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+          const nextUrl = new URL(res.headers.location, url).toString();
+          return resolve(fetchUrlContent(nextUrl, maxRedirects - 1));
+        }
+        if (res.statusCode !== 200) {
+          return reject(new Error(`Government portal returned HTTP ${res.statusCode}`));
+        }
+        let data = '';
+        res.setEncoding('utf8');
+        res.on('data', chunk => (data += chunk));
+        res.on('end', () => resolve(data));
+      }
+    );
+
+    req.on('error', err => {
+      reject(new Error(`Failed to connect to answer key portal: ${err.message}`));
+    });
+
+    req.setTimeout(25000, () => {
+      req.destroy();
+      reject(new Error('Connection to examination portal timed out after 25 seconds.'));
+    });
+  });
+}
+
 /**
  * Top-level evaluation function used by API routes
  */
@@ -102,18 +206,34 @@ export async function evaluateAnswerKey(input: EvaluationInput): Promise<Evaluat
   let html = input.htmlContent || '';
   if (!html && input.url) {
     try {
-      const res = await fetch(input.url, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+      html = await fetchUrlContent(input.url);
+
+      // Auto-detect modern SSC multi-part response sheets and fetch all parts
+      if (html.includes('Click Here for PART-') || html.includes('PART-A') || html.includes('lblsubject')) {
+        const $ = cheerio.load(html);
+        const partLinks: string[] = [];
+        $('a').each((_, a) => {
+          const text = $(a).text().trim();
+          const href = $(a).attr('href');
+          if (/Click Here for PART-[B-D]/i.test(text) && href && !href.startsWith('#') && !href.startsWith('javascript:')) {
+            try {
+              const absUrl = new URL(href, input.url).toString();
+              if (!partLinks.includes(absUrl)) partLinks.push(absUrl);
+            } catch {}
+          }
+        });
+
+        for (const pUrl of partLinks) {
+          try {
+            const partHtml = await fetchUrlContent(pUrl);
+            html += '\n<div class="appended-ssc-part">\n' + partHtml + '\n</div>';
+          } catch (e) {
+            console.warn('Could not fetch additional SSC part:', pUrl, e);
+          }
         }
-      });
-      if (!res.ok) {
-        throw new Error(`Failed to fetch URL (${res.status})`);
       }
-      html = await res.text();
     } catch (e: any) {
-      throw new Error(`Could not load answer key from URL. If official portal session expired, please paste the saved HTML page directly: ${e.message}`);
+      throw new Error(`Could not load answer key from URL. Please ensure your official session is active: ${e.message}`);
     }
   }
 
@@ -215,23 +335,42 @@ export async function evaluateResponseSheet(
   const overallAccuracy = grandAttempted > 0 ? (grandCorrect / grandAttempted) * 100 : 0;
   const attemptRate = grandTotal > 0 ? (grandAttempted / grandTotal) * 100 : 0;
 
-  // Real-time rank synthesis
-  const maxPossible = Math.max(1, grandTotal * rule.marksPerCorrect);
-  const normalizedScore = Math.max(0, finalScore) / maxPossible;
-  const percentileEstimate = Math.min(99.9, Math.max(5, Math.round((normalizedScore * 0.85 + 0.15) * 1000) / 10));
-  const allIndiaRankEstimate = Math.max(1, Math.round((100 - percentileEstimate) * 450 + 1));
-  const shiftRankEstimate = Math.max(1, Math.round((100 - percentileEstimate) * 45 + 1));
+  const shiftKey = `${sheet.meta.examDate || ''}_${sheet.meta.shiftTime || ''}`.trim() || 'General Shift';
+  const candRoll = sheet.meta.rollNo || '2402094182';
+  const candName = sheet.meta.candidateName || 'Candidate';
+  const candCategory = category || sheet.meta.category || 'UR';
+
+  // Load actual portal submissions for dynamic ranking
+  const portalSubmissions = loadPortalSubmissions();
+  
+  // Calculate rankings based on portal submissions
+  const allPortalForFamily = portalSubmissions.filter(s => s.examFamily === sheet.meta.examFamily);
+  const portalRank = allPortalForFamily.filter(s => s.finalScore > finalScore).length + 1;
+  const portalTotal = Math.max(allPortalForFamily.length + 1, 1);
+
+  const shiftPortal = allPortalForFamily.filter(s => s.shiftKey === shiftKey);
+  const shiftRank = shiftPortal.filter(s => s.finalScore > finalScore).length + 1;
+  const shiftTotal = Math.max(shiftPortal.length + 1, 1);
+
+  const shiftScores = shiftPortal.map(s => s.finalScore).concat(finalScore);
+  const shiftAvg = shiftScores.reduce((a, b) => a + b, 0) / shiftScores.length;
+  const shiftTop = Math.max(...shiftScores);
+
+  const catPortal = allPortalForFamily.filter(s => s.category?.toUpperCase() === candCategory.toUpperCase());
+  const catRank = catPortal.filter(s => s.finalScore > finalScore).length + 1;
+
+  const percentile = Math.min(99.9, Math.max(5, Math.round(((portalTotal - (portalRank - 1)) / portalTotal) * 1000) / 10));
 
   const result: EvaluationResult = {
     id: submissionId,
     submissionId,
     candidate: {
-      rollNumber: sheet.meta.rollNo || '2402094182',
-      name: sheet.meta.candidateName || 'Candidate',
+      rollNumber: candRoll,
+      name: candName,
       examDate: sheet.meta.examDate || new Date().toISOString().split('T')[0],
       shiftTime: sheet.meta.shiftTime || 'Shift 1',
       venue: sheet.meta.venueName || 'TCS iON Digital Zone',
-      category: category || sheet.meta.category || 'UR',
+      category: candCategory,
       zone: zone || sheet.meta.stateZone
     },
     metrics: {
@@ -250,22 +389,36 @@ export async function evaluateResponseSheet(
     parsed: sheet,
     ruleUsed: rule,
     analytics: {
-      allIndiaRank: allIndiaRankEstimate,
-      totalSubmissions: Math.max(12480, allIndiaRankEstimate * 12),
-      percentile: percentileEstimate,
-      shiftRank: shiftRankEstimate,
-      shiftTotal: Math.max(850, shiftRankEstimate * 10),
-      shiftAverageScore: Math.round(maxPossible * 0.52 * 10) / 10,
-      shiftTopperScore: Math.round(maxPossible * 0.92 * 10) / 10,
-      categoryRank: Math.max(1, Math.round(allIndiaRankEstimate * 0.28))
+      allIndiaRank: portalRank,
+      totalSubmissions: portalTotal,
+      percentile: percentile,
+      shiftRank: shiftRank,
+      shiftTotal: shiftTotal,
+      shiftAverageScore: Math.round(shiftAvg * 10) / 10,
+      shiftTopperScore: Math.round(shiftTop * 10) / 10,
+      categoryRank: catRank
     },
-    allIndiaRankEstimate,
-    shiftRankEstimate,
-    percentileEstimate,
+    allIndiaRankEstimate: portalRank,
+    shiftRankEstimate: shiftRank,
+    percentileEstimate: percentile,
     evaluatedAt: new Date().toISOString()
   };
 
   localSubmissionsCache.set(submissionId, result);
+
+  // Save to persistent file
+  savePortalSubmission({
+    id: submissionId,
+    rollNumber: candRoll,
+    candidateName: candName,
+    examFamily: sheet.meta.examFamily,
+    examTitle: sheet.meta.examTitle,
+    shiftKey,
+    category: candCategory,
+    finalScore: Math.round(finalScore * 100) / 100,
+    rawScore: Math.round(grandPositive * 100) / 100,
+    evaluatedAt: result.evaluatedAt
+  });
 
   // Asynchronously sync to Supabase if configured
   if (isSupabaseConfigured && supabase) {

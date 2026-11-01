@@ -120,7 +120,14 @@ export class UniversalAnswerKeyParser {
     ) {
       return 'digialm';
     }
-    if (html.includes('lblsubject') || html.includes('ViewCandResponse') || html.includes('Q.No:&nbsp;')) {
+    if (
+      html.includes('lblsubject') ||
+      html.includes('ViewCandResponse') ||
+      html.includes('Click Here for PART-') ||
+      html.includes('Correct Option selected') ||
+      html.includes('Wrong Option selected') ||
+      /Q\.?\s*No\.?\s*[:.]?/i.test(html)
+    ) {
       return 'ssc_cbexams';
     }
     return 'generic';
@@ -147,7 +154,7 @@ export class UniversalAnswerKeyParser {
         if (!info.shiftTime) info.shiftTime = value;
       } else if (label.includes('test center name') || label.includes('venue') || label.includes('centre') || label.includes('center')) {
         if (!info.venueName) info.venueName = value;
-      } else if (label.includes('subject') || label.includes('exam') || label.includes('post') || label.includes('test name')) {
+      } else if (label.includes('subject') || label.includes('exam level') || label.includes('exam') || label.includes('post') || label.includes('test name')) {
         if (!info.examName) info.examName = value;
       } else if (label.includes('reg') || label.includes('registration')) {
         if (!info.registrationNo) info.registrationNo = value;
@@ -161,16 +168,48 @@ export class UniversalAnswerKeyParser {
       const tds = $(tr).find('td');
       if (tds.length === 2) {
         parsePair($(tds[0]).text(), $(tds[1]).text());
+      } else if (tds.length === 3) {
+        // Label | : | Value (with possible select dropdown)
+        const valTd = $(tds[2]);
+        const selVal = valTd.find('option:selected, option').first().text().trim();
+        parsePair($(tds[0]).text(), selVal || valTd.text());
       } else if (tds.length >= 4) {
         parsePair($(tds[0]).text(), $(tds[1]).text());
         parsePair($(tds[2]).text(), $(tds[3]).text());
       }
     });
 
-    // Fallback: Selected dropdown option for SSC CBExams
+    // 2. Fallback: Selected dropdown option for SSC CBExams
     if (!info.examName) {
-      const selectedOpt = $('option[selected]').first().text().trim();
+      const selectedOpt = $('select option:selected, select option').first().text().trim();
       if (selectedOpt) info.examName = selectedOpt;
+    }
+
+    // 3. Fallback regex over raw text if fields are missing
+    const pageText = $('body').text() || $.root().text();
+    if (!info.rollNo) {
+      const m = pageText.match(/Roll\s*No\.?\s*[:\-]?\s*([A-Za-z0-9]+)/i);
+      if (m) info.rollNo = m[1].trim();
+    }
+    if (!info.candidateName) {
+      const m = pageText.match(/Candidate\s*Name\s*[:\-]?\s*([A-Za-z\s]+?)(?:\r|\n|Exam|Test|Roll|$)/i);
+      if (m && m[1].trim().length > 2) info.candidateName = m[1].trim();
+    }
+    if (!info.examDate) {
+      const m = pageText.match(/(?:Test|Exam)\s*Date\s*[:\-]?\s*([0-9]{1,2}\s+[A-Za-z]+\s+[0-9]{4}|[0-9]{1,2}[\/\-][0-9]{1,2}[\/\-][0-9]{4})/i);
+      if (m) info.examDate = m[1].trim();
+    }
+    if (!info.shiftTime) {
+      const m = pageText.match(/(?:Test\s*Time\s*and\s*Shift|Exam\s*Time|Shift\s*Time)\s*[:\-]?\s*([^\n\r]+)/i);
+      if (m) info.shiftTime = m[1].trim();
+    }
+    if (!info.venueName) {
+      const m = pageText.match(/(?:Centre|Center|Venue)\s*Name\s*[:\-]?\s*([^\n\r]+)/i);
+      if (m) info.venueName = m[1].trim();
+    }
+    if (!info.examName) {
+      const m = pageText.match(/Exam\s*Level\s*[:\-]?\s*([^\n\r]+)/i);
+      if (m) info.examName = m[1].trim();
     }
 
     return info;
@@ -413,7 +452,7 @@ export class UniversalAnswerKeyParser {
   }
 
   /**
-   * Parse SSC CBExams format (ViewCandResponse*.aspx)
+   * Parse SSC CBExams format (ViewCandResponse*.aspx) and modern SSC Challenge Sheets
    */
   private static parseSSCCBExams(
     $: cheerio.CheerioAPI,
@@ -421,88 +460,237 @@ export class UniversalAnswerKeyParser {
     baseUrl: string = ''
   ): { sections: ExtractedSection[]; allQuestions: ExtractedQuestion[] } {
     const allQuestions: ExtractedQuestion[] = [];
-    const sections: ExtractedSection[] = [];
 
-    const sectionElements = $('span#lblsubject');
-    const partNames: string[] = [];
+    // Helper to detect color from attributes/styles/classes
+    const detectColor = (el: cheerio.Cheerio<any>): 'green' | 'red' | 'yellow' | 'none' => {
+      const bg = (el.attr('bgcolor') || '').toLowerCase();
+      const style = (el.attr('style') || '').toLowerCase();
+      const cls = (el.attr('class') || '').toLowerCase();
+      const h = el.html() || '';
 
-    if (sectionElements.length > 0) {
-      sectionElements.each((_, el) => {
-        const title = $(el).text().trim();
-        if (title) partNames.push(title);
-      });
-    }
+      if (
+        bg.includes('green') || bg.includes('#008000') || bg.includes('#00a651') || bg.includes('rgb(0, 128, 0)') ||
+        style.includes('green') || style.includes('#008000') || style.includes('#00a651') || style.includes('rgb(0, 128, 0)') ||
+        cls.includes('green') || h.includes('tick.png') || h.includes('green.png')
+      ) return 'green';
 
-    if (partNames.length === 0) {
-      partNames.push('General Intelligence and Reasoning', 'General Awareness', 'Quantitative Aptitude', 'English Comprehension');
-    }
+      if (
+        bg.includes('red') || bg.includes('#ff0000') || bg.includes('#ed1c24') || bg.includes('rgb(255, 0, 0)') ||
+        style.includes('red') || style.includes('#ff0000') || style.includes('#ed1c24') || style.includes('rgb(255, 0, 0)') ||
+        cls.includes('red') || h.includes('cross.png') || h.includes('red.png')
+      ) return 'red';
 
-    const html = $.html();
-    const qMatches = [...html.matchAll(/Q\.No:&nbsp;(\d+)/gi)];
+      if (
+        bg.includes('yellow') || bg.includes('#ffff00') || bg.includes('#ffde00') || bg.includes('rgb(255, 255, 0)') ||
+        style.includes('yellow') || style.includes('#ffff00') || style.includes('#ffde00') || style.includes('rgb(255, 255, 0)') ||
+        cls.includes('yellow') || h.includes('yellow.png')
+      ) return 'yellow';
 
-    qMatches.forEach((match, idx) => {
+      return 'none';
+    };
+
+    // Detect section titles in the document
+    const sectionNamesMap: { [key: string]: string } = {
+      A: 'PART-A (General Intelligence and Reasoning)',
+      B: 'PART-B (General Awareness)',
+      C: 'PART-C (Quantitative Aptitude (Basic Arithmetic Skill))',
+      D: 'PART-D (English Language (Basic Knowledge))'
+    };
+
+    // Scan for actual headers in the HTML
+    $('b, strong, h2, h3, h4, span, div').each((_, el) => {
+      const t = $(el).text().trim();
+      const m = t.match(/^PART\s*[-:]?\s*([A-D])\s*(?:\(([^)]+)\)|[^\n\r]*)/i);
+      if (m) {
+        const letter = m[1].toUpperCase();
+        sectionNamesMap[letter] = t;
+      }
+    });
+
+    // Helper to get section name for question number
+    const getSectionForQno = (qno: number): string => {
+      if (qno <= 25) return sectionNamesMap['A'];
+      if (qno <= 50) return sectionNamesMap['B'];
+      if (qno <= 75) return sectionNamesMap['C'];
+      return sectionNamesMap['D'];
+    };
+
+    // Strategy 1: Table-based question parsing (Standard SSC CBExams)
+    const seenQnos = new Set<number>();
+
+    $('table').each((_, tbl) => {
+      const tableEl = $(tbl);
+      const tableText = tableEl.text();
+      const match = tableText.match(/Q\.?\s*No\.?\s*[:.]?\s*(\d+)/i);
+      if (!match) return;
+
       const qno = parseInt(match[1], 10);
-      const start = match.index || 0;
-      const end = idx + 1 < qMatches.length ? (qMatches[idx + 1].index || html.length) : html.length;
-      const blockHtml = html.substring(start, end);
-      const $block = cheerio.load(blockHtml);
+      if (seenQnos.has(qno)) return;
+      seenQnos.add(qno);
 
+      const rows = tableEl.find('tr');
       const options: ExtractedOption[] = [];
-      let correctOptNum: number | undefined = undefined;
-      let chosenOptNum: number | undefined = undefined;
-      let status: 'correct' | 'wrong' | 'skipped' | 'bonus' = 'skipped';
+      let correctOptNum: number | undefined;
+      let chosenOptNum: number | undefined;
+      let quesText = '';
+      const questionImages: string[] = [];
 
-      $block('tr').each((rowIdx, tr) => {
-        const bg = $block(tr).find('td[bgcolor]').attr('bgcolor')?.toLowerCase();
-        if (bg) {
-          const optIndex = options.length + 1;
-          const optText = $block(tr).text().trim();
-          const isGreen = bg.includes('green') || bg.includes('#008000');
-          const isRed = bg.includes('red') || bg.includes('#ff0000');
-          const isYellow = bg.includes('yellow') || bg.includes('#ffff00');
-
-          if (isGreen) {
-            correctOptNum = optIndex;
-            chosenOptNum = optIndex;
-            status = 'correct';
-          } else if (isRed) {
-            chosenOptNum = optIndex;
-            status = 'wrong';
-          } else if (isYellow) {
-            correctOptNum = optIndex;
-          }
-
-          options.push({
-            num: optIndex,
-            text: optText,
-            isCorrect: isGreen || isYellow,
-            isChosen: isGreen || isRed
+      rows.each((_, tr) => {
+        const row = $(tr);
+        const rowText = row.text().trim();
+        if (/Q\.?\s*No\.?\s*[:.]?\s*\d+/i.test(rowText)) {
+          quesText = cleanTextAndMath(rowText.replace(/Q\.?\s*No\.?\s*[:.]?\s*\d+/i, '').replace(/^[:\s]+/, ''));
+          row.find('img').each((__, img) => {
+            const src = $(img).attr('src');
+            if (src && !src.includes('tick') && !src.includes('cross') && !src.includes('dot')) {
+              questionImages.push(src.startsWith('http') ? src : (baseUrl ? new URL(src, baseUrl).toString() : src));
+            }
           });
+          return;
         }
+        if (rowText.toLowerCase() === 'not answered') return;
+
+        let color = 'none';
+        row.find('td, div, span').each((__, cell) => {
+          const c = detectColor($(cell));
+          if (c !== 'none') color = c;
+        });
+        if (color === 'none') color = detectColor(row);
+
+        const optNum = options.length + 1;
+        let optImg: string | undefined;
+        row.find('img').each((__, img) => {
+          const src = $(img).attr('src');
+          if (src && !src.includes('tick') && !src.includes('cross') && !src.includes('dot')) {
+            optImg = src.startsWith('http') ? src : (baseUrl ? new URL(src, baseUrl).toString() : src);
+          }
+        });
+
+        if (color === 'green') {
+          correctOptNum = optNum;
+          chosenOptNum = optNum;
+        } else if (color === 'red') {
+          chosenOptNum = optNum;
+        } else if (color === 'yellow') {
+          correctOptNum = optNum;
+        }
+
+        options.push({
+          num: optNum,
+          text: cleanTextAndMath(rowText),
+          imageUrl: optImg,
+          isCorrect: color === 'green' || color === 'yellow',
+          isChosen: color === 'green' || color === 'red'
+        });
       });
 
-      if (blockHtml.includes('taken up for challenge') || blockHtml.includes('purple')) {
+      let status: 'correct' | 'wrong' | 'skipped' | 'bonus' = 'skipped';
+      if (tableText.includes('dropped') || tableText.includes('taken up for challenge')) {
         status = 'bonus';
+      } else if (chosenOptNum && correctOptNum && chosenOptNum === correctOptNum) {
+        status = 'correct';
+      } else if (chosenOptNum) {
+        status = 'wrong';
+      } else {
+        status = 'skipped';
       }
 
-      const secIdx = Math.min(Math.floor((qno - 1) / 25), partNames.length - 1);
-      const sectionName = partNames[secIdx] || `Section ${secIdx + 1}`;
+      const secName = getSectionForQno(qno);
 
-      const qItem: ExtractedQuestion = {
+      allQuestions.push({
         qno,
         questionId: `SSC_Q${qno}`,
         status,
-        questionText: cleanTextAndMath($block.text().substring(0, 120)) || `Question ${qno}`,
-        questionImages: [],
+        questionText: quesText || `Question ${qno}`,
+        questionImages,
         options,
         chosenOption: chosenOptNum,
         correctOption: correctOptNum,
-        sectionName
-      };
-
-      allQuestions.push(qItem);
+        sectionName: secName
+      });
     });
 
+    // Strategy 2: Fallback regex slice if table parsing caught fewer than 10 questions
+    if (allQuestions.length < 10) {
+      allQuestions.length = 0; // Clear
+      seenQnos.clear();
+
+      const html = $.html();
+      const qMatches = [...html.matchAll(/Q\.?\s*No\.?\s*[:.]?\s*(?:&nbsp;|\s*)(\d+)/gi)];
+
+      qMatches.forEach((match, idx) => {
+        const qno = parseInt(match[1], 10);
+        if (seenQnos.has(qno)) return;
+        seenQnos.add(qno);
+
+        const start = match.index || 0;
+        const end = idx + 1 < qMatches.length ? (qMatches[idx + 1].index || html.length) : html.length;
+        const blockHtml = html.substring(start, end);
+        const $block = cheerio.load(blockHtml.includes('<table') ? blockHtml : `<table>${blockHtml}</table>`);
+
+        const options: ExtractedOption[] = [];
+        let correctOptNum: number | undefined;
+        let chosenOptNum: number | undefined;
+
+        $block('tr').each((_, tr) => {
+          const row = $block(tr);
+          const rowText = row.text().trim();
+          if (/Q\.?\s*No\.?\s*[:.]?\s*\d+/i.test(rowText) || rowText.toLowerCase() === 'not answered') return;
+
+          let color = 'none';
+          row.find('td, div, span').each((__, cell) => {
+            const c = detectColor($block(cell));
+            if (c !== 'none') color = c;
+          });
+          if (color === 'none') color = detectColor(row);
+
+          const optNum = options.length + 1;
+          if (color === 'green') {
+            correctOptNum = optNum;
+            chosenOptNum = optNum;
+          } else if (color === 'red') {
+            chosenOptNum = optNum;
+          } else if (color === 'yellow') {
+            correctOptNum = optNum;
+          }
+
+          options.push({
+            num: optNum,
+            text: cleanTextAndMath(rowText),
+            isCorrect: color === 'green' || color === 'yellow',
+            isChosen: color === 'green' || color === 'red'
+          });
+        });
+
+        let status: 'correct' | 'wrong' | 'skipped' | 'bonus' = 'skipped';
+        if (blockHtml.includes('dropped') || blockHtml.includes('taken up for challenge')) {
+          status = 'bonus';
+        } else if (chosenOptNum && correctOptNum && chosenOptNum === correctOptNum) {
+          status = 'correct';
+        } else if (chosenOptNum) {
+          status = 'wrong';
+        } else {
+          status = 'skipped';
+        }
+
+        allQuestions.push({
+          qno,
+          questionId: `SSC_Q${qno}`,
+          status,
+          questionText: cleanTextAndMath($block.text().substring(0, 140)) || `Question ${qno}`,
+          questionImages: [],
+          options,
+          chosenOption: chosenOptNum,
+          correctOption: correctOptNum,
+          sectionName: getSectionForQno(qno)
+        });
+      });
+    }
+
+    // Sort questions by question number
+    allQuestions.sort((a, b) => a.qno - b.qno);
+
+    // Group into sections
     const grouped = new Map<string, ExtractedQuestion[]>();
     allQuestions.forEach(q => {
       const name = q.sectionName || 'General Section';
@@ -510,6 +698,7 @@ export class UniversalAnswerKeyParser {
       grouped.get(name)!.push(q);
     });
 
+    const sections: ExtractedSection[] = [];
     grouped.forEach((questions, name) => {
       const correct = questions.filter(q => q.status === 'correct').length;
       const wrong = questions.filter(q => q.status === 'wrong').length;

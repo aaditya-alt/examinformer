@@ -17,23 +17,42 @@ export function classifyQuestion(section: string, text: string): { subject: 'mat
   const t = (text || '').toLowerCase();
   const sec = (section || '').toLowerCase();
 
-  // Reasoning
-  if (sec.includes('reason') || sec.includes('intelligence')) {
-    if (t.includes('letter-cluster') || t.includes('series') || t.includes('?')) return { subject: 'reasoning', chapter: 'Series (Number & Alphabet)' };
-    if (t.includes('odd one') || t.includes('different') || t.includes('alike in a certain')) return { subject: 'reasoning', chapter: 'Classification & Odd-One-Out' };
-    if (t.includes('coded') || t.includes('written as') || t.includes('code language')) return { subject: 'reasoning', chapter: 'Coding-Decoding' };
-    if (t.includes('brother') || t.includes('sister') || t.includes('father') || t.includes('mother') || t.includes('son') || t.includes('daughter')) return { subject: 'reasoning', chapter: 'Blood Relations' };
-    if (t.includes('related word') || t.includes('book : author') || t.includes('analogy') || t.includes('::')) return { subject: 'reasoning', chapter: 'Analogy (Word & Number)' };
-    if (t.includes('statement:') || t.includes('conclusion:') || t.includes('syllogism') || t.includes('all ') || t.includes('some ')) return { subject: 'reasoning', chapter: 'Venn Diagrams & Syllogisms' };
-    if (t.includes('mirror') || t.includes('water image') || t.includes('paper fold') || t.includes('unfolded')) return { subject: 'reasoning', chapter: 'Non-Verbal & Mirror/Water Images' };
-    if (t.includes('dice') || t.includes('cube') || t.includes('opposite face')) return { subject: 'reasoning', chapter: 'Dice, Cube & Counting Figures' };
-    if (t.includes('north') || t.includes('south') || t.includes('east') || t.includes('west') || t.includes('turns left')) return { subject: 'reasoning', chapter: 'Direction & Distance Sense' };
-    return { subject: 'reasoning', chapter: 'Series (Number & Alphabet)' };
-  }
+  const isMathSec = sec.includes('quant') || sec.includes('math') || sec.includes('arithmetic') || sec.includes('numerical');
+  const isReasSec = sec.includes('reason') || sec.includes('intelligence');
+  const isEngSec = sec.includes('english') || sec.includes('comprehension');
+  const isGaSec = sec.includes('general awareness') || sec.includes('general knowledge') || sec.includes('science') || sec.includes('gk') || sec.includes('current affairs');
 
-  // Mathematics
-  if (sec.includes('quant') || sec.includes('math') || sec.includes('arithmetic') || sec.includes('numerical')) {
-    // Pure Trigonometry detection: require LaTeX math command or explicit trig angle / terms
+  const isMathSignal =
+    /\\(sin|cos|tan|cot|sec|csc)\b/i.test(t) ||
+    /\b(sin|cos|tan|cot|cosec|sec)\s*(²|³|\^[0-9]+|\b\d+°?|\(?θ|theta|alpha|beta|gamma|\([^\)]+\)|[A-Z]\b)/.test(t) ||
+    /\b(trigonometr|heights?\s+and\s+distance|angle\s+of\s+elevation|angle\s+of\s+depression)\b/i.test(t) ||
+    /\b(pie chart|bar chart|histogram|table shows|given table|given graph|bar graph)\b/i.test(t) ||
+    /\b(compound interest|simple interest|sum of money|invested at|annually|per annum|half-yearly)\b/i.test(t) ||
+    /\b(profit|loss|cost price|selling price|marked price|discount|markup|dealer sells|shopkeeper)\b/i.test(t) ||
+    /\b(pipe|pipes|cistern|fill a tank|empty a tank|work together|can complete a work|days to complete|efficiency)\b/i.test(t) ||
+    /\b(train|trains|km\/h|m\/s|speed of|distance between|boat|stream|upstream|downstream|relative speed)\b/i.test(t) ||
+    /\b(ratio|proportion|proportional|partnership|divided among|shares of)\b/i.test(t) ||
+    /\b(percentage|percent|increased by|decreased by)\b/i.test(t) ||
+    /\b(average|mean|mixture|alligation|blended|weighted average)\b/i.test(t) ||
+    /\b(circle|chord|tangent|radius|diameter|circumference|triangle|hypotenuse|rhombus|trapezium|parallelogram|cyclic quadrilateral)\b/i.test(t) ||
+    /\b(cylinder|cone|sphere|hemisphere|cuboid|cube|surface area|volume of|perimeter of)\b/i.test(t) ||
+    /x\^2|x\^3|a\^2|a\^3|\bx\s*[\+\-]\s*1\/x\b|algebra|polynomial/i.test(t);
+
+  const isReasSignal =
+    t.includes('letter-cluster') || t.includes('coding-decoding') || t.includes('code language') ||
+    t.includes('odd one') || t.includes('different from the rest') || t.includes('alike in a certain') ||
+    t.includes('blood relations') || t.includes('father of') || t.includes('mother of') || t.includes('sister of') ||
+    t.includes('syllogism') || t.includes('statements and conclusions') || t.includes('all ') && t.includes('some ') ||
+    t.includes('mirror image') || t.includes('water image') || t.includes('paper folding') ||
+    t.includes('dice') || t.includes('opposite face of') || t.includes('direction sense') || t.includes('turns towards left');
+
+  const isEngSignal =
+    t.includes('synonym') || t.includes('nearest meaning') || t.includes('antonym') || t.includes('opposite meaning') ||
+    t.includes('idiom') || t.includes('phrase') || t.includes('one word') || t.includes('substitute') ||
+    t.includes('misspelt') || t.includes('correctly spelt') || t.includes('grammatical error') || t.includes('sentence improvement');
+
+  // 1. Mathematics
+  if (isMathSec || (!isReasSec && !isEngSec && !isGaSec && isMathSignal)) {
     const isTrig =
       /\\(sin|cos|tan|cot|sec|csc)\b/i.test(t) ||
       /\b(sin|cos|tan|cot|cosec|sec)\s*(²|³|\^[0-9]+|\b\d+°?|\(?θ|theta|alpha|beta|gamma|\([^\)]+\)|[A-Z]\b)/.test(t) ||
@@ -54,8 +73,22 @@ export function classifyQuestion(section: string, text: string): { subject: 'mat
     return { subject: 'math', chapter: 'Number System & Divisibility' };
   }
 
-  // English
-  if (sec.includes('english')) {
+  // 2. Reasoning
+  if (isReasSec || (!isMathSec && !isEngSec && !isGaSec && isReasSignal)) {
+    if (t.includes('letter-cluster') || t.includes('series') || t.includes('?')) return { subject: 'reasoning', chapter: 'Series (Number & Alphabet)' };
+    if (t.includes('odd one') || t.includes('different') || t.includes('alike in a certain')) return { subject: 'reasoning', chapter: 'Classification & Odd-One-Out' };
+    if (t.includes('coded') || t.includes('written as') || t.includes('code language')) return { subject: 'reasoning', chapter: 'Coding-Decoding' };
+    if (t.includes('brother') || t.includes('sister') || t.includes('father') || t.includes('mother') || t.includes('son') || t.includes('daughter')) return { subject: 'reasoning', chapter: 'Blood Relations' };
+    if (t.includes('related word') || t.includes('book : author') || t.includes('analogy') || t.includes('::')) return { subject: 'reasoning', chapter: 'Analogy (Word & Number)' };
+    if (t.includes('statement:') || t.includes('conclusion:') || t.includes('syllogism') || t.includes('all ') || t.includes('some ')) return { subject: 'reasoning', chapter: 'Venn Diagrams & Syllogisms' };
+    if (t.includes('mirror') || t.includes('water image') || t.includes('paper fold') || t.includes('unfolded')) return { subject: 'reasoning', chapter: 'Non-Verbal & Mirror/Water Images' };
+    if (t.includes('dice') || t.includes('cube') || t.includes('opposite face')) return { subject: 'reasoning', chapter: 'Dice, Cube & Counting Figures' };
+    if (t.includes('north') || t.includes('south') || t.includes('east') || t.includes('west') || t.includes('turns left')) return { subject: 'reasoning', chapter: 'Direction & Distance Sense' };
+    return { subject: 'reasoning', chapter: 'Series (Number & Alphabet)' };
+  }
+
+  // 3. English
+  if (isEngSec || (!isMathSec && !isReasSec && !isGaSec && isEngSignal)) {
     if (t.includes('synonym') || t.includes('nearest meaning')) return { subject: 'english', chapter: 'Synonyms & Antonyms' };
     if (t.includes('antonym') || t.includes('opposite')) return { subject: 'english', chapter: 'Synonyms & Antonyms' };
     if (t.includes('idiom') || t.includes('phrase')) return { subject: 'english', chapter: 'Idioms and Phrases' };
@@ -70,7 +103,7 @@ export function classifyQuestion(section: string, text: string): { subject: 'mat
     return { subject: 'english', chapter: 'Reading Comprehension' };
   }
 
-  // General Awareness
+  // 4. General Awareness
   if (t.includes('article') || t.includes('constitution') || t.includes('president') || t.includes('amendment') || t.includes('parliament') || t.includes('fundamental right')) {
     return { subject: 'ga', chapter: 'Indian Polity & Constitution' };
   }
@@ -80,27 +113,19 @@ export function classifyQuestion(section: string, text: string): { subject: 'mat
   if (t.includes('river') || t.includes('himalaya') || t.includes('soil') || t.includes('lake') || t.includes('dam') || t.includes('latitude') || t.includes('monsoon')) {
     return { subject: 'ga', chapter: 'Physical & Indian Geography' };
   }
-  if (t.includes('dance') || t.includes('festival') || t.includes('temple') || t.includes('gharana') || t.includes('instrument') || t.includes('classical dance')) {
-    return { subject: 'ga', chapter: 'Static GK (Art, Culture, Dances, Festivals)' };
+  if (t.includes('gdp') || t.includes('inflation') || t.includes('rbi') || t.includes('fiscal') || t.includes('budget') || t.includes('five year plan') || t.includes('monetary policy')) {
+    return { subject: 'ga', chapter: 'Indian Economy & Budget' };
   }
-  if (t.includes('gdp') || t.includes('inflation') || t.includes('rbi') || t.includes('bank') || t.includes('fiscal') || t.includes('budget') || t.includes('five year plan')) {
-    return { subject: 'ga', chapter: 'Indian Economy & Banking' };
+  if (t.includes('acid') || t.includes('newton') || t.includes('velocity') || t.includes('electron') || t.includes('chemical') || t.includes('reaction') || t.includes('force') || t.includes('optics') || t.includes('lens')) {
+    return { subject: 'ga', chapter: 'Physics & Basic Chemistry' };
   }
-  if (sec.includes('science')) {
-    if (t.includes('cell') || t.includes('vitamin') || t.includes('disease') || t.includes('bacteria') || t.includes('virus') || t.includes('blood') || t.includes('plant') || t.includes('hormone') || t.includes('organ') || t.includes('human body')) {
-      return { subject: 'ga', chapter: 'General Science (Biology & Health)' };
-    }
-    return { subject: 'ga', chapter: 'General Science (Physics & Chemistry)' };
+  if (t.includes('cell') || t.includes('vitamin') || t.includes('disease') || t.includes('dna') || t.includes('blood') || t.includes('hormone') || t.includes('plant') || t.includes('photosynthesis')) {
+    return { subject: 'ga', chapter: 'Biology & Environmental Science' };
   }
-
-  if (t.includes('cell') || t.includes('vitamin') || t.includes('disease') || t.includes('bacteria') || t.includes('virus') || t.includes('blood') || t.includes('plant') || t.includes('hormone')) {
-    return { subject: 'ga', chapter: 'General Science (Biology & Health)' };
+  if (t.includes('dance') || t.includes('festival') || t.includes('temple') || t.includes('monument') || t.includes('unesco') || t.includes('music') || t.includes('award')) {
+    return { subject: 'ga', chapter: 'Art, Culture & Festivals' };
   }
-  if (t.includes('force') || t.includes('energy') || t.includes('acid') || t.includes('reaction') || t.includes('metal') || t.includes('gravity') || t.includes('lens') || t.includes('current')) {
-    return { subject: 'ga', chapter: 'General Science (Physics & Chemistry)' };
-  }
-
-  return { subject: 'ga', chapter: 'Current Affairs, Awards & Sports' };
+  return { subject: 'ga', chapter: 'Current Affairs & Static GK' };
 }
 
 // Master memory question bank populated with all bundled questions and mapped metadata
@@ -171,7 +196,11 @@ export function filterQuestionBank(filters: {
 }): MappedQuestion[] {
   const all = getMasterQuestionBank();
   let result = all.filter((q) => {
-    if (filters.examCode && filters.examCode !== 'all' && q.examCode !== filters.examCode) return false;
+    if (filters.examCode && filters.examCode !== 'all') {
+      const code = (q.examCode || '').toLowerCase();
+      const filter = filters.examCode.toLowerCase();
+      if (!code.includes(filter)) return false;
+    }
     if (filters.subject && q.subject !== filters.subject) return false;
     if (filters.chapter && filters.chapter !== 'all' && q.chapter !== filters.chapter) return false;
     if (filters.year && q.year !== filters.year) return false;
@@ -185,26 +214,32 @@ export function filterQuestionBank(filters: {
   return result;
 }
 
-// Generate on-demand Chapter-Wise Practice Test
+// Generate on-demand Chapter-Wise Practice Test strictly matching chapter & exam series
 export function generateChapterTest(
   subject: 'math' | 'reasoning' | 'english' | 'ga',
   chapter: string,
   count = 20,
-  durationMinutes?: number
+  durationMinutes?: number,
+  examFilter?: string
 ): CBTTest {
-  let questions = filterQuestionBank({ subject, chapter });
+  // 1. First attempt to get questions from the specific exam series
+  let questions = filterQuestionBank({ subject, chapter, examCode: examFilter });
+  
+  // 2. If the active series has fewer questions than requested, fall back only to the SAME chapter across all series
   if (questions.length === 0) {
-    questions = filterQuestionBank({ subject });
+    questions = filterQuestionBank({ subject, chapter });
   }
-  if (questions.length === 0) {
-    questions = getMasterQuestionBank();
-  }
-  const selected = questions.length >= count ? questions.slice(0, count) : (questions.length > 0 ? questions : []);
+
+  // STRICT RULE: Never fall back to other chapters or random questions!
+  const selected = questions.slice(0, Math.min(count, questions.length));
   const safeCount = Math.max(1, selected.length);
+  const isRailway = examFilter ? examFilter.toLowerCase().includes('rrb') : false;
+  const marksPerQ = isRailway ? 1 : 2;
+  const negMarks = isRailway ? 0.33 : 0.5;
 
   const duration = durationMinutes || Math.max(10, Math.round(safeCount * 1.0));
-  const testId = `topic-${subject}-${encodeURIComponent(chapter).replace(/%20/g, '-').toLowerCase()}-${count}-${duration}`;
-  const totalMarks = safeCount * 2;
+  const testId = `topic-${examFilter ? `${examFilter}-` : ''}${subject}-${encodeURIComponent(chapter).replace(/%20/g, '-').toLowerCase()}-${count}-${duration}`;
+  const totalMarks = safeCount * marksPerQ;
 
   const cbtQuestions: CBTQuestion[] = selected.map((q, idx) => ({
     id: q.id,
@@ -214,23 +249,23 @@ export function generateChapterTest(
     options: q.options,
     correctOption: q.correctOption,
     explanation: q.explanation,
-    marks: q.marks || 2,
-    negativeMarks: q.negativeMarks || 0.5,
+    marks: marksPerQ,
+    negativeMarks: negMarks,
     sectionName: chapter,
-    examOrigin: `Official 2025 Paper: ${q.shift || q.examCode.toUpperCase()}`
+    examOrigin: `Official 2025-26 Paper: ${q.shift || q.examCode.toUpperCase()}`
   }));
 
   return {
     id: testId,
     title: `${chapter} — Practice Drill (${selected.length} Qs • ${duration} Mins)`,
-    examCode: 'chapter-practice',
-    examFamily: 'ssc',
+    examCode: examFilter || 'chapter-practice',
+    examFamily: isRailway ? 'rrb' : 'ssc',
     type: 'chapter',
     durationMinutes: duration,
     totalMarks,
     totalQuestions: selected.length,
-    positiveMarks: 2,
-    negativeMarks: 0.5,
+    positiveMarks: marksPerQ,
+    negativeMarks: negMarks,
     isPublished: true,
     sections: [
       {
