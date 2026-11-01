@@ -4,6 +4,7 @@ import type { CBTTest } from '@/lib/types/cbt';
 import { registerNewTest } from './testService';
 import https from 'https';
 import http from 'http';
+import zlib from 'zlib';
 import fs from 'fs';
 import path from 'path';
 import * as cheerio from 'cheerio';
@@ -146,45 +147,95 @@ function savePortalSubmission(record: StoredPortalSubmission) {
 }
 
 /**
- * Robust government portal URL fetcher with SSL verification bypass & redirect following
+ * Robust government portal URL fetcher with SSL verification bypass, Gzip/Brotli decompression & redirect following
  */
-export function fetchUrlContent(url: string, maxRedirects = 5): Promise<string> {
+export async function fetchUrlContent(url: string, maxRedirects = 5): Promise<string> {
+  const cleanUrl = url.trim().replace(/^['"]|['"]$/g, '');
+  if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
+    throw new Error('Invalid URL format. Please enter a valid URL starting with http:// or https://');
+  }
+
+  // 1. Try modern native fetch first (handles gzip, deflate, brotli, and redirects automatically)
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 25000);
+
+    const res = await fetch(cleanUrl, {
+      signal: controller.signal,
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+        'Accept':
+          'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9,hi;q=0.8',
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      },
+      redirect: 'follow'
+    });
+    clearTimeout(timeout);
+
+    if (res.ok) {
+      const text = await res.text();
+      if (text && text.trim().length > 100) {
+        return text;
+      }
+    }
+  } catch (fetchErr: any) {
+    console.warn('Native fetch attempt failed, trying fallback stream fetcher:', fetchErr?.message);
+  }
+
+  // 2. Fallback stream fetcher with explicit zlib decompression & SSL bypass
   return new Promise((resolve, reject) => {
     if (maxRedirects <= 0) return reject(new Error('Too many redirects while accessing response sheet'));
     let urlObj: URL;
     try {
-      urlObj = new URL(url);
+      urlObj = new URL(cleanUrl);
     } catch {
       return reject(new Error('Invalid URL format. Please enter a valid URL starting with https://'));
     }
 
     const client = urlObj.protocol === 'https:' ? https : http;
     const req = client.get(
-      url,
+      cleanUrl,
       {
         rejectUnauthorized: false,
         headers: {
           'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
           'Accept':
-            'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+            'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
           'Accept-Language': 'en-US,en;q=0.9,hi;q=0.8',
+          'Accept-Encoding': 'gzip, deflate, br',
           'Cache-Control': 'no-cache',
           'Pragma': 'no-cache'
         }
       },
       res => {
         if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-          const nextUrl = new URL(res.headers.location, url).toString();
+          const nextUrl = new URL(res.headers.location, cleanUrl).toString();
           return resolve(fetchUrlContent(nextUrl, maxRedirects - 1));
         }
-        if (res.statusCode !== 200) {
+        if (res.statusCode && res.statusCode !== 200) {
           return reject(new Error(`Government portal returned HTTP ${res.statusCode}`));
         }
+
+        const encoding = (res.headers['content-encoding'] || '').toLowerCase();
+        let stream: any = res;
+
+        if (encoding.includes('gzip')) {
+          stream = res.pipe(zlib.createGunzip());
+        } else if (encoding.includes('deflate')) {
+          stream = res.pipe(zlib.createInflate());
+        } else if (encoding.includes('br')) {
+          stream = res.pipe(zlib.createBrotliDecompress());
+        }
+
         let data = '';
-        res.setEncoding('utf8');
-        res.on('data', chunk => (data += chunk));
-        res.on('end', () => resolve(data));
+        stream.setEncoding('utf8');
+        stream.on('data', (chunk: string) => (data += chunk));
+        stream.on('end', () => resolve(data));
+        stream.on('error', (err: any) => reject(new Error(`Failed to decompress response: ${err.message}`)));
       }
     );
 

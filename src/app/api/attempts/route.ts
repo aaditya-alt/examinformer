@@ -8,6 +8,7 @@ export async function POST(req: Request) {
       testId,
       userId,
       candidateName,
+      rollNumber,
       totalScore,
       accuracy,
       timeTakenSeconds,
@@ -20,6 +21,9 @@ export async function POST(req: Request) {
     }
 
     const client = supabaseAdmin || supabase;
+    const finalUserId = userId || `usr_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+    const finalName = candidateName || 'Candidate';
+    const finalTime = Number(timeTakenSeconds) || 0;
 
     if (!client) {
       return NextResponse.json({
@@ -31,11 +35,12 @@ export async function POST(req: Request) {
 
     const payload = {
       test_id: testId,
-      user_id: userId || 'anonymous',
-      candidate_name: candidateName || 'Candidate',
+      user_id: finalUserId,
+      candidate_name: finalName,
+      roll_number: rollNumber || undefined,
       total_score: Number(totalScore) || 0,
       accuracy: Number(accuracy) || 0,
-      time_taken_seconds: Number(timeTakenSeconds) || 0,
+      time_taken_seconds: finalTime,
       status: 'completed',
       responses: responses || {}
     };
@@ -52,7 +57,42 @@ export async function POST(req: Request) {
 
     const insertedId = data?.[0]?.id || 'att_' + Date.now();
 
-    // Also update user's attempt count in Supabase Auth if candidate is logged in
+    // 2. Synchronize candidate profile into public.users table in Supabase
+    try {
+      const { data: existingUser } = await client
+        .from('users')
+        .select('id, total_time_spent_seconds, attempts_count')
+        .or(`id.eq.${finalUserId},name.eq.${finalName}`)
+        .limit(1)
+        .maybeSingle();
+
+      if (existingUser) {
+        await client
+          .from('users')
+          .update({
+            total_time_spent_seconds: (existingUser.total_time_spent_seconds || 0) + finalTime,
+            attempts_count: (existingUser.attempts_count || 0) + 1,
+            last_active_at: new Date().toISOString()
+          })
+          .eq('id', existingUser.id);
+      } else {
+        await client
+          .from('users')
+          .insert({
+            id: finalUserId,
+            name: finalName,
+            roll_number: rollNumber || '2402' + Math.floor(100000 + Math.random() * 900000),
+            total_time_spent_seconds: finalTime,
+            attempts_count: 1,
+            last_active_at: new Date().toISOString()
+          });
+      }
+    } catch (uErr: any) {
+      // Non-fatal if table not yet migrated
+      console.warn('Syncing user profile into users table:', uErr?.message);
+    }
+
+    // 3. Also update user's attempt count in Supabase Auth if candidate is logged in via Auth
     if (supabaseAdmin && userId && !userId.startsWith('guest_') && !userId.startsWith('usr_')) {
       try {
         const { data: userData } = await supabaseAdmin.auth.admin.getUserById(userId);

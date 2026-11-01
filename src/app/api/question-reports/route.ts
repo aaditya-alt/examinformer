@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { supabaseAdmin, isSupabaseConfigured } from '@/lib/supabase';
+import { supabaseAdmin, supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -23,7 +23,7 @@ interface QuestionReport {
   resolvedAt?: string;
 }
 
-function loadReports(): QuestionReport[] {
+function loadReportsFromFile(): QuestionReport[] {
   try {
     if (fs.existsSync(REPORTS_FILE)) {
       const data = fs.readFileSync(REPORTS_FILE, 'utf-8');
@@ -36,7 +36,7 @@ function loadReports(): QuestionReport[] {
   return [];
 }
 
-function saveReports(list: QuestionReport[]) {
+function saveReportsToFile(list: QuestionReport[]) {
   try {
     const dir = path.dirname(REPORTS_FILE);
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -52,13 +52,52 @@ export async function GET(req: Request) {
     const status = searchParams.get('status');
     const testId = searchParams.get('testId');
 
-    let reports = loadReports();
-    if (status && status !== 'all') {
-      reports = reports.filter(r => r.status === status);
+    const client = supabaseAdmin || supabase;
+    const reportsMap = new Map<string, QuestionReport>();
+
+    // 1. Fetch from Supabase question_reports table
+    if (client) {
+      try {
+        let query = client.from('question_reports').select('*').order('created_at', { ascending: false });
+        if (status && status !== 'all') query = query.eq('status', status);
+        if (testId) query = query.eq('test_id', testId);
+
+        const { data, error } = await query;
+        if (!error && Array.isArray(data)) {
+          data.forEach(r => {
+            reportsMap.set(r.id, {
+              id: r.id,
+              testId: r.test_id,
+              testTitle: r.test_title || 'CBT Mock Test',
+              qno: Number(r.question_number) || 1,
+              questionText: r.question_text || '',
+              issueType: r.issue_type || 'wrong_answer',
+              description: r.description || '',
+              userEmail: r.user_email,
+              userId: r.user_id,
+              status: r.status || 'pending',
+              createdAt: r.created_at || new Date().toISOString(),
+              resolvedAt: r.resolved_at
+            });
+          });
+        }
+      } catch (e) {
+        console.warn('Supabase question_reports query notice:', e);
+      }
     }
-    if (testId) {
-      reports = reports.filter(r => r.testId === testId);
-    }
+
+    // 2. Fetch and merge from local file
+    const fileReports = loadReportsFromFile();
+    fileReports.forEach(r => {
+      if (!reportsMap.has(r.id)) {
+        if ((!status || status === 'all' || r.status === status) && (!testId || r.testId === testId)) {
+          reportsMap.set(r.id, r);
+        }
+      }
+    });
+
+    const reports = Array.from(reportsMap.values());
+    reports.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return NextResponse.json({ success: true, reports });
   } catch (err: any) {
@@ -78,12 +117,13 @@ export async function POST(req: Request) {
       );
     }
 
+    const reportId = `rep_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
     const newReport: QuestionReport = {
-      id: `rep_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      id: reportId,
       testId,
       testTitle: testTitle || 'CBT Mock Test',
       qno: Number(qno),
-      questionText: questionText ? String(questionText).substring(0, 300) : '',
+      questionText: questionText ? String(questionText).substring(0, 400) : '',
       issueType,
       description: description ? String(description).trim() : '',
       userEmail,
@@ -92,15 +132,11 @@ export async function POST(req: Request) {
       createdAt: new Date().toISOString()
     };
 
-    // Save locally
-    const reports = loadReports();
-    reports.unshift(newReport);
-    saveReports(reports);
-
-    // Sync to Supabase if available
-    if (isSupabaseConfigured && supabaseAdmin) {
+    // 1. Save to Supabase question_reports
+    const client = supabaseAdmin || supabase;
+    if (client) {
       try {
-        await supabaseAdmin.from('question_reports').insert({
+        await client.from('question_reports').insert({
           id: newReport.id,
           test_id: newReport.testId,
           test_title: newReport.testTitle,
@@ -113,9 +149,14 @@ export async function POST(req: Request) {
           status: 'pending'
         });
       } catch (e: any) {
-        console.warn('Supabase question_reports sync notice:', e.message);
+        console.warn('Supabase question_reports sync note:', e.message);
       }
     }
+
+    // 2. Save locally for bulletproof persistence
+    const reports = loadReportsFromFile();
+    reports.unshift(newReport);
+    saveReportsToFile(reports);
 
     return NextResponse.json({ success: true, report: newReport });
   } catch (err: any) {
@@ -135,28 +176,48 @@ export async function PATCH(req: Request) {
       );
     }
 
-    const reports = loadReports();
-    const target = reports.find(r => r.id === reportId);
-    if (!target) {
-      return NextResponse.json({ success: false, error: 'Report not found' }, { status: 404 });
-    }
+    const resolvedAt = status === 'resolved' ? new Date().toISOString() : null;
 
-    target.status = status;
-    if (status === 'resolved') {
-      target.resolvedAt = new Date().toISOString();
-    }
-    saveReports(reports);
-
-    // If an update to question text or explanation was provided, save to test file!
-    if (updatedQuestion && target.testId) {
+    // 1. Update in Supabase
+    const client = supabaseAdmin || supabase;
+    if (client) {
       try {
-        const testFile = path.join(process.cwd(), 'src', 'data', 'tests', `${target.testId}.json`);
+        await client
+          .from('question_reports')
+          .update({
+            status,
+            resolved_at: resolvedAt
+          })
+          .eq('id', reportId);
+      } catch (e: any) {
+        console.warn('Supabase question report update note:', e.message);
+      }
+    }
+
+    // 2. Update locally
+    const reports = loadReportsFromFile();
+    const target = reports.find(r => r.id === reportId);
+    if (target) {
+      target.status = status;
+      if (status === 'resolved') {
+        target.resolvedAt = resolvedAt || new Date().toISOString();
+      }
+      saveReportsToFile(reports);
+    }
+
+    // 3. If an update to question text or explanation was provided, save to test file!
+    const activeTestId = target?.testId;
+    const activeQno = target?.qno;
+
+    if (updatedQuestion && activeTestId && activeQno) {
+      try {
+        const testFile = path.join(process.cwd(), 'src', 'data', 'tests', `${activeTestId}.json`);
         if (fs.existsSync(testFile)) {
           const testData = JSON.parse(fs.readFileSync(testFile, 'utf-8'));
           let changed = false;
           (testData.sections || []).forEach((sec: any) => {
             (sec.questions || []).forEach((q: any) => {
-              if (q.qno === target.qno) {
+              if (q.qno === activeQno) {
                 if (updatedQuestion.questionText) q.questionText = updatedQuestion.questionText;
                 if (updatedQuestion.explanation) q.explanation = updatedQuestion.explanation;
                 if (updatedQuestion.correctOption) q.correctOption = Number(updatedQuestion.correctOption);
@@ -173,7 +234,7 @@ export async function PATCH(req: Request) {
       }
     }
 
-    return NextResponse.json({ success: true, report: target });
+    return NextResponse.json({ success: true, report: target || { id: reportId, status } });
   } catch (err: any) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }

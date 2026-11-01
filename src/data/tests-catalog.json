@@ -8602,5 +8602,1841 @@
         "marks": 120
       }
     ]
+  },
+  {
+    "id": "rrb-alp-2024-cbt1-shift-1",
+    "title": "RRB ALP 2024 CBT-1 — 25 Nov, 2024 Shift 1",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2024,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 60,
+    "totalMarks": 75,
+    "totalQuestions": 75,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-alp-2024-cbt1-shift-1_sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-alp-2024-cbt1-shift-2",
+    "title": "RRB ALP 2024 CBT-1 — 25 Nov, 2024 Shift 2",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2024,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 60,
+    "totalMarks": 75,
+    "totalQuestions": 75,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-alp-2024-cbt1-shift-2_sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-alp-2024-cbt1-shift-3",
+    "title": "RRB ALP 2024 CBT-1 — 25 Nov, 2024 Shift 3",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2024,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 60,
+    "totalMarks": 75,
+    "totalQuestions": 75,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-alp-2024-cbt1-shift-3_sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-alp-2024-cbt1-shift-4",
+    "title": "RRB ALP 2024 CBT-1 — 26 Nov, 2024 Shift 1",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2024,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 60,
+    "totalMarks": 75,
+    "totalQuestions": 75,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-alp-2024-cbt1-shift-4_sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-alp-2024-cbt1-shift-5",
+    "title": "RRB ALP 2024 CBT-1 — 26 Nov, 2024 Shift 2",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2024,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 60,
+    "totalMarks": 75,
+    "totalQuestions": 75,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-alp-2024-cbt1-shift-5_sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-alp-2024-cbt1-shift-6",
+    "title": "RRB ALP 2024 CBT-1 — 26 Nov, 2024 Shift 3",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2024,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 60,
+    "totalMarks": 75,
+    "totalQuestions": 75,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-alp-2024-cbt1-shift-6_sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-alp-2024-cbt1-shift-7",
+    "title": "RRB ALP 2024 CBT-1 — 27 Nov, 2024 Shift 1",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2024,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 60,
+    "totalMarks": 75,
+    "totalQuestions": 75,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-alp-2024-cbt1-shift-7_sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-alp-2024-cbt1-shift-8",
+    "title": "RRB ALP 2024 CBT-1 — 27 Nov, 2024 Shift 2",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2024,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 60,
+    "totalMarks": 75,
+    "totalQuestions": 75,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-alp-2024-cbt1-shift-8_sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-alp-2024-cbt1-shift-9",
+    "title": "RRB ALP 2024 CBT-1 — 27 Nov, 2024 Shift 3",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2024,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 60,
+    "totalMarks": 75,
+    "totalQuestions": 75,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-alp-2024-cbt1-shift-9_sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-alp-2024-cbt1-shift-10",
+    "title": "RRB ALP 2024 CBT-1 — 28 Nov, 2024 Shift 1",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2024,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 60,
+    "totalMarks": 75,
+    "totalQuestions": 75,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-alp-2024-cbt1-shift-10_sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-alp-2024-cbt1-shift-11",
+    "title": "RRB ALP 2024 CBT-1 — 28 Nov, 2024 Shift 2",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2024,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 60,
+    "totalMarks": 75,
+    "totalQuestions": 75,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-alp-2024-cbt1-shift-11_sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-alp-2024-cbt1-shift-12",
+    "title": "RRB ALP 2024 CBT-1 — 28 Nov, 2024 Shift 3",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2024,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 60,
+    "totalMarks": 75,
+    "totalQuestions": 75,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-alp-2024-cbt1-shift-12_sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-alp-2024-cbt1-shift-13",
+    "title": "RRB ALP 2024 CBT-1 — 29 Nov, 2024 Shift 1",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2024,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 60,
+    "totalMarks": 75,
+    "totalQuestions": 75,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-alp-2024-cbt1-shift-13_sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-alp-2024-cbt1-shift-14",
+    "title": "RRB ALP 2024 CBT-1 — 29 Nov, 2024 Shift 2",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2024,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 60,
+    "totalMarks": 75,
+    "totalQuestions": 75,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-alp-2024-cbt1-shift-14_sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-alp-cbt2-rac-2025-shift-1",
+    "title": "RRB ALP CBT-2 (RAC Mechanic) — 02 May, 2025 Shift 1",
+    "examCode": "rrb-alp-cbt2",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 175,
+    "totalQuestions": 175,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-alp-cbt2-rac-2025-shift-1_sec_1",
+        "name": "Part A",
+        "questionCount": 100,
+        "marks": 100
+      },
+      {
+        "id": "rrb-alp-cbt2-rac-2025-shift-1_sec_2",
+        "name": "Part B",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-alp-cbt2-rac-2025-shift-2",
+    "title": "RRB ALP CBT-2 (RAC Mechanic) — 06 May, 2025 Shift 2",
+    "examCode": "rrb-alp-cbt2",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 175,
+    "totalQuestions": 175,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-alp-cbt2-rac-2025-shift-2_sec_1",
+        "name": "Part A",
+        "questionCount": 100,
+        "marks": 100
+      },
+      {
+        "id": "rrb-alp-cbt2-rac-2025-shift-2_sec_2",
+        "name": "Part B",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-alp-cbt2-armature-2025-shift-1",
+    "title": "RRB ALP CBT-2 (Armature & Coil Winder) — 06 May, 2025 Shift 1",
+    "examCode": "rrb-alp-cbt2",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 175,
+    "totalQuestions": 175,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-alp-cbt2-armature-2025-shift-1_sec_1",
+        "name": "Part A",
+        "questionCount": 100,
+        "marks": 100
+      },
+      {
+        "id": "rrb-alp-cbt2-armature-2025-shift-1_sec_2",
+        "name": "Part B",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-25",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 16 Jun, 2025 Shift 2",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-25_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-26",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 16 Jun, 2025 Shift 3",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-26_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-27",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 17 Jun, 2025 Shift 1",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-27_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-28",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 17 Jun, 2025 Shift 2",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-28_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-29",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 17 Jun, 2025 Shift 3",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-29_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-30",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 18 Jun, 2025 Shift 1",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-30_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-31",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 18 Jun, 2025 Shift 2",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-31_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-32",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 18 Jun, 2025 Shift 3",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-32_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-33",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 19 Jun, 2025 Shift 1",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-33_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-34",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 19 Jun, 2025 Shift 2",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-34_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-35",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 19 Jun, 2025 Shift 3",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-35_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-36",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 20 Jun, 2025 Shift 1",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-36_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-37",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 20 Jun, 2025 Shift 2",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-37_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-38",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 20 Jun, 2025 Shift 3",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-38_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-39",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 21 Jun, 2025 Shift 1",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-39_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-40",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 21 Jun, 2025 Shift 2",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-40_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-41",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 21 Jun, 2025 Shift 3",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-41_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-42",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 23 Jun, 2025 Shift 1",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-42_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-44",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 23 Jun, 2025 Shift 3",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-44_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-45",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 24 Jun, 2025 Shift 1",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-45_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-36",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 28 Aug, 2025 Shift 3",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-36_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-36_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-36_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-37",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 29 Aug, 2025 Shift 1",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-37_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-37_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-37_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-38",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 29 Aug, 2025 Shift 2",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-38_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-38_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-38_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-39",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 29 Aug, 2025 Shift 3",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-39_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-39_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-39_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-40",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 01 Sept, 2025 Shift 1",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-40_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-40_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-40_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-41",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 01 Sept, 2025 Shift 2",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-41_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-41_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-41_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-42",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 01 Sept, 2025 Shift 3",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-42_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-42_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-42_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-43",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 02 Sept, 2025 Shift 1",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-43_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-43_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-43_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-44",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 02 Sept, 2025 Shift 2",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-44_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-44_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-44_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-45",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 02 Sept, 2025 Shift 3",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-45_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-45_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-45_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-47",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 03 Sept, 2025 Shift 2",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-47_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-47_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-47_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-48",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 03 Sept, 2025 Shift 3",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-48_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-48_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-48_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-49",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 04 Sept, 2025 Shift 1",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-49_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-49_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-49_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-50",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 04 Sept, 2025 Shift 2",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-50_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-50_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-50_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-51",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 04 Sept, 2025 Shift 3",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-51_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-51_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-51_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-52",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 08 Sept, 2025 Shift 1",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-52_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-52_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-52_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-53",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 08 Sept, 2025 Shift 2",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-53_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-53_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-53_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-54",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 08 Sept, 2025 Shift 3",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-54_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-54_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-54_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-55",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 09 Sept, 2025 Shift 1",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-55_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-55_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-55_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-56",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 09 Sept, 2025 Shift 2",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-56_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-56_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-56_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-57",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 09 Sept, 2025 Shift 3",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-57_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-57_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-57_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-alp-2024-cbt1-shift-15",
+    "title": "RRB ALP 2024 CBT-1 — 29 Nov, 2024 Shift 3",
+    "examCode": "rrb-alp-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2024,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 60,
+    "totalMarks": 75,
+    "totalQuestions": 75,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-alp-2024-cbt1-shift-15_sec_1",
+        "name": "Stage I (CBT I)",
+        "questionCount": 75,
+        "marks": 75
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-43",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 23 Jun, 2025 Shift 2",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-43_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-46",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 24 Jun, 2025 Shift 2",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-46_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-grad-2025-shift-47",
+    "title": "RRB NTPC Graduate 2025 CBT-1 — 24 Jun, 2025 Shift 3",
+    "examCode": "rrb-ntpc-grad-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-grad-2025-shift-47_sec_1",
+        "name": "Test",
+        "questionCount": 100,
+        "marks": 100
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-33",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 22 Aug, 2025 Shift 3",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-33_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-33_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-33_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-34",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 28 Aug, 2025 Shift 1",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-34_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-34_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-34_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-35",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 28 Aug, 2025 Shift 2",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-35_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-35_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-35_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
+  },
+  {
+    "id": "rrb-ntpc-ug-2025-shift-46",
+    "title": "RRB NTPC (UG) 2025 CBT-1 — 03 Sept, 2025 Shift 1",
+    "examCode": "rrb-ntpc-ug-cbt1",
+    "examFamily": "rrb",
+    "examYear": 2025,
+    "type": "pyq",
+    "isOfficialPYQ": true,
+    "durationMinutes": 90,
+    "totalMarks": 100,
+    "totalQuestions": 100,
+    "positiveMarks": 1,
+    "negativeMarks": 0.33,
+    "sections": [
+      {
+        "id": "rrb-ntpc-ug-2025-shift-46_sec_1",
+        "name": "General Awareness",
+        "questionCount": 40,
+        "marks": 40
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-46_sec_2",
+        "name": "Mathematics",
+        "questionCount": 30,
+        "marks": 30
+      },
+      {
+        "id": "rrb-ntpc-ug-2025-shift-46_sec_3",
+        "name": "General Intelligence and Reasoning",
+        "questionCount": 30,
+        "marks": 30
+      }
+    ],
+    "isPublished": true
   }
 ]

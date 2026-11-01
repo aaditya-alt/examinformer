@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ExamLogo } from '@/components/ExamLogo';
+import { StudentReviewsSection } from '@/components/StudentReviewsSection';
 import {
   Search,
   Plus,
@@ -293,6 +294,11 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ─────────────────────────────────────────────────────────────
+          SECTION: STUDENT REVIEWS & GENUINE FEEDBACK (DRIBBBLE UI)
+      ───────────────────────────────────────────────────────────── */}
+      <StudentReviewsSection />
 
       {/* ─────────────────────────────────────────────────────────────
           SECTION: OFFICIAL COMMUNITY & SOCIAL CHANNELS

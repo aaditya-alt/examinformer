@@ -337,8 +337,42 @@ export class UniversalAnswerKeyParser {
           });
         });
       } else {
-        // Generic fallback for question and options inside pnl
-        quesText = cleanTextAndMath(pnl.find('.bold').first().text() || `Question ${qno}`);
+        // Generic / Railway table fallback: check any table rows inside pnl
+        const rows = pnl.find('tr');
+        if (rows.length > 1) {
+          const firstRow = rows.first();
+          quesText = cleanTextAndMath(firstRow.text() || pnl.find('.bold').first().text() || `Question ${qno}`);
+
+          rows.slice(1).each((rIdx, rEl) => {
+            const row = $(rEl);
+            const text = row.text().trim();
+            const isRight = row.hasClass('rightAns') || row.find('.rightAns').length > 0 || row.html()?.includes('tick');
+            const hasOptionIndicator = isRight || row.hasClass('wrngAns') || /^[1-4]\.|\(?[1-4]\)/.test(text);
+
+            if (hasOptionIndicator) {
+              const optNum = options.length + 1;
+              if (isRight) correctOptNum = optNum;
+
+              let optImg: string | undefined = undefined;
+              row.find('img').each((_, img) => {
+                const src = $(img).attr('src');
+                if (src && !src.includes('tick') && !src.includes('cross')) {
+                  optImg = src.startsWith('http') ? src : (baseUrl ? new URL(src, baseUrl).toString() : src);
+                }
+              });
+
+              options.push({
+                num: optNum,
+                text: cleanTextAndMath(text.replace(/^[1-4]\.\s*/, '')),
+                imageUrl: optImg,
+                isCorrect: Boolean(isRight),
+                isChosen: chosenOptNum === optNum
+              });
+            }
+          });
+        } else {
+          quesText = cleanTextAndMath(pnl.find('.bold').first().text() || pnl.text().substring(0, 150) || `Question ${qno}`);
+        }
       }
 
       // Collect question images from panel if not yet found
@@ -400,8 +434,25 @@ export class UniversalAnswerKeyParser {
         sectionMap.get(secName)!.push(...secQuestions);
       });
     } else {
-      // Fallback: iterate all .question-pnl directly
-      const questionPnls = $('.question-pnl');
+      // Fallback: iterate all question panels directly (.question-pnl, .questionPnlTbl, .questionRowTbl, or tables with .menu-tbl)
+      let questionPnls = $('.question-pnl');
+      if (questionPnls.length === 0) {
+        questionPnls = $('table.questionPnlTbl, table.questionRowTbl, div.rw, .panel-default');
+      }
+      if (questionPnls.length === 0) {
+        // Find panels via .menu-tbl presence
+        const matched: any[] = [];
+        $('.menu-tbl').each((_, mEl) => {
+          const container = $(mEl).closest('table.questionPnlTbl, table.questionRowTbl, div.question-pnl, div.rw, table');
+          if (container.length > 0) {
+            matched.push(container);
+          }
+        });
+        if (matched.length > 0) {
+          questionPnls = $(matched as any);
+        }
+      }
+
       questionPnls.each((idx, el) => {
         const pnl = $(el);
         const qno = idx + 1;
