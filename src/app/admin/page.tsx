@@ -184,9 +184,16 @@ export default function AdminDashboardPage() {
 
   // Check admin session
   useEffect(() => {
-    fetch('/api/admin/auth/verify')
+    const token = typeof window !== 'undefined' ? localStorage.getItem('mockyoddha_admin_token') : null;
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    fetch('/api/admin/auth/verify', { headers })
       .then(res => {
         if (!res.ok) {
+          localStorage.removeItem('mockyoddha_admin_token');
           router.push('/admin/login');
         } else {
           setAuthChecking(false);
@@ -197,6 +204,8 @@ export default function AdminDashboardPage() {
   }, []);
 
   const handleLogout = async () => {
+    localStorage.removeItem('mockyoddha_admin_token');
+    localStorage.removeItem('mockyoddha_admin_user');
     await fetch('/api/admin/auth/logout', { method: 'POST' });
     router.push('/admin/login');
   };
@@ -204,7 +213,12 @@ export default function AdminDashboardPage() {
   const fetchDashboardData = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/dashboard');
+      const token = typeof window !== 'undefined' ? localStorage.getItem('mockyoddha_admin_token') : null;
+      const headers: Record<string, string> = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      const res = await fetch('/api/admin/dashboard', { headers });
       const json = await res.json();
       if (json.success) {
         setData(json);

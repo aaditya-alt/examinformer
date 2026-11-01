@@ -38,7 +38,7 @@ export async function POST(req: Request) {
               userId: adminRecord.id,
               email: adminRecord.email,
               name: adminRecord.name,
-              role: adminRecord.role || 'admin',
+              role: adminRecord.role || 'superadmin',
               authenticatedAt: Date.now()
             };
             const token = Buffer.from(JSON.stringify(sessionPayload)).toString('base64');
@@ -46,17 +46,19 @@ export async function POST(req: Request) {
             cookieStore.set('mockyoddha_admin_session', token, {
               httpOnly: true,
               secure: process.env.NODE_ENV === 'production',
+              sameSite: 'lax',
               maxAge: 60 * 60 * 24 * 7,
               path: '/'
             });
 
             return NextResponse.json({
               success: true,
+              token,
               user: {
                 id: adminRecord.id,
                 email: adminRecord.email,
                 name: adminRecord.name,
-                role: adminRecord.role || 'admin'
+                role: adminRecord.role || 'superadmin'
               }
             });
           }
@@ -86,12 +88,14 @@ export async function POST(req: Request) {
         cookieStore.set('mockyoddha_admin_session', token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
           maxAge: 60 * 60 * 24 * 7,
           path: '/'
         });
 
         return NextResponse.json({
           success: true,
+          token,
           user: {
             id: authData.user.id,
             email: authData.user.email,
@@ -117,12 +121,14 @@ export async function POST(req: Request) {
       cookieStore.set('mockyoddha_admin_session', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
         maxAge: 60 * 60 * 24 * 7,
         path: '/'
       });
 
       return NextResponse.json({
         success: true,
+        token,
         user: { email: 'admin@examinformer.in', role: 'superadmin' }
       });
     }

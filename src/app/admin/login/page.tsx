@@ -28,6 +28,11 @@ export default function AdminLoginPage() {
         throw new Error(json.error || 'Authentication failed');
       }
 
+      if (json.token) {
+        localStorage.setItem('mockyoddha_admin_token', json.token);
+      }
+      localStorage.setItem('mockyoddha_admin_user', JSON.stringify(json.user || { role: 'admin' }));
+
       router.push('/admin');
     } catch (err: any) {
       setErrorMsg(err.message || 'Login failed. Please check credentials.');

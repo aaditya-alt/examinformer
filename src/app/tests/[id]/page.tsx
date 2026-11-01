@@ -709,6 +709,9 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     setSubmitting(true);
 
     const isMts = test.examCode === 'ssc-mts' || test.id.toLowerCase().includes('mts');
+    const isCglTier2 = (test.examCode || '').toLowerCase().includes('cgl-tier2') || ((test.id || '').toLowerCase().includes('cgl') && ((test.id || '').toLowerCase().includes('tier2') || (test.id || '').toLowerCase().includes('tier-2') || (test.title || '').toLowerCase().includes('tier 2') || (test.title || '').toLowerCase().includes('tier-2')));
+    const isChslTier2 = (test.examCode || '').toLowerCase().includes('chsl-tier2') || ((test.id || '').toLowerCase().includes('chsl') && ((test.id || '').toLowerCase().includes('tier2') || (test.id || '').toLowerCase().includes('tier-2') || (test.title || '').toLowerCase().includes('tier 2') || (test.title || '').toLowerCase().includes('tier-2')));
+    const isTier2SSC = isCglTier2 || isChslTier2;
 
     let score = 0;
     let correctCount = 0;
@@ -720,28 +723,42 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     let s1Attempted = 0;
     let s2Attempted = 0;
 
+    let computerScore = 0;
+    let computerAttempted = 0;
+    let computerCorrect = 0;
+    let computerWrong = 0;
+
     test.sections.forEach((sec, sIdx) => {
       // In MTS: Section 0 & 1 are Session 1 (Math & Reasoning). Section 2 & 3 are Session 2 (GA & English).
       const isMtsSession1 = isMts && (sIdx < 2 || sec.name.toLowerCase().includes('reasoning') || sec.name.toLowerCase().includes('numerical'));
+      // In CGL & CHSL Tier-2: Computer Knowledge Module is purely qualifying in nature (does NOT count in merit total score!)
+      const isComputerSec = isTier2SSC && sec.name.toLowerCase().includes('computer');
       
       sec.questions.forEach(q => {
         const resp = userResponses[q.qno];
         if (resp && resp.chosenOption !== undefined) {
           attemptedCount++;
-          if (isMtsSession1) s1Attempted++;
+          if (isComputerSec) computerAttempted++;
+          else if (isMtsSession1) s1Attempted++;
           else s2Attempted++;
 
           if (resp.chosenOption === q.correctOption) {
             correctCount++;
-            if (isMtsSession1) {
+            if (isComputerSec) {
+              computerCorrect++;
+              computerScore += (q.marks || 3.0);
+            } else if (isMtsSession1) {
               s1Score += 3.0; // MTS Session 1 is 3 marks per Q, 0 negative
             } else {
               s2Score += (q.marks || 3.0);
+              score += q.marks;
             }
-            score += q.marks;
           } else {
             wrongCount++;
-            if (!isMtsSession1) {
+            if (isComputerSec) {
+              computerWrong++;
+              computerScore -= (q.negativeMarks || 1.0);
+            } else if (!isMtsSession1) {
               s2Score -= (q.negativeMarks || 1.0); // MTS Session 2 penalty
               score -= q.negativeMarks;
             }
@@ -754,6 +771,9 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     const timeTaken = test.durationMinutes * 60 - overallSecondsRemaining;
     const finalScore = isMts ? Math.round(s2Score * 100) / 100 : Math.round(score * 100) / 100;
     const accuracy = attemptedCount > 0 ? Math.round((correctCount / attemptedCount) * 1000) / 10 : 0;
+    const computerCutoff = isCglTier2 ? 18 : 13.5;
+    const computerQualified = isTier2SSC ? computerScore >= computerCutoff : true;
+    const maxMeritMarks = isMts ? 150 : (isCglTier2 ? 390 : (isChslTier2 ? 360 : test.totalMarks));
 
     // Save anti-repetition question mastery for adaptive topic drills
     try {
@@ -779,8 +799,14 @@ function EduquityCBTContent({ testId }: { testId: string }) {
       testId: test.id,
       testTitle: test.title,
       totalQuestions: test.totalQuestions,
-      totalMarks: isMts ? 150 : test.totalMarks,
+      totalMarks: maxMeritMarks,
       isMts,
+      isTier2SSC,
+      isCglTier2,
+      isChslTier2,
+      computerScore: Math.round(computerScore * 100) / 100,
+      computerQualified,
+      computerMaxMarks: isCglTier2 ? 60 : 45,
       session1Score: Math.round(s1Score * 100) / 100,
       session2Score: Math.round(s2Score * 100) / 100,
       session1Qualified: s1Score >= 36, // MTS Session 1 qualifying threshold (30% for UR)

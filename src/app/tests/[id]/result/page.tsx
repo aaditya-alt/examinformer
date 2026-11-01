@@ -357,6 +357,33 @@ export default function CBTResultPage({
             <div className="text-[10px] text-slate-500">{wrongCount} wrong answers</div>
           </div>
         </div>
+        {/* Tier-2 Computer Knowledge Module Qualifying Status Banner */}
+        {(resultData.isTier2SSC || (test.id && test.id.includes('tier2')) || test.title.toLowerCase().includes('tier 2') || test.title.toLowerCase().includes('tier-2')) && (
+          <div className="p-4 sm:p-5 rounded-2xl bg-slate-900 border border-slate-800 text-left space-y-2 text-white shadow-md">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                  SSC Official Examination Rule
+                </span>
+                <span className="text-xs font-black text-white">Computer Knowledge Module (Qualifying Only)</span>
+              </div>
+              <span className={`px-3 py-1 rounded-full text-xs font-black ${
+                resultData.computerQualified ?? ((resultData.computerScore || 0) >= (test.title.toLowerCase().includes('chsl') ? 13.5 : 18))
+                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                  : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+              }`}>
+                {resultData.computerQualified ?? ((resultData.computerScore || 0) >= (test.title.toLowerCase().includes('chsl') ? 13.5 : 18)) ? '✅ QUALIFIED' : '❌ NOT QUALIFIED'}
+              </span>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-black text-purple-300">{resultData.computerScore ?? 0}</span>
+              <span className="text-xs text-slate-400">/ {resultData.computerMaxMarks || (test.title.toLowerCase().includes('chsl') ? 45 : 60)} Marks (Min 30% required for UR)</span>
+            </div>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              ⚡ As per the official SSC scheme, Computer Knowledge is strictly <strong>qualifying in nature</strong>. Its marks are <strong>not counted in your merit rank score</strong> ({resultData.finalScore} / {resultData.totalMarks || (test.title.toLowerCase().includes('chsl') ? 360 : 390)}).
+            </p>
+          </div>
+        )}
       </div>
 
       {/* ── PRIMARY VIEW TABS ── */}

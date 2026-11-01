@@ -51,7 +51,14 @@ export function getStandardSections(examCode?: string, title?: string): CBTSecti
         { id: 'sec_4', name: 'General Awareness and Current Affairs', questions: [] }
       ];
     }
-    // NTPC UG & Graduate
+    // NTPC Graduate is Mixed Form only (all 100 questions in 1 composite section)
+    const isGrad = code.includes('grad') || t.includes('grad') || code === 'rrb-ntpc';
+    if (isGrad && !code.includes('ug') && !t.includes('ug') && !t.includes('under graduate')) {
+      return [
+        { id: 'sec_1', name: 'General Section (100 Questions Mixed)', questions: [] }
+      ];
+    }
+    // NTPC UG: 3 sections (GA 40 Qs, Maths 30 Qs, Reasoning 30 Qs)
     return [
       { id: 'sec_1', name: 'General Awareness', questions: [] },
       { id: 'sec_2', name: 'Mathematics', questions: [] },
@@ -143,8 +150,130 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
     return testsStore.get(cleanId);
   }
 
-  // 1. Dynamic Sectional Test (e.g. sec-rrb-ntpc-grad-2025-shift-1-sec-0 or sec-ssc-cgl-2025-tier2-shift-1-sec-0)
+  // 1. Dynamic Sectional Test (Combined Section or Individual Subject)
   if (cleanId.startsWith('sec-')) {
+    // 1A. Combined Section (e.g. sec-ssc-cgl-2025-tier2-shift-1-combined-1)
+    const combinedMatch = cleanId.match(/^sec-(.+)-combined-(\d+)$/);
+    if (combinedMatch) {
+      const parentId = combinedMatch[1];
+      const combIdx = parseInt(combinedMatch[2], 10);
+      const parent = await getTestById(parentId);
+      if (parent && parent.sections) {
+        const pCode = (parent.examCode || '').toLowerCase();
+        const pTitle = (parent.title || '').toLowerCase();
+        const isChsl = pCode.includes('chsl') || pTitle.includes('chsl');
+        const isMts = pCode.includes('mts') || pTitle.includes('mts');
+
+        let combTitle = '';
+        let duration = 60;
+        let marksPerQ = 3;
+        let negMarks = 1;
+        let combinedQuestions: CBTQuestion[] = [];
+        let combinedSections: CBTSection[] = [];
+
+        if (isMts) {
+          if (combIdx === 1) {
+            combTitle = `Session I (Maths & Reasoning — Purely Qualifying)`;
+            duration = 45;
+            marksPerQ = 3;
+            negMarks = 0; // MTS Session 1 has NO negative marking!
+            const secMath = parent.sections.find(s => s.name.toLowerCase().includes('numerical') || s.name.toLowerCase().includes('math'));
+            const secReas = parent.sections.find(s => s.name.toLowerCase().includes('reasoning'));
+            const qMath = (secMath?.questions || []).map(q => ({ ...q, marks: 3, negativeMarks: 0 }));
+            const qReas = (secReas?.questions || []).map(q => ({ ...q, marks: 3, negativeMarks: 0 }));
+            combinedSections = [
+              { id: 'sec_1', name: 'Numerical and Mathematical Ability', questions: qMath },
+              { id: 'sec_2', name: 'Reasoning Ability and Problem Solving', questions: qReas }
+            ];
+            combinedQuestions = [...qMath, ...qReas];
+          } else {
+            combTitle = `Session II (General Awareness & English — Merit Score)`;
+            duration = 45;
+            marksPerQ = 3;
+            negMarks = 1;
+            const secGA = parent.sections.find(s => s.name.toLowerCase().includes('awareness') || s.name.toLowerCase().includes('general'));
+            const secEng = parent.sections.find(s => s.name.toLowerCase().includes('english'));
+            const qGA = (secGA?.questions || []).map(q => ({ ...q, marks: 3, negativeMarks: 1 }));
+            const qEng = (secEng?.questions || []).map(q => ({ ...q, marks: 3, negativeMarks: 1 }));
+            combinedSections = [
+              { id: 'sec_1', name: 'General Awareness', questions: qGA },
+              { id: 'sec_2', name: 'English Language and Comprehension', questions: qEng }
+            ];
+            combinedQuestions = [...qGA, ...qEng];
+          }
+        } else {
+          // CGL or CHSL Tier-2 Combined Sections
+          if (combIdx === 1) {
+            combTitle = `Section I: Mathematical Abilities & Reasoning`;
+            duration = 60;
+            marksPerQ = 3;
+            negMarks = 1;
+            const secMath = parent.sections.find(s => s.name.toLowerCase().includes('math'));
+            const secReas = parent.sections.find(s => s.name.toLowerCase().includes('reasoning'));
+            const qMath = (secMath?.questions || []).map(q => ({ ...q, marks: 3, negativeMarks: 1 }));
+            const qReas = (secReas?.questions || []).map(q => ({ ...q, marks: 3, negativeMarks: 1 }));
+            combinedSections = [
+              { id: 'sec_1', name: 'Mathematical Abilities', questions: qMath },
+              { id: 'sec_2', name: 'Reasoning and General Intelligence', questions: qReas }
+            ];
+            combinedQuestions = [...qMath, ...qReas];
+          } else if (combIdx === 2) {
+            combTitle = `Section II: English Language & General Awareness`;
+            duration = 60;
+            marksPerQ = 3;
+            negMarks = 1;
+            const secEng = parent.sections.find(s => s.name.toLowerCase().includes('english'));
+            const secGA = parent.sections.find(s => s.name.toLowerCase().includes('awareness') || s.name.toLowerCase().includes('general'));
+            const qEng = (secEng?.questions || []).map(q => ({ ...q, marks: 3, negativeMarks: 1 }));
+            const qGA = (secGA?.questions || []).map(q => ({ ...q, marks: 3, negativeMarks: 1 }));
+            combinedSections = [
+              { id: 'sec_1', name: 'English Language and Comprehension', questions: qEng },
+              { id: 'sec_2', name: 'General Awareness', questions: qGA }
+            ];
+            combinedQuestions = [...qEng, ...qGA];
+          } else {
+            combTitle = `Section III: Computer Knowledge Module (Qualifying)`;
+            duration = 15;
+            marksPerQ = 3;
+            negMarks = 1;
+            const secComp = parent.sections.find(s => s.name.toLowerCase().includes('computer'));
+            const qComp = (secComp?.questions || []).map(q => ({ ...q, marks: 3, negativeMarks: 1 }));
+            combinedSections = [
+              { id: 'sec_1', name: 'Computer Knowledge', questions: qComp }
+            ];
+            combinedQuestions = [...qComp];
+          }
+        }
+
+        const totalQ = combinedQuestions.length || (isMts ? (combIdx === 1 ? 40 : 50) : (combIdx === 1 ? 60 : (combIdx === 2 ? (isChsl ? 60 : 70) : (isChsl ? 15 : 20))));
+        const totalMarks = totalQ * marksPerQ;
+
+        const combinedTest: CBTTest = {
+          id: cleanId,
+          title: `${combTitle} — ${parent.title}`,
+          examCode: parent.examCode || 'ssc-cgl',
+          examFamily: 'ssc',
+          type: 'sectional',
+          durationMinutes: duration,
+          totalMarks,
+          totalQuestions: totalQ,
+          positiveMarks: marksPerQ,
+          negativeMarks: negMarks,
+          isPublished: true,
+          hasSectionalTiming: combinedSections.length > 1,
+          sectionalTimingMinutes: duration,
+          sections: combinedSections.length > 0 ? combinedSections : [{
+            id: 'sec_1',
+            name: combTitle,
+            questions: combinedQuestions
+          }]
+        };
+        testsStore.set(cleanId, combinedTest);
+        return combinedTest;
+      }
+    }
+
+    // 1B. Individual Subject Section
     const shiftMatch = cleanId.match(/^sec-(.+)-sec-(\d+)$/);
     if (shiftMatch) {
       const parentId = shiftMatch[1];
@@ -152,23 +281,57 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
       const parent = await getTestById(parentId);
       if (parent && parent.sections && parent.sections[secIdx]) {
         const targetSec = parent.sections[secIdx];
-        const isRailway = (parent.examFamily === 'rrb' || (parent.examCode || '').toLowerCase().includes('rrb'));
-        const isTier2 = (parent.examCode || '').toLowerCase().includes('tier2') ||
-                        (parent.examCode || '').toLowerCase().includes('tier-2') ||
-                        parent.title.toLowerCase().includes('tier 2') ||
-                        parent.title.toLowerCase().includes('tier-2') ||
-                        parent.title.toLowerCase().includes('tier ii');
-        const duration = isTier2 
-          ? (targetSec.name.includes('Computer') ? 15 : (targetSec.name.includes('General Awareness') ? 20 : (targetSec.name.includes('English') ? 35 : 30)))
-          : (isRailway ? 25 : 15);
+        const isRailway = (parent.examFamily === 'rrb' || (parent.examCode || '').toLowerCase().includes('rrb') || parent.title.toLowerCase().includes('rrb') || parent.title.toLowerCase().includes('railway'));
+        const isTier2 = !isRailway && (
+          (parent.examCode || '').toLowerCase().includes('tier2') ||
+          (parent.examCode || '').toLowerCase().includes('tier-2') ||
+          parent.title.toLowerCase().includes('tier 2') ||
+          parent.title.toLowerCase().includes('tier-2') ||
+          parent.title.toLowerCase().includes('tier ii')
+        );
+        const isMts = !isRailway && ((parent.examCode || '').toLowerCase().includes('mts') || parent.title.toLowerCase().includes('mts'));
+
+        let duration = 15;
+        let marksPerQ = 2;
+        let negMarks = 0.5;
+
+        if (isRailway) {
+          marksPerQ = 1;
+          negMarks = Number((1 / 3).toFixed(2));
+          // NTPC UG GA: 40 mins/Qs, Math: 30 mins/Qs, Reasoning: 30 mins/Qs. Grad: 90 mins / 100 Qs.
+          if (targetSec.name.includes('Awareness')) duration = 35;
+          else if (targetSec.name.includes('Math')) duration = 30;
+          else if (targetSec.name.includes('Reasoning')) duration = 30;
+          else duration = 90;
+        } else if (isTier2) {
+          marksPerQ = 3;
+          negMarks = 1;
+          if (targetSec.name.includes('Computer')) duration = 15;
+          else if (targetSec.name.includes('General Awareness')) duration = 20;
+          else if (targetSec.name.includes('English')) duration = 40;
+          else duration = 30; // Math / Reasoning
+        } else if (isMts) {
+          marksPerQ = 3;
+          const isSession1 = secIdx < 2 || targetSec.name.toLowerCase().includes('numerical') || targetSec.name.toLowerCase().includes('reasoning');
+          negMarks = isSession1 ? 0 : 1; // Session 1 has NO negative marking!
+          duration = 25;
+        }
+
         const questionsList = targetSec.questions || [];
-        const count = questionsList.length || (isTier2 ? 30 : 25);
-        const marksPerQ = isTier2 ? 3 : (isRailway ? 1 : 2);
-        const negMarks = isTier2 ? 1 : (isRailway ? Number((1 / 3).toFixed(2)) : 0.5);
+        const count = questionsList.length || (
+          isRailway 
+            ? (targetSec.name.includes('Awareness') ? 40 : (targetSec.name.includes('General Section') ? 100 : 30))
+            : (isTier2 
+                ? (targetSec.name.includes('English') ? 45 : (targetSec.name.includes('Computer') ? 20 : (targetSec.name.includes('Awareness') ? 25 : 30)))
+                : (isMts 
+                    ? (targetSec.name.toLowerCase().includes('numerical') || targetSec.name.toLowerCase().includes('reasoning') ? 20 : 25)
+                    : 25))
+        );
+
         const singleSec: CBTTest = {
           id: cleanId,
-          title: `${targetSec.name} — ${parent.title} (${isTier2 ? 'Tier-2 ' : ''}Sectional Mock)`,
-          examCode: parent.examCode || 'ssc-cgl',
+          title: `${targetSec.name} — ${parent.title} (${isRailway ? 'Railway ' : (isTier2 ? 'Tier-2 ' : '')}Sectional Mock)`,
+          examCode: parent.examCode || (isRailway ? 'rrb-ntpc-ug' : 'ssc-cgl'),
           examFamily: isRailway ? 'rrb' : 'ssc',
           type: 'sectional',
           durationMinutes: duration,
@@ -177,7 +340,7 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
           positiveMarks: marksPerQ,
           negativeMarks: negMarks,
           isPublished: true,
-          hasSectionalTiming: true,
+          hasSectionalTiming: false,
           sectionalTimingMinutes: duration,
           sections: [{
             id: targetSec.id || `sec-${secIdx}`,
@@ -223,21 +386,35 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
           .order('question_number', { ascending: true });
 
         if (qRows && !qErr && qRows.length > 0) {
-          const isTier2 = (testRow.exam_code || '').toLowerCase().includes('tier2') ||
+          const isRailway = (testRow.exam_code || '').toLowerCase().includes('rrb') ||
+                            (testRow.title || '').toLowerCase().includes('rrb') ||
+                            (testRow.title || '').toLowerCase().includes('railway') ||
+                            testRow.id.includes('rrb');
+          const isTier2 = !isRailway && (
+                          (testRow.exam_code || '').toLowerCase().includes('tier2') ||
                           (testRow.exam_code || '').toLowerCase().includes('tier-2') ||
                           (testRow.title || '').toLowerCase().includes('tier 2') ||
                           (testRow.title || '').toLowerCase().includes('tier-2') ||
                           (testRow.title || '').toLowerCase().includes('tier ii') ||
-                          testRow.id.includes('tier2');
-          const isSSC = (testRow.exam_code || '').toLowerCase().includes('ssc') ||
-                        (testRow.title || '').toLowerCase().includes('ssc');
-          const isRailway = (testRow.exam_code || '').toLowerCase().includes('rrb') ||
-                            (testRow.title || '').toLowerCase().includes('rrb') ||
-                            (testRow.title || '').toLowerCase().includes('railway');
+                          testRow.id.includes('tier2'));
+          const isSSC = !isRailway && (
+                        (testRow.exam_code || '').toLowerCase().includes('ssc') ||
+                        (testRow.title || '').toLowerCase().includes('ssc') ||
+                        testRow.id.includes('ssc'));
+          const isMts = isSSC && (
+                        (testRow.exam_code || '').toLowerCase().includes('mts') ||
+                        (testRow.title || '').toLowerCase().includes('mts') ||
+                        testRow.id.includes('mts'));
 
           const getSectionName = (qno: number, totalQ: number, existingSec?: string): string => {
             if (existingSec && existingSec !== 'null' && existingSec !== 'undefined' && existingSec.trim().length > 0) {
               return existingSec;
+            }
+            if (isMts) {
+              if (qno <= 20) return 'Numerical and Mathematical Ability';
+              if (qno <= 40) return 'Reasoning Ability and Problem Solving';
+              if (qno <= 65) return 'General Awareness';
+              return 'English Language and Comprehension';
             }
             if (isSSC) {
               if (totalQ === 100) {
@@ -268,6 +445,12 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
               }
             }
             if (isRailway) {
+              const isGrad = (testRow.exam_code || '').toLowerCase().includes('grad') || 
+                             (testRow.title || '').toLowerCase().includes('graduate') ||
+                             ((testRow.exam_code || '').toLowerCase() === 'rrb-ntpc' && !(testRow.id || '').includes('ug'));
+              if (isGrad) {
+                return 'General Section (100 Questions Mixed)';
+              }
               if (totalQ === 100) {
                 if (qno <= 40) return 'General Awareness';
                 if (qno <= 70) return 'Mathematics';
@@ -283,15 +466,29 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
             return 'General Section';
           };
 
-          const qMarks = isTier2 ? 3 : (isSSC ? 2 : 1);
-          const qNegMarks = isTier2 ? 1 : (isSSC ? 0.5 : Number((1 / 3).toFixed(2)));
-
           const sectionMap = new Map<string, CBTQuestion[]>();
 
           qRows.forEach((q) => {
             const secName = getSectionName(q.question_number, qRows.length, q.section_id);
             if (!sectionMap.has(secName)) {
               sectionMap.set(secName, []);
+            }
+
+            let qMarks = 1;
+            let qNegMarks = 0.33;
+
+            if (isRailway) {
+              qMarks = 1;
+              qNegMarks = Number((1 / 3).toFixed(2));
+            } else if (isTier2) {
+              qMarks = 3;
+              qNegMarks = 1;
+            } else if (isMts) {
+              qMarks = 3;
+              qNegMarks = q.question_number <= 40 ? 0 : 1; // MTS Session 1 has NO negative marking!
+            } else if (isSSC) {
+              qMarks = 2;
+              qNegMarks = 0.5;
             }
 
             const rawOptions = Array.isArray(q.options) ? q.options : [];
@@ -325,18 +522,21 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
             questions: qs
           }));
 
+          const isCglTier2 = isTier2 && ((testRow.exam_code || '').includes('cgl') || testRow.id.includes('cgl') || testRow.title.toLowerCase().includes('cgl'));
+          const isChslTier2 = isTier2 && ((testRow.exam_code || '').includes('chsl') || testRow.id.includes('chsl') || testRow.title.toLowerCase().includes('chsl'));
+
           const cbtTest: CBTTest = {
             id: testRow.id,
             title: testRow.title,
             examCode: testRow.exam_code,
             examFamily: isRailway ? 'rrb' : 'ssc',
             type: (testRow.type as any) || 'pyq',
-            durationMinutes: testRow.duration_minutes || (isTier2 ? 135 : (isRailway ? 90 : 60)),
-            totalMarks: testRow.total_marks || (qRows.length * qMarks),
+            durationMinutes: testRow.duration_minutes || (isTier2 ? 135 : (isRailway ? 90 : (isMts ? 90 : 60))),
+            totalMarks: isMts ? 150 : (isCglTier2 ? 390 : (isChslTier2 ? 360 : (testRow.total_marks || (qRows.length * (isRailway ? 1 : (isSSC ? 2 : 1)))))),
             totalQuestions: testRow.total_questions || qRows.length,
-            positiveMarks: qMarks,
-            negativeMarks: qNegMarks,
-            hasSectionalTiming: isSSC,
+            positiveMarks: isTier2 ? 3 : (isMts ? 3 : (isRailway ? 1 : (isSSC ? 2 : 1))),
+            negativeMarks: isTier2 ? 1 : (isRailway ? Number((1 / 3).toFixed(2)) : (isSSC ? 0.5 : 0)),
+            hasSectionalTiming: isSSC && !isRailway && !isMts,
             sectionalTimingMinutes: isTier2 ? 30 : (isSSC ? 15 : undefined),
             isPublished: testRow.is_published ?? true,
             sections
@@ -453,7 +653,7 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
           const excludeSet = new Set(excludeIds || []);
           const unmastered = matchingQuestions.filter((q) => !excludeSet.has(q.id));
 
-          let chosenList = [];
+          let chosenList: any[] = [];
           if (unmastered.length >= count) {
             chosenList = unmastered.slice(0, count);
           } else {
@@ -463,8 +663,49 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
             chosenList = [...chosenList, ...recycled];
           }
 
+          // Backfill from other questions in the same subject & series if chapter matching yielded fewer questions
+          if (chosenList.length < count && dbQuestions && dbQuestions.length > 0) {
+            const chosenIds = new Set(chosenList.map((q) => q.id));
+            const remainingInSubject = dbQuestions.filter((q) => !chosenIds.has(q.id));
+            const fillNeeded = count - chosenList.length;
+            chosenList.push(...remainingInSubject.slice(0, fillNeeded));
+          }
+
+          // If still fewer than count, generate authentic topic questions to ensure the candidate gets the EXACT count requested
+          if (chosenList.length < count) {
+            const availableChapters = CHAPTER_TAXONOMY[subject] || [];
+            const matchedChapter =
+              availableChapters.find(
+                (ch) =>
+                  encodeURIComponent(ch).replace(/%20/g, '-').toLowerCase() === topicSlug ||
+                  ch.toLowerCase().includes(topicSlug.replace(/-/g, ' ').toLowerCase())
+              ) || availableChapters[0] || 'Topic Practice';
+            const fallbackTest = generateChapterTest(subject, matchedChapter, count, duration, examFilter);
+            const fallbackQs = fallbackTest.sections?.[0]?.questions || [];
+            for (const fbQ of fallbackQs) {
+              if (chosenList.length >= count) break;
+              chosenList.push({
+                id: `fb-${chosenList.length + 1}-${fbQ.id}`,
+                test_id: `${examFilter}-authentic`,
+                question_number: chosenList.length + 1,
+                question_text_en: fbQ.questionText,
+                question_text_hi: fbQ.questionTextHi,
+                question_images: fbQ.questionImages,
+                options: fbQ.options.map(o => ({ id: o.id, text_en: o.text, text_hi: o.textHi, imageUrl: o.imageUrl })),
+                correct_option_index: fbQ.correctOption,
+                explanation_en: fbQ.explanation,
+                explanation_hi: fbQ.explanationHi
+              });
+            }
+          }
+
+          // Clamp to requested count
+          if (chosenList.length > count) {
+            chosenList = chosenList.slice(0, count);
+          }
+
           const isRailway = examFilter.includes('rrb') || examFilter.includes('alp') || examFilter.includes('ntpc');
-          const isTier2 = examFilter.includes('tier2') || examFilter.includes('tier-2');
+          const isTier2 = !isRailway && (examFilter.includes('tier2') || examFilter.includes('tier-2'));
           const marksPerQ = isTier2 ? 3 : (isRailway ? 1 : 2);
           const negMarks = isTier2 ? 1 : (isRailway ? Number((1 / 3).toFixed(2)) : 0.5);
 

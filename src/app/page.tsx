@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ExamLogo } from '@/components/ExamLogo';
@@ -65,7 +65,7 @@ const REAL_SERIES_CATALOG: HomeSeriesItem[] = [
     id: 'rrb-ntpc-ug-series',
     examCode: 'rrb-ntpc-ug',
     name: 'RRB NTPC Under Graduate (UG) 2025-26 (CBT 1 & 2)',
-    testCount: '97 Official Shifts (CBT 1 & CBT 2)',
+    testCount: '65 Official Shifts (CBT 1 & CBT 2)',
     category: 'rrb',
     logoType: 'rrb',
     tierSupport: 'CBT 1 & CBT 2'
@@ -74,7 +74,7 @@ const REAL_SERIES_CATALOG: HomeSeriesItem[] = [
     id: 'rrb-ntpc-grad-series',
     examCode: 'rrb-ntpc-grad',
     name: 'RRB NTPC Graduate 2025-26 (CBT 1 & 2)',
-    testCount: '54 Official Shifts (CBT 1 & CBT 2)',
+    testCount: '30 Official Shifts (CBT 1 & CBT 2)',
     category: 'rrb',
     logoType: 'rrb',
     tierSupport: 'CBT 1 & CBT 2'
@@ -112,6 +112,27 @@ export default function HomePage() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTrending, setActiveTrending] = useState<'all' | 'ssc' | 'rrb'>('all');
+  const [dynamicCounts, setDynamicCounts] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    fetch('/api/tests')
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success && Array.isArray(json.data)) {
+          const counts: Record<string, number> = {};
+          json.data.forEach((t: any) => {
+            const code = (t.examCode || '').toLowerCase();
+            REAL_SERIES_CATALOG.forEach((series) => {
+              if (code.includes(series.examCode)) {
+                counts[series.examCode] = (counts[series.examCode] || 0) + 1;
+              }
+            });
+          });
+          setDynamicCounts(counts);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const filteredSeries = useMemo(() => {
     return REAL_SERIES_CATALOG.filter((item) => {
@@ -227,7 +248,9 @@ export default function HomePage() {
                     {series.name}
                   </h3>
                   <div className="mt-1 text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                    {series.testCount}
+                    {dynamicCounts[series.examCode] !== undefined
+                      ? `${dynamicCounts[series.examCode]} Official Shifts`
+                      : series.testCount}
                   </div>
                 </div>
 

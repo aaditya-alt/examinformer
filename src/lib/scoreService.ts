@@ -587,9 +587,32 @@ export async function pushAnswerKeyToMockTest(
     generateAISolutions?: boolean;
   }
 ): Promise<{ testId: string; sectionalTestIds?: string[]; message: string }> {
-  const sub = localSubmissionsCache.get(submissionId);
-  if (!sub) {
-    throw new Error(`Submission ${submissionId} not found.`);
+  let sub = localSubmissionsCache.get(submissionId);
+  const client = supabaseAdmin || supabase;
+
+  // If not found in server memory, query Supabase answer_key_submissions table
+  if (!sub && isSupabaseConfigured && client) {
+    try {
+      const { data: dbSub } = await client
+        .from('answer_key_submissions')
+        .select('*')
+        .eq('id', submissionId)
+        .maybeSingle();
+
+      if (dbSub) {
+        sub = {
+          id: dbSub.id,
+          metrics: dbSub.metrics || {},
+          parsed: dbSub.parsed || {}
+        };
+      }
+    } catch (e) {
+      console.warn('Could not load submission from Supabase:', e);
+    }
+  }
+
+  if (!sub || !sub.parsed || !sub.parsed.sections) {
+    throw new Error(`Submission ${submissionId} not found in cache or database.`);
   }
 
   const isSSC = sub.parsed.meta.examFamily === 'ssc';
@@ -660,9 +683,9 @@ export async function pushAnswerKeyToMockTest(
   sub.pushedToTestId = testId;
 
   // Sync main test to Supabase
-  if (isSupabaseConfigured && supabase) {
+  if (isSupabaseConfigured && client) {
     try {
-      await supabase.from('tests').upsert({
+      await client.from('tests').upsert({
         id: testId,
         exam_code: newCBTTest.examCode,
         title: newCBTTest.title,
@@ -676,7 +699,7 @@ export async function pushAnswerKeyToMockTest(
       const questionInserts = newCBTTest.sections.flatMap(s => s.questions.map(q => ({
         id: `${testId}_q${q.qno}`,
         test_id: testId,
-        section_id: s.name,
+        section_id: null,
         question_number: q.qno,
         question_text_en: q.questionText || '',
         question_text_hi: (q as any).questionTextHi || q.questionText || '',
@@ -689,8 +712,13 @@ export async function pushAnswerKeyToMockTest(
 
       for (let b = 0; b < questionInserts.length; b += 50) {
         const batch = questionInserts.slice(b, b + 50);
-        await supabase.from('questions').upsert(batch);
+        await client.from('questions').upsert(batch);
       }
+
+      await client
+        .from('answer_key_submissions')
+        .update({ is_pushed: true, pushed_test_id: testId })
+        .eq('id', submissionId);
     } catch (e: any) {
       console.warn('Supabase test sync warning:', e.message);
     }
@@ -742,9 +770,9 @@ export async function pushAnswerKeyToMockTest(
       registerNewTest(sectionalTest);
       sectionalTestIds.push(secTestId);
 
-      if (isSupabaseConfigured && supabase) {
+      if (isSupabaseConfigured && client) {
         try {
-          await supabase.from('tests').upsert({
+          await client.from('tests').upsert({
             id: secTestId,
             exam_code: sectionalTest.examCode,
             title: sectionalTest.title,

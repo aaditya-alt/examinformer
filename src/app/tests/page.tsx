@@ -199,6 +199,47 @@ function getSeriesTopicCount(topicId: string, subject: string, seriesCode: strin
   return 45;
 }
 
+function getShiftSectionQCount(secName: string, examCode?: string, title?: string, actualCount?: number): number {
+  if (actualCount && actualCount > 0) return actualCount;
+  const c = (examCode || '').toLowerCase();
+  const t = (title || '').toLowerCase();
+  const n = (secName || '').toLowerCase();
+
+  // RRB NTPC UG (GA 40, Math 30, Reasoning 30)
+  if (c.includes('ntpc-ug') || t.includes('under graduate') || t.includes('ug') || t.includes('(ug)')) {
+    if (n.includes('awareness')) return 40;
+    if (n.includes('math')) return 30;
+    if (n.includes('reasoning') || n.includes('intelligence')) return 30;
+    return 30;
+  }
+  // RRB NTPC Graduate (100 Mixed)
+  if (c.includes('ntpc-grad') || t.includes('graduate') || c === 'rrb-ntpc') {
+    return 100;
+  }
+  // RRB ALP
+  if (c.includes('alp') || t.includes('alp')) {
+    if (n.includes('math')) return 20;
+    if (n.includes('reasoning')) return 25;
+    if (n.includes('science')) return 20;
+    return 10;
+  }
+  // SSC MTS
+  if (c.includes('mts') || t.includes('mts')) {
+    if (n.includes('numerical') || n.includes('reasoning')) return 20;
+    return 25;
+  }
+  // SSC Tier 2
+  if (c.includes('tier2') || c.includes('tier-2') || t.includes('tier 2') || t.includes('tier-2') || t.includes('mains')) {
+    const isChsl = c.includes('chsl') || t.includes('chsl');
+    if (n.includes('math') || n.includes('reasoning')) return 30;
+    if (n.includes('english')) return isChsl ? 40 : 45;
+    if (n.includes('awareness')) return isChsl ? 20 : 25;
+    if (n.includes('computer')) return isChsl ? 15 : 20;
+  }
+  // Standard SSC Tier 1
+  return 25;
+}
+
 function TestsExplorerContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -219,6 +260,9 @@ function TestsExplorerContent() {
   // Active Category Tab inside Series Detail View:
   // 'pyq_tier1' | 'pyst_tier1' (Sectional) | 'pyq_tier2' | 'pyst_tier2' | 'topic_practice'
   const [activeCategoryTab, setActiveCategoryTab] = useState<'pyq_tier1' | 'pyst_tier1' | 'pyq_tier2' | 'pyst_tier2' | 'topic_practice'>('pyq_tier1');
+
+  // Tier 2 Section Mode: 'combined' (Official Combined Modules) vs 'subject' (Subject-Wise)
+  const [tier2SectionMode, setTier2SectionMode] = useState<'combined' | 'subject'>('combined');
 
   // Year Filter Pill inside Series: 'all' or real years only
   const [selectedYear, setSelectedYear] = useState<string>('all');
@@ -538,25 +582,16 @@ function TestsExplorerContent() {
                     <ExamLogo type={series.logoType} size="sm" />
                   </div>
 
-                  <div className="flex-1 min-w-0 pr-6">
+                  <div className="flex-1 min-w-0">
                     <h3 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white leading-snug group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors line-clamp-2">
                       {series.name}
                     </h3>
                     <div className="mt-1 text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                      {series.badge}
+                      {allTests.filter(t => (t.examCode || '').toLowerCase().includes(series.examCode)).length > 0
+                        ? `${allTests.filter(t => (t.examCode || '').toLowerCase().includes(series.examCode)).length} Official Shift Papers`
+                        : series.badge}
                     </div>
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                    className="absolute right-4 top-4 w-7 h-7 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center transition"
-                    aria-label="Bookmark"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </button>
                 </div>
 
                 <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800/80 text-[11px] text-slate-500">
@@ -811,7 +846,27 @@ function TestsExplorerContent() {
             {/* ── SUB-TAB 1 & 2: FULL SHIFTS LIST (TIER 1 or TIER 2) ── */}
             {(activeCategoryTab === 'pyq_tier1' || activeCategoryTab === 'pyq_tier2') && (
               <div className="space-y-3.5">
-                {currentSeriesTests.length === 0 ? (
+                {loading ? (
+                  <div className="space-y-3.5">
+                    {[1, 2, 3, 4].map((i) => (
+                      <div
+                        key={i}
+                        className="p-5 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200/90 dark:border-slate-800 shadow-2xs animate-pulse flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                      >
+                        <div className="space-y-2.5 flex-1 w-full">
+                          <div className="h-5 bg-slate-200 dark:bg-slate-800 rounded-md w-3/4"></div>
+                          <div className="flex items-center gap-3">
+                            <div className="h-3.5 bg-slate-200 dark:bg-slate-800 rounded w-16"></div>
+                            <div className="h-3.5 bg-slate-200 dark:bg-slate-800 rounded w-16"></div>
+                            <div className="h-3.5 bg-slate-200 dark:bg-slate-800 rounded w-20"></div>
+                          </div>
+                          <div className="h-3 bg-slate-100 dark:bg-slate-800/60 rounded w-1/2"></div>
+                        </div>
+                        <div className="h-10 bg-slate-200 dark:bg-slate-800 rounded-xl w-28 shrink-0"></div>
+                      </div>
+                    ))}
+                  </div>
+                ) : currentSeriesTests.length === 0 ? (
                   <div className="p-12 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
                     <FileText className="w-10 h-10 text-slate-400 mx-auto mb-2" />
                     <h4 className="font-bold text-sm text-slate-800 dark:text-slate-200">
@@ -930,113 +985,333 @@ function TestsExplorerContent() {
             {(activeCategoryTab === 'pyst_tier1' || activeCategoryTab === 'pyst_tier2') && (
               <div className="space-y-4">
                 {/* Tier 1 / Tier 2 Switcher for exams with Tier 2 support */}
-                {selectedSeries.tierSupport.includes('tier2') && (
-                  <div className="flex items-center gap-2 p-1 bg-slate-100 dark:bg-slate-900 rounded-2xl w-fit border border-slate-200 dark:border-slate-800">
-                    <button
-                      type="button"
-                      onClick={() => setActiveCategoryTab('pyst_tier1')}
-                      className={`px-4 py-1.5 rounded-xl font-black text-xs transition cursor-pointer ${
-                        activeCategoryTab === 'pyst_tier1'
-                          ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-xs'
-                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                      }`}
-                    >
-                      {isRailway ? 'CBT 1 Sectionals (+1, -0.33)' : 'Tier 1 Sectionals (+2, -0.5)'}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setActiveCategoryTab('pyst_tier2')}
-                      className={`px-4 py-1.5 rounded-xl font-black text-xs transition cursor-pointer ${
-                        activeCategoryTab === 'pyst_tier2'
-                          ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-xs'
-                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                      }`}
-                    >
-                      {isRailway ? 'CBT 2 Sectionals (+1, -0.33)' : 'Tier 2 Sectionals (+3, -1)'}
-                    </button>
-                  </div>
-                )}
+                <div className="flex flex-wrap items-center gap-3">
+                  {selectedSeries.tierSupport.includes('tier2') && (
+                    <div className="flex items-center gap-2 p-1 bg-slate-100 dark:bg-slate-900 rounded-2xl w-fit border border-slate-200 dark:border-slate-800">
+                      <button
+                        type="button"
+                        onClick={() => setActiveCategoryTab('pyst_tier1')}
+                        className={`px-4 py-1.5 rounded-xl font-black text-xs transition cursor-pointer ${
+                          activeCategoryTab === 'pyst_tier1'
+                            ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-xs'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                        }`}
+                      >
+                        {isRailway ? 'CBT 1 Sectionals (+1, -0.33)' : 'Tier 1 Sectionals (+2, -0.5)'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setActiveCategoryTab('pyst_tier2')}
+                        className={`px-4 py-1.5 rounded-xl font-black text-xs transition cursor-pointer ${
+                          activeCategoryTab === 'pyst_tier2'
+                            ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-xs'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                        }`}
+                      >
+                        {isRailway ? 'CBT 2 Sectionals (+1, -0.33)' : 'Tier 2 Sectionals (+3, -1)'}
+                      </button>
+                    </div>
+                  )}
 
-                <div className="p-3.5 rounded-2xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 text-xs text-blue-900 dark:text-blue-200">
-                  ⚡ <strong>{activeCategoryTab === 'pyst_tier2' ? (isRailway ? 'CBT 2 Sectional Speed Mocks (+1, -0.33):' : 'Tier 2 Mains Sectional Speed Mocks (+3, -1 Marking):') : (isRailway ? 'Official Railway Sectional Practice (+1, -0.33):' : 'Eduquity Sectional Speed Mocks (+2, -0.5):')}</strong> Organized shift-wise. Select any shift to drill individual sections!
+                  {/* Tier 2 SSC Section Mode Toggle: Combined Modules vs Subject-Wise */}
+                  {activeCategoryTab === 'pyst_tier2' && !isRailway && (
+                    <div className="flex items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-900 rounded-2xl w-fit border border-slate-200 dark:border-slate-800">
+                      <button
+                        type="button"
+                        onClick={() => setTier2SectionMode('combined')}
+                        className={`px-3 py-1.5 rounded-xl font-black text-xs transition cursor-pointer ${
+                          tier2SectionMode === 'combined'
+                            ? 'bg-blue-600 text-white shadow-xs'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                        }`}
+                      >
+                        Official Section-Wise (Sec 1, 2, 3)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setTier2SectionMode('subject')}
+                        className={`px-3 py-1.5 rounded-xl font-black text-xs transition cursor-pointer ${
+                          tier2SectionMode === 'subject'
+                            ? 'bg-blue-600 text-white shadow-xs'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                        }`}
+                      >
+                        Subject-Wise (5 Subjects)
+                      </button>
+                    </div>
+                  )}
                 </div>
 
-                {currentSeriesTests.map((shiftTest) => {
-                  const isTier2Test = (shiftTest.examCode || '').includes('tier2') || shiftTest.title.toLowerCase().includes('tier 2') || shiftTest.title.toLowerCase().includes('tier-2') || activeCategoryTab === 'pyst_tier2';
-                  const sectionsList = (shiftTest.sections && shiftTest.sections.length > 0)
-                    ? shiftTest.sections
-                    : getStandardSections(shiftTest.examCode, shiftTest.title);
-                  return (
-                    <div
-                      key={shiftTest.id}
-                      className="p-5 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-slate-800 shadow-2xs space-y-3.5"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="space-y-0.5">
-                          <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">
-                            {isTier2Test ? 'Tier 2 Authentic Shift Paper' : 'Authentic Shift Paper'}
-                          </span>
-                          <h4 className="font-black text-sm text-slate-900 dark:text-white">
-                            {shiftTest.title}
-                          </h4>
+                <div className="p-3.5 rounded-2xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 text-xs text-blue-900 dark:text-blue-200">
+                  ⚡ <strong>{activeCategoryTab === 'pyst_tier2' ? (isRailway ? 'CBT 2 Sectional Speed Mocks (+1, -0.33 Marking):' : 'Tier 2 Mains Sectional Speed Mocks (+3, -1 Marking):') : (isRailway ? 'Official Railway Sectional Practice (+1, -0.33 Marking):' : 'Eduquity Sectional Speed Mocks (+2, -0.5 Marking):')}</strong> Organized shift-wise. Select any shift to drill individual sections!
+                </div>
+
+                {loading ? (
+                  <div className="space-y-3.5">
+                    {[1, 2, 3].map((i) => (
+                      <div
+                        key={i}
+                        className="p-5 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-slate-800 shadow-2xs animate-pulse space-y-3.5"
+                      >
+                        <div className="h-5 bg-slate-200 dark:bg-slate-800 rounded-md w-1/3"></div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                          <div className="h-16 bg-slate-100 dark:bg-slate-800/60 rounded-xl"></div>
+                          <div className="h-16 bg-slate-100 dark:bg-slate-800/60 rounded-xl"></div>
                         </div>
-                        <span className="text-[11px] font-bold text-slate-500">
-                          {sectionsList.length || (isTier2Test ? 5 : (isRailway ? 3 : 4))} Sections
-                        </span>
                       </div>
+                    ))}
+                  </div>
+                ) : currentSeriesTests.length === 0 ? (
+                  <div className="p-12 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <FileText className="w-10 h-10 text-slate-400 mx-auto mb-2" />
+                    <h4 className="font-bold text-sm text-slate-800 dark:text-slate-200">
+                      No shift papers found
+                    </h4>
+                    <p className="text-xs text-slate-500 mt-1">
+                      Check your search query or switch year filter to "All Available".
+                    </p>
+                  </div>
+                ) : (
+                  currentSeriesTests.map((shiftTest) => {
+                    const isRailwayShift = isRailway || shiftTest.examFamily === 'rrb' || (shiftTest.examCode || '').includes('rrb') || shiftTest.title.toLowerCase().includes('rrb');
+                    const isTier2Test = !isRailwayShift && ((shiftTest.examCode || '').includes('tier2') || shiftTest.title.toLowerCase().includes('tier 2') || shiftTest.title.toLowerCase().includes('tier-2') || activeCategoryTab === 'pyst_tier2');
+                    const isGradMixed = isRailwayShift && (shiftTest.id.includes('grad') || shiftTest.title.toLowerCase().includes('graduate') || selectedSeries.examCode === 'rrb-ntpc-grad');
+                    const isChslTier2 = isTier2Test && ((shiftTest.examCode || '').includes('chsl') || shiftTest.title.toLowerCase().includes('chsl'));
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
-                        {sectionsList.map((sec, secIdx) => {
-                          const secTestId = `sec-${shiftTest.id}-sec-${secIdx}`;
-                          const isSecAttempted = !!attemptedMap[secTestId];
-                          const qCount = sec.questions?.length || (sec as any).questionCount || (isTier2Test ? (sec.name.includes('Math') || sec.name.includes('Reasoning') ? 30 : (sec.name.includes('English') ? 45 : (sec.name.includes('Awareness') ? 25 : 20))) : 25);
-                          const marksPerQ = isTier2Test ? 3 : (isRailway ? 1 : 2);
-                          const negMarks = isTier2Test ? 1 : (isRailway ? 0.33 : 0.5);
+                    // Tier 2 Combined Sections
+                    if (isTier2Test && tier2SectionMode === 'combined') {
+                      const combinedSections = [
+                        {
+                          id: `sec-${shiftTest.id}-combined-1`,
+                          name: 'Section I: Mathematical Abilities & Reasoning',
+                          qCount: 60,
+                          duration: '60 Mins',
+                          marks: 180,
+                          marking: '+3, -1'
+                        },
+                        {
+                          id: `sec-${shiftTest.id}-combined-2`,
+                          name: 'Section II: English Language & General Awareness',
+                          qCount: isChslTier2 ? 60 : 70,
+                          duration: '60 Mins',
+                          marks: isChslTier2 ? 180 : 210,
+                          marking: '+3, -1'
+                        },
+                        {
+                          id: `sec-${shiftTest.id}-combined-3`,
+                          name: 'Section III: Computer Knowledge Module (Qualifying)',
+                          qCount: isChslTier2 ? 15 : 20,
+                          duration: '15 Mins',
+                          marks: isChslTier2 ? 45 : 60,
+                          marking: '+3, -1 (Qualifying)'
+                        }
+                      ];
 
-                          return (
-                            <div
-                              key={secIdx}
-                              className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-3"
-                            >
-                              <div className="min-w-0">
-                                <div className="font-extrabold text-xs text-slate-900 dark:text-white truncate">
-                                  {sec.name}
-                                </div>
-                                <div className="text-[11px] text-slate-500 mt-0.5">
-                                  {qCount} Qs &bull; {qCount * marksPerQ} Marks &bull; <span className="text-emerald-600 font-bold">+{marksPerQ}, -{negMarks}</span>
-                                </div>
-                              </div>
-
-                              {isSecAttempted ? (
-                                <Link
-                                  href={`/tests/${secTestId}?mode=solution`}
-                                  className="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-extrabold text-[11px] shrink-0 hover:bg-emerald-700 transition"
-                                >
-                                  Solutions
-                                </Link>
-                              ) : pausedMap[secTestId] ? (
-                                <Link
-                                  href={`/tests/${secTestId}`}
-                                  className="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-[11px] shrink-0 transition flex items-center gap-1"
-                                >
-                                  <Play className="w-3 h-3 fill-current" />
-                                  <span>Resume</span>
-                                </Link>
-                              ) : (
-                                <Link
-                                  href={`/tests/${secTestId}`}
-                                  className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-[11px] shrink-0 transition"
-                                >
-                                  Start Section
-                                </Link>
-                              )}
+                      return (
+                        <div
+                          key={shiftTest.id}
+                          className="p-5 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-slate-800 shadow-2xs space-y-3.5"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="space-y-0.5">
+                              <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                                Tier 2 Official Combined Modules
+                              </span>
+                              <h4 className="font-black text-sm text-slate-900 dark:text-white">
+                                {shiftTest.title}
+                              </h4>
                             </div>
-                          );
-                        })}
+                            <span className="text-[11px] font-bold text-slate-500">
+                              3 Official Sections
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+                            {combinedSections.map((sec) => {
+                              const isSecAttempted = !!attemptedMap[sec.id];
+                              return (
+                                <div
+                                  key={sec.id}
+                                  className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between gap-3"
+                                >
+                                  <div>
+                                    <div className="font-extrabold text-xs text-slate-900 dark:text-white leading-snug">
+                                      {sec.name}
+                                    </div>
+                                    <div className="text-[11px] text-slate-500 mt-1">
+                                      {sec.qCount} Qs &bull; {sec.duration} &bull; {sec.marks} Marks &bull; <span className="text-emerald-600 font-bold">{sec.marking}</span>
+                                    </div>
+                                  </div>
+
+                                  {isSecAttempted ? (
+                                    <Link
+                                      href={`/tests/${sec.id}?mode=solution`}
+                                      className="w-full py-1.5 rounded-lg bg-emerald-600 text-white font-extrabold text-[11px] text-center hover:bg-emerald-700 transition"
+                                    >
+                                      Solutions
+                                    </Link>
+                                  ) : pausedMap[sec.id] ? (
+                                    <Link
+                                      href={`/tests/${sec.id}`}
+                                      className="w-full py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-[11px] text-center transition flex items-center justify-center gap-1"
+                                    >
+                                      <Play className="w-3 h-3 fill-current" />
+                                      <span>Resume</span>
+                                    </Link>
+                                  ) : (
+                                    <Link
+                                      href={`/tests/${sec.id}`}
+                                      className="w-full py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-[11px] text-center transition"
+                                    >
+                                      Start Section
+                                    </Link>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    // Railway NTPC Graduate Mixed Paper
+                    if (isGradMixed) {
+                      const secTestId = `sec-${shiftTest.id}-sec-0`;
+                      const isSecAttempted = !!attemptedMap[secTestId];
+                      return (
+                        <div
+                          key={shiftTest.id}
+                          className="p-5 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-slate-800 shadow-2xs space-y-3.5"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="space-y-0.5">
+                              <span className="text-[10px] font-black uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
+                                Official Mixed CBT Format
+                              </span>
+                              <h4 className="font-black text-sm text-slate-900 dark:text-white">
+                                {shiftTest.title}
+                              </h4>
+                            </div>
+                            <span className="text-[11px] font-bold text-slate-500">
+                              1 Composite Section (100 Qs Mixed)
+                            </span>
+                          </div>
+
+                          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-3">
+                            <div className="min-w-0">
+                              <div className="font-extrabold text-xs text-slate-900 dark:text-white truncate">
+                                General Section (100 Questions Mixed)
+                              </div>
+                              <div className="text-[11px] text-slate-500 mt-0.5">
+                                100 Qs &bull; 90 Mins &bull; 100 Marks &bull; <span className="text-emerald-600 font-bold">+1.00, -0.33</span> &bull; Full composite navigation
+                              </div>
+                            </div>
+
+                            {isSecAttempted ? (
+                              <Link
+                                href={`/tests/${secTestId}?mode=solution`}
+                                className="px-3.5 py-1.5 rounded-lg bg-emerald-600 text-white font-extrabold text-[11px] shrink-0 hover:bg-emerald-700 transition"
+                              >
+                                Solutions
+                              </Link>
+                            ) : pausedMap[secTestId] ? (
+                              <Link
+                                href={`/tests/${secTestId}`}
+                                className="px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-[11px] shrink-0 transition flex items-center gap-1"
+                              >
+                                <Play className="w-3 h-3 fill-current" />
+                                <span>Resume</span>
+                              </Link>
+                            ) : (
+                              <Link
+                                href={`/tests/${secTestId}`}
+                                className="px-3.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-700 text-white font-extrabold text-[11px] shrink-0 transition"
+                              >
+                                Start Paper
+                              </Link>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    // Standard Individual Sections (NTPC UG, SSC Tier 1, MTS, Tier 2 Subject-Wise)
+                    const sectionsList = (shiftTest.sections && shiftTest.sections.length > 0)
+                      ? shiftTest.sections
+                      : getStandardSections(shiftTest.examCode, shiftTest.title);
+
+                    return (
+                      <div
+                        key={shiftTest.id}
+                        className="p-5 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-slate-800 shadow-2xs space-y-3.5"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-0.5">
+                            <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                              {isTier2Test ? 'Tier 2 Authentic Shift Paper' : (isRailwayShift ? 'Railway Authentic Shift Paper' : 'Authentic Shift Paper')}
+                            </span>
+                            <h4 className="font-black text-sm text-slate-900 dark:text-white">
+                              {shiftTest.title}
+                            </h4>
+                          </div>
+                          <span className="text-[11px] font-bold text-slate-500">
+                            {sectionsList.length} Sections
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                          {sectionsList.map((sec, secIdx) => {
+                            const secTestId = `sec-${shiftTest.id}-sec-${secIdx}`;
+                            const isSecAttempted = !!attemptedMap[secTestId];
+                            const qCount = getShiftSectionQCount(sec.name, shiftTest.examCode, shiftTest.title, sec.questions?.length);
+                            const marksPerQ = isRailwayShift ? 1 : (isTier2Test ? 3 : 2);
+                            const negMarks = isRailwayShift ? 0.33 : (isTier2Test ? 1 : 0.5);
+
+                            return (
+                              <div
+                                key={secIdx}
+                                className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-3"
+                              >
+                                <div className="min-w-0">
+                                  <div className="font-extrabold text-xs text-slate-900 dark:text-white truncate">
+                                    {sec.name}
+                                  </div>
+                                  <div className="text-[11px] text-slate-500 mt-0.5">
+                                    {qCount} Qs &bull; {qCount * marksPerQ} Marks &bull; <span className="text-emerald-600 font-bold">+{marksPerQ}, -{negMarks}</span>
+                                  </div>
+                                </div>
+
+                                {isSecAttempted ? (
+                                  <Link
+                                    href={`/tests/${secTestId}?mode=solution`}
+                                    className="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-extrabold text-[11px] shrink-0 hover:bg-emerald-700 transition"
+                                  >
+                                    Solutions
+                                  </Link>
+                                ) : pausedMap[secTestId] ? (
+                                  <Link
+                                    href={`/tests/${secTestId}`}
+                                    className="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-[11px] shrink-0 transition flex items-center gap-1"
+                                  >
+                                    <Play className="w-3 h-3 fill-current" />
+                                    <span>Resume</span>
+                                  </Link>
+                                ) : (
+                                  <Link
+                                    href={`/tests/${secTestId}`}
+                                    className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-[11px] shrink-0 transition"
+                                  >
+                                    Start Section
+                                  </Link>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                )}
               </div>
             )}
 
@@ -1192,29 +1467,29 @@ function TestsExplorerContent() {
             {/* Select Number of Questions */}
             {(() => {
               const maxInSeries = getSeriesTopicCount(activeTopicModal.id, activeTopicModal.subject, selectedSeries.examCode);
-              const maxAllowed = Math.min(30, maxInSeries);
+              const maxAllowed = Math.max(5, maxInSeries);
               return (
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-xs font-bold">
                     <span className="text-slate-700 dark:text-slate-300">Number of Questions:</span>
                     <span className="text-blue-600 dark:text-blue-400 font-extrabold text-sm">
-                      {customQuestionCount} Qs (Available: {maxInSeries} Qs)
+                      {customQuestionCount} Qs (Available in Bank: {maxInSeries} Qs)
                     </span>
                   </div>
                   <input
                     type="range"
-                    min="5"
+                    min={Math.min(5, maxAllowed)}
                     max={maxAllowed}
-                    step="5"
+                    step={maxAllowed >= 30 ? 5 : 1}
                     value={Math.min(customQuestionCount, maxAllowed)}
                     onChange={(e) => setCustomQuestionCount(Number(e.target.value))}
                     className="w-full accent-blue-600 cursor-pointer"
                   />
                   <div className="flex justify-between text-[10px] font-bold text-slate-400">
                     <span>5 Qs</span>
-                    <span>10 Qs</span>
-                    <span>15 Qs</span>
-                    <span>20 Qs</span>
+                    <span>{Math.round(maxAllowed * 0.25)} Qs</span>
+                    <span>{Math.round(maxAllowed * 0.5)} Qs</span>
+                    <span>{Math.round(maxAllowed * 0.75)} Qs</span>
                     <span>{maxAllowed} Qs</span>
                   </div>
                 </div>
