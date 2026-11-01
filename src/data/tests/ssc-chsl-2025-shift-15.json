@@ -961,7 +961,7 @@
         {
           "id": "ssc-chsl-2025-shift-15_q32",
           "qno": 32,
-          "questionText": "In this type of questions, question is provided with substitutes for various mathematical symbols, followed by a question involving calculation of an expression or choosing the correct/incorrect equation. You have to put the real signs in the given equation and then solve the questions as required.\n\nIf '~' stands for '&divide;', '?' stands for '+', '%' stands for '-', '$' stands for '×', then find the value of: 4 % 13 ? 9 $14 = ?",
+          "questionText": "In this type of questions, question is provided with substitutes for various mathematical symbols, followed by a question involving calculation of an expression or choosing the correct/incorrect equation. You have to put the real signs in the given equation and then solve the questions as required.\n\nIf '~' stands for '&divide;', '?' stands for '+', '%' stands for '-', '$' stands for '×', then find the value of: 4 % 13 ? 9 14 = ?",
           "questionTextHi": "इस प्रकार के प्रश्नों में, विभिन्न गणितीय प्रतीकों के प्रतिस्थापन दिए जाते हैं, जिसके बाद एक व्यंजक की गणना या सही/गलत समीकरण का चयन करने से संबंधित एक प्रश्न आता है। आपको दिए गए समीकरण में वास्तविक चिह्न लगाने होंगे और फिर आवश्यकतानुसार प्रश्नों को हल करना होगा।\n\nयदि '~' का अर्थ '&divide;', '?' का अर्थ '+', '%' का अर्थ '-', '$' का अर्थ 'x', तो 4 % 13 ? 9 $14 का मान ज्ञात कीजिए",
           "options": [
             {

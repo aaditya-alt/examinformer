@@ -9,8 +9,12 @@ import { AuthProvider } from '@/components/auth/AuthContext';
 import { AuthModal } from '@/components/auth/AuthModal';
 
 export const metadata: Metadata = {
-  title: `${BRANDING.name} — CBT Mocks, Answer Key Parser & Rank Calculator`,
-  description: 'Evaluate SSC & Railway answer keys with instant marks, All-India ranks, shift analysis, and practice real-time CBT mock tests.',
+  title: `${BRANDING.fullName} — Online Mock Test Platform & Answer Key Rank Calculator`,
+  description: 'Practice 100% genuine SSC & Railway CBT mock tests, calculate instant marks & All-India Shift Ranks from official answer key links.',
+  icons: {
+    icon: '/images/mockyoddha-logo.jpg',
+    apple: '/images/mockyoddha-logo.jpg'
+  }
 };
 
 export default function RootLayout({

@@ -41,12 +41,15 @@ function renderMathAndMarkdownToHtml(content: string): string {
   // Normalize tabs and excessive whitespace
   str = str.replace(/\t+/g, ' ');
   str = str.replace(/^[ \t]+$/gm, '');
-  str = str.replace(/(?:\r?\n[ \t]*){3,}/g, '\n\n');
+  str = str.replace(/(?:\r?\n[ \t]*){2,}/g, '\n\n');
   str = str
     .split('\n')
     .map((l) => l.trim())
     .join('\n');
-  str = str.replace(/\n{3,}/g, '\n\n').trim();
+  str = str.replace(/\n{2,}/g, '\n\n').trim();
+
+  // Strip stray unescaped short tokens like $s, $3, $2e when not in math formula
+  str = str.replace(/\$([a-zA-Z0-9]{1,4})(?![^$]*\$)/g, '$1');
 
   // Extract KaTeX mathematical formulas into placeholders
   const mathPlaceholders: string[] = [];
@@ -79,11 +82,12 @@ function renderMathAndMarkdownToHtml(content: string): string {
   str = str.replace(/^(\d+)\.\s+(.*)$/gm, '<div class="flex items-start gap-1.5 my-0.5"><span class="font-bold text-slate-500 shrink-0">$1.</span><span>$2</span></div>');
   str = str.replace(/[#*]/g, '');
 
-  // Convert raw newlines into <br /> cleanly without breaking adjacent block elements
+  // Convert newlines into single <br /> without huge gaps
   str = str.replace(/(<\/div>)\s*\n+/gi, '$1');
   str = str.replace(/\n+\s*(<div)/gi, '$1');
+  str = str.replace(/\n\n+/g, '<br />');
   str = str.replace(/\n/g, '<br />');
-  str = str.replace(/(<br\s*\/?>){3,}/gi, '<br /><br />');
+  str = str.replace(/(<br\s*\/?>){2,}/gi, '<br />');
 
   // Re-inject rendered KaTeX blocks
   for (let i = 0; i < mathPlaceholders.length; i++) {

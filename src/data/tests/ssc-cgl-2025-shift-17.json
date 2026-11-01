@@ -1046,7 +1046,7 @@
         {
           "id": "ssc-cgl-2025-shift-17_q31",
           "qno": 31,
-          "questionText": "$2e",
+          "questionText": "स्तंभ A में सूचीबद्ध राजवंशों का मिलान स्तंभ B में उल्लिखित उनके संबंधित संस्थापकों से करें:",
           "questionTextHi": "स्तंभ A में सूचीबद्ध राजवंशों का मिलान स्तंभ B में उल्लिखित उनके संबंधित संस्थापकों से करें:  \n\n \n\t \n\t\t \n\t\t\t  स्तम्भ A (वंश)  ** \n\t\t\t  स्तम्भ B: संस्थापक  ** \n\t\t \n\t \n\t \n\t\t \n\t\t\t  A. तोमरस**   \n\t\t\t  1. बहलुल लोदी**   \n\t\t \n\t\t \n\t\t\t  B. खिलजी राजवंश**   \n\t\t\t  2. अनंग पाला**   \n\t\t \n\t\t \n\t\t\t  C. सैय्यद राजवंश**   \n\t\t\t  3. जलालुद्दीन खिलजी**   \n\t\t \n\t\t \n\t\t\t  D. लोदी राजवंश**   \n\t\t\t  4. खिज़्र खान** (",
           "options": [
             {
@@ -2359,12 +2359,12 @@
             },
             {
               "id": 3,
-              "text": "The ratio of the perimeter of $\\triangle$ABE to the perimeter of $\\triangle$CDE.",
+              "text": "The ratio of the perimeter of $\\triangle$ABE to the perimeter of $\\triangleCDE.",
               "textHi": "त्रिभुज ABE के परिमाप और त्रिभुज CDE के परिमाप का अनुपात"
             },
             {
               "id": 4,
-              "text": "The ratio of the area of $\\triangle$ABC to the area of $\\triangle$BCD.",
+              "text": "The ratio of the area of $\\triangle$ABC to the area of $\\triangleBCD.",
               "textHi": "त्रिभुज ABC के क्षेत्रफल और त्रिभुज BCD के क्षेत्रफल का अनुपात"
             }
           ],

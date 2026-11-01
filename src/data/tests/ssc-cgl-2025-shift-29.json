@@ -700,7 +700,7 @@
         {
           "id": "ssc-cgl-2025-shift-29_q21",
           "qno": 21,
-          "questionText": "In this mathematical expression, the symbols have been replaced by code symbols. You are required to substitute each symbol with its actual arithmetic operator as per the given code :\n\nFind the value of the expression:\n\n3 * 4 # 2 @ 5\n \n\t \n\t\t \n\t\t\t Symbol  \n\t\t\t Actual Operator \n\t\t \n\t\t \n\t\t\t *  \n\t\t\t + (Addition) \n\t\t \n\t\t \n\t\t\t @  \n\t\t\t - (Subtraction) \n\t\t \n\t\t \n\t\t\t #  \n\t\t\t × (Multiplication) \n\t\t \n\t\t \n\t\t\t &amp; \n\t\t\t &divide; (Division)",
+          "questionText": "In this mathematical expression, the symbols have been replaced by code symbols. You are required to substitute each symbol with its actual arithmetic operator as per the given code :\n\nFind the value of the expression:\n\n3 * 4 # 2 @ 5\n\nSymbol  \n\t\t\t Actual Operator \n\n*  \n\t\t\t + (Addition) \n\n@  \n\t\t\t - (Subtraction) \n\n#  \n\t\t\t × (Multiplication) \n\n&amp; \n\t\t\t &divide; (Division)",
           "questionTextHi": "इस गणितीय व्यंजक में, प्रतीकों को कूट प्रतीकों से बदल दिया गया है। आपको दिए गए कूट के अनुसार प्रत्येक प्रतीक के स्थान पर उसका वास्तविक अंकगणितीय संकारक रखना है:\n\nव्यंजक का मान ज्ञात कीजिए:\n\n3 * 4 # 2 @ 5\n \n\t \n\t\t \n\t\t\t प्रतीक \n\t\t\t वास्तविक संकारक \n\t\t \n\t\t \n\t\t\t * \n\t\t\t + (जोड़) \n\t\t \n\t\t \n\t\t\t @ \n\t\t\t - (घटाव) \n\t\t \n\t\t \n\t\t\t # \n\t\t\t × (गुणन) \n\t\t \n\t\t \n\t\t\t &amp; \n\t\t\t &divide; (भाग)",
           "options": [
             {

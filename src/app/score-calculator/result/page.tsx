@@ -19,9 +19,15 @@ import {
   Check,
   TrendingUp,
   Percent,
-  Share2
+  Share2,
+  RotateCcw,
+  Flag,
+  BookOpen,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { ReportQuestionModal } from '@/components/ReportQuestionModal';
 
 function ScorecardContent() {
   const searchParams = useSearchParams();
@@ -30,6 +36,10 @@ function ScorecardContent() {
   const [data, setData] = useState<EvaluationResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState<'all' | 'correct' | 'wrong' | 'skipped' | 'bonus'>('all');
+  const [reattemptMode, setReattemptMode] = useState(false);
+  const [reattemptAnswers, setReattemptAnswers] = useState<Record<number, number>>({});
+  const [paletteExpanded, setPaletteExpanded] = useState(false);
+  const [reportTarget, setReportTarget] = useState<{ qno: number; text: string } | null>(null);
   const [pushingToTest, setPushingToTest] = useState(false);
   const [pushedTestInfo, setPushedTestInfo] = useState<{ testId: string; message: string } | null>(null);
 
@@ -211,7 +221,7 @@ function ScorecardContent() {
       <div className="space-y-3">
         {/* Title */}
         <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white text-center tracking-tight">
-          {meta.examTitle || (isSSC ? 'Graduate Level' : 'RRB NTPC')}: Answer Key and Analysis by ExamInformer
+          {meta.examTitle || (isSSC ? 'Graduate Level' : 'RRB NTPC')}: Answer Key and Analysis by MockYoddha
         </h1>
 
         {/* Card with Red Border */}
@@ -344,7 +354,7 @@ function ScorecardContent() {
               <span>Portal Rank &amp; Shift Analytics</span>
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Live ranking based on all candidates who have evaluated on ExamInformer / MockMatrix.
+              Live ranking based on all candidates who have evaluated on MockYoddha by ExamInformerNitesh.
             </p>
           </div>
           <span className="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 self-start sm:self-auto">
@@ -423,32 +433,121 @@ function ScorecardContent() {
               Detailed Question-by-Question Review
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Review every response with chosen option vs official commission answer key.
+              Review every response with chosen option vs official commission answer key, or test yourself with reattempt mode.
             </p>
           </div>
 
-          {/* Question Status Filter Chips */}
-          <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-bold no-print">
-            {[
-              { key: 'all', label: `All (${allQuestions.length})` },
-              { key: 'correct', label: `Correct (${summary.correct})` },
-              { key: 'wrong', label: `Wrong (${summary.wrong})` },
-              { key: 'skipped', label: `Not Answered (${summary.skipped})` },
-              { key: 'bonus', label: `Bonus (${summary.bonus})` }
-            ].map(f => (
-              <button
-                key={f.key}
-                onClick={() => setActiveFilter(f.key as any)}
-                className={`px-3 py-1.5 rounded-xl transition ${
-                  activeFilter === f.key
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
-              >
-                {f.label}
-              </button>
-            ))}
+          <div className="flex flex-wrap items-center gap-2 no-print">
+            {/* Reattempt Mode Toggle */}
+            <button
+              type="button"
+              onClick={() => setReattemptMode(!reattemptMode)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                reattemptMode
+                  ? 'bg-amber-500 text-white shadow-sm ring-2 ring-amber-300'
+                  : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
+              }`}
+              title="Practice this paper without seeing answers beforehand"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Reattempt Mode: {reattemptMode ? 'ON' : 'OFF'}</span>
+            </button>
+
+            {/* Question Status Filter Chips */}
+            <div className="flex flex-wrap items-center gap-1 p-1 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-bold">
+              {[
+                { key: 'all', label: `All (${allQuestions.length})` },
+                { key: 'correct', label: `Right (${summary.correct})` },
+                { key: 'wrong', label: `Wrong (${summary.wrong})` },
+                { key: 'skipped', label: `Blank (${summary.skipped})` }
+              ].map(f => (
+                <button
+                  key={f.key}
+                  onClick={() => setActiveFilter(f.key as any)}
+                  className={`px-2.5 py-1 rounded-xl transition ${
+                    activeFilter === f.key
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
           </div>
+        </div>
+
+        {/* Question Palette Quick Navigator */}
+        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3 no-print">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                Question Palette Navigator
+              </span>
+              <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                ({allQuestions.length} Questions)
+              </span>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setPaletteExpanded(!paletteExpanded)}
+              className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
+            >
+              <span>{paletteExpanded ? 'Hide Palette' : 'Show Palette'}</span>
+              {paletteExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+            </button>
+          </div>
+
+          {paletteExpanded && (
+            <div className="space-y-3 pt-1">
+              <div className="flex flex-wrap gap-1.5 max-h-48 overflow-y-auto pr-1">
+                {allQuestions.map(q => {
+                  let btnColor = 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300';
+                  if (reattemptMode) {
+                    if (reattemptAnswers[q.qno] !== undefined) {
+                      const userPick = reattemptAnswers[q.qno];
+                      const isCorrectPick = q.options.find(o => o.num === userPick)?.isCorrect;
+                      btnColor = isCorrectPick ? 'bg-emerald-600 text-white font-bold' : 'bg-rose-600 text-white font-bold';
+                    }
+                  } else {
+                    if (q.status === 'correct') btnColor = 'bg-emerald-600 text-white font-bold';
+                    else if (q.status === 'wrong') btnColor = 'bg-rose-600 text-white font-bold';
+                    else if (q.status === 'skipped') btnColor = 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300';
+                  }
+
+                  return (
+                    <button
+                      key={q.qno}
+                      type="button"
+                      onClick={() => {
+                        const el = document.getElementById(`qcard-${q.qno}`);
+                        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      }}
+                      className={`w-7 h-7 rounded-lg text-xs flex items-center justify-center transition cursor-pointer ${btnColor}`}
+                    >
+                      {q.qno}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="flex flex-wrap items-center gap-4 text-[11px] text-slate-500 pt-1 border-t border-slate-100 dark:border-slate-800">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-3 h-3 rounded bg-emerald-600 inline-block" />
+                  <span>Correct</span>
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-3 h-3 rounded bg-rose-600 inline-block" />
+                  <span>Incorrect</span>
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-3 h-3 rounded bg-slate-200 dark:bg-slate-700 inline-block" />
+                  <span>Not Answered</span>
+                </span>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Questions List */}
@@ -459,10 +558,14 @@ function ScorecardContent() {
             const isSkipped = q.status === 'skipped';
             const isBonus = q.status === 'bonus';
 
+            const userReattemptPick = reattemptAnswers[q.qno];
+            const hasReattempted = userReattemptPick !== undefined;
+
             return (
               <div
                 key={q.qno}
-                className="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4"
+                id={`qcard-${q.qno}`}
+                className="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 transition scroll-mt-24"
               >
                 {/* Header status bar */}
                 <div className="flex items-center justify-between">
@@ -475,30 +578,65 @@ function ScorecardContent() {
                     </span>
                   </div>
 
-                  <div>
-                    {isCorrect && (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 text-xs font-bold">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span>Correct (+{data.ruleUsed.marksPerCorrect})</span>
-                      </span>
+                  <div className="flex items-center gap-2">
+                    {/* Status Pill */}
+                    {reattemptMode ? (
+                      hasReattempted ? (
+                        q.options.find(o => o.num === userReattemptPick)?.isCorrect ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 text-xs font-bold">
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            <span>Correct Choice!</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/70 dark:text-rose-300 text-xs font-bold">
+                            <XCircle className="w-3.5 h-3.5" />
+                            <span>Incorrect Choice</span>
+                          </span>
+                        )
+                      ) : (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 dark:bg-amber-950/70 dark:text-amber-300 text-xs font-bold">
+                          <RotateCcw className="w-3 h-3 animate-spin" />
+                          <span>Click an option to practice</span>
+                        </span>
+                      )
+                    ) : (
+                      <>
+                        {isCorrect && (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 text-xs font-bold">
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            <span>Correct (+{data.ruleUsed.marksPerCorrect})</span>
+                          </span>
+                        )}
+                        {isWrong && (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/70 dark:text-rose-300 text-xs font-bold">
+                            <XCircle className="w-3.5 h-3.5" />
+                            <span>Wrong (-{Number(data.ruleUsed.negativePerWrong.toFixed(2))})</span>
+                          </span>
+                        )}
+                        {isSkipped && (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 text-xs font-bold">
+                            <HelpCircle className="w-3.5 h-3.5" />
+                            <span>Not Answered (0)</span>
+                          </span>
+                        )}
+                        {isBonus && (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950/70 dark:text-purple-300 text-xs font-bold">
+                            <span>Bonus / Dropped</span>
+                          </span>
+                        )}
+                      </>
                     )}
-                    {isWrong && (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/70 dark:text-rose-300 text-xs font-bold">
-                        <XCircle className="w-3.5 h-3.5" />
-                        <span>Wrong (-{Number(data.ruleUsed.negativePerWrong.toFixed(2))})</span>
-                      </span>
-                    )}
-                    {isSkipped && (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 text-xs font-bold">
-                        <HelpCircle className="w-3.5 h-3.5" />
-                        <span>Not Answered (0)</span>
-                      </span>
-                    )}
-                    {isBonus && (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950/70 dark:text-purple-300 text-xs font-bold">
-                        <span>Bonus / Dropped</span>
-                      </span>
-                    )}
+
+                    {/* Report Button */}
+                    <button
+                      type="button"
+                      onClick={() => setReportTarget({ qno: q.qno, text: q.questionText })}
+                      className="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-slate-400 hover:text-rose-600 transition flex items-center gap-1 text-[11px] font-bold cursor-pointer"
+                      title="Report an error in this question or options"
+                    >
+                      <Flag className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Report</span>
+                    </button>
                   </div>
                 </div>
 
@@ -528,16 +666,34 @@ function ScorecardContent() {
                     const isOfficialCorrect = opt.isCorrect;
 
                     let optionBorder = 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40 text-slate-700 dark:text-slate-300';
+                    let isReattemptPickedThis = hasReattempted && userReattemptPick === opt.num;
 
-                    if (isOfficialCorrect) {
-                      optionBorder = 'border-emerald-500 bg-emerald-50/70 dark:bg-emerald-950/40 text-emerald-950 dark:text-emerald-200 font-bold';
-                    } else if (isCandidateChoice && !isOfficialCorrect) {
-                      optionBorder = 'border-rose-500 bg-rose-50/70 dark:bg-rose-950/40 text-rose-950 dark:text-rose-200 font-bold';
+                    if (reattemptMode) {
+                      if (hasReattempted) {
+                        if (opt.isCorrect) {
+                          optionBorder = 'border-emerald-500 bg-emerald-50/70 dark:bg-emerald-950/40 text-emerald-950 dark:text-emerald-200 font-bold';
+                        } else if (isReattemptPickedThis) {
+                          optionBorder = 'border-rose-500 bg-rose-50/70 dark:bg-rose-950/40 text-rose-950 dark:text-rose-200 font-bold';
+                        }
+                      } else {
+                        optionBorder = 'border-slate-200 dark:border-slate-700 hover:border-blue-400 bg-white dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 cursor-pointer hover:bg-blue-50/30';
+                      }
+                    } else {
+                      if (isOfficialCorrect) {
+                        optionBorder = 'border-emerald-500 bg-emerald-50/70 dark:bg-emerald-950/40 text-emerald-950 dark:text-emerald-200 font-bold';
+                      } else if (isCandidateChoice && !isOfficialCorrect) {
+                        optionBorder = 'border-rose-500 bg-rose-50/70 dark:bg-rose-950/40 text-rose-950 dark:text-rose-200 font-bold';
+                      }
                     }
 
                     return (
                       <div
                         key={opt.num}
+                        onClick={() => {
+                          if (reattemptMode && !hasReattempted) {
+                            setReattemptAnswers(prev => ({ ...prev, [q.qno]: opt.num }));
+                          }
+                        }}
                         className={`p-3 rounded-xl border text-xs flex items-center justify-between gap-2 transition ${optionBorder}`}
                       >
                         <div className="flex items-center gap-2.5">
@@ -548,26 +704,77 @@ function ScorecardContent() {
                         </div>
 
                         <div className="flex items-center gap-1.5 flex-shrink-0">
-                          {isCandidateChoice && (
-                            <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200">
-                              Your Choice
-                            </span>
-                          )}
-                          {isOfficialCorrect && (
-                            <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-emerald-600 text-white">
-                              Official Key &check;
-                            </span>
+                          {reattemptMode ? (
+                            hasReattempted && (
+                              <>
+                                {isReattemptPickedThis && (
+                                  <span className={`text-[10px] uppercase font-bold px-1.5 py-0.5 rounded ${
+                                    opt.isCorrect ? 'bg-emerald-600 text-white' : 'bg-rose-600 text-white'
+                                  }`}>
+                                    {opt.isCorrect ? 'Your Pick &check;' : 'Your Pick ✕'}
+                                  </span>
+                                )}
+                                {opt.isCorrect && !isReattemptPickedThis && (
+                                  <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-emerald-600 text-white">
+                                    Correct Key &check;
+                                  </span>
+                                )}
+                              </>
+                            )
+                          ) : (
+                            <>
+                              {isCandidateChoice && (
+                                <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200">
+                                  Your Choice
+                                </span>
+                              )}
+                              {isOfficialCorrect && (
+                                <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-emerald-600 text-white">
+                                  Official Key &check;
+                                </span>
+                              )}
+                            </>
                           )}
                         </div>
                       </div>
                     );
                   })}
                 </div>
+
+                {/* Explanation Box */}
+                {(!reattemptMode || hasReattempted) && (
+                  <div className="mt-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800 dark:text-slate-200">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                      <span>Official Commission Key &amp; Step-by-Step Explanation</span>
+                    </div>
+                    <div className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                      <MathRenderer
+                        content={
+                          (q as any).explanation ||
+                          `The official correct option designated by the examination board is Option (${q.correctOption}). Candidates are evaluated strictly based on this key.`
+                        }
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
       </div>
+
+      {/* Report Question Modal */}
+      {reportTarget && (
+        <ReportQuestionModal
+          isOpen={!!reportTarget}
+          onClose={() => setReportTarget(null)}
+          testId={data.parsed.meta.examTitle || 'answer-key-evaluation'}
+          testTitle={data.parsed.meta.examTitle}
+          qno={reportTarget.qno}
+          questionText={reportTarget.text}
+        />
+      )}
     </div>
   );
 }

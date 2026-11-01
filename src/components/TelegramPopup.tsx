@@ -116,29 +116,38 @@ export function TelegramPopup() {
         </div>
 
         {/* CTA 3D Buttons */}
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           <button
             type="button"
             onClick={handleJoin}
-            className="w-full py-3.5 rounded-xl bg-[#0088cc] hover:bg-[#0077b5] text-white font-black text-sm flex items-center justify-center gap-2 btn-3d-primary cursor-pointer shadow-lg shadow-[#0088cc]/30"
+            className="w-full py-3 rounded-xl bg-[#0088cc] hover:bg-[#0077b5] text-white font-black text-sm flex items-center justify-center gap-2 btn-3d-primary cursor-pointer shadow-lg shadow-[#0088cc]/30"
           >
             <Send className="w-4 h-4 fill-current" />
             <span>Join Telegram Channel Now</span>
             <ArrowRight className="w-4 h-4" />
           </button>
 
+          <a
+            href={BRANDING.youtubeUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="w-full py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition"
+          >
+            <span>Subscribe on YouTube (ExamInformerNitesh)</span>
+          </a>
+
           {/* Cancel or Continue Button */}
           {canClose ? (
             <button
               type="button"
               onClick={handleDismiss}
-              className="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs transition cursor-pointer"
+              className="w-full py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs transition cursor-pointer"
             >
               Continue to Website &rarr;
             </button>
           ) : (
-            <div className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 py-1">
-              Cancel button will unlock in <strong className="text-slate-600 dark:text-slate-300">{secondsLeft}s</strong>...
+            <div className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 py-0.5">
+              Continue button will unlock in <strong className="text-slate-600 dark:text-slate-300">{secondsLeft}s</strong>...
             </div>
           )}
         </div>

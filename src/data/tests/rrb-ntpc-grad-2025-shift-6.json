@@ -1006,7 +1006,7 @@
         {
           "id": "rrb-ntpc-grad-2025-shift-6_q30",
           "qno": 30,
-          "questionText": "Calculate the median (rounded to two decimal places) from the following data:\n \n\t \n\t\t \n\t\t\t Marks \n\t\t\t 0 -10 \n\t\t\t 10 &ndash; 30 \n\t\t\t 30 - 60 \n\t\t\t 60 &ndash; 80 \n\t\t\t 80 - 90 \n\t\t \n\t\t \n\t\t\t Number of students \n\t\t\t 9 \n\t\t\t 19 \n\t\t\t 34 \n\t\t\t 12 \n\t\t\t 6 \n\t\t \n\t \n \n\nTotal frequency N = 80",
+          "questionText": "Calculate the median (rounded to two decimal places) from the following data:\n\nMarks \n\t\t\t 0 -10 \n\t\t\t 10 &ndash; 30 \n\t\t\t 30 - 60 \n\t\t\t 60 &ndash; 80 \n\t\t\t 80 - 90 \n\nNumber of students \n\t\t\t 9 \n\t\t\t 19 \n\t\t\t 34 \n\t\t\t 12 \n\t\t\t 6 \n\nTotal frequency N = 80",
           "questionTextHi": "निम्नलिखित आँकड़ों से माध्यिका (दो दशमलव स्थानों तक पूर्णांकित) की गणना करें:\n \n\t \n\t\t \n\t\t\t अंक \n\t\t\t 0 -10 \n\t\t\t 10 - 30 \n\t\t\t 30 - 60 \n\t\t\t 60 - 80 \n\t\t\t 80 - 90 \n\t\t \n\t\t \n\t\t\t छात्रों की संख्या \n\t\t\t 9 \n\t\t\t 19 \n\t\t\t 34 \n\t\t\t 12 \n\t\t\t 6 \n\t\t \n\t \n \n\nकुल आवृत्ति N = 80",
           "options": [
             {
@@ -1550,7 +1550,7 @@
         {
           "id": "rrb-ntpc-grad-2025-shift-6_q46",
           "qno": 46,
-          "questionText": "Find the mode of the following distribution.\n \n\t \n\t\t \n\t\t\t **Class interval** \n\t\t\t 10-15 \n\t\t\t 15-20 \n\t\t\t 20-25 \n\t\t\t 25-30 \n\t\t\t 30-35 \n\t\t\t 35-40 \n\t\t \n\t\t \n\t\t\t **Frequency** \n\t\t\t 30 \n\t\t\t 48 \n\t\t\t 72 \n\t\t\t 36 \n\t\t\t 24 \n\t\t\t 18",
+          "questionText": "Find the mode of the following distribution.\n\n**Class interval** \n\t\t\t 10-15 \n\t\t\t 15-20 \n\t\t\t 20-25 \n\t\t\t 25-30 \n\t\t\t 30-35 \n\t\t\t 35-40 \n\n**Frequency** \n\t\t\t 30 \n\t\t\t 48 \n\t\t\t 72 \n\t\t\t 36 \n\t\t\t 24 \n\t\t\t 18",
           "questionTextHi": "निम्नलिखित वितरण का बहुलक ज्ञात कीजिए।\n \n\t \n\t\t \n\t\t\t **वर्ग अंतराल** \n\t\t\t 10-15 \n\t\t\t 15-20 \n\t\t\t 20-25 \n\t\t\t 25-30 \n\t\t\t 30-35 \n\t\t\t 35-40 \n\t\t \n\t\t \n\t\t\t **बारंबारता** \n\t\t\t 30 \n\t\t\t 48 \n\t\t\t 72 \n\t\t\t 36 \n\t\t\t 24 \n\t\t\t 18",
           "options": [
             {

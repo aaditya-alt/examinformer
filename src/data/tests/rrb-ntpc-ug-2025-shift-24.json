@@ -360,27 +360,27 @@
         {
           "id": "rrb-ntpc-ug-2025-shift-24_q11",
           "qno": 11,
-          "questionText": "The price of a laptop was initially $1,200. During a sale, the price was first reduced by 20%, and then an additional discount of 15% was applied to the new price. What is the final price of the laptop?",
+          "questionText": "The price of a laptop was initially 1,200. During a sale, the price was first reduced by 20%, and then an additional discount of 15% was applied to the new price. What is the final price of the laptop?",
           "questionTextHi": "एक लैपटॉप का मूल्य प्रारंभ में $1,200 था। एक सेल के दौरान, मूल्य में पहले 20% की कमी की गई, और फिर नए मूल्य पर 15% की अतिरिक्त छूट दी गई। लैपटॉप का अंतिम मूल्य क्या है?",
           "options": [
             {
               "id": 1,
-              "text": "$780",
+              "text": "780",
               "textHi": "$780"
             },
             {
               "id": 2,
-              "text": "$816",
+              "text": "816",
               "textHi": "$816"
             },
             {
               "id": 3,
-              "text": "$799",
+              "text": "799",
               "textHi": "$799"
             },
             {
               "id": 4,
-              "text": "$899",
+              "text": "899",
               "textHi": "$899"
             }
           ],

@@ -20,7 +20,9 @@ import {
   ShieldCheck,
   User,
   LogIn,
-  AlertCircle
+  AlertCircle,
+  Play,
+  Pause
 } from 'lucide-react';
 
 interface AttemptRecord {
@@ -34,10 +36,22 @@ interface AttemptRecord {
   status?: string;
 }
 
+interface PausedTestRecord {
+  testId: string;
+  testTitle?: string;
+  savedAt: number;
+  overallSecondsRemaining: number;
+  activeSectionIdx: number;
+  activeQuestionIdx: number;
+  answeredCount: number;
+  storageKey: string;
+}
+
 export default function MyTestsDashboardPage() {
   const router = useRouter();
   const { user, openAuthModal } = useAuth();
   const [attempts, setAttempts] = useState<AttemptRecord[]>([]);
+  const [pausedTests, setPausedTests] = useState<PausedTestRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
@@ -48,6 +62,37 @@ export default function MyTestsDashboardPage() {
   const loadUserAttempts = async () => {
     setLoading(true);
     let list: AttemptRecord[] = [];
+    const pausedList: PausedTestRecord[] = [];
+
+    // 0. Check localStorage for paused sessions
+    if (typeof window !== 'undefined') {
+      try {
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && key.startsWith('cbt_paused_session_')) {
+            const raw = localStorage.getItem(key);
+            if (raw) {
+              const parsed = JSON.parse(raw);
+              if (parsed.testId) {
+                pausedList.push({
+                  testId: parsed.testId,
+                  testTitle: parsed.testTitle || parsed.testId.toUpperCase().replace(/-/g, ' '),
+                  savedAt: parsed.savedAt || Date.now(),
+                  overallSecondsRemaining: parsed.overallSecondsRemaining || 0,
+                  activeSectionIdx: parsed.activeSectionIdx || 0,
+                  activeQuestionIdx: parsed.activeQuestionIdx || 0,
+                  answeredCount: parsed.userResponses ? Object.keys(parsed.userResponses).length : 0,
+                  storageKey: key
+                });
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Error reading paused sessions:', err);
+      }
+    }
+    setPausedTests(pausedList);
 
     // 1. Fetch from Supabase if user is logged in
     if (user && isSupabaseConfigured && supabase) {
@@ -95,6 +140,13 @@ export default function MyTestsDashboardPage() {
 
     setAttempts(list);
     setLoading(false);
+  };
+
+  const handleDiscardPausedTest = (key: string) => {
+    if (confirm('Discard this in-progress test? You will lose saved progress.')) {
+      localStorage.removeItem(key);
+      setPausedTests(prev => prev.filter(p => p.storageKey !== key));
+    }
   };
 
   const handleDeleteAttempt = async (attempt: AttemptRecord) => {
@@ -172,38 +224,112 @@ export default function MyTestsDashboardPage() {
           <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto" />
           <p className="text-xs text-slate-500 font-medium">Loading your test attempt records...</p>
         </div>
-      ) : attempts.length === 0 ? (
-        /* Empty State */
-        <div className="p-8 sm:p-14 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-5 card-3d max-w-xl mx-auto">
-          <div className="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 mx-auto flex items-center justify-center">
-            <BookOpen className="w-7 h-7" />
-          </div>
-          <div className="space-y-1.5">
-            <h3 className="font-extrabold text-lg text-slate-900 dark:text-white">
-              No Test Attempts Found
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm mx-auto">
-              You haven&apos;t completed any mock tests yet. Take an official 2026–2027 CBT mock test to see your score, live shift rank, and question derivations here.
-            </p>
-          </div>
-          <Link
-            href="/tests"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md transition active:scale-95"
-          >
-            <BookOpen className="w-4 h-4" />
-            <span>Explore Mock Tests</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
       ) : (
-        /* Attempts List */
-        <div className="space-y-4">
-          <div className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
-            <span>Completed Test Attempts ({attempts.length})</span>
-            <span>Sorted by Most Recent</span>
-          </div>
+        <div className="space-y-8">
+          {/* Paused & In-Progress Tests Section */}
+          {pausedTests.length > 0 && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="relative flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                  </span>
+                  <h2 className="text-sm font-extrabold text-amber-900 dark:text-amber-400 uppercase tracking-wider">
+                    Paused &amp; In-Progress Tests ({pausedTests.length})
+                  </h2>
+                </div>
+                <span className="text-xs text-slate-500 font-medium">Resume directly without losing progress</span>
+              </div>
 
-          <div className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {pausedTests.map((pt) => (
+                  <div
+                    key={pt.storageKey}
+                    className="p-5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/20 border-2 border-amber-300 dark:border-amber-700/60 shadow-sm flex flex-col justify-between gap-4 transition hover:border-amber-400"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded bg-amber-200 dark:bg-amber-900/60 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700">
+                          Paused Test
+                        </span>
+                        <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                          Paused on {new Date(pt.savedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                        </span>
+                      </div>
+
+                      <h3 className="font-extrabold text-base text-slate-900 dark:text-white">
+                        {pt.testTitle}
+                      </h3>
+
+                      <div className="flex flex-wrap items-center gap-4 text-xs font-semibold pt-1">
+                        <div className="flex items-center gap-1.5 text-amber-700 dark:text-amber-400">
+                          <Clock className="w-4 h-4" />
+                          <span>Time Left: <strong>{Math.floor(pt.overallSecondsRemaining / 60)}m {pt.overallSecondsRemaining % 60}s</strong></span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span>Answered: <strong>{pt.answeredCount} questions</strong></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 pt-3 border-t border-amber-200/80 dark:border-amber-800/60">
+                      <Link
+                        href={`/tests/${pt.testId}`}
+                        className="flex-1 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs flex items-center justify-center gap-2 shadow-sm transition active:scale-95 text-center"
+                      >
+                        <Play className="w-4 h-4 fill-current" />
+                        <span>Resume Test</span>
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => handleDiscardPausedTest(pt.storageKey)}
+                        className="p-2.5 rounded-xl border border-amber-300 dark:border-amber-800 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-slate-400 hover:text-rose-600 transition"
+                        title="Discard paused test"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Completed Tests List or Empty State */}
+          {attempts.length === 0 ? (
+            /* Empty State */
+            <div className="p-8 sm:p-14 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-5 card-3d max-w-xl mx-auto">
+              <div className="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 mx-auto flex items-center justify-center">
+                <BookOpen className="w-7 h-7" />
+              </div>
+              <div className="space-y-1.5">
+                <h3 className="font-extrabold text-lg text-slate-900 dark:text-white">
+                  No Completed Tests Yet
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm mx-auto">
+                  Take an official 2026 CBT mock test to see your score, live shift rank, and question derivations here.
+                </p>
+              </div>
+              <Link
+                href="/tests"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md transition active:scale-95"
+              >
+                <BookOpen className="w-4 h-4" />
+                <span>Explore Mock Tests</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          ) : (
+            /* Attempts List */
+            <div className="space-y-4">
+              <div className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
+                <span>Completed Test Attempts ({attempts.length})</span>
+                <span>Sorted by Most Recent</span>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
             {attempts.map((att) => (
               <div
                 key={att.id}
@@ -276,7 +402,9 @@ export default function MyTestsDashboardPage() {
                 </div>
               </div>
             ))}
-          </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

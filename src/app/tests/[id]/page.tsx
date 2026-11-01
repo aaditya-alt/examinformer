@@ -7,6 +7,7 @@ import Link from 'next/link';
 import type { CBTTest, CBTQuestion } from '@/lib/types/cbt';
 import { MathRenderer } from '@/components/MathRenderer';
 import { PreTestInstructions } from '@/components/PreTestInstructions';
+import { ReportQuestionModal } from '@/components/ReportQuestionModal';
 import { useAuth } from '@/components/auth/AuthContext';
 import { supabase } from '@/lib/supabase';
 import {
@@ -92,6 +93,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   const [submitModalOpen, setSubmitModalOpen] = useState(false);
   const [instructionsModalOpen, setInstructionsModalOpen] = useState(false);
   const [languageModalOpen, setLanguageModalOpen] = useState(false);
+  const [reportModalOpen, setReportModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [sectionAlertMsg, setSectionAlertMsg] = useState<string | null>(null);
   const [isQuestionBookmarked, setIsQuestionBookmarked] = useState(false);
@@ -1301,8 +1303,9 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                 </button>
                 <button
                   type="button"
-                  onClick={() => alert('Question feedback noted for the examination review committee.')}
+                  onClick={() => setReportModalOpen(true)}
                   className="px-2.5 py-0.5 rounded bg-[#dc2626] hover:bg-[#b91c1c] text-white font-bold text-xs shadow-xs transition active:scale-95 cursor-pointer"
+                  title="Report an error in this question or options"
                 >
                   Report
                 </button>
@@ -1963,6 +1966,16 @@ function EduquityCBTContent({ testId }: { testId: string }) {
           </div>
         </div>
       )}
+
+      {/* ── 8. REPORT QUESTION ERROR MODAL ── */}
+      <ReportQuestionModal
+        isOpen={reportModalOpen}
+        onClose={() => setReportModalOpen(false)}
+        testId={testId}
+        testTitle={test?.title}
+        qno={currentQuestion?.qno || activeQuestionIdx + 1}
+        questionText={currentQuestion?.questionText}
+      />
     </div>
   );
 }

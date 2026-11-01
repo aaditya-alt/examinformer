@@ -1031,7 +1031,7 @@
         {
           "id": "ssc-chsl-2025-shift-9_q34",
           "qno": 34,
-          "questionText": "In the following question, select the number which can be placed at the sign of question mark (?) from the given alternatives.\n\n \n\t \n\t\t \n\t\t\t Col 1 \n\t\t\t Col 2 \n\t\t\t Col 3 \n\t\t \n\t \n\t \n\t\t \n\t\t\t 4 \n\t\t\t 2 \n\t\t\t 7 \n\t\t \n\t\t \n\t\t\t 5 \n\t\t\t 6 \n\t\t\t 3 \n\t\t \n\t\t \n\t\t\t 3 \n\t\t\t 4 \n\t\t\t 2 \n\t\t \n\t\t \n\t\t\t 600 \n\t\t\t 480 \n\t\t\t ?",
+          "questionText": "In the following question, select the number which can be placed at the sign of question mark (?) from the given alternatives.\n\nCol 1 \n\t\t\t Col 2 \n\t\t\t Col 3 \n\n4 \n\t\t\t 2 \n\t\t\t 7 \n\n5 \n\t\t\t 6 \n\t\t\t 3 \n\n3 \n\t\t\t 4 \n\t\t\t 2 \n\n600 \n\t\t\t 480 \n\t\t\t ?",
           "questionTextHi": "निम्नलिखित प्रश्न में, दिए गए विकल्पों में से प्रश्न चिह्न (?) के स्थान पर कौन-सी संख्या रखी जा सकती है?\n\n \n\t \n\t\t \n\t\t\t स्तंभ 1 \n\t\t\t स्तंभ 2 \n\t\t\t स्तंभ 3 \n\t\t \n\t \n\t \n\t\t \n\t\t\t 4 \n\t\t\t 2 \n\t\t\t 7 \n\t\t \n\t\t \n\t\t\t 5 \n\t\t\t 6 \n\t\t\t 3 \n\t\t \n\t\t \n\t\t\t 3 \n\t\t\t 4 \n\t\t\t 2 \n\t\t \n\t\t \n\t\t\t 600 \n\t\t\t 480 \n\t\t\t ?",
           "options": [
             {
@@ -1211,22 +1211,22 @@
           "options": [
             {
               "id": 1,
-              "text": "",
+              "text": "Option (1)",
               "textHi": ""
             },
             {
               "id": 2,
-              "text": "",
+              "text": "Option (2)",
               "textHi": ""
             },
             {
               "id": 3,
-              "text": "",
+              "text": "Option (3)",
               "textHi": ""
             },
             {
               "id": 4,
-              "text": "",
+              "text": "Option (4)",
               "textHi": ""
             }
           ],
@@ -1246,22 +1246,22 @@
           "options": [
             {
               "id": 1,
-              "text": "",
+              "text": "Option (1)",
               "textHi": ""
             },
             {
               "id": 2,
-              "text": "",
+              "text": "Option (2)",
               "textHi": ""
             },
             {
               "id": 3,
-              "text": "",
+              "text": "Option (3)",
               "textHi": ""
             },
             {
               "id": 4,
-              "text": "",
+              "text": "Option (4)",
               "textHi": ""
             }
           ],
@@ -1281,22 +1281,22 @@
           "options": [
             {
               "id": 1,
-              "text": "",
+              "text": "Option (1)",
               "textHi": ""
             },
             {
               "id": 2,
-              "text": "",
+              "text": "Option (2)",
               "textHi": ""
             },
             {
               "id": 3,
-              "text": "",
+              "text": "Option (3)",
               "textHi": ""
             },
             {
               "id": 4,
-              "text": "",
+              "text": "Option (4)",
               "textHi": ""
             }
           ],
@@ -1316,22 +1316,22 @@
           "options": [
             {
               "id": 1,
-              "text": "",
+              "text": "Option (1)",
               "textHi": ""
             },
             {
               "id": 2,
-              "text": "",
+              "text": "Option (2)",
               "textHi": ""
             },
             {
               "id": 3,
-              "text": "",
+              "text": "Option (3)",
               "textHi": ""
             },
             {
               "id": 4,
-              "text": "",
+              "text": "Option (4)",
               "textHi": ""
             }
           ],
@@ -1351,22 +1351,22 @@
           "options": [
             {
               "id": 1,
-              "text": "",
+              "text": "Option (1)",
               "textHi": ""
             },
             {
               "id": 2,
-              "text": "",
+              "text": "Option (2)",
               "textHi": ""
             },
             {
               "id": 3,
-              "text": "",
+              "text": "Option (3)",
               "textHi": ""
             },
             {
               "id": 4,
-              "text": "",
+              "text": "Option (4)",
               "textHi": ""
             }
           ],
@@ -1386,22 +1386,22 @@
           "options": [
             {
               "id": 1,
-              "text": "",
+              "text": "Option (1)",
               "textHi": ""
             },
             {
               "id": 2,
-              "text": "",
+              "text": "Option (2)",
               "textHi": ""
             },
             {
               "id": 3,
-              "text": "",
+              "text": "Option (3)",
               "textHi": ""
             },
             {
               "id": 4,
-              "text": "",
+              "text": "Option (4)",
               "textHi": ""
             }
           ],

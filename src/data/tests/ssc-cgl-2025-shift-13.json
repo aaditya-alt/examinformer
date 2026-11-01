@@ -1046,7 +1046,7 @@
         {
           "id": "ssc-cgl-2025-shift-13_q31",
           "qno": 31,
-          "questionText": "Match each ruler listed in Column A with their respective period of reign given in Column B:\n \n\t \n\t\t \n\t\t\t Column A: Ruler \n\t\t\t Column B: Reign Period \n\t\t \n\t\t \n\t\t\t A. Qutbuddin Aybak \n\t\t\t 1. 1175-1192 \n\t\t \n\t\t \n\t\t\t B. Prithviraj Chauhan \n\t\t\t 2. 1206-1210 \n\t\t \n\t\t \n\t\t\t C. Alauddin Khalji \n\t\t\t 3. 1296-1316 \n\t\t \n\t\t \n\t\t\t D. Muhammad Tughluq \n\t\t\t 4. 1324-1351",
+          "questionText": "Match each ruler listed in Column A with their respective period of reign given in Column B:\n\nColumn A: Ruler \n\t\t\t Column B: Reign Period \n\nA. Qutbuddin Aybak \n\t\t\t 1. 1175-1192 \n\nB. Prithviraj Chauhan \n\t\t\t 2. 1206-1210 \n\nC. Alauddin Khalji \n\t\t\t 3. 1296-1316 \n\nD. Muhammad Tughluq \n\t\t\t 4. 1324-1351",
           "questionTextHi": "स्तंभ A में दिए गए प्रत्येक शासक का मिलान स्तंभ B में दी गई उनकी शासन अवधि से करें:\n \n\t \n\t\t \n\t\t\t स्तंभ A: शासक \n\t\t\t स्तंभ B: शासन काल \n\t\t \n\t\t \n\t\t\t A. कुतुबुद्दीन ऐबक \n\t\t\t 1. 1175-1192 \n\t\t \n\t\t \n\t\t\t B. पृथ्वीराज चौहान \n\t\t\t 2. 1206-1210 \n\t\t \n\t\t \n\t\t\t C. अलाउद्दीन खिलजी \n\t\t\t 3. 1296-1316 \n\t\t \n\t\t \n\t\t\t D. मुहम्मद तुगलक \n\t\t\t 4. 1324-1351",
           "options": [
             {
@@ -1970,7 +1970,7 @@
         {
           "id": "ssc-cgl-2025-shift-13_q58",
           "qno": 58,
-          "questionText": "Table - Weekly Fuel Usage (litres)\n \n\t \n\t\t \n\t\t\t Vehicle \n\t\t\t Mon \n\t\t\t Tue \n\t\t\t Wed \n\t\t\t Thu \n\t\t\t Fri \n\t\t \n\t\t \n\t\t\t Truck 1 \n\t\t\t 18  \n\t\t\t 20  \n\t\t\t 22  \n\t\t\t 21  \n\t\t\t 19  \n\t\t \n\t\t \n\t\t\t Truck 2 \n\t\t\t 25  \n\t\t\t 24 \n\t\t\t 26  \n\t\t\t 23  \n\t\t\t 24 \n\t\t \n\t \n \n\nQ: What is the overall average daily fuel usage for both trucks?",
+          "questionText": "Table - Weekly Fuel Usage (litres)\n\nVehicle \n\t\t\t Mon \n\t\t\t Tue \n\t\t\t Wed \n\t\t\t Thu \n\t\t\t Fri \n\nTruck 1 \n\t\t\t 18  \n\t\t\t 20  \n\t\t\t 22  \n\t\t\t 21  \n\t\t\t 19  \n\nTruck 2 \n\t\t\t 25  \n\t\t\t 24 \n\t\t\t 26  \n\t\t\t 23  \n\t\t\t 24 \n\nQ: What is the overall average daily fuel usage for both trucks?",
           "questionTextHi": "तालिका - साप्ताहिक ईंधन उपयोग (लीटर में)\n \n\t \n\t\t \n\t\t\t वाहन \n\t\t\t सोम \n\t\t\t मंगल \n\t\t\t बुध \n\t\t\t गुरु \n\t\t\t शुक्र \n\t\t \n\t\t \n\t\t\t ट्रक 1 \n\t\t\t 18 \n\t\t\t 20 \n\t\t\t 22 \n\t\t\t 21 \n\t\t\t 19 \n\t\t \n\t\t \n\t\t\t ट्रक 2 \n\t\t\t 25 \n\t\t\t 24 \n\t\t\t 26 \n\t\t\t 23 \n\t\t\t 24 \n\t\t \n\t \n \n\nप्रश्न: दोनों ट्रकों के लिए कुल औसत दैनिक ईंधन उपयोग कितना है?",
           "options": [
             {

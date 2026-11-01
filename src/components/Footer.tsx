@@ -11,34 +11,54 @@ export function Footer() {
           {/* Brand Info */}
           <div className="md:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white">
-                <Sparkles className="w-4 h-4" />
+              <img
+                src="/images/mockyoddha-logo.jpg"
+                alt="MockYoddha Logo"
+                className="w-10 h-10 rounded-xl object-cover shadow-sm"
+              />
+              <div className="flex flex-col">
+                <span className="font-black text-xl text-slate-900 dark:text-white leading-none">
+                  Mock<span className="text-red-600">Yoddha</span>
+                </span>
+                <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 mt-1 leading-none">
+                  by ExamInformerNitesh
+                </span>
               </div>
-              <span className="font-extrabold text-lg text-slate-900 dark:text-white">
-                {BRANDING.name}
-              </span>
             </div>
             <p className="text-sm text-slate-600 dark:text-slate-400 max-w-sm">
-              The premier open-architecture CBT examination and official answer key evaluation engine. Instant All-India Ranks, category percentiles, and 1-click test publishing.
+              The premier CBT examination platform and official answer key evaluation engine. Live mock tests, genuine previous papers, instant All-India Ranks, and authentic solutions.
             </p>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col gap-2.5">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <a
+                  href={BRANDING.telegramUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-2 text-xs font-bold px-3.5 py-2 rounded-xl bg-sky-50 text-sky-700 dark:bg-sky-950/60 dark:text-sky-300 border border-sky-200 dark:border-sky-800 hover:bg-sky-100 transition shadow-xs"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>Join Telegram Community</span>
+                </a>
+                <a
+                  href={BRANDING.whatsappUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-2 text-xs font-bold px-3.5 py-2 rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 transition shadow-xs"
+                >
+                  <MessageSquare className="w-3.5 h-3.5" />
+                  <span>WhatsApp Channel</span>
+                </a>
+              </div>
               <a
-                href={BRANDING.telegramUrl}
+                href={BRANDING.youtubeUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-lg bg-sky-50 text-sky-600 dark:bg-sky-950/60 dark:text-sky-300 border border-sky-200 dark:border-sky-800"
+                className="inline-flex items-center gap-2 text-xs font-bold px-3.5 py-2 rounded-xl bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-800 hover:bg-rose-100 transition shadow-xs self-start"
               >
-                <Send className="w-3.5 h-3.5" />
-                <span>Join Telegram Community</span>
-              </a>
-              <a
-                href={BRANDING.whatsappUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
-              >
-                <MessageSquare className="w-3.5 h-3.5" />
-                <span>WhatsApp Channel</span>
+                <svg className="w-4 h-4 text-red-600 fill-current shrink-0" viewBox="0 0 24 24">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+                <span>Subscribe on YouTube (ExamInformerNitesh)</span>
               </a>
             </div>
           </div>

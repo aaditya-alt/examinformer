@@ -836,7 +836,7 @@
         {
           "id": "rrb-alp-2025-shift-1_q25",
           "qno": 25,
-          "questionText": "$2e",
+          "questionText": "The following data shows the ages of the patients admitted in a hospital during a year. What is the modal age of the patients (correct to 2 decimal places)?\n \n\t \n\t\t \n\t\t\t Age (in years) \n\t\t\t 5 - 10 \n\t\t\t 10 - 15 \n\t\t\t 15 - 20 \n\t\t\t 20 - 25 \n\t\t\t 25 - 30 \n\t\t\t 30 - 35 \n\t\t\t 35 - 40 \n\t\t \n\t\t \n\t\t\t Number of Patients \n\t\t\t 4 \n\t\t\t 10 \n\t\t\t 8 \n\t\t\t 2 \n\t\t\t 12 \n\t\t\t 6 \n\t\t\t 3",
           "questionTextHi": "निम्नलिखित अक्षर, प्रतीक शृंखला को देखें और प्रश्न का उत्तर दें। गणना केवल बाएं से दाएं की जाएगी।\n\n(बाएं) X # $ L K M O &gt; ? A S + T % @ A P &amp; ? X Z R @ * + # I O ? &amp; @ E R $ Y U ? (दाएं)\n\nऐसे कितने प्रतीक हैं जिनमें से प्रत्येक के ठीक पहले एक अक्षर है और ठीक बाद में भी एक अक्षर है?30:T8cf,அசுதோஷ் புள்ளி $A$ இலிருந்து தொடங்கி மேற்கு நோக்கி 19 கி.மீ தூரம் வாகனத்தை ஓட்டிச் செல்கிறார். பின்னர் அவர் இடதுபுறம் திரும்பி 9 கி.மீ ஓட்டுகிறார், மீண்டும் இடதுபுறம் திரும்பி 26 கி.மீ ஓட்டுகிறார். அதன்பின் அவர் இடதுபுறம் திரும்பி 19 கி.மீ ஓட்டுகிறார். அவர் இறுதியாக ஒரு முறை இடதுபுறம் திரும்பி 7 கி.மீ தூரம் ஓட்டிச் சென்று புள்ளி p இல் நிறுத்துகிறார். அவர் மீண்டும் புள்ளிA ஐ அடைய எவ்வளவு தூரம் (மிகக் குறுகிய தூரம்) மற்றும் எந்த திசையை நோக்கி வாகனத்தை ஓட்ட வேண்டும்? (குறிப்பிடப்படாவிட்டால் அனைத்து திருப்பங்களும் 90- டிகிரி திருப்பங்கள் மட்டுமே).\n\n \n\n31:T574,The following data shows the ages of the patients admitted in a hospital during a year. What is the modal age of the patients (correct to 2 decimal places)?\n \n\t \n\t\t \n\t\t\t Age (in years) \n\t\t\t 5 - 10 \n\t\t\t 10 - 15 \n\t\t\t 15 - 20 \n\t\t\t 20 - 25 \n\t\t\t 25 - 30 \n\t\t\t 30 - 35 \n\t\t\t 35 - 40 \n\t\t \n\t\t \n\t\t\t Number of Patients \n\t\t\t 4 \n\t\t\t 10 \n\t\t\t 8 \n\t\t\t 2 \n\t\t\t 12 \n\t\t\t 6 \n\t\t\t 3",
           "options": [
             {
@@ -1278,7 +1278,7 @@
         {
           "id": "rrb-alp-2025-shift-1_q38",
           "qno": 38,
-          "questionText": "$31",
+          "questionText": "निम्नलिखित आँकड़े एक वर्ष के दौरान एक अस्पताल में भर्ती मरीजों की आयु दर्शाते हैं। मरीजों की बहुलक आयु क्या है (2 दशमलव स्थानों तक पूर्णांकित)?\n \n\t \n\t\t \n\t\t\t आयु (वर्षों में) \n\t\t\t 5 - 10 \n\t\t\t 10 - 15 \n\t\t\t 15 - 20 \n\t\t\t 20 - 25 \n\t\t\t 25 - 30 \n\t\t\t 30 - 35 \n\t\t\t 35 - 40 \n\t\t \n\t\t \n\t\t\t मरीजों की संख्या \n\t\t\t 4 \n\t\t\t 10 \n\t\t\t 8 \n\t\t\t 2 \n\t\t\t 12 \n\t\t\t 6 \n\t\t\t 3",
           "questionTextHi": "निम्नलिखित आँकड़े एक वर्ष के दौरान एक अस्पताल में भर्ती मरीजों की आयु दर्शाते हैं। मरीजों की बहुलक आयु क्या है (2 दशमलव स्थानों तक पूर्णांकित)?\n \n\t \n\t\t \n\t\t\t आयु (वर्षों में) \n\t\t\t 5 - 10 \n\t\t\t 10 - 15 \n\t\t\t 15 - 20 \n\t\t\t 20 - 25 \n\t\t\t 25 - 30 \n\t\t\t 30 - 35 \n\t\t\t 35 - 40 \n\t\t \n\t\t \n\t\t\t मरीजों की संख्या \n\t\t\t 4 \n\t\t\t 10 \n\t\t\t 8 \n\t\t\t 2 \n\t\t\t 12 \n\t\t\t 6 \n\t\t\t 3",
           "options": [
             {

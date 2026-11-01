@@ -1800,7 +1800,7 @@
         {
           "id": "ssc-cgl-2025-shift-7_q53",
           "qno": 53,
-          "questionText": "$2e",
+          "questionText": "दो अनुभाग A और B में अलग-अलग ऊँचाई वाले छात्रों की संख्या नीचे दी गई तालिका में दर्शाई गई है:",
           "questionTextHi": "दो अनुभाग A और B में अलग-अलग ऊँचाई वाले छात्रों की संख्या नीचे दी गई तालिका में दर्शाई गई है:\n\n \n\t \n\t\t \n\t\t\t ऊँचाई (मीटर में) \n\t\t\t खंड A \n\t\t\t खंड B \n\t\t \n\t \n\t \n\t\t \n\t\t\t 1.55 \n\t\t\t 5 \n\t\t\t 4 \n\t\t \n\t\t \n\t\t\t 1.60 \n\t\t\t 9 \n\t\t\t 8 \n\t\t \n\t\t \n\t\t\t 1.62 \n\t\t\t 11 \n\t\t\t 13 \n\t\t \n\t\t \n\t\t\t 1.65 \n\t\t\t 14 \n\t\t\t 10 \n\t\t \n\t\t \n\t\t\t 1.68 \n\t\t\t 6 \n\t\t\t 7 \n\t\t \n\t\t \n\t\t\t 1.71 \n\t\t\t 7 \n\t\t\t 5 \n\t\t \n\t\t \n\t\t\t 1.75 \n\t\t\t 4 \n\t\t\t 3 \n\t\t \n\t \n \n\nअनुभाग A में 1.65 मीटर से कम ऊँचाई वाले छात्रों की कुल संख्या और अनुभाग B में 1.65 मीटर से कम ऊँचाई वाले छात्रों की कुल संख्या का अनुपात क्या है?",
           "options": [
             {
@@ -1902,7 +1902,7 @@
         {
           "id": "ssc-cgl-2025-shift-7_q56",
           "qno": 56,
-          "questionText": "Table - Units Sold of 3 Products\n\n \n\t \n\t\t \n\t\t\t Product \n\t\t\t Jan \n\t\t\t Feb \n\t\t\t Mar \n\t\t \n\t \n\t \n\t\t \n\t\t\t A \n\t\t\t 100 \n\t\t\t 120 \n\t\t\t 110 \n\t\t \n\t\t \n\t\t\t B \n\t\t\t 90 \n\t\t\t 85 \n\t\t\t 95 \n\t\t \n\t\t \n\t\t\t C \n\t\t\t 150 \n\t\t\t 160 \n\t\t\t 155 \n\t\t \n\t \n \n \n\nWhich product had the highest average units sold?",
+          "questionText": "Table - Units Sold of 3 Products\n\nProduct \n\t\t\t Jan \n\t\t\t Feb \n\t\t\t Mar \n\nA \n\t\t\t 100 \n\t\t\t 120 \n\t\t\t 110 \n\nB \n\t\t\t 90 \n\t\t\t 85 \n\t\t\t 95 \n\nC \n\t\t\t 150 \n\t\t\t 160 \n\t\t\t 155 \n\nWhich product had the highest average units sold?",
           "questionTextHi": "तालिका - 3 उत्पादों की बेची गई इकाइयाँ\n\n \n\t \n\t\t \n\t\t\t उत्पाद \n\t\t\t जनवरी \n\t\t\t फ़रवरी \n\t\t\t मार्च \n\t\t \n\t \n\t \n\t\t \n\t\t\t A \n\t\t\t 100 \n\t\t\t 120 \n\t\t\t 110 \n\t\t \n\t\t \n\t\t\t B \n\t\t\t 90 \n\t\t\t 85 \n\t\t\t 95 \n\t\t \n\t\t \n\t\t\t C \n\t\t\t 150 \n\t\t\t 160 \n\t\t\t 155 \n\t\t \n\t \n \n\nकिस उत्पाद की औसत बिक्री सबसे अधिक रही है?",
           "options": [
             {

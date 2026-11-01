@@ -1970,7 +1970,7 @@
         {
           "id": "ssc-cgl-2025-shift-10_q58",
           "qno": 58,
-          "questionText": "Table - Monthly Sales (in ₹1000)\n\n \n\t \n\t\t \n\t\t\t Sales Person  \n\t\t\t Jan  \n\t\t\t Feb  \n\t\t\t March  \n\t\t\t April  \n\t\t \n\t\t \n\t\t\t P \n\t\t\t 50 \n\t\t\t 60 \n\t\t\t 70 \n\t\t\t 55 \n\t\t \n\t\t \n\t\t\t Q \n\t\t\t 65 \n\t\t\t 68 \n\t\t\t 62 \n\t\t\t 64 \n\t\t \n\t \n \n\nThe average monthly sales of Q?",
+          "questionText": "Table - Monthly Sales (in ₹1000)\n\nSales Person  \n\t\t\t Jan  \n\t\t\t Feb  \n\t\t\t March  \n\t\t\t April  \n\nP \n\t\t\t 50 \n\t\t\t 60 \n\t\t\t 70 \n\t\t\t 55 \n\nQ \n\t\t\t 65 \n\t\t\t 68 \n\t\t\t 62 \n\t\t\t 64 \n\nThe average monthly sales of Q?",
           "questionTextHi": "तालिका - मासिक बिक्री (₹1000 में)\n \n\t \n\t\t \n\t\t\t विक्रेता \n\t\t\t जनवरी \n\t\t\t फरवरी \n\t\t\t मार्च \n\t\t\t अप्रैल \n\t\t \n\t\t \n\t\t\t P \n\t\t\t 50 \n\t\t\t 60 \n\t\t\t 70 \n\t\t\t 55 \n\t\t \n\t\t \n\t\t\t Q \n\t\t\t 65 \n\t\t\t 68 \n\t\t\t 62 \n\t\t\t 64 \n\t\t \n\t \n \n\nQ की औसत मासिक बिक्री क्या है?",
           "options": [
             {

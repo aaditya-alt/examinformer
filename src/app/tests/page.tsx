@@ -24,7 +24,8 @@ import {
   Check,
   ChevronRight,
   Sliders,
-  ArrowLeft
+  ArrowLeft,
+  Play
 } from 'lucide-react';
 
 interface ExamSeriesItem {
@@ -163,6 +164,8 @@ function TestsExplorerContent() {
 
   // Attempted tests record for showing direct "View Solutions"
   const [attemptedMap, setAttemptedMap] = useState<Record<string, { score?: number; accuracy?: number }>>({});
+  // Paused tests record for showing "Resume Test"
+  const [pausedMap, setPausedMap] = useState<Record<string, { secondsRemaining: number; answeredCount: number }>>({});
 
   // Topic Drill Configuration Modal State
   const [activeTopicModal, setActiveTopicModal] = useState<TopicItem | null>(null);
@@ -230,6 +233,31 @@ function TestsExplorerContent() {
     }
 
     setAttemptedMap(map);
+
+    // Read paused sessions from localStorage
+    if (typeof window !== 'undefined') {
+      try {
+        const pMap: Record<string, { secondsRemaining: number; answeredCount: number }> = {};
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && k.startsWith('cbt_paused_session_')) {
+            const raw = localStorage.getItem(k);
+            if (raw) {
+              const parsed = JSON.parse(raw);
+              if (parsed.testId) {
+                pMap[parsed.testId] = {
+                  secondsRemaining: parsed.overallSecondsRemaining || 0,
+                  answeredCount: parsed.userResponses ? Object.keys(parsed.userResponses).length : 0
+                };
+              }
+            }
+          }
+        }
+        setPausedMap(pMap);
+      } catch (err) {
+        console.warn('Could not read localStorage for paused sessions:', err);
+      }
+    }
   }, [user]);
 
   // Navigate to dedicated series page
@@ -685,11 +713,17 @@ function TestsExplorerContent() {
                   currentSeriesTests.map((test) => {
                     const attemptedInfo = attemptedMap[test.id];
                     const isAttempted = !!attemptedInfo;
+                    const pausedInfo = pausedMap[test.id];
+                    const isPaused = !isAttempted && !!pausedInfo;
 
                     return (
                       <div
                         key={test.id}
-                        className="p-5 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200/90 dark:border-slate-800 shadow-2xs hover:border-slate-300 dark:hover:border-slate-700 transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                        className={`p-5 rounded-2xl bg-white dark:bg-[#12141a] border ${
+                          isPaused
+                            ? 'border-amber-400 dark:border-amber-600 shadow-amber-500/10'
+                            : 'border-slate-200/90 dark:border-slate-800'
+                        } shadow-2xs hover:border-slate-300 dark:hover:border-slate-700 transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4`}
                       >
                         <div className="space-y-1.5 flex-1 min-w-0">
                           <h4 className="font-extrabold text-sm text-slate-900 dark:text-white leading-snug">
@@ -714,7 +748,15 @@ function TestsExplorerContent() {
                           </div>
 
                           <div className="text-[11px] font-bold">
-                            {isAttempted ? (
+                            {isPaused ? (
+                              <span className="text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+                                <span className="relative flex h-2 w-2">
+                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                                  <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                                </span>
+                                <span>In Progress (Paused) &bull; {Math.floor(pausedInfo.secondsRemaining / 60)}m left &bull; {pausedInfo.answeredCount} answered</span>
+                              </span>
+                            ) : isAttempted ? (
                               <span className="text-emerald-600 dark:text-emerald-400">
                                 Completed &bull; Score: {attemptedInfo.score ?? '—'} / {test.totalMarks} &bull; Accuracy: {attemptedInfo.accuracy ?? 85}%
                               </span>
@@ -732,7 +774,15 @@ function TestsExplorerContent() {
                         </div>
 
                         <div className="flex items-center gap-2 self-stretch sm:self-center shrink-0">
-                          {isAttempted ? (
+                          {isPaused ? (
+                            <Link
+                              href={`/tests/${test.id}`}
+                              className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs tracking-wide shadow-sm transition text-center flex items-center justify-center gap-1.5"
+                            >
+                              <Play className="w-3.5 h-3.5 fill-current" />
+                              <span>Resume Test</span>
+                            </Link>
+                          ) : isAttempted ? (
                             <>
                               <Link
                                 href={`/tests/${test.id}?mode=solution`}
@@ -818,6 +868,14 @@ function TestsExplorerContent() {
                                   className="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-extrabold text-[11px] shrink-0 hover:bg-emerald-700 transition"
                                 >
                                   Solutions
+                                </Link>
+                              ) : pausedMap[secTestId] ? (
+                                <Link
+                                  href={`/tests/${secTestId}`}
+                                  className="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-[11px] shrink-0 transition flex items-center gap-1"
+                                >
+                                  <Play className="w-3 h-3 fill-current" />
+                                  <span>Resume</span>
                                 </Link>
                               ) : (
                                 <Link

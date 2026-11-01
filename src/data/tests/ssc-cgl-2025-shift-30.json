@@ -564,7 +564,7 @@
         {
           "id": "ssc-cgl-2025-shift-30_q17",
           "qno": 17,
-          "questionText": "Directions: These questions are based on the following information:\n\n'P@Q' means 'Q is the mother of P'.\n\n'P$Q' means 'Q is the husband of P'.\n\n'P#Q' means 'Q is the sister of P'.\n\n'P&amp;Q' means 'Q is the son of P'.\n\nIf 'A &amp; B @ C &amp; D # E' then how is A related with E?",
+          "questionText": "Directions: These questions are based on the following information:\n\n'P@Q' means 'Q is the mother of P'.\n\n'PQ' means 'Q is the husband of P'.\n\n'P#Q' means 'Q is the sister of P'.\n\n'P&amp;Q' means 'Q is the son of P'.\n\nIf 'A &amp; B @ C &amp; D # E' then how is A related with E?",
           "questionTextHi": "निर्देश: निम्नलिखित जानकारी के आधार पर प्रश्नों के उत्तर दीजिए।\n\n'P@Q' का अर्थ है 'Q, P की माता है'।\n\n'P$Q' का अर्थ है 'Q, P का पति है'।\n\n'P#Q' का अर्थ है 'Q, P की बहन है'।\n\n'P&amp;Q' का अर्थ है 'Q, P का पुत्र है'।\n\nयदि 'A &amp; B @ C &amp; D # E' है, तो A, E से किस प्रकार संबंधित है?",
           "options": [
             {

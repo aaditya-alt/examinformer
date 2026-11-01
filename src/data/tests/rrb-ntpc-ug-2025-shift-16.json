@@ -564,7 +564,7 @@
         {
           "id": "rrb-ntpc-ug-2025-shift-16_q17",
           "qno": 17,
-          "questionText": "The median of the given distribution is 28.5. Find the missing frequency x.\n\n \n\t \n\t\t \n\t\t\t Class \n\t\t\t 0-10 \n\t\t\t 10-20 \n\t\t\t 20-30 \n\t\t\t 30-40 \n\t\t\t 40-50 \n\t\t\t 50-60 \n\t\t \n\t\t \n\t\t\t Frequency \n\t\t\t 5 \n\t\t\t x \n\t\t\t 20 \n\t\t\t 15 \n\t\t\t 7 \n\t\t\t 5",
+          "questionText": "The median of the given distribution is 28.5. Find the missing frequency x.\n\nClass \n\t\t\t 0-10 \n\t\t\t 10-20 \n\t\t\t 20-30 \n\t\t\t 30-40 \n\t\t\t 40-50 \n\t\t\t 50-60 \n\nFrequency \n\t\t\t 5 \n\t\t\t x \n\t\t\t 20 \n\t\t\t 15 \n\t\t\t 7 \n\t\t\t 5",
           "questionTextHi": "दिए गए बंटन की माध्यिका 28.5 है। अज्ञात बारंबारता x ज्ञात कीजिए।     वर्ग   0-10   10-20   20-30   30-40   40-50   50-60       बारंबारता   5   x   20   15   7   5",
           "options": [
             {
