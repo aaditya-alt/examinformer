@@ -205,11 +205,32 @@ export async function PATCH(req: Request) {
       saveReportsToFile(reports);
     }
 
-    // 3. If an update to question text or explanation was provided, save to test file!
+    // 3. If an update to question text or explanation was provided, save to Supabase and test file!
     const activeTestId = target?.testId;
     const activeQno = target?.qno;
 
     if (updatedQuestion && activeTestId && activeQno) {
+      // 3A. Update in Supabase questions table
+      if (client) {
+        try {
+          const updatePayload: any = {};
+          if (updatedQuestion.questionText !== undefined) updatePayload.question_text_en = updatedQuestion.questionText;
+          if (updatedQuestion.explanation !== undefined) updatePayload.explanation_en = updatedQuestion.explanation;
+          if (updatedQuestion.correctOption !== undefined) updatePayload.correct_option_index = Number(updatedQuestion.correctOption);
+          if (updatedQuestion.questionImages !== undefined) updatePayload.question_images = updatedQuestion.questionImages;
+          if (updatedQuestion.options !== undefined) updatePayload.options = updatedQuestion.options;
+
+          await client
+            .from('questions')
+            .update(updatePayload)
+            .eq('test_id', activeTestId)
+            .eq('question_number', activeQno);
+        } catch (e: any) {
+          console.warn('Supabase question table update error:', e.message);
+        }
+      }
+
+      // 3B. Update locally
       try {
         const testFile = path.join(process.cwd(), 'src', 'data', 'tests', `${activeTestId}.json`);
         if (fs.existsSync(testFile)) {
@@ -221,6 +242,8 @@ export async function PATCH(req: Request) {
                 if (updatedQuestion.questionText) q.questionText = updatedQuestion.questionText;
                 if (updatedQuestion.explanation) q.explanation = updatedQuestion.explanation;
                 if (updatedQuestion.correctOption) q.correctOption = Number(updatedQuestion.correctOption);
+                if (updatedQuestion.questionImages) q.questionImages = updatedQuestion.questionImages;
+                if (updatedQuestion.options) q.options = updatedQuestion.options;
                 changed = true;
               }
             });

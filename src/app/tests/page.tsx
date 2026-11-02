@@ -11,6 +11,7 @@ import {
   TOPIC_PRACTICE_LIST,
   TopicItem
 } from '@/lib/types/taxonomy';
+import { getExamBlueprint } from '@/lib/examBlueprintRegistry';
 import {
   Search,
   Plus,
@@ -129,6 +130,13 @@ const MASTER_SERIES_CATALOG: ExamSeriesItem[] = [
 ];
 
 function extractTestExamYear(title: string, examCode?: string, testId?: string): string {
+  // 1. Look for exam notification cycle year first (e.g. "RRB NTPC (UG) 2025 CBT-1" -> 2025)
+  const examCycleMatch = title.match(/(?:SSC|RRB|NTPC|CGL|CHSL|MTS|ALP|Group\s*D)[^—\-]*(202\d)/i);
+  if (examCycleMatch) {
+    return examCycleMatch[1];
+  }
+
+  // 2. Delimiter match for shift date year
   if (title.includes('—') || title.includes(' - ')) {
     const delimiter = title.includes('—') ? '—' : ' - ';
     const parts = title.split(delimiter);
@@ -136,14 +144,15 @@ function extractTestExamYear(title: string, examCode?: string, testId?: string):
     const dateYear = datePart.match(/(202\d)/);
     if (dateYear) return dateYear[1];
   }
-  const matches = title.match(/(202\d)/g);
-  if (matches && matches.length > 0) {
-    return matches[matches.length - 1];
-  }
+
   const idMatch = (testId || '').match(/(202\d)/);
   if (idMatch) return idMatch[1];
   const codeMatch = (examCode || '').match(/(202\d)/);
   if (codeMatch) return codeMatch[1];
+  const matches = title.match(/(202\d)/g);
+  if (matches && matches.length > 0) {
+    return matches[0];
+  }
   return '';
 }
 
@@ -201,42 +210,11 @@ function getSeriesTopicCount(topicId: string, subject: string, seriesCode: strin
 
 function getShiftSectionQCount(secName: string, examCode?: string, title?: string, actualCount?: number): number {
   if (actualCount && actualCount > 0) return actualCount;
-  const c = (examCode || '').toLowerCase();
-  const t = (title || '').toLowerCase();
-  const n = (secName || '').toLowerCase();
-
-  // RRB NTPC UG (GA 40, Math 30, Reasoning 30)
-  if (c.includes('ntpc-ug') || t.includes('under graduate') || t.includes('ug') || t.includes('(ug)')) {
-    if (n.includes('awareness')) return 40;
-    if (n.includes('math')) return 30;
-    if (n.includes('reasoning') || n.includes('intelligence')) return 30;
-    return 30;
-  }
-  // RRB NTPC Graduate (100 Mixed)
-  if (c.includes('ntpc-grad') || t.includes('graduate') || c === 'rrb-ntpc') {
-    return 100;
-  }
-  // RRB ALP
-  if (c.includes('alp') || t.includes('alp')) {
-    if (n.includes('math')) return 20;
-    if (n.includes('reasoning')) return 25;
-    if (n.includes('science')) return 20;
-    return 10;
-  }
-  // SSC MTS
-  if (c.includes('mts') || t.includes('mts')) {
-    if (n.includes('numerical') || n.includes('reasoning')) return 20;
-    return 25;
-  }
-  // SSC Tier 2
-  if (c.includes('tier2') || c.includes('tier-2') || t.includes('tier 2') || t.includes('tier-2') || t.includes('mains')) {
-    const isChsl = c.includes('chsl') || t.includes('chsl');
-    if (n.includes('math') || n.includes('reasoning')) return 30;
-    if (n.includes('english')) return isChsl ? 40 : 45;
-    if (n.includes('awareness')) return isChsl ? 20 : 25;
-    if (n.includes('computer')) return isChsl ? 15 : 20;
-  }
-  // Standard SSC Tier 1
+  const bp = getExamBlueprint(examCode, title);
+  const n = (secName || '').toLowerCase().trim();
+  const found = bp.sections.find(s => s.name.toLowerCase().trim() === n || s.id.toLowerCase() === n);
+  if (found) return found.questionCount;
+  if (bp.sections.length === 1) return bp.sections[0].questionCount;
   return 25;
 }
 
@@ -266,6 +244,11 @@ function TestsExplorerContent() {
 
   // Year Filter Pill inside Series: 'all' or real years only
   const [selectedYear, setSelectedYear] = useState<string>('all');
+
+  // Whenever activeCategoryTab changes (e.g. Tier 1 to Tier 2 Sectional), reset year filter to 'all' so shifts are immediately visible
+  useEffect(() => {
+    setSelectedYear('all');
+  }, [activeCategoryTab]);
 
   // Search & Filter
   const [testSearchQuery, setTestSearchQuery] = useState('');
@@ -823,7 +806,7 @@ function TestsExplorerContent() {
                 </button>
 
                 {realAvailableYears.map((yr) => {
-                  const countForYear = baseCategoryTests.filter((t) => t.title.includes(yr)).length;
+                  const countForYear = baseCategoryTests.filter((t) => extractTestExamYear(t.title, t.examCode, t.id) === yr).length;
                   if (countForYear === 0) return null;
                   return (
                     <button

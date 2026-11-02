@@ -12,6 +12,20 @@ interface MathRendererProps {
 function decodeHtmlEntities(str: string): string {
   if (!str) return '';
   return str
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;/g, "'")
+    .replace(/&#39;/g, "'")
+    .replace(/&rsquo;/g, '’')
+    .replace(/&lsquo;/g, '‘')
+    .replace(/&rdquo;/g, '”')
+    .replace(/&ldquo;/g, '“')
+    .replace(/&hellip;/g, '…')
+    .replace(/&bull;/g, '•')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&sup2;/g, '²')
+    .replace(/&sup3;/g, '³')
     .replace(/&rArr;/g, '⇒')
     .replace(/&lArr;/g, '⇐')
     .replace(/&hArr;/g, '⇔')
@@ -48,12 +62,17 @@ function renderMathAndMarkdownToHtml(content: string): string {
     .join('\n');
   str = str.replace(/\n{2,}/g, '\n\n').trim();
 
+  // Clean up isolated consecutive single numbers / options stacked vertically (e.g. "2\n3\n4" or "(1)\n(2)\n(3)")
+  str = str.replace(/(?:^|\n)(\(?\d{1,2}\)?|\(?[a-dA-D]\)?)\s*\n+(\(?\d{1,2}\)?|\(?[a-dA-D]\)?)(?=\s*\n|$)/g, '$1, $2');
+  str = str.replace(/(?:^|\n)(\(?\d{1,2}\)?|\(?[a-dA-D]\)?)\s*\n+(\(?\d{1,2}\)?|\(?[a-dA-D]\)?)(?=\s*\n|$)/g, '$1, $2');
+
   // Strip stray unescaped short tokens like $s, $3, $2e when not in math formula
   str = str.replace(/\$([a-zA-Z0-9]{1,4})(?![^$]*\$)/g, '$1');
 
-  // Extract KaTeX mathematical formulas into placeholders
+  // Extract KaTeX mathematical formulas into placeholders:
+  // Supports \(...\), $$, and inline $...$
   const mathPlaceholders: string[] = [];
-  str = str.replace(/(\\\([\s\S]*?\\\)|\$\$[\s\S]*?\$\$)/g, (match) => {
+  str = str.replace(/(\\\([\s\S]*?\\\)|\$\$[\s\S]*?\$\$|\$([^\$\n]{1,120})\$)/g, (match, p1, p2) => {
     let rendered = match;
     try {
       if (match.startsWith('\\(') && match.endsWith('\\)')) {
@@ -62,6 +81,8 @@ function renderMathAndMarkdownToHtml(content: string): string {
       } else if (match.startsWith('$$') && match.endsWith('$$')) {
         const formula = match.slice(2, -2);
         rendered = `<div class="my-2">${katex.renderToString(formula, { displayMode: true, throwOnError: false })}</div>`;
+      } else if (match.startsWith('$') && match.endsWith('$') && p2) {
+        rendered = katex.renderToString(p2.trim(), { displayMode: false, throwOnError: false });
       }
     } catch {
       rendered = match;
@@ -70,6 +91,21 @@ function renderMathAndMarkdownToHtml(content: string): string {
     mathPlaceholders.push(rendered);
     return token;
   });
+
+  // Convert plain text squares/cubes into proper superscripts:
+  // 1. Metric units (cm2 -> cm², m2 -> m², etc.)
+  str = str.replace(/\b(cm|mm|m|km|ft|in|sec|s)2\b/gi, '$1<sup>2</sup>');
+  str = str.replace(/\b(cm|mm|m|km|ft|in)3\b/gi, '$1<sup>3</sup>');
+  // 2. Algebraic expressions like x^2, y^2, (a+b)^2 -> x<sup>2</sup>
+  str = str.replace(/\b([a-zA-Z\(\)])\^([0-9\+\-n]+)\b/g, '$1<sup>$2</sup>');
+  // 3. Mathematical variables written as x2, y2, a2, b2 before operators
+  str = str.replace(/\b([a-zA-Z])2(?=\s*[\+\-\*\/\=\,\)]|\s*$|\s+(?:is|equals|equal))/g, '$1<sup>2</sup>');
+  str = str.replace(/\b([a-zA-Z])3(?=\s*[\+\-\*\/\=\,\)]|\s*$|\s+(?:is|equals|equal))/g, '$1<sup>3</sup>');
+  str = str.replace(/(sin|cos|tan|cot|sec|cosec)2\b/gi, '$1<sup>2</sup>');
+  // 4. Unicode superscripts to HTML <sup>
+  str = str.replace(/²/g, '<sup>2</sup>');
+  str = str.replace(/³/g, '<sup>3</sup>');
+  str = str.replace(/⁴/g, '<sup>4</sup>');
 
   // Markdown styling transformations
   str = str.replace(/^####\s+(.*)$/gm, '<div class="font-bold text-xs uppercase tracking-wider text-sky-700 dark:text-sky-400 mt-2 mb-1">$1</div>');

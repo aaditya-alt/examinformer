@@ -65,7 +65,7 @@ const REAL_SERIES_CATALOG: HomeSeriesItem[] = [
     id: 'rrb-ntpc-ug-series',
     examCode: 'rrb-ntpc-ug',
     name: 'RRB NTPC Under Graduate (UG) 2025-26 (CBT 1 & 2)',
-    testCount: '65 Official Shifts (CBT 1 & CBT 2)',
+    testCount: '97 Official Shifts (CBT 1 & CBT 2)',
     category: 'rrb',
     logoType: 'rrb',
     tierSupport: 'CBT 1 & CBT 2'
@@ -74,7 +74,7 @@ const REAL_SERIES_CATALOG: HomeSeriesItem[] = [
     id: 'rrb-ntpc-grad-series',
     examCode: 'rrb-ntpc-grad',
     name: 'RRB NTPC Graduate 2025-26 (CBT 1 & 2)',
-    testCount: '30 Official Shifts (CBT 1 & CBT 2)',
+    testCount: '54 Official Shifts (CBT 1 & CBT 2)',
     category: 'rrb',
     logoType: 'rrb',
     tierSupport: 'CBT 1 & CBT 2'
@@ -122,8 +122,20 @@ export default function HomePage() {
           const counts: Record<string, number> = {};
           json.data.forEach((t: any) => {
             const code = (t.examCode || '').toLowerCase();
+            const id = (t.id || '').toLowerCase();
+            const title = (t.title || '').toLowerCase();
+            const isUg = id.includes('ug') || title.includes('under graduate') || title.includes(' ug') || title.includes('(ug)');
+
             REAL_SERIES_CATALOG.forEach((series) => {
-              if (code.includes(series.examCode)) {
+              let matches = false;
+              if (series.examCode === 'rrb-ntpc-grad') {
+                matches = !isUg && (code.includes('grad') || code.includes('rrb-ntpc') || id.includes('grad') || title.includes('graduate'));
+              } else if (series.examCode === 'rrb-ntpc-ug') {
+                matches = isUg && (code.includes('ntpc') || id.includes('ntpc') || title.includes('ntpc'));
+              } else {
+                matches = code.includes(series.examCode) || id.includes(series.examCode);
+              }
+              if (matches) {
                 counts[series.examCode] = (counts[series.examCode] || 0) + 1;
               }
             });

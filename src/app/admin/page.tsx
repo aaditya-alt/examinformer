@@ -32,8 +32,11 @@ import {
   Trash2,
   Plus,
   MessageSquare,
-  Star
+  Star,
+  Image as ImageIcon,
+  Upload
 } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 interface Candidate {
   id: string;
@@ -121,6 +124,9 @@ const TEST_SERIES_OPTIONS = [
   { id: 'ssc-cgl', name: 'SSC CGL' },
   { id: 'ssc-chsl', name: 'SSC CHSL' },
   { id: 'ssc-mts', name: 'SSC MTS & Havaldar' },
+  { id: 'ssc-cpo', name: 'SSC CPO (SI in Delhi Police & CAPFs)' },
+  { id: 'delhi-police', name: 'Delhi Police Constable' },
+  { id: 'ssc-gd', name: 'SSC GD Constable' },
 ];
 
 export default function AdminDashboardPage() {
@@ -180,7 +186,42 @@ export default function AdminDashboardPage() {
   const [editingReport, setEditingReport] = useState<QuestionReport | null>(null);
   const [editQuesText, setEditQuesText] = useState('');
   const [editExplanation, setEditExplanation] = useState('');
+  const [editQuestionImageUrl, setEditQuestionImageUrl] = useState('');
+  const [editOptionImages, setEditOptionImages] = useState<Record<string, string>>({});
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [savingEdit, setSavingEdit] = useState(false);
+
+  const handleUploadImage = async (file: File, target: 'question' | 'opt1' | 'opt2' | 'opt3' | 'opt4') => {
+    try {
+      if (!supabase) {
+        alert('Supabase client not initialized.');
+        return;
+      }
+      setUploadingImage(true);
+      const ext = file.name.split('.').pop() || 'png';
+      const fileName = `img_${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${ext}`;
+      const { data, error } = await supabase.storage.from('question-images').upload(fileName, file, {
+        cacheControl: '3600',
+        upsert: false
+      });
+      if (error) {
+        alert('Storage upload failed: ' + error.message);
+        return;
+      }
+      const { data: publicData } = supabase.storage.from('question-images').getPublicUrl(fileName);
+      const url = publicData.publicUrl;
+      if (target === 'question') {
+        setEditQuestionImageUrl(url);
+      } else {
+        const optNum = target.replace('opt', '');
+        setEditOptionImages(prev => ({ ...prev, [optNum]: url }));
+      }
+    } catch (err: any) {
+      alert('Upload error: ' + err.message);
+    } finally {
+      setUploadingImage(false);
+    }
+  };
 
   // Check admin session
   useEffect(() => {
@@ -290,21 +331,35 @@ export default function AdminDashboardPage() {
     if (!editingReport) return;
     setSavingEdit(true);
     try {
+      const updatedQuestionPayload: any = {
+        questionText: editQuesText,
+        explanation: editExplanation
+      };
+      if (editQuestionImageUrl) {
+        updatedQuestionPayload.questionImages = [editQuestionImageUrl];
+      }
+      if (Object.keys(editOptionImages).length > 0) {
+        updatedQuestionPayload.options = [1, 2, 3, 4].map(idx => ({
+          id: idx,
+          text: `Option ${idx}`,
+          imageUrl: editOptionImages[String(idx)] || undefined
+        }));
+      }
+
       const res = await fetch('/api/question-reports', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           reportId: editingReport.id,
           status: 'resolved',
-          updatedQuestion: {
-            questionText: editQuesText,
-            explanation: editExplanation
-          }
+          updatedQuestion: updatedQuestionPayload
         })
       });
       const json = await res.json();
       if (json.success) {
         setEditingReport(null);
+        setEditQuestionImageUrl('');
+        setEditOptionImages({});
         fetchDashboardData();
       } else {
         alert(json.error || 'Could not save question fix.');
@@ -1515,6 +1570,94 @@ export default function AdminDashboardPage() {
                   rows={3}
                   className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-medium"
                 />
+              </div>
+
+              {/* Question Image Upload (for Non-verbal/Diagrams) */}
+              <div className="space-y-1.5 p-3 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/40">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                    <ImageIcon className="w-3.5 h-3.5 text-blue-500" />
+                    <span>Question Diagram / Figure (Mirror/Water Image)</span>
+                  </span>
+                  {uploadingImage && <span className="text-[10px] text-blue-600 animate-pulse font-bold">Uploading to Supabase...</span>}
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={editQuestionImageUrl}
+                    onChange={(e) => setEditQuestionImageUrl(e.target.value)}
+                    placeholder="Enter image URL or choose file from device..."
+                    className="flex-1 p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-mono"
+                  />
+                  <label className="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 font-bold text-slate-700 dark:text-slate-200 text-xs flex items-center gap-1 cursor-pointer shrink-0">
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>Browse</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleUploadImage(file, 'question');
+                      }}
+                    />
+                  </label>
+                </div>
+                {editQuestionImageUrl && (
+                  <div className="mt-1 flex items-center gap-2">
+                    <img src={editQuestionImageUrl} alt="Preview" className="h-16 border rounded bg-white object-contain" />
+                    <button type="button" onClick={() => setEditQuestionImageUrl('')} className="text-red-500 hover:text-red-700 font-bold text-[10px]">Remove</button>
+                  </div>
+                )}
+              </div>
+
+              {/* Option Images Upload (A, B, C, D) */}
+              <div className="space-y-2 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/20">
+                <span className="font-bold text-slate-700 dark:text-slate-300 block">Option Figures (for Visual Options A, B, C, D)</span>
+                <div className="grid grid-cols-2 gap-2">
+                  {[1, 2, 3, 4].map((optIdx) => {
+                    const optKey = String(optIdx);
+                    const currentImg = editOptionImages[optKey] || '';
+                    return (
+                      <div key={optIdx} className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 space-y-1">
+                        <div className="flex items-center justify-between text-[11px] font-bold">
+                          <span>Option {optIdx} Figure</span>
+                          <label className="text-blue-600 hover:text-blue-700 cursor-pointer flex items-center gap-0.5 text-[10px]">
+                            <Upload className="w-3 h-3" />
+                            <span>Upload</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) handleUploadImage(file, `opt${optIdx}` as any);
+                              }}
+                            />
+                          </label>
+                        </div>
+                        {currentImg ? (
+                          <div className="flex items-center gap-1.5">
+                            <img src={currentImg} alt={`Option ${optIdx}`} className="h-10 border rounded bg-white object-contain" />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const copy = { ...editOptionImages };
+                                delete copy[optKey];
+                                setEditOptionImages(copy);
+                              }}
+                              className="text-red-500 text-[10px] font-bold"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="text-[10px] text-slate-400 italic">No image set</div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
               <div className="space-y-1">

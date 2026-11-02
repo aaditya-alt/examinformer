@@ -10,6 +10,7 @@ import {
   generateSectionalTest,
   generateSmartFullMock
 } from './questionBank';
+import { getExamBlueprint, getDynamicStandardSections } from './examBlueprintRegistry';
 
 import { testsStore, registerNewTest, deleteTest } from './testStore';
 
@@ -17,79 +18,7 @@ export * from './types/cbt';
 export { testsStore, registerNewTest, deleteTest };
 
 export function getStandardSections(examCode?: string, title?: string): CBTSection[] {
-  const code = (examCode || '').toLowerCase();
-  const t = (title || '').toLowerCase();
-  const isSSC = code.includes('ssc') || t.includes('ssc');
-  const isRailway = code.includes('rrb') || t.includes('rrb') || t.includes('railway') || t.includes('alp') || t.includes('group d') || t.includes('ntpc');
-  const isTier2 = code.includes('tier2') || code.includes('tier-2') || t.includes('tier 2') || t.includes('tier-2') || t.includes('tier ii');
-
-  if (isSSC && isTier2) {
-    const isCHSL = code.includes('chsl') || t.includes('chsl');
-    return [
-      { id: 'sec_1', name: 'Mathematical Abilities', questions: [] },
-      { id: 'sec_2', name: 'Reasoning and General Intelligence', questions: [] },
-      { id: 'sec_3', name: 'English Language and Comprehension', questions: [] },
-      { id: 'sec_4', name: 'General Awareness', questions: [] },
-      { id: 'sec_5', name: 'Computer Knowledge', questions: [] }
-    ];
-  }
-
-  if (isRailway) {
-    if (code.includes('alp') || t.includes('alp')) {
-      return [
-        { id: 'sec_1', name: 'Mathematics', questions: [] },
-        { id: 'sec_2', name: 'General Intelligence & Reasoning', questions: [] },
-        { id: 'sec_3', name: 'General Science', questions: [] },
-        { id: 'sec_4', name: 'General Awareness & Current Affairs', questions: [] }
-      ];
-    }
-    if (code.includes('group-d') || t.includes('group d') || t.includes('level-1')) {
-      return [
-        { id: 'sec_1', name: 'General Science', questions: [] },
-        { id: 'sec_2', name: 'Mathematics', questions: [] },
-        { id: 'sec_3', name: 'General Intelligence and Reasoning', questions: [] },
-        { id: 'sec_4', name: 'General Awareness and Current Affairs', questions: [] }
-      ];
-    }
-    // NTPC Graduate is Mixed Form only (all 100 questions in 1 composite section)
-    const isGrad = code.includes('grad') || t.includes('grad') || code === 'rrb-ntpc';
-    if (isGrad && !code.includes('ug') && !t.includes('ug') && !t.includes('under graduate')) {
-      return [
-        { id: 'sec_1', name: 'General Section (100 Questions Mixed)', questions: [] }
-      ];
-    }
-    // NTPC UG: 3 sections (GA 40 Qs, Maths 30 Qs, Reasoning 30 Qs)
-    return [
-      { id: 'sec_1', name: 'General Awareness', questions: [] },
-      { id: 'sec_2', name: 'Mathematics', questions: [] },
-      { id: 'sec_3', name: 'General Intelligence and Reasoning', questions: [] }
-    ];
-  }
-
-  if (isSSC) {
-    if (code.includes('mts') || t.includes('mts')) {
-      return [
-        { id: 'sec_1', name: 'Numerical and Mathematical Ability', questions: [] },
-        { id: 'sec_2', name: 'Reasoning Ability and Problem Solving', questions: [] },
-        { id: 'sec_3', name: 'General Awareness', questions: [] },
-        { id: 'sec_4', name: 'English Language and Comprehension', questions: [] }
-      ];
-    }
-    // CGL, CHSL, etc.
-    return [
-      { id: 'sec_1', name: 'General Intelligence & Reasoning', questions: [] },
-      { id: 'sec_2', name: 'General Awareness', questions: [] },
-      { id: 'sec_3', name: 'Quantitative Aptitude', questions: [] },
-      { id: 'sec_4', name: 'English Comprehension', questions: [] }
-    ];
-  }
-
-  return [
-    { id: 'sec_1', name: 'General Intelligence & Reasoning', questions: [] },
-    { id: 'sec_2', name: 'General Awareness', questions: [] },
-    { id: 'sec_3', name: 'Quantitative Aptitude', questions: [] },
-    { id: 'sec_4', name: 'English Comprehension', questions: [] }
-  ];
+  return getDynamicStandardSections(examCode, title);
 }
 
 export async function getAvailableTests(filterExam?: string): Promise<CBTTest[]> {
@@ -281,52 +210,19 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
       const parent = await getTestById(parentId);
       if (parent && parent.sections && parent.sections[secIdx]) {
         const targetSec = parent.sections[secIdx];
-        const isRailway = (parent.examFamily === 'rrb' || (parent.examCode || '').toLowerCase().includes('rrb') || parent.title.toLowerCase().includes('rrb') || parent.title.toLowerCase().includes('railway'));
-        const isTier2 = !isRailway && (
-          (parent.examCode || '').toLowerCase().includes('tier2') ||
-          (parent.examCode || '').toLowerCase().includes('tier-2') ||
-          parent.title.toLowerCase().includes('tier 2') ||
-          parent.title.toLowerCase().includes('tier-2') ||
-          parent.title.toLowerCase().includes('tier ii')
-        );
-        const isMts = !isRailway && ((parent.examCode || '').toLowerCase().includes('mts') || parent.title.toLowerCase().includes('mts'));
+        const bp = getExamBlueprint(parent.examCode, parent.title);
+        const bpSec = bp.sections.find(s => s.name.toLowerCase() === targetSec.name.toLowerCase()) || bp.sections[secIdx] || {
+          durationMinutes: 15,
+          positiveMarks: bp.positiveMarks,
+          negativeMarks: bp.negativeMarks,
+          questionCount: targetSec.questions?.length || 25
+        };
 
-        let duration = 15;
-        let marksPerQ = 2;
-        let negMarks = 0.5;
-
-        if (isRailway) {
-          marksPerQ = 1;
-          negMarks = Number((1 / 3).toFixed(2));
-          // NTPC UG GA: 40 mins/Qs, Math: 30 mins/Qs, Reasoning: 30 mins/Qs. Grad: 90 mins / 100 Qs.
-          if (targetSec.name.includes('Awareness')) duration = 35;
-          else if (targetSec.name.includes('Math')) duration = 30;
-          else if (targetSec.name.includes('Reasoning')) duration = 30;
-          else duration = 90;
-        } else if (isTier2) {
-          marksPerQ = 3;
-          negMarks = 1;
-          if (targetSec.name.includes('Computer')) duration = 15;
-          else if (targetSec.name.includes('General Awareness')) duration = 20;
-          else if (targetSec.name.includes('English')) duration = 40;
-          else duration = 30; // Math / Reasoning
-        } else if (isMts) {
-          marksPerQ = 3;
-          const isSession1 = secIdx < 2 || targetSec.name.toLowerCase().includes('numerical') || targetSec.name.toLowerCase().includes('reasoning');
-          negMarks = isSession1 ? 0 : 1; // Session 1 has NO negative marking!
-          duration = 25;
-        }
-
+        const duration = bpSec.durationMinutes || 15;
+        const marksPerQ = bpSec.positiveMarks ?? bp.positiveMarks ?? 2;
+        const negMarks = bpSec.negativeMarks ?? bp.negativeMarks ?? 0.5;
         const questionsList = targetSec.questions || [];
-        const count = questionsList.length || (
-          isRailway 
-            ? (targetSec.name.includes('Awareness') ? 40 : (targetSec.name.includes('General Section') ? 100 : 30))
-            : (isTier2 
-                ? (targetSec.name.includes('English') ? 45 : (targetSec.name.includes('Computer') ? 20 : (targetSec.name.includes('Awareness') ? 25 : 30)))
-                : (isMts 
-                    ? (targetSec.name.toLowerCase().includes('numerical') || targetSec.name.toLowerCase().includes('reasoning') ? 20 : 25)
-                    : 25))
-        );
+        const count = questionsList.length || bpSec.questionCount || 25;
 
         const singleSec: CBTTest = {
           id: cleanId,

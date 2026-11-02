@@ -746,6 +746,15 @@ export default function CBTResultPage({
                     <MathRenderer content={q.questionText} as="div" />
                   </div>
 
+                  {/* Question Images if any */}
+                  {q.questionImages && q.questionImages.length > 0 && (
+                    <div className="flex flex-wrap gap-2 my-2">
+                      {q.questionImages.map((imgUrl, i) => (
+                        <img key={i} src={imgUrl} alt={`Question Diagram ${i + 1}`} className="max-h-48 border rounded-lg object-contain bg-white" />
+                      ))}
+                    </div>
+                  )}
+
                   {/* Options */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
                     {(q.options || []).map((opt, optIdx) => {
@@ -773,6 +782,9 @@ export default function CBTResultPage({
                             </span>
                             <div className="flex-1">
                               <MathRenderer content={opt.text} as="div" />
+                              {opt.imageUrl && (
+                                <img src={opt.imageUrl} alt={`Option ${opt.id}`} className="mt-2 max-h-36 border rounded object-contain bg-white" />
+                              )}
                             </div>
                           </div>
                           {isRight && <span className="text-[10px] text-emerald-600 font-black shrink-0 ml-2">Official Key &check;</span>}

@@ -281,6 +281,15 @@ export default function SavedQuestionsPage() {
                     <MathRenderer content={textToRender} />
                   </div>
 
+                  {/* Question Images if any */}
+                  {item.questionImages && item.questionImages.length > 0 && (
+                    <div className="flex flex-wrap gap-2 my-2">
+                      {item.questionImages.map((imgUrl, i) => (
+                        <img key={i} src={imgUrl} alt={`Question Diagram ${i + 1}`} className="max-h-48 border rounded-lg object-contain bg-white" />
+                      ))}
+                    </div>
+                  )}
+
                   {/* Options */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
                     {item.options?.map((opt) => {
@@ -290,7 +299,7 @@ export default function SavedQuestionsPage() {
                       return (
                         <div
                           key={opt.id}
-                          className={`p-3 rounded-xl border text-xs font-semibold flex items-center gap-2.5 ${
+                          className={`p-3 rounded-xl border text-xs font-semibold flex items-start gap-2.5 ${
                             isCorrect
                               ? 'border-emerald-500 bg-emerald-50/70 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-bold'
                               : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 text-slate-700 dark:text-slate-300'
@@ -305,9 +314,12 @@ export default function SavedQuestionsPage() {
                           >
                             {opt.id}
                           </span>
-                          <span className="flex-1">
+                          <div className="flex-1">
                             <MathRenderer content={optText} />
-                          </span>
+                            {opt.imageUrl && (
+                              <img src={opt.imageUrl} alt={`Option ${opt.id}`} className="mt-2 max-h-36 border rounded object-contain bg-white" />
+                            )}
+                          </div>
                           {isCorrect && (
                             <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                           )}
