@@ -9,6 +9,82 @@ export const dynamic = 'force-dynamic';
 
 const REPORTS_FILE = path.join(process.cwd(), 'src', 'storage', 'question-reports.json');
 const REVIEWS_FILE = path.join(process.cwd(), 'src', 'storage', 'student-reviews.json');
+const SEL_POST_FILE = path.join(process.cwd(), 'src', 'data', 'ssc_selection_post_all_shifts.json');
+
+async function enrichQuestionData(testId: string, qno: number, client: any) {
+  // 1. Check Selection Post dataset
+  try {
+    if (fs.existsSync(SEL_POST_FILE)) {
+      const selData = JSON.parse(fs.readFileSync(SEL_POST_FILE, 'utf-8'));
+      if (selData[testId] && selData[testId].questions && selData[testId].questions[String(qno)]) {
+        const q = selData[testId].questions[String(qno)];
+        return {
+          questionTextEn: q.question_text_en || q.questionText || '',
+          questionTextHi: q.question_text_hi || q.questionTextHi || '',
+          options: q.options || [],
+          correctOptionIndex: q.correct_option_index ?? q.correctOption ?? 0,
+          explanationEn: q.explanation_en || q.explanation || '',
+          explanationHi: q.explanation_hi || q.explanationHi || '',
+          questionImages: q.question_images || q.questionImages || []
+        };
+      }
+    }
+  } catch (e) {
+    console.warn('Dashboard selection post lookup note:', e);
+  }
+
+  // 2. Check local test json
+  try {
+    const localTestFile = path.join(process.cwd(), 'src', 'data', 'tests', `${testId}.json`);
+    if (fs.existsSync(localTestFile)) {
+      const tData = JSON.parse(fs.readFileSync(localTestFile, 'utf-8'));
+      for (const sec of tData.sections || []) {
+        for (const q of sec.questions || []) {
+          if (q.qno === qno) {
+            return {
+              questionTextEn: q.questionText || '',
+              questionTextHi: q.questionTextHi || '',
+              options: q.options || [],
+              correctOptionIndex: q.correctOption !== undefined ? q.correctOption - 1 : 0,
+              explanationEn: q.explanation || '',
+              explanationHi: q.explanationHi || '',
+              questionImages: q.questionImages || []
+            };
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('Dashboard local test file lookup note:', e);
+  }
+
+  // 3. Check Supabase
+  if (client) {
+    try {
+      const { data, error } = await client
+        .from('questions')
+        .select('*')
+        .eq('test_id', testId)
+        .eq('question_number', qno)
+        .maybeSingle();
+
+      if (!error && data) {
+        return {
+          questionTextEn: data.question_text_en || data.question_text || '',
+          questionTextHi: data.question_text_hi || '',
+          options: Array.isArray(data.options) ? data.options : [],
+          correctOptionIndex: data.correct_option_index ?? 0,
+          explanationEn: data.explanation_en || data.explanation || '',
+          explanationHi: data.explanation_hi || '',
+          questionImages: data.question_images || []
+        };
+      }
+    } catch (e) {
+      console.warn('Dashboard Supabase question lookup note:', e);
+    }
+  }
+  return null;
+}
 
 export async function GET() {
   try {
@@ -230,6 +306,24 @@ export async function GET() {
 
     const questionReports = Array.from(reportsMap.values());
     questionReports.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+    // Enrich question reports with full question details (options, solutions, images, bilingual text)
+    await Promise.all(
+      questionReports.map(async (r: any) => {
+        try {
+          const details = await enrichQuestionData(r.testId, r.qno, client);
+          if (details) {
+            r.questionDetails = details;
+            if (!r.questionText && details.questionTextEn) {
+              r.questionText = details.questionTextEn;
+            }
+            if (details.questionTextHi) {
+              r.questionTextHi = details.questionTextHi;
+            }
+          }
+        } catch {}
+      })
+    );
 
     // 9. Student Reviews
     let studentReviews: any[] = [];

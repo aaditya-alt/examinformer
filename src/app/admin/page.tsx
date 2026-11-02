@@ -173,7 +173,7 @@ export default function AdminDashboardPage() {
     questionReports: QuestionReport[];
   } | null>(null);
 
-  const [activeTab, setActiveTab] = useState<'shifts' | 'difficulty' | 'users' | 'activity' | 'reports' | 'attempts' | 'reviews'>('shifts');
+  const [activeTab, setActiveTab] = useState<'shifts' | 'difficulty' | 'diagrams' | 'users' | 'activity' | 'reports' | 'attempts' | 'reviews'>('shifts');
   const [studentReviews, setStudentReviews] = useState<any[]>([]);
   const [editingReview, setEditingReview] = useState<any | null>(null);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
@@ -192,6 +192,15 @@ export default function AdminDashboardPage() {
   const [difficultyExamFilter, setDifficultyExamFilter] = useState('all');
   const [generatingReport, setGeneratingReport] = useState(false);
   const [difficultyMsg, setDifficultyMsg] = useState<string | null>(null);
+
+  // Diagram questions state
+  const [diagramQuestions, setDiagramQuestions] = useState<any[]>([]);
+  const [loadingDiagrams, setLoadingDiagrams] = useState(false);
+  const [diagramFilter, setDiagramFilter] = useState<'all' | 'missing' | 'has_image'>('all');
+  const [diagramSubject, setDiagramSubject] = useState<'all' | 'reasoning' | 'math'>('all');
+  const [diagramSearch, setDiagramSearch] = useState('');
+  const [diagramTestId, setDiagramTestId] = useState('');
+  const [diagramUploadLoading, setDiagramUploadLoading] = useState<string | null>(null);
 
   // Shift assignment state
   const [targetSeriesMap, setTargetSeriesMap] = useState<Record<string, string>>({});
@@ -300,6 +309,83 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const fetchDiagramQuestions = async () => {
+    setLoadingDiagrams(true);
+    try {
+      const params = new URLSearchParams();
+      if (diagramFilter !== 'all') params.set('filter', diagramFilter);
+      if (diagramSubject !== 'all') params.set('subject', diagramSubject);
+      if (diagramTestId) params.set('testId', diagramTestId);
+      const res = await fetch(`/api/admin/diagram-questions?${params.toString()}`);
+      const json = await res.json();
+      if (json.success) {
+        setDiagramQuestions(json.questions || []);
+      }
+    } catch (err) {
+      console.error('Failed to load diagram questions:', err);
+    } finally {
+      setLoadingDiagrams(false);
+    }
+  };
+
+  const handleUploadQuestionDiagram = async (q: any, file: File) => {
+    try {
+      if (!supabase) {
+        alert('Supabase client not initialized.');
+        return;
+      }
+      setDiagramUploadLoading(`${q.testId}_${q.qno}`);
+      const ext = file.name.split('.').pop() || 'png';
+      const fileName = `diag_${q.testId}_q${q.qno}_${Date.now()}.${ext}`;
+      const { data, error } = await supabase.storage.from('question-images').upload(fileName, file, {
+        upsert: true,
+        cacheControl: '3600'
+      });
+      if (error) {
+        alert('Upload failed: ' + error.message);
+        return;
+      }
+      const { data: publicData } = supabase.storage.from('question-images').getPublicUrl(fileName);
+      const url = publicData.publicUrl;
+
+      const res = await fetch('/api/admin/diagram-questions', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          testId: q.testId,
+          qno: q.qno,
+          questionImages: [url]
+        })
+      });
+      const json = await res.json();
+      if (json.success) {
+        fetchDiagramQuestions();
+        alert(`Figure uploaded successfully for Q.${q.qno}!`);
+      } else {
+        alert('Update error: ' + json.error);
+      }
+    } catch (e: any) {
+      alert('Upload error: ' + e.message);
+    } finally {
+      setDiagramUploadLoading(null);
+    }
+  };
+
+  const handleRefreshReports = async () => {
+    try {
+      const res = await fetch('/api/question-reports');
+      const json = await res.json();
+      if (json.success && data) {
+        setData({
+          ...data,
+          questionReports: json.reports || []
+        });
+      }
+    } catch (e) {
+      console.warn('Refresh reports note:', e);
+    }
+  };
+
   const handleConvertToMock = async (shift: UniqueShift) => {
     const submissionId = shift.representativeSubmission?.id;
     if (!submissionId) return;
@@ -389,6 +475,29 @@ export default function AdminDashboardPage() {
     setEditOptionImages(optImgs);
   };
 
+  const handleEditDiagramQuestion = (q: any) => {
+    const syntheticReport: QuestionReport = {
+      id: `diag_${q.testId}_${q.qno}`,
+      testId: q.testId,
+      testTitle: q.testTitle || q.testId,
+      qno: q.qno,
+      issueType: 'missing_options',
+      description: 'Admin visual / diagram update',
+      createdAt: new Date().toISOString(),
+      status: 'pending',
+      questionDetails: {
+        questionTextEn: q.questionTextEn,
+        questionTextHi: q.questionTextHi,
+        options: q.options,
+        correctOptionIndex: q.correctOptionIndex,
+        explanationEn: q.explanationEn,
+        explanationHi: q.explanationHi,
+        questionImages: q.questionImages
+      }
+    };
+    openFixQuestionModal(syntheticReport);
+  };
+
   const handleSaveQuestionFix = async () => {
     if (!editingReport) return;
     setSavingEdit(true);
@@ -425,6 +534,7 @@ export default function AdminDashboardPage() {
         setEditQuestionImageUrl('');
         setEditOptionImages({});
         fetchDashboardData();
+        fetchDiagramQuestions();
         alert('Question updated and marked resolved successfully!');
       } else {
         alert(json.error || 'Could not save question fix.');
@@ -603,6 +713,19 @@ export default function AdminDashboardPage() {
     c.rollNumber.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const filteredDiagramQuestions = diagramQuestions.filter((q) => {
+    if (!diagramSearch.trim()) return true;
+    const s = diagramSearch.toLowerCase();
+    return (
+      (q.testId && q.testId.toLowerCase().includes(s)) ||
+      (q.testTitle && q.testTitle.toLowerCase().includes(s)) ||
+      String(q.qno).includes(s) ||
+      (q.questionTextEn && q.questionTextEn.toLowerCase().includes(s)) ||
+      (q.questionTextHi && q.questionTextHi.toLowerCase().includes(s)) ||
+      (q.sectionName && q.sectionName.toLowerCase().includes(s))
+    );
+  });
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 p-4 sm:p-6 lg:p-8 space-y-6">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -718,6 +841,21 @@ export default function AdminDashboardPage() {
           >
             <BarChart3 className="w-4 h-4" />
             <span>Shift Difficulty &amp; Normalization ({data?.shiftDifficultyAnalytics?.length || 0})</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab('diagrams');
+              fetchDiagramQuestions();
+            }}
+            className={`pb-3 border-b-2 flex items-center gap-2 transition whitespace-nowrap cursor-pointer ${
+              activeTab === 'diagrams'
+                ? 'border-red-600 text-red-600 dark:text-red-400 font-extrabold'
+                : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <ImageIcon className="w-4 h-4 text-violet-500" />
+            <span>Visual / Diagram Questions ({diagramQuestions.length > 0 ? diagramQuestions.length : '42+'})</span>
           </button>
 
           <button
@@ -1142,6 +1280,251 @@ export default function AdminDashboardPage() {
           </div>
         )}
 
+        {/* ── TAB: VISUAL / DIAGRAM QUESTIONS MANAGER ── */}
+        {activeTab === 'diagrams' && (
+          <div className="space-y-4">
+            {/* Header & Controls */}
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="font-black text-base text-slate-900 dark:text-white flex items-center gap-2">
+                    <ImageIcon className="w-5 h-5 text-violet-500" />
+                    <span>Visual &amp; Diagram Questions Pipeline</span>
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Meticulously inspect and upload missing reasoning &amp; math figures, diagrams, and paper cuttings directly to Supabase storage.
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={fetchDiagramQuestions}
+                    disabled={loadingDiagrams}
+                    className="px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer"
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 ${loadingDiagrams ? 'animate-spin' : ''}`} />
+                    <span>Refresh</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Filters */}
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={diagramSearch}
+                    onChange={(e) => setDiagramSearch(e.target.value)}
+                    placeholder="Search question text or Q#..."
+                    className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-violet-500"
+                  />
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                </div>
+
+                <div>
+                  <select
+                    value={diagramFilter}
+                    onChange={(e) => {
+                      setDiagramFilter(e.target.value as any);
+                      setTimeout(fetchDiagramQuestions, 10);
+                    }}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-violet-500"
+                  >
+                    <option value="all">All Visual Questions</option>
+                    <option value="missing">Needs Diagram (Missing)</option>
+                    <option value="has_image">Has Diagram Attached</option>
+                  </select>
+                </div>
+
+                <div>
+                  <select
+                    value={diagramSubject}
+                    onChange={(e) => {
+                      setDiagramSubject(e.target.value as any);
+                      setTimeout(fetchDiagramQuestions, 10);
+                    }}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-violet-500"
+                  >
+                    <option value="all">All Subjects</option>
+                    <option value="reasoning">Reasoning &amp; Intelligence</option>
+                    <option value="math">Quantitative Aptitude</option>
+                  </select>
+                </div>
+
+                <div className="text-xs text-slate-500 font-semibold flex items-center justify-end">
+                  Showing {filteredDiagramQuestions.length} visual questions
+                </div>
+              </div>
+            </div>
+
+            {/* List */}
+            {loadingDiagrams ? (
+              <div className="p-12 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
+                <RefreshCw className="w-8 h-8 text-violet-500 animate-spin mx-auto mb-2" />
+                <h4 className="font-bold text-sm text-slate-700 dark:text-slate-300">Loading Visual Questions...</h4>
+              </div>
+            ) : filteredDiagramQuestions.length === 0 ? (
+              <div className="p-12 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
+                <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto mb-2" />
+                <h4 className="font-bold text-sm text-slate-700 dark:text-slate-300">No Questions Match Filter</h4>
+                <p className="text-xs text-slate-500 mt-1">Try switching filters or resetting search query.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-4">
+                {filteredDiagramQuestions.map((q) => {
+                  const hasImage = (q.questionImages && q.questionImages.length > 0) || (q.options && q.options.some((o: any) => o.imageUrl));
+                  const isUploading = diagramUploadLoading === `${q.testId}_${q.qno}`;
+
+                  return (
+                    <div
+                      key={`${q.testId}_${q.qno}`}
+                      className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-extrabold text-xs px-2.5 py-0.5 rounded-full bg-violet-100 text-violet-800 dark:bg-violet-950 dark:text-violet-300">
+                            Q.{q.qno}
+                          </span>
+                          <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                            {q.testTitle || q.testId}
+                          </span>
+                          <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                            {q.sectionName || 'Reasoning'}
+                          </span>
+                          {hasImage ? (
+                            <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 flex items-center gap-1">
+                              <CheckCircle2 className="w-3 h-3" /> Diagram Attached
+                            </span>
+                          ) : (
+                            <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 flex items-center gap-1">
+                              <AlertCircle className="w-3 h-3" /> Diagram Missing
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          {/* File input for one-click upload */}
+                          <label className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-xs ${
+                            isUploading
+                              ? 'bg-slate-300 text-slate-600 cursor-not-allowed'
+                              : 'bg-violet-600 hover:bg-violet-700 text-white'
+                          }`}>
+                            <Upload className={`w-3.5 h-3.5 ${isUploading ? 'animate-bounce' : ''}`} />
+                            <span>{isUploading ? 'Uploading...' : hasImage ? 'Replace Diagram' : 'Upload Diagram'}</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              disabled={isUploading}
+                              className="hidden"
+                              onChange={(e) => {
+                                const f = e.target.files?.[0];
+                                if (f) handleUploadQuestionDiagram(q, f);
+                              }}
+                            />
+                          </label>
+
+                          <button
+                            type="button"
+                            onClick={() => handleEditDiagramQuestion(q)}
+                            className="px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                            <span>Edit Text &amp; Solutions</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Attached Diagram Preview */}
+                      {q.questionImages && q.questionImages.length > 0 && (
+                        <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex items-center gap-4">
+                          <img
+                            src={q.questionImages[0]}
+                            alt={`Question ${q.qno} diagram`}
+                            className="h-28 max-w-xs object-contain rounded-lg border border-slate-200 dark:border-slate-700 bg-white"
+                          />
+                          <div className="text-xs space-y-1">
+                            <span className="font-bold text-slate-700 dark:text-slate-300 block">Current Diagram:</span>
+                            <a
+                              href={q.questionImages[0]}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-violet-600 hover:underline text-[11px] block truncate max-w-md"
+                            >
+                              {q.questionImages[0]}
+                            </a>
+                            <p className="text-[11px] text-slate-400">
+                              Directly rendered in test series CBT screens.
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Question texts bilingual */}
+                      <div className="space-y-2 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60 text-xs">
+                        <div className="text-slate-900 dark:text-white leading-relaxed">
+                          <strong className="text-blue-600 mr-1.5">[English]:</strong>
+                          <span>{q.questionTextEn || '—'}</span>
+                        </div>
+                        {q.questionTextHi && (
+                          <div className="text-slate-900 dark:text-white leading-relaxed pt-1 border-t border-slate-200/60 dark:border-slate-700/60">
+                            <strong className="text-emerald-600 mr-1.5">[हिंदी]:</strong>
+                            <span>{q.questionTextHi}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Options preview */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {(q.options || []).map((opt: any, optIdx: number) => {
+                          const isCorrect = q.correctOptionIndex === optIdx;
+                          return (
+                            <div
+                              key={optIdx}
+                              className={`p-2.5 rounded-xl border text-xs flex items-center justify-between gap-2 ${
+                                isCorrect
+                                  ? 'border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/40 text-emerald-950 dark:text-emerald-200 font-semibold'
+                                  : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 text-slate-800 dark:text-slate-200'
+                              }`}
+                            >
+                              <div className="flex items-center gap-2 overflow-hidden">
+                                <span className="w-5 h-5 rounded-full border border-slate-300 dark:border-slate-600 flex items-center justify-center font-bold text-[10px] shrink-0">
+                                  {String.fromCharCode(65 + optIdx)}
+                                </span>
+                                <span className="truncate">
+                                  {opt.text_en || opt.text || `Option ${optIdx + 1}`}
+                                  {opt.text_hi && opt.text_hi !== opt.text_en && (
+                                    <span className="text-slate-400 ml-1.5 text-[11px]">({opt.text_hi})</span>
+                                  )}
+                                </span>
+                              </div>
+                              {isCorrect && (
+                                <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-emerald-600 text-white shrink-0">
+                                  Key ✓
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Explanation preview if exists */}
+                      {(q.explanationEn || q.explanationHi) && (
+                        <div className="p-3 rounded-xl bg-blue-50/60 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/40 text-xs text-slate-700 dark:text-slate-300 space-y-1">
+                          <strong className="text-blue-700 dark:text-blue-400 block text-[11px] uppercase tracking-wide">
+                            Official Explanation:
+                          </strong>
+                          {q.explanationEn && <div>{q.explanationEn}</div>}
+                          {q.explanationHi && <div className="text-slate-600 dark:text-slate-400">{q.explanationHi}</div>}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* ── TAB 2: USER DETAILS & STUDY TIME ── */}
         {activeTab === 'users' && (
           <div className="space-y-4">
@@ -1287,6 +1670,14 @@ export default function AdminDashboardPage() {
                   Questions flagged by aspirants. Click &quot;Fix Question&quot; to edit text or explanation directly!
                 </p>
               </div>
+              <button
+                type="button"
+                onClick={handleRefreshReports}
+                className="px-3.5 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-xs"
+              >
+                <RefreshCw className="w-3.5 h-3.5" />
+                <span>Refresh Reports</span>
+              </button>
             </div>
 
             {(!data?.questionReports || data.questionReports.length === 0) ? (
