@@ -412,6 +412,8 @@ export const TOPIC_PRACTICE_LIST: TopicItem[] = [
   { id: 'geometry', name: 'Geometry (Circles, Chords & Triangles)', subject: 'math', scope: 'ssc', questionCountEstimate: 380, highlight: 'SSC CGL Crucial' },
   { id: 'mensuration', name: 'Mensuration 2D & 3D (Surface & Volume)', subject: 'math', scope: 'all', questionCountEstimate: 420, highlight: 'SSC & RRB Both' },
   { id: 'number-system', name: 'Number System, Divisibility & Remainder', subject: 'math', scope: 'all', questionCountEstimate: 510, highlight: 'RRB NTPC & SSC Favorite' },
+  { id: 'simplification', name: 'Simplification, Fractions, Indices & Surds', subject: 'math', scope: 'all', questionCountEstimate: 450, highlight: 'Quick Speed & Accuracy' },
+  { id: 'lcm-hcf', name: 'LCM, HCF & Factorization', subject: 'math', scope: 'all', questionCountEstimate: 210, highlight: 'Divisibility Application' },
   { id: 'profit-loss', name: 'Profit, Loss, Markup & Discount', subject: 'math', scope: 'all', questionCountEstimate: 460, highlight: 'Universal Exam Must-Solve' },
   { id: 'time-work', name: 'Time, Work, Efficiency & Pipes-Cisterns', subject: 'math', scope: 'all', questionCountEstimate: 390, highlight: 'High Speed Scoring' },
   { id: 'time-speed-distance', name: 'Time, Speed, Distance, Trains & Boats', subject: 'math', scope: 'all', questionCountEstimate: 410, highlight: 'RRB & SSC High Yield' },
@@ -429,6 +431,8 @@ export const TOPIC_PRACTICE_LIST: TopicItem[] = [
   { id: 'direction-distance', name: 'Direction & Distance Sense Test', subject: 'reasoning', scope: 'all', questionCountEstimate: 280, highlight: 'Pythagoras Short Trick' },
   { id: 'non-verbal', name: 'Non-Verbal (Paper Folding, Mirror Images)', subject: 'reasoning', scope: 'all', questionCountEstimate: 370, highlight: 'Visual Reasoning Core' },
   { id: 'dice-cubes', name: 'Dice, Cubes & Figure Counting', subject: 'reasoning', scope: 'all', questionCountEstimate: 290, highlight: 'Triangle Counting Rules' },
+  { id: 'missing-number', name: 'Missing Number & Mathematical Operations', subject: 'reasoning', scope: 'all', questionCountEstimate: 380, highlight: 'High Weightage Drill' },
+  { id: 'seating-order', name: 'Order, Ranking & Seating Arrangement', subject: 'reasoning', scope: 'all', questionCountEstimate: 350, highlight: 'Logical Puzzle Drill' },
   { id: 'statement-conclusion', name: 'Statement & Conclusion / Assumptions', subject: 'reasoning', scope: 'rrb', questionCountEstimate: 330, highlight: 'Crucial in RRB NTPC' },
 
   // ── English Language (SSC Specific) ──
@@ -437,6 +441,7 @@ export const TOPIC_PRACTICE_LIST: TopicItem[] = [
   { id: 'synonyms-antonyms', name: 'Synonyms & Antonyms (Repeated Vocab)', subject: 'english', scope: 'ssc', questionCountEstimate: 580, highlight: 'Past 5-Year High Frequency' },
   { id: 'idioms-phrases', name: 'Idioms, Phrases & Phrasal Verbs', subject: 'english', scope: 'ssc', questionCountEstimate: 430, highlight: 'Scoring Memory Based' },
   { id: 'one-word-substitution', name: 'One Word Substitution (OWS)', subject: 'english', scope: 'ssc', questionCountEstimate: 470, highlight: '100% Repetition Pool' },
+  { id: 'homophones', name: 'Homophones, Homonyms & Confusable Words', subject: 'english', scope: 'ssc', questionCountEstimate: 240, highlight: 'Recent SSC Trend' },
   { id: 'spelling-test', name: 'Misspelt Words & Spelling Test', subject: 'english', scope: 'ssc', questionCountEstimate: 290, highlight: 'Quick 2 Marks' },
   { id: 'active-passive-voice', name: 'Active & Passive Voice Transformation', subject: 'english', scope: 'ssc', questionCountEstimate: 310, highlight: 'Tier 2 Mega Booster' },
   { id: 'direct-indirect-speech', name: 'Direct & Indirect Speech (Narration)', subject: 'english', scope: 'ssc', questionCountEstimate: 310, highlight: 'Tier 2 High Weightage' },
@@ -450,5 +455,6 @@ export const TOPIC_PRACTICE_LIST: TopicItem[] = [
   { id: 'general-science-physics-chem', name: 'General Science: Physics & Chemistry', subject: 'ga', scope: 'all', questionCountEstimate: 470, highlight: 'RRB Group D & ALP Top Yield' },
   { id: 'general-science-biology', name: 'General Science: Biology, Diseases & Vitamins', subject: 'ga', scope: 'all', questionCountEstimate: 460, highlight: 'High Frequency Human Body' },
   { id: 'static-gk-culture', name: 'Static GK: Dances, Festivals, Musical Instruments', subject: 'ga', scope: 'all', questionCountEstimate: 510, highlight: 'TCS Pattern Top Trend' },
+  { id: 'sports-census', name: 'Sports (Static & Current), Census & Awards', subject: 'ga', scope: 'all', questionCountEstimate: 480, highlight: 'Guaranteed 4-5 Qs' },
   { id: 'economy', name: 'Indian Economy, Budget & Five Year Plans', subject: 'ga', scope: 'all', questionCountEstimate: 280, highlight: 'Inflation, RBI & Schemes' }
 ];

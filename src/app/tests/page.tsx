@@ -203,6 +203,26 @@ function getSeriesTopicCount(topicId: string, subject: string, seriesCode: strin
     if (topicId.includes('polity')) return 80;
     return 70;
   }
+  if (code.includes('selection-post')) {
+    if (topicId.includes('number-system')) return 50;
+    if (topicId.includes('simplification')) return 54;
+    if (topicId.includes('mensur')) return 135;
+    if (topicId.includes('geomet')) return 58;
+    if (topicId.includes('trig')) return 49;
+    if (topicId.includes('profit') || topicId.includes('percent')) return 40;
+    if (topicId.includes('series')) return 73;
+    if (topicId.includes('analogy')) return 61;
+    if (topicId.includes('syllogism')) return 35;
+    if (topicId.includes('synonym') || topicId.includes('antonym')) return 97;
+    if (topicId.includes('one-word')) return 57;
+    if (topicId.includes('idiom')) return 48;
+    if (topicId.includes('polity')) return 55;
+    if (topicId.includes('history')) return 60;
+    if (subject === 'math') return 45;
+    if (subject === 'reasoning') return 45;
+    if (subject === 'english') return 48;
+    if (subject === 'ga') return 40;
+  }
   if (code.includes('alp')) {
     if (subject === 'ga') return 55;
     if (subject === 'math') return 50;
@@ -258,6 +278,10 @@ function TestsExplorerContent() {
 
   // Educational Level for SSC Selection Post: 'all' | 'grad' | '12th' | '10th'
   const [selectionPostLevel, setSelectionPostLevel] = useState<'all' | 'grad' | '12th' | '10th'>('all');
+
+  // Subject filter inside Topic-Wise Practice: 'math' | 'reasoning' | 'english' | 'ga'
+  const [selectedTopicSubject, setSelectedTopicSubject] = useState<'math' | 'reasoning' | 'english' | 'ga'>('math');
+  const [topicSearchQuery, setTopicSearchQuery] = useState('');
 
   // Whenever activeCategoryTab changes (e.g. Tier 1 to Tier 2 Sectional), reset year filter to 'all' so shifts are immediately visible
   useEffect(() => {
@@ -447,6 +471,14 @@ function TestsExplorerContent() {
 
   // Filter topics strictly according to the exam family (Railway has NO English topics)
   const isRailway = selectedSeries.category === 'rrb' || selectedSeries.examCode.startsWith('rrb-');
+
+  // Reset selected topic subject to math if switching to Railway (Railway has no English)
+  useEffect(() => {
+    if (isRailway && selectedTopicSubject === 'english') {
+      setSelectedTopicSubject('math');
+    }
+  }, [isRailway, selectedTopicSubject]);
+
   const filteredTopics = useMemo(() => {
     return TOPIC_PRACTICE_LIST.filter((topic) => {
       if (isRailway && (topic.subject === 'english' || topic.scope === 'ssc')) return false;
@@ -454,6 +486,58 @@ function TestsExplorerContent() {
       return true;
     });
   }, [isRailway]);
+
+  // Topic Subjects tabs for topic practice navigation
+  const topicSubjects = useMemo(() => {
+    const list: Array<{ id: 'math' | 'reasoning' | 'english' | 'ga'; name: string; shortName: string; icon: string; count: number }> = [
+      {
+        id: 'math',
+        name: isRailway ? 'Mathematics' : 'Quantitative Aptitude',
+        shortName: 'Maths',
+        icon: '📐',
+        count: filteredTopics.filter((t) => t.subject === 'math').length
+      },
+      {
+        id: 'reasoning',
+        name: 'General Intelligence & Reasoning',
+        shortName: 'Reasoning',
+        icon: '🧠',
+        count: filteredTopics.filter((t) => t.subject === 'reasoning').length
+      }
+    ];
+
+    if (!isRailway) {
+      list.push({
+        id: 'english',
+        name: 'English Comprehension',
+        shortName: 'English',
+        icon: '📖',
+        count: filteredTopics.filter((t) => t.subject === 'english').length
+      });
+    }
+
+    list.push({
+      id: 'ga',
+      name: isRailway ? 'General Science & Awareness' : 'General Awareness (GK)',
+      shortName: 'GA / GK',
+      icon: '🌍',
+      count: filteredTopics.filter((t) => t.subject === 'ga').length
+    });
+
+    return list;
+  }, [isRailway, filteredTopics]);
+
+  // Topics strictly for the active selected subject and search query
+  const currentSubjectTopics = useMemo(() => {
+    return filteredTopics.filter((topic) => {
+      if (topic.subject !== selectedTopicSubject) return false;
+      if (topicSearchQuery) {
+        const q = topicSearchQuery.toLowerCase();
+        return topic.name.toLowerCase().includes(q) || (topic.highlight || '').toLowerCase().includes(q);
+      }
+      return true;
+    });
+  }, [filteredTopics, selectedTopicSubject, topicSearchQuery]);
 
   // Compute filtered test list for selected series, category, year & search
   const currentSeriesTests = useMemo(() => {
@@ -1394,48 +1478,137 @@ function TestsExplorerContent() {
 
             {/* ── SUB-TAB 4: DEDICATED TOPIC-WISE DRILLS ── */}
             {activeCategoryTab === 'topic_practice' && (
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <div className="p-3.5 rounded-2xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900 text-xs text-purple-900 dark:text-purple-200">
                   🎯 <strong>Adaptive Chapter Drills ({selectedSeries.name.split('Mock')[0].trim()}):</strong> Anti-repetition active learning. Questions you previously solved correctly are automatically excluded so you always practice new or weak questions!
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {filteredTopics.map((topic) => {
-                    const countInSeries = getSeriesTopicCount(topic.id, topic.subject, selectedSeries.examCode);
-                    return (
-                      <div
-                        key={topic.id}
-                        className="p-4 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-slate-800 shadow-2xs flex flex-col justify-between space-y-3"
-                      >
-                        <div className="space-y-1">
+                {/* 1. SUBJECT SELECTION TABS */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-black uppercase tracking-wider text-slate-500">
+                      Step 1: Select Subject
+                    </span>
+                    <span className="text-[11px] font-semibold text-slate-400">
+                      {topicSubjects.length} Exam Subjects
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                    {topicSubjects.map((sub) => {
+                      const isSelected = selectedTopicSubject === sub.id;
+                      return (
+                        <button
+                          key={sub.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedTopicSubject(sub.id);
+                            setTopicSearchQuery('');
+                          }}
+                          className={`p-3 rounded-2xl border text-left transition cursor-pointer flex flex-col justify-between gap-2.5 ${
+                            isSelected
+                              ? 'bg-blue-50/80 dark:bg-blue-950/50 border-blue-500 dark:border-blue-500 ring-2 ring-blue-500/20 shadow-xs'
+                              : 'bg-white dark:bg-[#12141a] border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                          }`}
+                        >
                           <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-black uppercase text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 px-2 py-0.5 rounded">
-                              {topic.subject.toUpperCase()}
-                            </span>
-                            <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
-                              {countInSeries} Qs in this Series
+                            <span className="text-xl">{sub.icon}</span>
+                            <span
+                              className={`text-[10px] font-black px-2 py-0.5 rounded-full ${
+                                isSelected
+                                  ? 'bg-blue-600 text-white'
+                                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                              }`}
+                            >
+                              {sub.count} Topics
                             </span>
                           </div>
-                          <h4 className="font-extrabold text-sm text-slate-900 dark:text-white">
-                            {topic.name}
-                          </h4>
-                          <p className="text-xs text-slate-500">
-                            {topic.highlight || 'Official shift questions with step-by-step KaTeX solutions.'}
-                          </p>
-                        </div>
-
-                        <button
-                          type="button"
-                          onClick={() => handleOpenTopicModal(topic)}
-                          className="w-full py-2 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white text-white dark:text-slate-900 font-extrabold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer"
-                        >
-                          <Sliders className="w-3.5 h-3.5" />
-                          <span>Configure &amp; Practice</span>
+                          <div>
+                            <h4
+                              className={`font-black text-xs leading-tight ${
+                                isSelected
+                                  ? 'text-blue-900 dark:text-blue-200'
+                                  : 'text-slate-900 dark:text-white'
+                              }`}
+                            >
+                              {sub.name}
+                            </h4>
+                          </div>
                         </button>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
+
+                {/* 2. CHAPTERS HEADER & SEARCH IN CURRENT SUBJECT */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-1 border-t border-slate-200 dark:border-slate-800">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-black uppercase tracking-wider text-slate-500">
+                      Step 2: Choose Topic / Chapter
+                    </span>
+                    <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/80 px-2 py-0.5 rounded-full">
+                      {currentSubjectTopics.length} Available
+                    </span>
+                  </div>
+
+                  <div className="relative w-full sm:w-64">
+                    <Search className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
+                    <input
+                      type="text"
+                      placeholder={`Search ${topicSubjects.find(s => s.id === selectedTopicSubject)?.shortName || 'subject'} topics...`}
+                      value={topicSearchQuery}
+                      onChange={(e) => setTopicSearchQuery(e.target.value)}
+                      className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+
+                {/* 3. CHAPTER CARDS GRID (FILTERED STRICTLY BY SELECTED SUBJECT) */}
+                {currentSubjectTopics.length === 0 ? (
+                  <div className="p-8 text-center rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                    <p className="text-xs text-slate-500 font-semibold">
+                      No topics found matching &ldquo;{topicSearchQuery}&rdquo; in this subject.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {currentSubjectTopics.map((topic) => {
+                      const countInSeries = getSeriesTopicCount(topic.id, topic.subject, selectedSeries.examCode);
+                      return (
+                        <div
+                          key={topic.id}
+                          className="p-4 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-slate-800 shadow-2xs flex flex-col justify-between space-y-3 hover:border-blue-400/60 dark:hover:border-blue-500/40 transition"
+                        >
+                          <div className="space-y-1.5">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[10px] font-black uppercase text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 px-2 py-0.5 rounded">
+                                {topic.subject.toUpperCase()}
+                              </span>
+                              <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
+                                {countInSeries} Qs in this Series
+                              </span>
+                            </div>
+                            <h4 className="font-extrabold text-sm text-slate-900 dark:text-white leading-snug">
+                              {topic.name}
+                            </h4>
+                            <p className="text-xs text-slate-500">
+                              {topic.highlight || 'Official shift questions with step-by-step KaTeX solutions.'}
+                            </p>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => handleOpenTopicModal(topic)}
+                            className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white text-white dark:text-slate-900 font-extrabold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer shadow-2xs"
+                          >
+                            <Sliders className="w-3.5 h-3.5" />
+                            <span>Configure &amp; Practice</span>
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             )}
           </div>
