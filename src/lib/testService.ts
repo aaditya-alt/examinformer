@@ -243,18 +243,23 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
       if (parent && parent.sections && parent.sections[secIdx]) {
         const targetSec = parent.sections[secIdx];
         const bp = getExamBlueprint(parent.examCode, parent.title);
+        const pCode = (parent.examCode || '').toLowerCase();
+        const pTitle = (parent.title || '').toLowerCase();
+        const isRailway = parent.examFamily === 'rrb' || pCode.includes('rrb') || pTitle.includes('rrb');
+        const isTier2 = !isRailway && (pCode.includes('tier2') || pCode.includes('tier-2') || pTitle.includes('tier 2') || pTitle.includes('tier-2') || pTitle.includes('mains'));
+
         const bpSec = bp.sections.find(s => s.name.toLowerCase() === targetSec.name.toLowerCase()) || bp.sections[secIdx] || {
-          durationMinutes: 15,
-          positiveMarks: bp.positiveMarks,
-          negativeMarks: bp.negativeMarks,
-          questionCount: targetSec.questions?.length || 25
+          durationMinutes: isTier2 ? (targetSec.name.toLowerCase().includes('computer') ? 15 : 30) : (isRailway ? 25 : 15),
+          positiveMarks: isTier2 ? 3 : (isRailway ? 1 : 2),
+          negativeMarks: isTier2 ? 1 : (isRailway ? Number((1 / 3).toFixed(2)) : 0.5),
+          questionCount: targetSec.questions?.length || (isTier2 ? 30 : 25)
         };
 
-        const duration = bpSec.durationMinutes || 15;
-        const marksPerQ = bpSec.positiveMarks ?? bp.positiveMarks ?? 2;
-        const negMarks = bpSec.negativeMarks ?? bp.negativeMarks ?? 0.5;
+        const duration = bpSec.durationMinutes || (isTier2 ? (targetSec.name.toLowerCase().includes('computer') ? 15 : 30) : (isRailway ? 25 : 15));
+        const marksPerQ = isTier2 ? 3 : (isRailway ? 1 : (bpSec.positiveMarks ?? bp.positiveMarks ?? 2));
+        const negMarks = isTier2 ? 1 : (isRailway ? Number((1 / 3).toFixed(2)) : (bpSec.negativeMarks ?? bp.negativeMarks ?? 0.5));
         const questionsList = targetSec.questions || [];
-        const count = questionsList.length || bpSec.questionCount || 25;
+        const count = questionsList.length || bpSec.questionCount || (isTier2 ? 30 : 25);
 
         const singleSec: CBTTest = {
           id: cleanId,

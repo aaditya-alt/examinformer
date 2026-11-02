@@ -9,39 +9,92 @@ interface MathRendererProps {
   as?: 'div' | 'span';
 }
 
-function decodeHtmlEntities(str: string): string {
-  if (!str) return '';
-  return str
-    .replace(/&amp;/g, '&')
-    .replace(/&quot;/g, '"')
-    .replace(/&#039;/g, "'")
-    .replace(/&#39;/g, "'")
-    .replace(/&rsquo;/g, '’')
-    .replace(/&lsquo;/g, '‘')
-    .replace(/&rdquo;/g, '”')
-    .replace(/&ldquo;/g, '“')
-    .replace(/&hellip;/g, '…')
-    .replace(/&bull;/g, '•')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&sup2;/g, '²')
-    .replace(/&sup3;/g, '³')
-    .replace(/&rArr;/g, '⇒')
-    .replace(/&lArr;/g, '⇐')
-    .replace(/&hArr;/g, '⇔')
-    .replace(/&there4;/g, '∴')
-    .replace(/&minus;/g, '−')
-    .replace(/&plusmn;/g, '±')
-    .replace(/&asymp;/g, '≈')
-    .replace(/&ne;/g, '≠')
-    .replace(/&le;/g, '≤')
-    .replace(/&ge;/g, '≥')
-    .replace(/&times;/g, '×')
-    .replace(/&divide;/g, '÷')
-    .replace(/&deg;/g, '°')
-    .replace(/&Omega;/g, 'Ω')
-    .replace(/&pound;/g, '£')
-    .replace(/&nbsp;/g, ' ');
+function decodeHtmlEntities(raw: string): string {
+  if (!raw) return '';
+  let str = String(raw);
+
+  // Replace reasoning and entity artifacts
+  str = str.replace(/@amp;?/gi, '&');
+
+  const entityMap: Record<string, string> = {
+    '&quot;': '"',
+    '&#039;': "'",
+    '&#39;': "'",
+    '&apos;': "'",
+    '&lsquo;': "'",
+    '&rsquo;': "'",
+    '&ldquo;': '"',
+    '&rdquo;': '"',
+    '&ndash;': '–',
+    '&mdash;': '—',
+    '&hellip;': '…',
+    '&bull;': '•',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&sup2;': '²',
+    '&sup3;': '³',
+    '&rArr;': '⇒',
+    '&lArr;': '⇐',
+    '&hArr;': '⇔',
+    '&there4;': '∴',
+    '&minus;': '−',
+    '&times;': '×',
+    '&divide;': '÷',
+    '&plusmn;': '±',
+    '&asymp;': '≈',
+    '&ne;': '≠',
+    '&le;': '≤',
+    '&ge;': '≥',
+    '&ang;': '∠',
+    '&angle;': '∠',
+    '&deg;': '°',
+    '&Delta;': 'Δ',
+    '&delta;': 'δ',
+    '&pi;': 'π',
+    '&theta;': 'θ',
+    '&alpha;': 'α',
+    '&beta;': 'β',
+    '&gamma;': 'γ',
+    '&infin;': '∞',
+    '&sim;': '∼',
+    '&cong;': '≅',
+    '&perp;': '⊥',
+    '&radic;': '√',
+    '&Omega;': 'Ω',
+    '&pound;': '£',
+    '&cent;': '¢',
+    '&yen;': '¥',
+    '&euro;': '€',
+    '&copy;': '©',
+    '&reg;': '®',
+    '&trade;': '™',
+    '&nbsp;': ' '
+  };
+
+  // Multiple passes to unwrap double/triple-encoded entities
+  for (let pass = 0; pass < 3; pass++) {
+    for (const [ent, rep] of Object.entries(entityMap)) {
+      if (str.includes(ent)) {
+        str = str.split(ent).join(rep);
+      }
+    }
+    if (str.includes('&amp;')) {
+      str = str.replace(/&amp;/g, '&');
+    }
+    str = str.replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)));
+    str = str.replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCharCode(parseInt(code, 16)));
+  }
+
+  // Handle superscripts and subscripts in mathematical notation
+  str = str.replace(/<sup>2<\/sup>/gi, '²');
+  str = str.replace(/<sup>3<\/sup>/gi, '³');
+  str = str.replace(/<sup>4<\/sup>/gi, '⁴');
+  str = str.replace(/<sup>5<\/sup>/gi, '⁵');
+  str = str.replace(/<sup>6<\/sup>/gi, '⁶');
+  str = str.replace(/<sup>([0-9a-zA-Z+-]+)<\/sup>/gi, '^($1)');
+  str = str.replace(/<sub>([0-9a-zA-Z+-]+)<\/sub>/gi, '_($1)');
+
+  return str;
 }
 
 /**

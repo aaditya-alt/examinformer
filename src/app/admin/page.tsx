@@ -1304,7 +1304,11 @@ export default function AdminDashboardPage() {
                   {(data?.attempts || []).map((a) => (
                     <tr key={a.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/40">
                       <td className="py-3 px-4 font-bold text-slate-900 dark:text-white">{a.candidateName || 'Anonymous'}</td>
-                      <td className="py-3 px-3 text-slate-600 dark:text-slate-300">{a.testId}</td>
+                      <td className="py-3 px-3 text-slate-600 dark:text-slate-300">
+                        <Link href={`/tests/${a.testId}`} target="_blank" className="hover:text-blue-600 dark:hover:text-blue-400 font-mono text-[11px] hover:underline">
+                          {a.testId}
+                        </Link>
+                      </td>
                       <td className="py-3 px-3 text-center font-black text-blue-600">{a.score}</td>
                       <td className="py-3 px-3 text-center font-bold text-emerald-600">{a.accuracy}%</td>
                       <td className="py-3 px-3 text-center font-medium text-slate-500">{formatSeconds(a.timeTakenSeconds)}</td>

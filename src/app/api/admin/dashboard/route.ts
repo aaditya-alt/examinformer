@@ -184,7 +184,7 @@ export async function GET() {
     }));
 
     // 7. Unique Shift Submissions from Answer Key Calculator
-    const uniqueShifts = getUniqueShiftSubmissions();
+    const uniqueShifts = await getUniqueShiftSubmissions();
 
     // 8. Question Reports (from Supabase first, merged with local JSON)
     const reportsMap = new Map<string, any>();
