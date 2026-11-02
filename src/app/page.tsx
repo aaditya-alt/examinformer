@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ExamLogo } from '@/components/ExamLogo';
 import { StudentReviewsSection } from '@/components/StudentReviewsSection';
+import { WhatsNewTicker } from '@/components/WhatsNewTicker';
 import {
   Search,
   Plus,
@@ -19,7 +20,10 @@ import {
   BookOpen,
   Timer,
   Smartphone,
-  Sparkles
+  Sparkles,
+  Flame,
+  Zap,
+  Lock
 } from 'lucide-react';
 
 interface HomeSeriesItem {
@@ -34,6 +38,15 @@ interface HomeSeriesItem {
 
 // Strictly only exams for which we have official questions
 const REAL_SERIES_CATALOG: HomeSeriesItem[] = [
+  {
+    id: 'ssc-selection-post-series',
+    examCode: 'ssc-selection-post',
+    name: 'SSC Selection Post Phase 14 (2026) Official Mock Test Series',
+    testCount: '27 Official Shifts (Graduation, 12th & 10th Level)',
+    category: 'ssc',
+    logoType: 'ssc',
+    tierSupport: 'Graduation, 12th, 10th'
+  },
   {
     id: 'ssc-cgl-series',
     examCode: 'ssc-cgl',
@@ -164,6 +177,11 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#f8fafc] dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 transition-colors pb-24">
       {/* ─────────────────────────────────────────────────────────────
+          WHAT'S NEW TICKER (MOVING LEFT TO RIGHT)
+      ───────────────────────────────────────────────────────────── */}
+      <WhatsNewTicker />
+
+      {/* ─────────────────────────────────────────────────────────────
           HERO & BROWSE SECTION (EXACT REPEATERMOCK AESTHETIC)
       ───────────────────────────────────────────────────────────── */}
       <section className="bg-white dark:bg-[#0f1117] border-b border-slate-200/90 dark:border-slate-800 pt-10 pb-12 shadow-2xs">
@@ -222,6 +240,151 @@ export default function HomePage() {
                 {tag.label}
               </button>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────
+          2026 EXAMINATION SEGMENT (FLAGSHIP 2026 HUB)
+      ───────────────────────────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 dark:border-slate-800 pb-3">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-50 dark:bg-cyan-950/80 border border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300 text-[10px] font-black uppercase tracking-wider mb-1">
+              <Sparkles className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
+              <span>Flagship 2026 Series</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              2026 Examination Hub
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Latest commission mock tests and official question compilations for 2026 aspirants.
+            </p>
+          </div>
+          <span className="text-xs font-bold text-slate-500 self-start sm:self-center">
+            Updated Daily with Commission Shifts
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Card 1: SSC Selection Post Phase 14 (2026) */}
+          <div
+            onClick={() => handleOpenSeries('ssc-selection-post')}
+            className="p-5 rounded-2xl border-2 border-emerald-500/40 bg-gradient-to-b from-emerald-50/30 to-white dark:from-emerald-950/20 dark:to-[#12141a] hover:border-emerald-500 transition-all hover:shadow-lg cursor-pointer flex flex-col justify-between space-y-4 relative group"
+          >
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/60 p-1.5 flex items-center justify-center border border-emerald-200 dark:border-emerald-800">
+                  <ExamLogo type="ssc" size="sm" />
+                </div>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider shadow-xs">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                  <span>Live Now</span>
+                </span>
+              </div>
+              <div>
+                <h3 className="font-extrabold text-sm text-slate-900 dark:text-white leading-snug group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                  SSC Selection Post Phase 14 (2026)
+                </h3>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">
+                  Graduation, Higher Secondary &amp; Matriculation Levels (27 Shifts Complete)
+                </p>
+              </div>
+            </div>
+            <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-emerald-600 dark:text-emerald-400">
+              <span>27 Official Shifts</span>
+              <span className="inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                <span>Take Mock</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </span>
+            </div>
+          </div>
+
+          {/* Card 2: SSC CGL 2026 */}
+          <div className="p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white/70 dark:bg-[#12141a]/60 flex flex-col justify-between space-y-4 relative opacity-90 hover:opacity-100 transition">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 p-1.5 flex items-center justify-center border border-slate-200 dark:border-slate-700">
+                  <ExamLogo type="ssc" size="sm" />
+                </div>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950/80 border border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-300 text-[10px] font-black uppercase tracking-wider">
+                  <Lock className="w-3 h-3" />
+                  <span>Coming Soon</span>
+                </span>
+              </div>
+              <div>
+                <h3 className="font-extrabold text-sm text-slate-900 dark:text-white leading-snug">
+                  SSC CGL 2026 Mock Test Series
+                </h3>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">
+                  Tier 1 &amp; Tier 2 Full Length Shifts with Sectional 15-Min Timer Caps
+                </p>
+              </div>
+            </div>
+            <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-slate-400">
+              <span>Notification Awaited</span>
+              <span className="text-[11px] font-semibold text-purple-600 dark:text-purple-400">Releasing Soon</span>
+            </div>
+          </div>
+
+          {/* Card 3: SSC CHSL 2026 */}
+          <div className="p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white/70 dark:bg-[#12141a]/60 flex flex-col justify-between space-y-4 relative opacity-90 hover:opacity-100 transition">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 p-1.5 flex items-center justify-center border border-slate-200 dark:border-slate-700">
+                  <ExamLogo type="ssc" size="sm" />
+                </div>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950/80 border border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-300 text-[10px] font-black uppercase tracking-wider">
+                  <Lock className="w-3 h-3" />
+                  <span>Coming Soon</span>
+                </span>
+              </div>
+              <div>
+                <h3 className="font-extrabold text-sm text-slate-900 dark:text-white leading-snug">
+                  SSC CHSL 2026 Mock Test Series
+                </h3>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">
+                  Tier 1 &amp; Tier 2 Combined Higher Secondary Level Full Papers
+                </p>
+              </div>
+            </div>
+            <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-slate-400">
+              <span>Notification Awaited</span>
+              <span className="text-[11px] font-semibold text-purple-600 dark:text-purple-400">Releasing Soon</span>
+            </div>
+          </div>
+
+          {/* Card 4: RRB NTPC & ALP 2025-26 */}
+          <div
+            onClick={() => handleOpenSeries('rrb-ntpc-ug')}
+            className="p-5 rounded-2xl border-2 border-blue-500/40 bg-gradient-to-b from-blue-50/30 to-white dark:from-blue-950/20 dark:to-[#12141a] hover:border-blue-500 transition-all hover:shadow-lg cursor-pointer flex flex-col justify-between space-y-4 relative group"
+          >
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/60 p-1.5 flex items-center justify-center border border-blue-200 dark:border-blue-800">
+                  <ExamLogo type="rrb" size="sm" />
+                </div>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-black uppercase tracking-wider shadow-xs">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                  <span>Live Now</span>
+                </span>
+              </div>
+              <div>
+                <h3 className="font-extrabold text-sm text-slate-900 dark:text-white leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  RRB NTPC &amp; ALP (2025-26)
+                </h3>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">
+                  CBT 1 &amp; CBT 2 Official Commission Shifts with Trade Tests &amp; Zone Standings
+                </p>
+              </div>
+            </div>
+            <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-blue-600 dark:text-blue-400">
+              <span>191+ Shifts Active</span>
+              <span className="inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                <span>Start Railway CBT</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </span>
+            </div>
           </div>
         </div>
       </section>

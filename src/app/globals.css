@@ -225,6 +225,22 @@ body {
   background-size: 32px 32px;
 }
 
+/* Continuous Marquee Ticker */
+@keyframes marqueeLeftToRight {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0%); }
+}
+
+.animate-marquee-ltr {
+  display: flex;
+  width: max-content;
+  animation: marqueeLeftToRight 30s linear infinite;
+}
+
+.animate-marquee-ltr:hover {
+  animation-play-state: paused;
+}
+
 @media print {
   body {
     background: #ffffff !important;

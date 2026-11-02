@@ -551,8 +551,54 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
 
         if (dbQuestions && !dbErr && dbQuestions.length > 0) {
           const cleanSlug = topicSlug.toLowerCase().replace(/-/g, ' ');
+          const isNonVerbalCategory =
+            topicSlug.includes('mirror') ||
+            topicSlug.includes('water') ||
+            topicSlug.includes('paper') ||
+            topicSlug.includes('figure') ||
+            topicSlug.includes('embedded') ||
+            topicSlug.includes('dice') ||
+            topicSlug.includes('cube') ||
+            topicSlug.includes('counting') ||
+            topicSlug.includes('non-verbal');
+
           let matchingQuestions = dbQuestions.filter((q) => {
             const t = (q.question_text_en || '').toLowerCase();
+            const hasDiagram = (Array.isArray(q.question_images) && q.question_images.length > 0) ||
+                               (Array.isArray(q.options) && q.options.some((o: any) => o.imageUrl || o.image));
+
+            // If candidate selected a visual/non-verbal chapter, strictly eliminate verbal noise
+            if (isNonVerbalCategory) {
+              const verbalNoise = /\b(coded as|written as|letter-cluster|blood relations?|brother of|sister of|father of|mother of|syllogism|statement and conclusion|all [a-z]+ are [a-z]+)\b/i;
+              if (verbalNoise.test(t)) return false;
+            }
+
+            // Visual / Non-Verbal specific filters
+            if (topicSlug.includes('mirror') || topicSlug.includes('water')) {
+              return /\b(mirror|water image|reflection|lateral inversion)\b/i.test(t);
+            }
+            if (topicSlug.includes('paper')) {
+              return /\b(paper|folded|folding|punched|unfolded|hole|cut)\b/i.test(t);
+            }
+            if (topicSlug.includes('figure-series') || topicSlug.includes('completion')) {
+              return /\b(figure series|replace the question mark|pattern in the figure|next figure|complete the pattern|figure c|four figure pairs)\b/i.test(t);
+            }
+            if (topicSlug.includes('embedded')) {
+              return /\b(embedded|hidden inside|hidden figure|embedded figure)\b/i.test(t);
+            }
+            if (topicSlug.includes('dice') || topicSlug.includes('cube')) {
+              return /\b(dice|cube|cubes|opposite face|standard dice)\b/i.test(t);
+            }
+            if (topicSlug.includes('counting')) {
+              return /\b(count the number|number of triangles|number of squares|number of rectangles|counting figures)\b/i.test(t);
+            }
+            if (topicSlug.includes('non-verbal')) {
+              return hasDiagram || /\b(figure|mirror|water image|paper|folding|embedded|dice|triangle)\b/i.test(t);
+            }
+
+            // Quantitative Aptitude
+            if (topicSlug.includes('simplif')) return (/\b(simplify|value of|approximate|surds|indices)\b/i.test(t) || /[×÷\+\-\=]{2,}/.test(t));
+            if (topicSlug.includes('lcm') || topicSlug.includes('hcf')) return (/\b(lcm|hcf|greatest common|least common|divisible by)\b/i.test(t));
             if (topicSlug.includes('trig') && (t.includes('sin') || t.includes('cos') || t.includes('tan') || t.includes('trigonometr') || t.includes('elevation') || t.includes('heights and distance'))) return true;
             if (topicSlug.includes('algebra') && (/x\^2|x\^3|a\^2|a\^3|\bx\s*[\+\-]\s*1\/x\b|algebra|polynomial/i.test(t))) return true;
             if (topicSlug.includes('geomet') && (/\b(circle|chord|tangent|radius|triangle|hypotenuse|rhombus|trapezium)\b/i.test(t))) return true;
@@ -563,25 +609,34 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
             if ((topicSlug.includes('distance') || topicSlug.includes('train')) && (/\b(train|trains|km\/h|m\/s|speed|boat|stream|relative speed)\b/i.test(t))) return true;
             if (topicSlug.includes('percent') && (/\b(percentage|percent|ratio|proportion|partnership)\b/i.test(t) || t.includes('%'))) return true;
             if (topicSlug.includes('average') && (/\b(average|mean|mixture|alligation|blended)\b/i.test(t))) return true;
+
+            // Verbal Reasoning
             if (topicSlug.includes('coding') && (t.includes('code') || t.includes('coded') || t.includes('written as'))) return true;
             if (topicSlug.includes('blood') && (t.includes('brother') || t.includes('sister') || t.includes('father') || t.includes('mother') || t.includes('daughter') || t.includes('son'))) return true;
             if (topicSlug.includes('syllog') && (t.includes('statement') || t.includes('conclusion') || t.includes('syllogism') || t.includes('all ') || t.includes('some '))) return true;
-            if ((topicSlug.includes('mirror') || topicSlug.includes('non-verbal')) && (t.includes('mirror') || t.includes('water image') || t.includes('paper'))) return true;
-            if (topicSlug.includes('dice') && (t.includes('dice') || t.includes('cube') || t.includes('opposite face') || t.includes('triangle'))) return true;
             if (topicSlug.includes('direction') && (t.includes('north') || t.includes('south') || t.includes('east') || t.includes('west') || t.includes('turns left'))) return true;
+            if (topicSlug.includes('seating') || topicSlug.includes('ranking')) return (/\b(seated|circular table|facing north|facing south|row of|rank|tallest|shortest)\b/i.test(t));
+            if (topicSlug.includes('missing-number')) return (/\b(missing number|mathematical operation|interchanged|signs?\s+are\s+interchanged|replace\s+\*)\b/i.test(t));
+
+            // English
             if ((topicSlug.includes('synonym') || topicSlug.includes('antonym')) && (t.includes('synonym') || t.includes('antonym') || t.includes('meaning') || t.includes('opposite'))) return true;
             if (topicSlug.includes('idiom') && (t.includes('idiom') || t.includes('phrase'))) return true;
             if (topicSlug.includes('one-word') && (t.includes('one word') || t.includes('substitute'))) return true;
+            if (topicSlug.includes('homophone')) return (/\b(homophone|homonym|confusable|spelt similarly)\b/i.test(t));
             if (topicSlug.includes('spelling') && (t.includes('misspelt') || t.includes('correctly spelt') || t.includes('spelling'))) return true;
             if (topicSlug.includes('error') && (t.includes('error') || t.includes('grammatical') || t.includes('incorrect'))) return true;
+
+            // General Awareness
             if (topicSlug.includes('polity') && (t.includes('constitution') || t.includes('article') || t.includes('amendment') || t.includes('president') || t.includes('parliament'))) return true;
             if (topicSlug.includes('history') && (t.includes('dynasty') || t.includes('battle') || t.includes('ruler') || t.includes('gandhi') || t.includes('british') || t.includes('revolt'))) return true;
             if (topicSlug.includes('geography') && (t.includes('river') || t.includes('mountain') || t.includes('soil') || t.includes('state') || t.includes('plateau'))) return true;
             if (topicSlug.includes('science') && (t.includes('acid') || t.includes('cell') || t.includes('reaction') || t.includes('velocity') || t.includes('disease') || t.includes('energy'))) return true;
+
             return cleanSlug.split(' ').some((word) => word.length > 3 && t.includes(word));
           });
 
-          if (matchingQuestions.length === 0) {
+          // Only default to dbQuestions if NOT a non-verbal chapter to prevent subject pollution
+          if (matchingQuestions.length === 0 && !isNonVerbalCategory) {
             matchingQuestions = dbQuestions;
           }
 
@@ -599,8 +654,8 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
             chosenList = [...chosenList, ...recycled];
           }
 
-          // Backfill from other questions in the same subject & series if chapter matching yielded fewer questions
-          if (chosenList.length < count && dbQuestions && dbQuestions.length > 0) {
+          // Backfill strictly from matching questions, NEVER inject verbal questions into non-verbal drill!
+          if (chosenList.length < count && dbQuestions && dbQuestions.length > 0 && !isNonVerbalCategory) {
             const chosenIds = new Set(chosenList.map((q) => q.id));
             const remainingInSubject = dbQuestions.filter((q) => !chosenIds.has(q.id));
             const fillNeeded = count - chosenList.length;
