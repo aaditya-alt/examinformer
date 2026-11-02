@@ -65,9 +65,9 @@ export function WhatsNewTicker() {
           <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping ml-0.5" />
         </div>
 
-        {/* Marquee track moving left to right */}
+        {/* Marquee track moving right to left */}
         <div className="overflow-hidden flex-1 relative mask-linear-gradient">
-          <div className="animate-marquee-ltr flex items-center gap-8 text-xs font-semibold py-0.5">
+          <div className="animate-marquee-rtl flex items-center gap-8 text-xs font-semibold py-0.5">
             {/* Repeat list twice for seamless continuous scroll */}
             {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, idx) => (
               <Link

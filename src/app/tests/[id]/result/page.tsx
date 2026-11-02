@@ -46,8 +46,18 @@ export default function CBTResultPage({
   // Tabs: 'analysis' or 'solutions'
   const [activeTab, setActiveTab] = useState<'analysis' | 'solutions'>('analysis');
 
-  // Solution filters
+  // Solution filters & language mode
   const [filterStatus, setFilterStatus] = useState<'all' | 'correct' | 'wrong' | 'skipped'>('all');
+  const [solutionsLanguage, setSolutionsLanguage] = useState<'en' | 'hi'>('en');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('mockmatrix_default_lang');
+      if (saved === 'hi' || saved === 'en') {
+        setSolutionsLanguage(saved);
+      }
+    }
+  }, []);
   const [filterSection, setFilterSection] = useState<string>('all');
 
   useEffect(() => {
@@ -659,7 +669,7 @@ export default function CBTResultPage({
               </button>
             </div>
 
-            {/* Section filter */}
+            {/* Section filter & Language Toggle */}
             <div className="flex items-center gap-2">
               <span className="text-slate-400 font-semibold text-[10px] uppercase">Section:</span>
               <select
@@ -674,6 +684,32 @@ export default function CBTResultPage({
                   </option>
                 ))}
               </select>
+
+              {/* Bilingual Language Selector */}
+              <div className="flex items-center gap-0.5 bg-slate-100 dark:bg-slate-800 p-0.5 rounded-xl border border-slate-200 dark:border-slate-700 ml-2">
+                <button
+                  type="button"
+                  onClick={() => setSolutionsLanguage('en')}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
+                    solutionsLanguage === 'en'
+                      ? 'bg-blue-600 text-white shadow-xs'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900'
+                  }`}
+                >
+                  English
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSolutionsLanguage('hi')}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
+                    solutionsLanguage === 'hi'
+                      ? 'bg-blue-600 text-white shadow-xs'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900'
+                  }`}
+                >
+                  हिंदी
+                </button>
+              </div>
             </div>
           </div>
 
@@ -753,7 +789,7 @@ export default function CBTResultPage({
 
                   {/* Question Text with KaTeX and line breaks rendered */}
                   <div className="text-sm font-semibold text-slate-900 dark:text-white leading-relaxed">
-                    <MathRenderer content={q.questionText} as="div" />
+                    <MathRenderer content={solutionsLanguage === 'hi' && (q.questionTextHi || (q as any).question_text_hi) ? (q.questionTextHi || (q as any).question_text_hi) : q.questionText} as="div" />
                   </div>
 
                   {/* Question Images if any */}
@@ -791,7 +827,7 @@ export default function CBTResultPage({
                               {opt.id}
                             </span>
                             <div className="flex-1">
-                              <MathRenderer content={opt.text} as="div" />
+                              <MathRenderer content={solutionsLanguage === 'hi' && (opt.textHi || (opt as any).text_hi) ? (opt.textHi || (opt as any).text_hi) : (opt.text || (opt as any).text_en || '')} as="div" />
                               {opt.imageUrl && (
                                 <img src={opt.imageUrl} alt={`Option ${opt.id}`} className="mt-2 max-h-36 border rounded object-contain bg-white" />
                               )}
@@ -852,13 +888,13 @@ export default function CBTResultPage({
                   </div>
 
                   {/* Detailed Step-by-Step KaTeX Explanation */}
-                  {q.explanation && (
+                  {((solutionsLanguage === 'hi' && ((q as any).explanationHi || (q as any).explanation_hi)) || q.explanation) && (
                     <div className="p-4 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/50 text-xs text-blue-950 dark:text-blue-200 leading-relaxed space-y-1.5">
                       <div className="font-extrabold flex items-center gap-1.5 text-blue-700 dark:text-blue-300">
                         <BookOpen className="w-4 h-4" />
-                        <span>Official Step-by-Step Explanation:</span>
+                        <span>Official Step-by-Step Explanation ({solutionsLanguage === 'hi' ? 'हिंदी माध्यम' : 'English'}):</span>
                       </div>
-                      <MathRenderer content={q.explanation} as="div" />
+                      <MathRenderer content={solutionsLanguage === 'hi' && ((q as any).explanationHi || (q as any).explanation_hi) ? ((q as any).explanationHi || (q as any).explanation_hi) : (q.explanation || '')} as="div" />
                     </div>
                   )}
                 </div>

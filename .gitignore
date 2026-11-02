@@ -43,3 +43,25 @@ next-env.d.ts
 
 # temp scripts data
 scripts/downloads/
+scripts/*.png
+scripts/*.jpg
+scripts/cache_repeatermock/
+scripts/__pycache__/
+scripts/extracted_sample/
+scripts/extracted_grad_diagrams.json
+scripts/translation_cache.json
+scripts/test_*
+scripts/inspect_*
+scripts/check_*
+scripts/find_*
+scripts/scan_*
+scripts/read_*
+scripts/sample_*
+scripts/render_*
+scripts/debug_*
+scripts/export_*
+scripts/extract_*
+scripts/fix_*
+scripts/list_*
+scripts/save_*
+scripts/verify_*

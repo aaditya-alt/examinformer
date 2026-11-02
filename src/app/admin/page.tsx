@@ -78,17 +78,36 @@ interface UniqueShift {
   };
 }
 
+export interface QuestionDetails {
+  questionTextEn?: string;
+  questionTextHi?: string;
+  options?: Array<{
+    id: number | string;
+    text_en?: string;
+    text_hi?: string;
+    text?: string;
+    textHi?: string;
+    imageUrl?: string;
+  }>;
+  correctOptionIndex?: number;
+  explanationEn?: string;
+  explanationHi?: string;
+  questionImages?: string[];
+}
+
 interface QuestionReport {
   id: string;
   testId: string;
   testTitle?: string;
   qno: number;
   questionText?: string;
+  questionTextHi?: string;
   issueType: string;
   description: string;
   userEmail?: string;
   status: 'pending' | 'resolved' | 'dismissed';
   createdAt: string;
+  questionDetails?: QuestionDetails;
 }
 
 interface ShiftDifficultyAnalytic {
@@ -185,11 +204,21 @@ export default function AdminDashboardPage() {
   // Question editing modal state
   const [editingReport, setEditingReport] = useState<QuestionReport | null>(null);
   const [editQuesText, setEditQuesText] = useState('');
+  const [editQuesTextHi, setEditQuesTextHi] = useState('');
   const [editExplanation, setEditExplanation] = useState('');
+  const [editExplanationHi, setEditExplanationHi] = useState('');
+  const [editCorrectOption, setEditCorrectOption] = useState<number>(1);
+  const [editOptionsList, setEditOptionsList] = useState<Array<{ id: number; text_en: string; text_hi: string; imageUrl?: string }>>([
+    { id: 1, text_en: '', text_hi: '' },
+    { id: 2, text_en: '', text_hi: '' },
+    { id: 3, text_en: '', text_hi: '' },
+    { id: 4, text_en: '', text_hi: '' }
+  ]);
   const [editQuestionImageUrl, setEditQuestionImageUrl] = useState('');
   const [editOptionImages, setEditOptionImages] = useState<Record<string, string>>({});
   const [uploadingImage, setUploadingImage] = useState(false);
   const [savingEdit, setSavingEdit] = useState(false);
+  const [reportsLanguageMode, setReportsLanguageMode] = useState<Record<string, 'both' | 'en' | 'hi'>>({});
 
   const handleUploadImage = async (file: File, target: 'question' | 'opt1' | 'opt2' | 'opt3' | 'opt4') => {
     try {
@@ -327,24 +356,57 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const openFixQuestionModal = (r: QuestionReport) => {
+    setEditingReport(r);
+    const d = r.questionDetails;
+    setEditQuesText(d?.questionTextEn || r.questionText || '');
+    setEditQuesTextHi(d?.questionTextHi || r.questionTextHi || '');
+    setEditExplanation(d?.explanationEn || '');
+    setEditExplanationHi(d?.explanationHi || '');
+    setEditCorrectOption(d?.correctOptionIndex !== undefined ? d.correctOptionIndex + 1 : 1);
+    
+    if (d?.options && d.options.length > 0) {
+      setEditOptionsList(d.options.map((o: any, idx: number) => ({
+        id: typeof o.id === 'number' ? o.id : idx + 1,
+        text_en: o.text_en || o.text || '',
+        text_hi: o.text_hi || o.textHi || o.text_en || o.text || '',
+        imageUrl: o.imageUrl
+      })));
+    } else {
+      setEditOptionsList([
+        { id: 1, text_en: '', text_hi: '' },
+        { id: 2, text_en: '', text_hi: '' },
+        { id: 3, text_en: '', text_hi: '' },
+        { id: 4, text_en: '', text_hi: '' }
+      ]);
+    }
+    setEditQuestionImageUrl(d?.questionImages?.[0] || '');
+    const optImgs: Record<string, string> = {};
+    (d?.options || []).forEach((o: any, idx: number) => {
+      const id = String(o.id || idx + 1);
+      if (o.imageUrl) optImgs[id] = o.imageUrl;
+    });
+    setEditOptionImages(optImgs);
+  };
+
   const handleSaveQuestionFix = async () => {
     if (!editingReport) return;
     setSavingEdit(true);
     try {
       const updatedQuestionPayload: any = {
-        questionText: editQuesText,
-        explanation: editExplanation
+        questionTextEn: editQuesText,
+        questionTextHi: editQuesTextHi,
+        explanationEn: editExplanation,
+        explanationHi: editExplanationHi,
+        correctOptionIndex: editCorrectOption - 1,
+        options: editOptionsList.map((opt) => ({
+          id: opt.id,
+          text_en: opt.text_en,
+          text_hi: opt.text_hi,
+          imageUrl: editOptionImages[String(opt.id)] || opt.imageUrl || undefined
+        })),
+        questionImages: editQuestionImageUrl ? [editQuestionImageUrl] : []
       };
-      if (editQuestionImageUrl) {
-        updatedQuestionPayload.questionImages = [editQuestionImageUrl];
-      }
-      if (Object.keys(editOptionImages).length > 0) {
-        updatedQuestionPayload.options = [1, 2, 3, 4].map(idx => ({
-          id: idx,
-          text: `Option ${idx}`,
-          imageUrl: editOptionImages[String(idx)] || undefined
-        }));
-      }
 
       const res = await fetch('/api/question-reports', {
         method: 'PATCH',
@@ -352,6 +414,8 @@ export default function AdminDashboardPage() {
         body: JSON.stringify({
           reportId: editingReport.id,
           status: 'resolved',
+          testId: editingReport.testId,
+          qno: editingReport.qno,
           updatedQuestion: updatedQuestionPayload
         })
       });
@@ -361,6 +425,7 @@ export default function AdminDashboardPage() {
         setEditQuestionImageUrl('');
         setEditOptionImages({});
         fetchDashboardData();
+        alert('Question updated and marked resolved successfully!');
       } else {
         alert(json.error || 'Could not save question fix.');
       }
@@ -1231,52 +1296,167 @@ export default function AdminDashboardPage() {
                 <p className="text-xs text-slate-500">No unresolved error reports currently flagged by students.</p>
               </div>
             ) : (
-              <div className="space-y-3">
-                {data.questionReports.map((r) => (
-                  <div
-                    key={r.id}
-                    className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3"
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-xs px-2.5 py-0.5 rounded-full bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300">
-                          Question #{r.qno}
-                        </span>
-                        <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                          {r.testTitle} ({r.testId})
-                        </span>
-                        <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800">
-                          {r.issueType.replace('_', ' ')}
-                        </span>
+              <div className="space-y-4">
+                {data.questionReports.map((r) => {
+                  const viewMode = reportsLanguageMode[r.id] || 'both';
+                  const d = r.questionDetails;
+                  return (
+                    <div
+                      key={r.id}
+                      className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-bold text-xs px-2.5 py-0.5 rounded-full bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300">
+                            Question #{r.qno}
+                          </span>
+                          <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                            {r.testTitle} ({r.testId})
+                          </span>
+                          <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                            {r.issueType.replace('_', ' ')}
+                          </span>
+                          {r.userEmail && (
+                            <span className="text-[11px] text-slate-400">
+                              by {r.userEmail}
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => openFixQuestionModal(r)}
+                            className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-xs"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                            <span>Fix / Edit Question</span>
+                          </button>
+                          <button
+                            onClick={() => handleResolveReport(r.id, 'resolved')}
+                            className="px-3.5 py-1.5 rounded-xl border border-emerald-600 text-emerald-600 hover:bg-emerald-50 text-xs font-bold transition cursor-pointer"
+                          >
+                            Mark Resolved
+                          </button>
+                        </div>
                       </div>
 
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => {
-                            setEditingReport(r);
-                            setEditQuesText(r.questionText || '');
-                            setEditExplanation('');
-                          }}
-                          className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition flex items-center gap-1 cursor-pointer"
-                        >
-                          <Edit3 className="w-3.5 h-3.5" />
-                          <span>Fix Question</span>
-                        </button>
-                        <button
-                          onClick={() => handleResolveReport(r.id, 'resolved')}
-                          className="px-3 py-1.5 rounded-xl border border-emerald-600 text-emerald-600 hover:bg-emerald-50 text-xs font-bold transition cursor-pointer"
-                        >
-                          Mark Resolved
-                        </button>
+                      {/* Candidate Report Note */}
+                      <div className="text-xs text-rose-800 dark:text-rose-200 bg-rose-50 dark:bg-rose-950/40 p-3 rounded-xl border border-rose-200 dark:border-rose-900/40">
+                        <strong>Candidate Report: </strong>
+                        <span>{r.description || 'Reported discrepancy in option/key.'}</span>
+                      </div>
+
+                      {/* Full Question, Options & Solution Display in Both Languages */}
+                      <div className="space-y-3 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60">
+                        {/* Language Toggle for this report card */}
+                        <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-200/80 dark:border-slate-700/80">
+                          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Live Question Preview</span>
+                          <div className="flex items-center gap-1 bg-white dark:bg-slate-800 p-0.5 rounded-lg border border-slate-200 dark:border-slate-700 text-[10px]">
+                            {(['both', 'en', 'hi'] as const).map((mode) => (
+                              <button
+                                key={mode}
+                                type="button"
+                                onClick={() => setReportsLanguageMode(prev => ({ ...prev, [r.id]: mode }))}
+                                className={`px-2 py-0.5 rounded font-bold transition cursor-pointer ${
+                                  viewMode === mode
+                                    ? 'bg-blue-600 text-white'
+                                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900'
+                                }`}
+                              >
+                                {mode === 'both' ? 'Both (Side-by-Side)' : mode === 'en' ? 'English' : 'हिंदी'}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Question Text */}
+                        <div className="space-y-2">
+                          {(viewMode === 'both' || viewMode === 'en') && (
+                            <div className="text-xs text-slate-900 dark:text-white leading-relaxed">
+                              <span className="font-bold text-blue-600 mr-1.5">[EN]:</span>
+                              {d?.questionTextEn || r.questionText || 'No English text available.'}
+                            </div>
+                          )}
+                          {(viewMode === 'both' || viewMode === 'hi') && (
+                            <div className="text-xs text-slate-900 dark:text-white leading-relaxed">
+                              <span className="font-bold text-emerald-600 mr-1.5">[HI]:</span>
+                              {d?.questionTextHi || r.questionTextHi || 'हिंदी पाठ उपलब्ध नहीं है।'}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Question Diagram / Image */}
+                        {d?.questionImages && d.questionImages.length > 0 && (
+                          <div className="flex flex-wrap gap-2 py-1">
+                            {d.questionImages.map((img, i) => (
+                              <img key={i} src={img} alt="Diagram" className="max-h-40 border rounded-lg bg-white p-1 object-contain" />
+                            ))}
+                          </div>
+                        )}
+
+                        {/* All 4 Options with English and Hindi & Correct Key highlight */}
+                        <div className="space-y-1.5 pt-1">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Options:</span>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {(d?.options || []).map((opt: any, optIdx: number) => {
+                              const optNum = typeof opt.id === 'number' ? opt.id : optIdx + 1;
+                              const isCorrect = (d?.correctOptionIndex !== undefined && d.correctOptionIndex === optIdx) || (d?.correctOptionIndex === undefined && optIdx === 0);
+                              return (
+                                <div
+                                  key={optIdx}
+                                  className={`p-2.5 rounded-xl border text-xs flex flex-col gap-1 transition ${
+                                    isCorrect
+                                      ? 'border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/40 text-emerald-950 dark:text-emerald-200 font-semibold'
+                                      : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 text-slate-800 dark:text-slate-200'
+                                  }`}
+                                >
+                                  <div className="flex items-center justify-between">
+                                    <span className="w-5 h-5 rounded-full border border-slate-300 dark:border-slate-600 flex items-center justify-center font-bold text-[10px] shrink-0">
+                                      {String.fromCharCode(65 + optIdx)}
+                                    </span>
+                                    {isCorrect && (
+                                      <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded bg-emerald-600 text-white shrink-0">
+                                        Official Key ✓
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="space-y-0.5 text-xs">
+                                    {(viewMode === 'both' || viewMode === 'en') && (
+                                      <div><strong className="text-slate-400 text-[10px]">EN:</strong> {opt.text_en || opt.text || `Option ${optNum}`}</div>
+                                    )}
+                                    {(viewMode === 'both' || viewMode === 'hi') && (
+                                      <div><strong className="text-slate-400 text-[10px]">HI:</strong> {opt.text_hi || opt.textHi || opt.text_en || opt.text || `विकल्प ${optNum}`}</div>
+                                    )}
+                                  </div>
+                                  {opt.imageUrl && (
+                                    <img src={opt.imageUrl} alt={`Opt ${optNum}`} className="h-14 border rounded object-contain bg-white mt-1" />
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Step-by-Step Solution in English and Hindi */}
+                        <div className="pt-2 border-t border-slate-200/80 dark:border-slate-700/80 space-y-1.5">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Solution / Explanation:</span>
+                          {(viewMode === 'both' || viewMode === 'en') && (
+                            <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40 text-xs text-blue-950 dark:text-blue-200">
+                              <span className="font-bold text-blue-700 block mb-0.5">[English Solution]:</span>
+                              <div className="whitespace-pre-wrap">{d?.explanationEn || 'No English solution set.'}</div>
+                            </div>
+                          )}
+                          {(viewMode === 'both' || viewMode === 'hi') && (
+                            <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/40 text-xs text-emerald-950 dark:text-emerald-200">
+                              <span className="font-bold text-emerald-700 block mb-0.5">[हिंदी समाधान]:</span>
+                              <div className="whitespace-pre-wrap">{d?.explanationHi || 'हिंदी समाधान उपलब्ध नहीं है।'}</div>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
-
-                    <div className="text-xs text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl">
-                      <strong>Candidate Report: </strong>
-                      <span>{r.description || 'Reported discrepancy in option/key.'}</span>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
@@ -1557,43 +1737,85 @@ export default function AdminDashboardPage() {
       {/* Question Fix Modal */}
       {editingReport && (
         <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
-          <div className="w-full max-w-xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-              <h3 className="font-extrabold text-sm text-slate-900 dark:text-white">
-                Live Question Fix — Q.{editingReport.qno} ({editingReport.testId})
-              </h3>
-              <button onClick={() => setEditingReport(null)} className="text-slate-400 hover:text-slate-600">✕</button>
+          <div className="w-full max-w-3xl max-h-[92vh] flex flex-col bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 shrink-0 bg-slate-50/50 dark:bg-slate-800/40">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-violet-100 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300">
+                    Bilingual Editor
+                  </span>
+                  <h3 className="font-extrabold text-base text-slate-900 dark:text-white">
+                    Edit &amp; Fix Question #{editingReport.qno}
+                  </h3>
+                </div>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 font-mono">
+                  Test: {editingReport.testId} • Reported Issue: {editingReport.issueType}
+                </p>
+              </div>
+              <button 
+                onClick={() => setEditingReport(null)} 
+                className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+              >
+                ✕
+              </button>
             </div>
 
-            <div className="space-y-3 text-xs">
-              <div className="space-y-1">
-                <label className="font-bold text-slate-700 dark:text-slate-300">Question Text</label>
-                <textarea
-                  value={editQuesText}
-                  onChange={(e) => setEditQuesText(e.target.value)}
-                  rows={3}
-                  className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-medium"
-                />
+            {/* Modal Scrollable Body */}
+            <div className="p-6 space-y-5 overflow-y-auto text-xs">
+              {/* Question Text in English & Hindi */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                      Question Text (English)
+                    </label>
+                  </div>
+                  <textarea
+                    value={editQuesText}
+                    onChange={(e) => setEditQuesText(e.target.value)}
+                    rows={4}
+                    placeholder="Enter English question text..."
+                    className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none resize-none leading-relaxed"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                      Question Text (हिंदी)
+                    </label>
+                  </div>
+                  <textarea
+                    value={editQuesTextHi}
+                    onChange={(e) => setEditQuesTextHi(e.target.value)}
+                    rows={4}
+                    placeholder="हिंदी प्रश्न दर्ज करें..."
+                    className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none resize-none leading-relaxed"
+                  />
+                </div>
               </div>
 
               {/* Question Image Upload (for Non-verbal/Diagrams) */}
-              <div className="space-y-1.5 p-3 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/40">
+              <div className="space-y-2 p-3.5 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/40">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                    <ImageIcon className="w-3.5 h-3.5 text-blue-500" />
-                    <span>Question Diagram / Figure (Mirror/Water Image)</span>
+                    <ImageIcon className="w-4 h-4 text-violet-500" />
+                    <span>Question Diagram / Figure (Mirror / Non-verbal Figure)</span>
                   </span>
-                  {uploadingImage && <span className="text-[10px] text-blue-600 animate-pulse font-bold">Uploading to Supabase...</span>}
+                  {uploadingImage && <span className="text-[10px] text-violet-600 animate-pulse font-bold">Uploading to Supabase...</span>}
                 </div>
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
                     value={editQuestionImageUrl}
                     onChange={(e) => setEditQuestionImageUrl(e.target.value)}
-                    placeholder="Enter image URL or choose file from device..."
-                    className="flex-1 p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-mono"
+                    placeholder="Image URL or choose file from device..."
+                    className="flex-1 p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-mono"
                   />
-                  <label className="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 font-bold text-slate-700 dark:text-slate-200 text-xs flex items-center gap-1 cursor-pointer shrink-0">
+                  <label className="px-3.5 py-2 rounded-xl bg-violet-50 hover:bg-violet-100 dark:bg-violet-950/40 dark:hover:bg-violet-900/60 font-bold text-violet-700 dark:text-violet-300 text-xs flex items-center gap-1.5 cursor-pointer shrink-0 border border-violet-200 dark:border-violet-800 transition">
                     <Upload className="w-3.5 h-3.5" />
                     <span>Browse</span>
                     <input
@@ -1608,41 +1830,104 @@ export default function AdminDashboardPage() {
                   </label>
                 </div>
                 {editQuestionImageUrl && (
-                  <div className="mt-1 flex items-center gap-2">
-                    <img src={editQuestionImageUrl} alt="Preview" className="h-16 border rounded bg-white object-contain" />
-                    <button type="button" onClick={() => setEditQuestionImageUrl('')} className="text-red-500 hover:text-red-700 font-bold text-[10px]">Remove</button>
+                  <div className="mt-2 flex items-center gap-3 p-2 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <img src={editQuestionImageUrl} alt="Preview" className="h-16 border rounded-lg bg-white object-contain p-1" />
+                    <button type="button" onClick={() => setEditQuestionImageUrl('')} className="text-red-500 hover:text-red-700 font-bold text-xs">Remove Image</button>
                   </div>
                 )}
               </div>
 
-              {/* Option Images Upload (A, B, C, D) */}
-              <div className="space-y-2 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/20">
-                <span className="font-bold text-slate-700 dark:text-slate-300 block">Option Figures (for Visual Options A, B, C, D)</span>
-                <div className="grid grid-cols-2 gap-2">
-                  {[1, 2, 3, 4].map((optIdx) => {
-                    const optKey = String(optIdx);
-                    const currentImg = editOptionImages[optKey] || '';
+              {/* All 4 Options (Bilingual Text + Correct Option Radio + Figures) */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between pb-1 border-b border-slate-100 dark:border-slate-800">
+                  <label className="font-extrabold text-slate-800 dark:text-slate-200 text-sm flex items-center gap-2">
+                    <span>Options &amp; Correct Answer Key</span>
+                    <span className="text-[11px] font-normal text-slate-500">(Click radio button to set correct answer)</span>
+                  </label>
+                </div>
+
+                <div className="space-y-3">
+                  {[1, 2, 3, 4].map((optNum) => {
+                    const optIndex = optNum - 1;
+                    const optData = editOptionsList[optIndex] || { id: optNum, text_en: '', text_hi: '' };
+                    const isCorrect = editCorrectOption === optNum;
+                    const optKey = String(optNum);
+                    const optImg = editOptionImages[optKey] || optData.imageUrl || '';
+
                     return (
-                      <div key={optIdx} className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 space-y-1">
-                        <div className="flex items-center justify-between text-[11px] font-bold">
-                          <span>Option {optIdx} Figure</span>
-                          <label className="text-blue-600 hover:text-blue-700 cursor-pointer flex items-center gap-0.5 text-[10px]">
+                      <div
+                        key={optNum}
+                        className={`p-3.5 rounded-2xl border transition-all ${
+                          isCorrect
+                            ? 'border-emerald-500 bg-emerald-50/40 dark:bg-emerald-950/20 shadow-sm ring-1 ring-emerald-400'
+                            : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/60'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <label className="flex items-center gap-2.5 cursor-pointer font-extrabold">
+                            <input
+                              type="radio"
+                              name="correctOptionRadio"
+                              checked={isCorrect}
+                              onChange={() => setEditCorrectOption(optNum)}
+                              className="w-4 h-4 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
+                            />
+                            <span className={`px-2 py-0.5 rounded-md text-xs font-black ${isCorrect ? 'bg-emerald-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'}`}>
+                              Option {optNum} ({['A', 'B', 'C', 'D'][optIndex]})
+                            </span>
+                            {isCorrect && (
+                              <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1">
+                                ✓ Correct Answer Key
+                              </span>
+                            )}
+                          </label>
+
+                          {/* Figure upload button */}
+                          <label className="text-violet-600 hover:text-violet-700 dark:text-violet-400 cursor-pointer flex items-center gap-1 text-[11px] font-bold">
                             <Upload className="w-3 h-3" />
-                            <span>Upload</span>
+                            <span>{optImg ? 'Change Figure' : 'Upload Figure'}</span>
                             <input
                               type="file"
                               accept="image/*"
                               className="hidden"
                               onChange={(e) => {
                                 const file = e.target.files?.[0];
-                                if (file) handleUploadImage(file, `opt${optIdx}` as any);
+                                if (file) handleUploadImage(file, `opt${optNum}` as any);
                               }}
                             />
                           </label>
                         </div>
-                        {currentImg ? (
-                          <div className="flex items-center gap-1.5">
-                            <img src={currentImg} alt={`Option ${optIdx}`} className="h-10 border rounded bg-white object-contain" />
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                          <input
+                            type="text"
+                            value={optData.text_en}
+                            onChange={(e) => {
+                              const updated = [...editOptionsList];
+                              if (!updated[optIndex]) updated[optIndex] = { id: optNum, text_en: '', text_hi: '' };
+                              updated[optIndex].text_en = e.target.value;
+                              setEditOptionsList(updated);
+                            }}
+                            placeholder={`Option ${optNum} (English)`}
+                            className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium"
+                          />
+                          <input
+                            type="text"
+                            value={optData.text_hi}
+                            onChange={(e) => {
+                              const updated = [...editOptionsList];
+                              if (!updated[optIndex]) updated[optIndex] = { id: optNum, text_en: '', text_hi: '' };
+                              updated[optIndex].text_hi = e.target.value;
+                              setEditOptionsList(updated);
+                            }}
+                            placeholder={`विकल्प ${optNum} (हिंदी)`}
+                            className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium"
+                          />
+                        </div>
+
+                        {optImg && (
+                          <div className="mt-2 flex items-center gap-2">
+                            <img src={optImg} alt={`Option ${optNum}`} className="h-10 border rounded bg-white object-contain p-1" />
                             <button
                               type="button"
                               onClick={() => {
@@ -1650,13 +1935,11 @@ export default function AdminDashboardPage() {
                                 delete copy[optKey];
                                 setEditOptionImages(copy);
                               }}
-                              className="text-red-500 text-[10px] font-bold"
+                              className="text-red-500 hover:text-red-700 text-[10px] font-bold"
                             >
-                              ✕
+                              Remove Figure
                             </button>
                           </div>
-                        ) : (
-                          <div className="text-[10px] text-slate-400 italic">No image set</div>
                         )}
                       </div>
                     );
@@ -1664,32 +1947,60 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
 
-              <div className="space-y-1">
-                <label className="font-bold text-slate-700 dark:text-slate-300">Step-by-Step AI Solution &amp; Explanation</label>
-                <textarea
-                  value={editExplanation}
-                  onChange={(e) => setEditExplanation(e.target.value)}
-                  placeholder="Enter corrected step-by-step mathematical proof or reasoning solution..."
-                  rows={4}
-                  className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-medium"
-                />
+              {/* Step-by-Step Explanation in English & Hindi */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                    Step-by-Step Explanation (English)
+                  </label>
+                  <textarea
+                    value={editExplanation}
+                    onChange={(e) => setEditExplanation(e.target.value)}
+                    placeholder="Enter mathematical proof, grammar rule, or fact explanation in English..."
+                    rows={4}
+                    className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-violet-500 outline-none resize-none leading-relaxed"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                    Step-by-Step Explanation (हिंदी)
+                  </label>
+                  <textarea
+                    value={editExplanationHi}
+                    onChange={(e) => setEditExplanationHi(e.target.value)}
+                    placeholder="हिंदी में विस्तृत हल एवं स्पष्टीकरण दर्ज करें..."
+                    rows={4}
+                    className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-amber-500 outline-none resize-none leading-relaxed"
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2">
-              <button
-                onClick={() => setEditingReport(null)}
-                className="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSaveQuestionFix}
-                disabled={savingEdit}
-                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold"
-              >
-                {savingEdit ? 'Saving Fix...' : 'Save & Resolve Error'}
-              </button>
+            {/* Modal Footer */}
+            <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 shrink-0">
+              <span className="text-[11px] text-slate-500">
+                Fixes update Supabase database and local test caches immediately.
+              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingReport(null)}
+                  className="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSaveQuestionFix}
+                  disabled={savingEdit}
+                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition disabled:opacity-50 flex items-center gap-1.5"
+                >
+                  {savingEdit ? 'Saving Fix...' : 'Save & Resolve Error'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
