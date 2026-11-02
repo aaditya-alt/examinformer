@@ -427,13 +427,43 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
             const rawOptions = Array.isArray(q.options) ? q.options : [];
             const mappedOptions = rawOptions.map((o: any, idx: number) => {
               const optImg = o.imageUrl || o.image_url || o.image || undefined;
+              let optId = idx + 1;
+              if (typeof o.id === 'number' && o.id >= 1 && o.id <= 4) {
+                optId = o.id;
+              } else if (typeof o.id === 'string') {
+                const lower = o.id.trim().toLowerCase();
+                if (lower === 'a' || lower === '1') optId = 1;
+                else if (lower === 'b' || lower === '2') optId = 2;
+                else if (lower === 'c' || lower === '3') optId = 3;
+                else if (lower === 'd' || lower === '4') optId = 4;
+                else if (!isNaN(Number(lower))) optId = Number(lower);
+              }
               return {
-                id: o.id || idx + 1,
-                text: o.text_en || o.text || (optImg ? '' : `Option ${o.id || idx + 1}`),
-                textHi: o.text_hi || o.text_en || o.text || (optImg ? '' : `Option ${o.id || idx + 1}`),
+                id: optId,
+                text: o.text_en || o.text || (optImg ? '' : `Option ${optId}`),
+                textHi: o.text_hi || o.text_en || o.text || (optImg ? '' : `Option ${optId}`),
                 imageUrl: optImg
               };
             });
+
+            // 1-based correctOption (1, 2, 3, 4)
+            let corrOpt = 1;
+            if (typeof q.correct_option_index === 'number') {
+              if (q.correct_option_index >= 1 && q.correct_option_index <= 4) {
+                corrOpt = q.correct_option_index;
+              } else if (q.correct_option_index === 0) {
+                corrOpt = 1;
+              }
+            } else if (typeof q.correctOption === 'number' && q.correctOption >= 1 && q.correctOption <= 4) {
+              corrOpt = q.correctOption;
+            } else if (typeof (q as any).correct_option === 'string') {
+              const lower = (q as any).correct_option.trim().toLowerCase();
+              if (lower === 'a' || lower === '1') corrOpt = 1;
+              else if (lower === 'b' || lower === '2') corrOpt = 2;
+              else if (lower === 'c' || lower === '3') corrOpt = 3;
+              else if (lower === 'd' || lower === '4') corrOpt = 4;
+              else if (!isNaN(Number(lower))) corrOpt = Number(lower);
+            }
 
             sectionMap.get(secName)!.push({
               id: q.id,
@@ -442,7 +472,7 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
               questionTextHi: q.question_text_hi || q.question_text_en || '',
               questionImages: q.question_images || [],
               options: mappedOptions,
-              correctOption: q.correct_option_index || 1,
+              correctOption: corrOpt,
               explanation: q.explanation_en || '',
               explanationHi: q.explanation_hi || q.explanation_en || '',
               marks: qMarks,
@@ -704,13 +734,43 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
             const rawOptions = Array.isArray(q.options) ? q.options : [];
             const mappedOptions = rawOptions.map((o: any, oIdx: number) => {
               const optImg = o.imageUrl || o.image_url || o.image || undefined;
+              let optId = oIdx + 1;
+              if (typeof o.id === 'number' && o.id >= 1 && o.id <= 4) {
+                optId = o.id;
+              } else if (typeof o.id === 'string') {
+                const lower = o.id.trim().toLowerCase();
+                if (lower === 'a' || lower === '1') optId = 1;
+                else if (lower === 'b' || lower === '2') optId = 2;
+                else if (lower === 'c' || lower === '3') optId = 3;
+                else if (lower === 'd' || lower === '4') optId = 4;
+                else if (!isNaN(Number(lower))) optId = Number(lower);
+              }
               return {
-                id: o.id || oIdx + 1,
-                text: o.text_en || o.text || (optImg ? '' : `Option ${o.id || oIdx + 1}`),
-                textHi: o.text_hi || o.text_en || o.text || (optImg ? '' : `Option ${o.id || oIdx + 1}`),
+                id: optId,
+                text: o.text_en || o.text || (optImg ? '' : `Option ${optId}`),
+                textHi: o.text_hi || o.text_en || o.text || (optImg ? '' : `Option ${optId}`),
                 imageUrl: optImg
               };
             });
+
+            let corrOpt = 1;
+            if (typeof q.correct_option_index === 'number') {
+              if (q.correct_option_index >= 1 && q.correct_option_index <= 4) {
+                corrOpt = q.correct_option_index;
+              } else if (q.correct_option_index === 0) {
+                corrOpt = 1;
+              }
+            } else if (typeof q.correctOption === 'number' && q.correctOption >= 1 && q.correctOption <= 4) {
+              corrOpt = q.correctOption;
+            } else if (typeof (q as any).correct_option === 'string') {
+              const lower = (q as any).correct_option.trim().toLowerCase();
+              if (lower === 'a' || lower === '1') corrOpt = 1;
+              else if (lower === 'b' || lower === '2') corrOpt = 2;
+              else if (lower === 'c' || lower === '3') corrOpt = 3;
+              else if (lower === 'd' || lower === '4') corrOpt = 4;
+              else if (!isNaN(Number(lower))) corrOpt = Number(lower);
+            }
+
             return {
               id: q.id,
               qno: idx + 1,
@@ -718,7 +778,7 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
               questionTextHi: q.question_text_hi || q.question_text_en || '',
               questionImages: q.question_images || [],
               options: mappedOptions,
-              correctOption: q.correct_option_index || 1,
+              correctOption: corrOpt,
               explanation: q.explanation_en || '',
               explanationHi: q.explanation_hi || q.explanation_en || '',
               marks: marksPerQ,

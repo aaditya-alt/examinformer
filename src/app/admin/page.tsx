@@ -1476,7 +1476,7 @@ export default function AdminDashboardPage() {
                       {/* Options preview */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {(q.options || []).map((opt: any, optIdx: number) => {
-                          const isCorrect = q.correctOptionIndex === optIdx;
+                          const isCorrect = q.correctOptionIndex === optIdx || q.correctOptionIndex === (optIdx + 1) || q.correctOptionIndex === opt.id;
                           return (
                             <div
                               key={optIdx}
@@ -1791,7 +1791,7 @@ export default function AdminDashboardPage() {
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             {(d?.options || []).map((opt: any, optIdx: number) => {
                               const optNum = typeof opt.id === 'number' ? opt.id : optIdx + 1;
-                              const isCorrect = (d?.correctOptionIndex !== undefined && d.correctOptionIndex === optIdx) || (d?.correctOptionIndex === undefined && optIdx === 0);
+                              const isCorrect = (d?.correctOptionIndex !== undefined && (d.correctOptionIndex === optIdx || d.correctOptionIndex === optNum || d.correctOptionIndex === optIdx + 1));
                               return (
                                 <div
                                   key={optIdx}

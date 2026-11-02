@@ -42,6 +42,29 @@ import {
   Lock
 } from 'lucide-react';
 
+const normalizeOptionVal = (val: any): number => {
+  if (typeof val === 'number') return val;
+  if (typeof val === 'string') {
+    const s = val.trim().toLowerCase();
+    if (s === 'a' || s === '1') return 1;
+    if (s === 'b' || s === '2') return 2;
+    if (s === 'c' || s === '3') return 3;
+    if (s === 'd' || s === '4') return 4;
+    const n = Number(s);
+    if (!isNaN(n)) return n;
+  }
+  return -1;
+};
+
+const isOptionMatch = (a: any, b: any): boolean => {
+  if (a === undefined || b === undefined || a === null || b === null) return false;
+  if (a === b) return true;
+  const numA = normalizeOptionVal(a);
+  const numB = normalizeOptionVal(b);
+  if (numA !== -1 && numB !== -1) return numA === numB;
+  return String(a).trim().toLowerCase() === String(b).trim().toLowerCase();
+};
+
 function EduquityCBTContent({ testId }: { testId: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -550,7 +573,8 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   };
 
   // Option selection handlers
-  const handleSelectOption = (optId: number) => {
+  const handleSelectOption = (rawOptId: any) => {
+    const optId = normalizeOptionVal(rawOptId) > 0 ? normalizeOptionVal(rawOptId) : rawOptId;
     if (isSolutionMode) {
       if (reattemptMode) {
         setReattemptChoices(prev => ({ ...prev, [qno]: optId }));
@@ -707,10 +731,10 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   const secNotAnswered = sectionQuestions.length - secAnswered;
 
   // Solution evaluation counts for active section
-  const secCorrect = sectionQuestions.filter(q => userResponses[q.qno]?.chosenOption === q.correctOption).length;
+  const secCorrect = sectionQuestions.filter(q => isOptionMatch(userResponses[q.qno]?.chosenOption, q.correctOption)).length;
   const secWrong = sectionQuestions.filter(q => {
     const r = userResponses[q.qno];
-    return r && r.chosenOption !== undefined && r.chosenOption !== q.correctOption;
+    return r && r.chosenOption !== undefined && !isOptionMatch(r.chosenOption, q.correctOption);
   }).length;
   const secSkipped = sectionQuestions.length - secCorrect - secWrong;
 
@@ -753,7 +777,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
           else if (isMtsSession1) s1Attempted++;
           else s2Attempted++;
 
-          if (resp.chosenOption === q.correctOption) {
+          if (isOptionMatch(resp.chosenOption, q.correctOption)) {
             correctCount++;
             if (isComputerSec) {
               computerCorrect++;
@@ -793,7 +817,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
         sec.questions.forEach(q => {
           const resp = userResponses[q.qno];
           if (resp && resp.chosenOption !== undefined) {
-            if (resp.chosenOption === q.correctOption) {
+            if (isOptionMatch(resp.chosenOption, q.correctOption)) {
               existingMastery[q.id] = 'correct';
             } else {
               existingMastery[q.id] = 'wrong';
@@ -1430,12 +1454,12 @@ function EduquityCBTContent({ testId }: { testId: string }) {
               {(currentQuestion?.options || []).map((opt) => {
                 const optText = language === 'hi' && opt.textHi ? opt.textHi : opt.text;
                 
-                const isSelectedInExam = !isSolutionMode && currentResponse.chosenOption === opt.id;
-                const isSelectedInReattempt = isSolutionMode && reattemptMode && reattemptChoices[qno] === opt.id;
+                const isSelectedInExam = !isSolutionMode && isOptionMatch(currentResponse.chosenOption, opt.id);
+                const isSelectedInReattempt = isSolutionMode && reattemptMode && isOptionMatch(reattemptChoices[qno], opt.id);
                 
-                const isOfficialCorrect = isSolutionMode && isQuestionSolutionVisible && opt.id === currentQuestion?.correctOption;
+                const isOfficialCorrect = isSolutionMode && isQuestionSolutionVisible && isOptionMatch(opt.id, currentQuestion?.correctOption);
                 const isUserAttempted = isSolutionMode && isQuestionSolutionVisible && (
-                  reattemptMode ? (reattemptChoices[qno] === opt.id) : (currentResponse.chosenOption === opt.id)
+                  reattemptMode ? isOptionMatch(reattemptChoices[qno], opt.id) : isOptionMatch(currentResponse.chosenOption, opt.id)
                 );
                 const isUserWrongChoice = isSolutionMode && isQuestionSolutionVisible && isUserAttempted && !isOfficialCorrect;
                 const isUserCorrectChoice = isSolutionMode && isQuestionSolutionVisible && isUserAttempted && isOfficialCorrect;
@@ -1568,11 +1592,11 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                 <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between text-xs text-slate-600 dark:text-slate-400 gap-2">
                   <div className="flex items-center gap-3">
                     <span>
-                      Candidate Choice: <strong className="text-slate-900 dark:text-white">{currentResponse.chosenOption ? `Option (${currentResponse.chosenOption})` : 'Unattempted'}</strong>
+                      Candidate Choice: <strong className="text-slate-900 dark:text-white">{currentResponse.chosenOption ? `Option (${normalizeOptionVal(currentResponse.chosenOption) > 0 ? normalizeOptionVal(currentResponse.chosenOption) : currentResponse.chosenOption})` : 'Unattempted'}</strong>
                     </span>
                     <span className="text-slate-300 dark:text-slate-700">|</span>
                     <span className="text-emerald-700 dark:text-emerald-400">
-                      Official Key: <strong>Option ({currentQuestion?.correctOption || 1})</strong>
+                      Official Key: <strong>Option ({normalizeOptionVal(currentQuestion?.correctOption) > 0 ? normalizeOptionVal(currentQuestion?.correctOption) : (currentQuestion?.correctOption || 1)})</strong>
                     </span>
                   </div>
                   <div className="text-[11px] text-slate-500 dark:text-slate-400">
@@ -1663,7 +1687,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
 
                 if (isSolutionMode) {
                   if (resp && resp.chosenOption !== undefined) {
-                    if (resp.chosenOption === q.correctOption) {
+                    if (isOptionMatch(resp.chosenOption, q.correctOption)) {
                       bgClass = 'bg-[#15803d] text-white';
                     } else {
                       bgClass = 'bg-[#dc2626] text-white';
@@ -1807,7 +1831,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
 
                     if (isSolutionMode) {
                       if (resp && resp.chosenOption !== undefined) {
-                        if (resp.chosenOption === q.correctOption) {
+                        if (isOptionMatch(resp.chosenOption, q.correctOption)) {
                           bgClass = 'bg-[#15803d] text-white';
                         } else {
                           bgClass = 'bg-[#dc2626] text-white';
