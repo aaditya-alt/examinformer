@@ -8,7 +8,7 @@ export async function GET(req: Request) {
   const uniqueOnly = searchParams.get('unique') === 'true';
 
   if (id) {
-    const submission = getSubmissionById(id);
+    const submission = await getSubmissionById(id);
     if (!submission) {
       return NextResponse.json({ error: 'Submission not found' }, { status: 404 });
     }
@@ -24,7 +24,7 @@ export async function GET(req: Request) {
   }
 
   if (uniqueOnly) {
-    const unique = getUniqueSubmissions();
+    const unique = await getUniqueSubmissions();
     return NextResponse.json({ success: true, count: unique.length, data: unique });
   }
 

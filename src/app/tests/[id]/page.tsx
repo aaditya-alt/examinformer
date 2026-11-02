@@ -103,6 +103,17 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   // Storage key for pause/resume state
   const pauseStorageKey = user ? `cbt_paused_session_${testId}_${user.id}` : `cbt_paused_session_${testId}_guest`;
 
+  const isRailway = Boolean(
+    test?.examFamily === 'rrb' ||
+    test?.id?.startsWith('rrb-') ||
+    (test?.examCode || '').toLowerCase().includes('rrb') ||
+    test?.title?.toLowerCase().includes('rrb') ||
+    test?.title?.toLowerCase().includes('railway') ||
+    testId.startsWith('rrb-')
+  );
+  const agencyName = isRailway ? 'TCS iON' : 'Eduquity';
+  const commissionName = isRailway ? 'Railway Recruitment Board (RRB)' : 'Staff Selection Commission (SSC)';
+
   const isSectionalTimingApplicable = (testObj: CBTTest | null): boolean => {
     if (!testObj) return false;
     if (testObj.hasSectionalTiming === false) return false;
@@ -387,7 +398,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     if (nextIdx !== -1) {
       setActiveSectionIdx(nextIdx);
       setActiveQuestionIdx(0);
-      setSectionAlertMsg(`Time expired for section "${test.sections[activeSectionIdx]?.name || 'Current Section'}". Eduquity has transitioned you to "${test.sections[nextIdx].name}".`);
+      setSectionAlertMsg(`Time expired for section "${test.sections[activeSectionIdx]?.name || 'Current Section'}". ${agencyName} has transitioned you to "${test.sections[nextIdx].name}".`);
       setTimeout(() => setSectionAlertMsg(null), 5000);
     } else {
       handleSubmitTest();
@@ -651,7 +662,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     }
 
     if (!isSolutionMode && lockedSections[secIdx]) {
-      alert('This section has expired and is locked under Eduquity SSC examination rules.');
+      alert(`This section has expired and is locked under ${agencyName} ${isRailway ? 'Railway' : 'SSC'} examination rules.`);
       return;
     }
     setActiveSectionIdx(secIdx);
@@ -898,7 +909,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
     return (
       <div className="fixed inset-0 bg-[#0f172a] flex flex-col items-center justify-center text-white z-50">
         <div className="w-10 h-10 border-3 border-sky-400 border-t-transparent rounded-full animate-spin mb-3" />
-        <h2 className="text-base font-bold">Initializing Eduquity Assessment Hall...</h2>
+        <h2 className="text-base font-bold">Initializing {agencyName} Assessment Hall...</h2>
         <p className="text-xs text-slate-400 mt-1">Validating candidate station &amp; loading encrypted question paper</p>
       </div>
     );
@@ -1166,7 +1177,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
         <div className="flex items-center gap-4">
           <button
             type="button"
-            onClick={() => alert('Eduquity Palette Symbols:\n- Blue: Not Answered / Visited\n- Green: Answered\n- Purple: Marked for Review\n- Purple with Green dot: Answered & Marked for Review')}
+            onClick={() => alert(`${agencyName} Palette Symbols:\n- Blue: Not Answered / Visited\n- Green: Answered\n- Purple: Marked for Review\n- Purple with Green dot: Answered & Marked for Review`)}
             className="text-rose-600 underline font-bold text-xs hover:text-rose-700 tracking-wider"
           >
             SYMBOLS
@@ -2009,14 +2020,14 @@ function EduquityCBTContent({ testId }: { testId: string }) {
           <div className="w-full max-w-2xl max-h-[85vh] rounded-2xl bg-white border border-slate-200 flex flex-col shadow-2xl">
             <div className="p-4 border-b border-slate-100 flex items-center justify-between">
               <h3 className="font-extrabold text-base text-slate-900">
-                Eduquity CBT Standard Examination Guidelines
+                {agencyName} CBT Standard Examination Guidelines
               </h3>
               <button onClick={() => setInstructionsModalOpen(false)} className="text-slate-400 hover:text-slate-600">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <div className="p-6 overflow-y-auto space-y-4 text-xs text-slate-700 leading-relaxed">
-              <p><strong>1. Eduquity Assessment System:</strong> The server clock controls timing. The timer at the top indicates remaining total time.</p>
+              <p><strong>1. {agencyName} Assessment System:</strong> The server clock controls timing. The timer at the top indicates remaining total time.</p>
               <p><strong>2. Sectional Tabs:</strong> Click on PART-A, PART-B, PART-C, or PART-D to navigate between sections.</p>
               <p><strong>3. Choosing Options:</strong> Click on the small circular radio button to select an option. Click &quot;Clear Response&quot; to deselect.</p>
               <p><strong>4. Palette Legend:</strong> Green (Answered), Red (Not Answered), Blue (Not Visited), Purple (Marked for Review).</p>
@@ -2050,7 +2061,7 @@ export default function CBTTestInterfacePage({
       fallback={
         <div className="fixed inset-0 bg-[#0f172a] flex flex-col items-center justify-center text-white z-50">
           <div className="w-10 h-10 border-3 border-sky-400 border-t-transparent rounded-full animate-spin mb-3" />
-          <h2 className="text-base font-bold">Initializing Eduquity Assessment Hall...</h2>
+          <h2 className="text-base font-bold">Initializing Assessment Hall...</h2>
         </div>
       }
     >

@@ -50,7 +50,9 @@ export interface EvaluationResult {
     shiftTime: string;
     venue: string;
     category?: string;
+    gender?: string;
     zone?: string;
+    state?: string;
   };
   metrics: CandidateMetrics;
   sections: SectionScore[];
@@ -60,11 +62,25 @@ export interface EvaluationResult {
     allIndiaRank: number;
     totalSubmissions: number;
     percentile: number;
+    normalizedScore: number;
+    normalizedRank: number;
     shiftRank: number;
     shiftTotal: number;
     shiftAverageScore: number;
     shiftTopperScore: number;
     categoryRank: number;
+    categoryTotal: number;
+    normalizedCategoryRank: number;
+    categoryShiftRank: number;
+    categoryShiftTotal: number;
+    genderRank?: number;
+    genderTotal?: number;
+    zoneRank?: number;
+    zoneTotal?: number;
+    zoneCategoryRank?: number;
+    zoneCategoryTotal?: number;
+    zoneShiftCategoryRank?: number;
+    zoneShiftCategoryTotal?: number;
   };
   allIndiaRankEstimate?: number;
   shiftRankEstimate?: number;
@@ -111,8 +127,12 @@ export interface StoredPortalSubmission {
   examTitle: string;
   shiftKey: string;
   category: string;
+  gender?: string;
+  zone?: string;
+  state?: string;
   finalScore: number;
   rawScore: number;
+  normalizedScore?: number;
   evaluatedAt: string;
 }
 
@@ -357,7 +377,14 @@ export async function evaluateAnswerKey(input: EvaluationInput): Promise<Evaluat
     customRule: rule
   });
 
-  return await evaluateResponseSheet(parsedSheet, rule, input.category, input.zone);
+  return await evaluateResponseSheet(
+    parsedSheet,
+    rule,
+    input.category,
+    input.zone,
+    input.gender,
+    input.state
+  );
 }
 
 /**
@@ -367,7 +394,9 @@ export async function evaluateResponseSheet(
   sheet: UniversalResponseSheet,
   rule: ScoreRule,
   category: string = 'UR',
-  zone?: string
+  zone?: string,
+  gender?: string,
+  state?: string
 ): Promise<EvaluationResult> {
   const submissionId = `sub_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
   const sectionBreakdowns: SectionScore[] = [];
@@ -436,27 +465,127 @@ export async function evaluateResponseSheet(
   const candRoll = sheet.meta.rollNo || '2402094182';
   const candName = sheet.meta.candidateName || 'Candidate';
   const candCategory = category || sheet.meta.category || 'UR';
+  const candGender = gender || 'Male';
+  const candZone = zone || sheet.meta.stateZone || undefined;
+  const candState = state || undefined;
+  const isRailway = sheet.meta.examFamily === 'rrb' || Boolean(candZone);
 
-  // Load actual portal submissions for dynamic ranking
-  const portalSubmissions = loadPortalSubmissions();
-  
-  // Calculate rankings based on portal submissions
-  const allPortalForFamily = portalSubmissions.filter(s => s.examFamily === sheet.meta.examFamily);
-  const portalRank = allPortalForFamily.filter(s => s.finalScore > finalScore).length + 1;
+  // Load existing portal submissions from local file
+  let portalSubmissions = loadPortalSubmissions();
+
+  // Merge with Supabase answer_key_submissions for real-time multi-device accuracy
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data: dbSubs } = await supabase
+        .from('answer_key_submissions')
+        .select('id, roll_number, candidate_name, exam_family, exam_code, exam_date, shift_time, category, state_zone, final_score, raw_score, sections_data, created_at')
+        .order('final_score', { ascending: false })
+        .limit(2500);
+
+      if (dbSubs && dbSubs.length > 0) {
+        const combinedMap = new Map<string, StoredPortalSubmission>();
+        portalSubmissions.forEach((item) => combinedMap.set(item.rollNumber || item.id, item));
+
+        dbSubs.forEach((s) => {
+          const sMeta = s.sections_data?.meta || {};
+          const key = s.roll_number || s.id;
+          combinedMap.set(key, {
+            id: s.id,
+            rollNumber: s.roll_number || '',
+            candidateName: s.candidate_name || '',
+            examFamily: s.exam_family || 'ssc',
+            examTitle: s.exam_code || '',
+            shiftKey: `${s.exam_date || ''}_${s.shift_time || ''}`.trim() || 'General Shift',
+            category: s.category || 'UR',
+            gender: sMeta.gender || undefined,
+            zone: s.state_zone || sMeta.zone || undefined,
+            state: sMeta.state || undefined,
+            finalScore: Number(s.final_score) || 0,
+            rawScore: Number(s.raw_score) || Number(s.final_score) || 0,
+            normalizedScore: sMeta.normalizedScore ? Number(sMeta.normalizedScore) : undefined,
+            evaluatedAt: s.created_at || new Date().toISOString()
+          });
+        });
+
+        portalSubmissions = Array.from(combinedMap.values());
+      }
+    } catch (e) {
+      console.warn('Could not load DB submissions for live rankings:', e);
+    }
+  }
+
+  // Candidates in this exam family
+  const allPortalForFamily = portalSubmissions.filter((s) => s.examFamily === sheet.meta.examFamily);
+
+  // 1. Shift Scores & Statistics
+  const shiftPortal = allPortalForFamily.filter((s) => s.shiftKey === shiftKey);
+  const shiftScores = shiftPortal.map((s) => s.finalScore).concat(finalScore);
+  const shiftMean = shiftScores.reduce((a, b) => a + b, 0) / shiftScores.length;
+  const shiftVariance = shiftScores.reduce((sum, score) => sum + Math.pow(score - shiftMean, 2), 0) / shiftScores.length;
+  const shiftStdDev = Math.max(Math.sqrt(shiftVariance), 4.0);
+  const shiftTop = Math.max(...shiftScores);
+  const shiftAvg = shiftMean;
+
+  // 2. Global Examination Statistics across all shifts
+  const allScores = allPortalForFamily.map((s) => s.finalScore).concat(finalScore);
+  const globalMean = allScores.reduce((a, b) => a + b, 0) / allScores.length;
+  const globalVariance = allScores.reduce((sum, score) => sum + Math.pow(score - globalMean, 2), 0) / allScores.length;
+  const globalStdDev = Math.max(Math.sqrt(globalVariance), 5.0);
+
+  // 3. Official Commission Linear Z-Score Normalization
+  // Formula: Normalized = ((globalStdDev / shiftStdDev) * (finalScore - shiftMean)) + globalMean
+  const normalizedRaw = shiftScores.length <= 1
+    ? finalScore
+    : ((globalStdDev / shiftStdDev) * (finalScore - shiftMean)) + globalMean;
+  const normalizedScore = Math.round(normalizedRaw * 100) / 100;
+
+  // 4. Overall & Normalized Rankings
+  const portalRank = allPortalForFamily.filter((s) => s.finalScore > finalScore).length + 1;
   const portalTotal = Math.max(allPortalForFamily.length + 1, 1);
+  const normalizedRank = allPortalForFamily.filter((s) => (s.normalizedScore ?? s.finalScore) > normalizedScore).length + 1;
+  const percentile = Math.min(99.9, Math.max(5, Math.round(((portalTotal - (portalRank - 1)) / portalTotal) * 1000) / 10));
 
-  const shiftPortal = allPortalForFamily.filter(s => s.shiftKey === shiftKey);
-  const shiftRank = shiftPortal.filter(s => s.finalScore > finalScore).length + 1;
+  // 5. Shift Ranking
+  const shiftRank = shiftPortal.filter((s) => s.finalScore > finalScore).length + 1;
   const shiftTotal = Math.max(shiftPortal.length + 1, 1);
 
-  const shiftScores = shiftPortal.map(s => s.finalScore).concat(finalScore);
-  const shiftAvg = shiftScores.reduce((a, b) => a + b, 0) / shiftScores.length;
-  const shiftTop = Math.max(...shiftScores);
+  // 6. Category Ranking (Across All Shifts)
+  const catPortal = allPortalForFamily.filter((s) => s.category?.toUpperCase() === candCategory.toUpperCase());
+  const categoryRank = catPortal.filter((s) => s.finalScore > finalScore).length + 1;
+  const categoryTotal = Math.max(catPortal.length + 1, 1);
+  const normalizedCategoryRank = catPortal.filter((s) => (s.normalizedScore ?? s.finalScore) > normalizedScore).length + 1;
 
-  const catPortal = allPortalForFamily.filter(s => s.category?.toUpperCase() === candCategory.toUpperCase());
-  const catRank = catPortal.filter(s => s.finalScore > finalScore).length + 1;
+  // 7. Category-Shift Combined Ranking (Within SAME Category & SAME Shift)
+  const catShiftPortal = shiftPortal.filter((s) => s.category?.toUpperCase() === candCategory.toUpperCase());
+  const categoryShiftRank = catShiftPortal.filter((s) => s.finalScore > finalScore).length + 1;
+  const categoryShiftTotal = Math.max(catShiftPortal.length + 1, 1);
 
-  const percentile = Math.min(99.9, Math.max(5, Math.round(((portalTotal - (portalRank - 1)) / portalTotal) * 1000) / 10));
+  // 8. Gender Ranking
+  const genderPortal = allPortalForFamily.filter((s) => s.gender?.toLowerCase() === candGender.toLowerCase());
+  const genderRank = genderPortal.filter((s) => s.finalScore > finalScore).length + 1;
+  const genderTotal = Math.max(genderPortal.length + 1, 1);
+
+  // 9. Railway RRB Zone Rankings (Strictly evaluated within candidate's applied RRB Zone)
+  let zoneRank: number | undefined;
+  let zoneTotal: number | undefined;
+  let zoneCategoryRank: number | undefined;
+  let zoneCategoryTotal: number | undefined;
+  let zoneShiftCategoryRank: number | undefined;
+  let zoneShiftCategoryTotal: number | undefined;
+
+  if (candZone) {
+    const zonePortal = allPortalForFamily.filter((s) => s.zone === candZone);
+    zoneRank = zonePortal.filter((s) => s.finalScore > finalScore).length + 1;
+    zoneTotal = Math.max(zonePortal.length + 1, 1);
+
+    const zoneCatPortal = zonePortal.filter((s) => s.category?.toUpperCase() === candCategory.toUpperCase());
+    zoneCategoryRank = zoneCatPortal.filter((s) => s.finalScore > finalScore).length + 1;
+    zoneCategoryTotal = Math.max(zoneCatPortal.length + 1, 1);
+
+    const zoneShiftCatPortal = zoneCatPortal.filter((s) => s.shiftKey === shiftKey);
+    zoneShiftCategoryRank = zoneShiftCatPortal.filter((s) => s.finalScore > finalScore).length + 1;
+    zoneShiftCategoryTotal = Math.max(zoneShiftCatPortal.length + 1, 1);
+  }
 
   const result: EvaluationResult = {
     id: submissionId,
@@ -466,9 +595,11 @@ export async function evaluateResponseSheet(
       name: candName,
       examDate: sheet.meta.examDate || new Date().toISOString().split('T')[0],
       shiftTime: sheet.meta.shiftTime || 'Shift 1',
-      venue: sheet.meta.venueName || 'TCS iON Digital Zone',
+      venue: sheet.meta.venueName || (isRailway ? 'TCS iON Digital Zone' : 'Eduquity Online Test Center'),
       category: candCategory,
-      zone: zone || sheet.meta.stateZone
+      gender: candGender,
+      zone: candZone,
+      state: candState
     },
     metrics: {
       totalQuestions: grandTotal,
@@ -488,12 +619,26 @@ export async function evaluateResponseSheet(
     analytics: {
       allIndiaRank: portalRank,
       totalSubmissions: portalTotal,
-      percentile: percentile,
-      shiftRank: shiftRank,
-      shiftTotal: shiftTotal,
+      percentile,
+      normalizedScore,
+      normalizedRank,
+      shiftRank,
+      shiftTotal,
       shiftAverageScore: Math.round(shiftAvg * 10) / 10,
       shiftTopperScore: Math.round(shiftTop * 10) / 10,
-      categoryRank: catRank
+      categoryRank,
+      categoryTotal,
+      normalizedCategoryRank,
+      categoryShiftRank,
+      categoryShiftTotal,
+      genderRank,
+      genderTotal,
+      zoneRank,
+      zoneTotal,
+      zoneCategoryRank,
+      zoneCategoryTotal,
+      zoneShiftCategoryRank,
+      zoneShiftCategoryTotal
     },
     allIndiaRankEstimate: portalRank,
     shiftRankEstimate: shiftRank,
@@ -512,12 +657,16 @@ export async function evaluateResponseSheet(
     examTitle: sheet.meta.examTitle,
     shiftKey,
     category: candCategory,
+    gender: candGender,
+    zone: candZone,
+    state: candState,
     finalScore: Math.round(finalScore * 100) / 100,
     rawScore: Math.round(grandPositive * 100) / 100,
+    normalizedScore,
     evaluatedAt: result.evaluatedAt
   });
 
-  // Asynchronously sync to Supabase if configured (persisting candidate scorecard & profile)
+  // Save directly to Supabase answer_key_submissions (DO NOT touch public.users table)
   if (isSupabaseConfigured && supabase) {
     try {
       const submissionRecord = {
@@ -525,12 +674,12 @@ export async function evaluateResponseSheet(
         exam_id: sheet.meta.examName || (sheet.meta.examFamily === 'ssc' ? 'ssc-cgl' : 'rrb-ntpc'),
         exam_code: sheet.meta.examFamily === 'ssc' ? 'ssc-cgl' : 'rrb-ntpc',
         exam_family: sheet.meta.examFamily,
-        source_url: sheet.meta.sourceUrl || input.url || null,
+        source_url: sheet.meta.sourceUrl || undefined,
         roll_number: result.candidate.rollNumber || null,
         candidate_name: result.candidate.name || null,
         registration_number: sheet.meta.registrationNo || null,
         category: result.candidate.category || null,
-        state_zone: zone || result.candidate.venue || null,
+        state_zone: candZone || candState || result.candidate.venue || null,
         exam_date: result.candidate.examDate || null,
         shift_time: result.candidate.shiftTime || null,
         venue_name: result.candidate.venue || null,
@@ -544,26 +693,26 @@ export async function evaluateResponseSheet(
         negative_marks: result.metrics.negativeMarks,
         final_score: result.metrics.finalScore,
         accuracy_percentage: result.metrics.accuracyPercentage,
-        sections_data: sectionBreakdowns,
+        sections_data: {
+          sections: sheet.sections,
+          breakdowns: sectionBreakdowns,
+          meta: {
+            gender: candGender,
+            zone: candZone,
+            state: candState,
+            normalizedScore,
+            normalizedRank,
+            categoryShiftRank,
+            zoneRank,
+            zoneCategoryRank,
+            zoneShiftCategoryRank
+          }
+        },
         status: 'submitted',
         created_at: result.evaluatedAt
       };
 
       await supabase.from('answer_key_submissions').upsert(submissionRecord, { onConflict: 'id' });
-
-      // Keep candidate profile tracked in public.users
-      if (result.candidate.rollNumber || result.candidate.name) {
-        const userId = result.candidate.rollNumber
-          ? `user_${result.candidate.rollNumber.trim()}`
-          : `user_${submissionId.slice(0, 12)}`;
-        await supabase.from('users').upsert({
-          id: userId,
-          name: result.candidate.name || 'Candidate',
-          roll_number: result.candidate.rollNumber || 'N/A',
-          category: result.candidate.category || 'UR',
-          last_active_at: new Date().toISOString()
-        }, { onConflict: 'id' });
-      }
     } catch (err: any) {
       console.warn('Supabase submission save error:', err.message);
     }
@@ -804,11 +953,11 @@ export async function pushAnswerKeyToMockTest(
 /**
  * Returns deduplicated shift submissions for Admin review
  */
-export function getUniqueSubmissions(): UniqueShiftSubmission[] {
-  const all = Array.from(localSubmissionsCache.values());
+export async function getUniqueSubmissions(): Promise<UniqueShiftSubmission[]> {
   const shiftMap = new Map<string, UniqueShiftSubmission>();
 
-  for (const sub of all) {
+  // 1. Load from local memory cache
+  for (const sub of localSubmissionsCache.values()) {
     const examCode = sub.parsed.meta.examFamily || 'exam';
     const examDate = sub.candidate.examDate || 'date';
     const shiftTime = sub.candidate.shiftTime || 'shift';
@@ -839,6 +988,129 @@ export function getUniqueSubmissions(): UniqueShiftSubmission[] {
     }
   }
 
+  // 2. Load from Supabase answer_key_submissions
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data: dbSubs } = await supabase
+        .from('answer_key_submissions')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(2000);
+
+      if (dbSubs && dbSubs.length > 0) {
+        for (const s of dbSubs) {
+          const examCode = s.exam_family || 'exam';
+          const examDate = s.exam_date || 'date';
+          const shiftTime = s.shift_time || 'shift';
+          const key = `${examCode}_${examDate}_${shiftTime}`.toLowerCase().replace(/\s+/g, '_');
+
+          if (!shiftMap.has(key)) {
+            const rawSections = s.sections_data?.sections || (Array.isArray(s.sections_data) ? s.sections_data : []);
+            const repSub: EvaluationResult = {
+              id: s.id,
+              submissionId: s.id,
+              candidate: {
+                rollNumber: s.roll_number || '',
+                name: s.candidate_name || 'Candidate',
+                examDate: s.exam_date || '',
+                shiftTime: s.shift_time || '',
+                venue: s.venue_name || '',
+                category: s.category || 'UR',
+                zone: s.state_zone || undefined
+              },
+              metrics: {
+                totalQuestions: s.total_questions || 100,
+                attempted: s.attempted || 0,
+                correct: s.correct || 0,
+                wrong: s.wrong || 0,
+                skipped: s.skipped || 0,
+                rawScore: s.raw_score || s.final_score || 0,
+                negativeMarks: s.negative_marks || 0,
+                finalScore: s.final_score || 0,
+                accuracyPercentage: s.accuracy_percentage || 0,
+                attemptRatePercentage: Math.round(((s.attempted || 0) / Math.max(1, s.total_questions || 100)) * 1000) / 10
+              },
+              sections: rawSections,
+              parsed: {
+                meta: {
+                  rollNo: s.roll_number,
+                  candidateName: s.candidate_name,
+                  examDate: s.exam_date,
+                  shiftTime: s.shift_time,
+                  venueName: s.venue_name,
+                  category: s.category,
+                  stateZone: s.state_zone,
+                  examTitle: s.exam_code,
+                  examFamily: s.exam_family
+                },
+                summary: {
+                  totalQuestions: s.total_questions || 100,
+                  attempted: s.attempted || 0,
+                  correct: s.correct || 0,
+                  wrong: s.wrong || 0,
+                  skipped: s.skipped || 0,
+                  bonus: s.bonus || 0,
+                  rawScore: s.raw_score || s.final_score || 0,
+                  negativeMarks: s.negative_marks || 0,
+                  finalScore: s.final_score || 0,
+                  accuracy: s.accuracy_percentage || 0
+                },
+                sections: rawSections,
+                rawQuestionsCount: s.total_questions || 100
+              },
+              ruleUsed: {
+                marksPerCorrect: s.exam_family === 'ssc' ? 2 : 1,
+                negativePerWrong: s.exam_family === 'ssc' ? 0.5 : 0.33
+              },
+              analytics: {
+                allIndiaRank: 1,
+                totalSubmissions: 1,
+                percentile: 99.0,
+                normalizedScore: s.sections_data?.meta?.normalizedScore || s.final_score || 0,
+                normalizedRank: 1,
+                shiftRank: 1,
+                shiftTotal: 1,
+                shiftAverageScore: s.final_score || 0,
+                shiftTopperScore: s.final_score || 0,
+                categoryRank: 1,
+                categoryTotal: 1,
+                normalizedCategoryRank: 1,
+                categoryShiftRank: 1,
+                categoryShiftTotal: 1
+              },
+              pushedToTestId: s.pushed_test_id || undefined,
+              evaluatedAt: s.created_at || new Date().toISOString()
+            };
+
+            shiftMap.set(key, {
+              shiftKey: key,
+              representativeSubmission: repSub,
+              submissionCount: 1,
+              candidateNames: [s.candidate_name || 'Candidate'],
+              examTitle: s.exam_code || (s.exam_family === 'ssc' ? 'SSC Official Shift Paper' : 'Railway Shift Paper'),
+              examDate: s.exam_date,
+              shiftTime: s.shift_time,
+              isPushed: Boolean(s.pushed_test_id),
+              pushedTestId: s.pushed_test_id
+            });
+          } else {
+            const existing = shiftMap.get(key)!;
+            existing.submissionCount += 1;
+            if (s.candidate_name && !existing.candidateNames.includes(s.candidate_name)) {
+              existing.candidateNames.push(s.candidate_name);
+            }
+            if (s.pushed_test_id) {
+              existing.isPushed = true;
+              existing.pushedTestId = s.pushed_test_id;
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('Could not query Supabase for admin shift submissions:', e);
+    }
+  }
+
   return Array.from(shiftMap.values());
 }
 
@@ -852,10 +1124,120 @@ export function getAllSubmissions(): EvaluationResult[] {
 }
 
 /**
- * Get single submission
+ * Get single submission by ID with automatic Supabase fallback for cross-device links
  */
-export function getSubmissionById(id: string): EvaluationResult | undefined {
-  return localSubmissionsCache.get(id);
+export async function getSubmissionById(id: string): Promise<EvaluationResult | undefined> {
+  const cached = localSubmissionsCache.get(id);
+  if (cached) return cached;
+
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data } = await supabase
+        .from('answer_key_submissions')
+        .select('*')
+        .eq('id', id)
+        .maybeSingle();
+
+      if (data) {
+        const sMeta = data.sections_data?.meta || {};
+        const rawSections = data.sections_data?.sections || (Array.isArray(data.sections_data) ? data.sections_data : []);
+        const rawBreakdowns = data.sections_data?.breakdowns || (Array.isArray(data.sections_data) ? data.sections_data : []);
+
+        const subResult: EvaluationResult = {
+          id: data.id,
+          submissionId: data.id,
+          candidate: {
+            rollNumber: data.roll_number || '',
+            name: data.candidate_name || 'Candidate',
+            examDate: data.exam_date || '',
+            shiftTime: data.shift_time || '',
+            venue: data.venue_name || '',
+            category: data.category || 'UR',
+            gender: sMeta.gender,
+            zone: data.state_zone || sMeta.zone,
+            state: sMeta.state
+          },
+          metrics: {
+            totalQuestions: data.total_questions || 100,
+            attempted: data.attempted || 0,
+            correct: data.correct || 0,
+            wrong: data.wrong || 0,
+            skipped: data.skipped || 0,
+            rawScore: Number(data.raw_score) || Number(data.final_score) || 0,
+            negativeMarks: Number(data.negative_marks) || 0,
+            finalScore: Number(data.final_score) || 0,
+            accuracyPercentage: Number(data.accuracy_percentage) || 0,
+            attemptRatePercentage: Math.round(((data.attempted || 0) / Math.max(1, data.total_questions || 100)) * 1000) / 10
+          },
+          sections: rawBreakdowns,
+          parsed: {
+            meta: {
+              rollNo: data.roll_number,
+              candidateName: data.candidate_name,
+              examDate: data.exam_date,
+              shiftTime: data.shift_time,
+              venueName: data.venue_name,
+              category: data.category,
+              stateZone: data.state_zone,
+              examTitle: data.exam_code,
+              examFamily: data.exam_family
+            },
+            summary: {
+              totalQuestions: data.total_questions || 100,
+              attempted: data.attempted || 0,
+              correct: data.correct || 0,
+              wrong: data.wrong || 0,
+              skipped: data.skipped || 0,
+              bonus: data.bonus || 0,
+              rawScore: Number(data.raw_score) || Number(data.final_score) || 0,
+              negativeMarks: Number(data.negative_marks) || 0,
+              finalScore: Number(data.final_score) || 0,
+              accuracy: Number(data.accuracy_percentage) || 0
+            },
+            sections: rawSections,
+            rawQuestionsCount: data.total_questions || 100
+          },
+          ruleUsed: {
+            marksPerCorrect: data.exam_family === 'ssc' ? 2 : 1,
+            negativePerWrong: data.exam_family === 'ssc' ? 0.5 : 0.33
+          },
+          analytics: {
+            allIndiaRank: 1,
+            totalSubmissions: 1,
+            percentile: 98.5,
+            normalizedScore: sMeta.normalizedScore ? Number(sMeta.normalizedScore) : Number(data.final_score) || 0,
+            normalizedRank: sMeta.normalizedRank || 1,
+            shiftRank: 1,
+            shiftTotal: 1,
+            shiftAverageScore: Number(data.final_score) || 0,
+            shiftTopperScore: Number(data.final_score) || 0,
+            categoryRank: 1,
+            categoryTotal: 1,
+            normalizedCategoryRank: 1,
+            categoryShiftRank: sMeta.categoryShiftRank || 1,
+            categoryShiftTotal: 1,
+            genderRank: 1,
+            genderTotal: 1,
+            zoneRank: sMeta.zoneRank,
+            zoneTotal: 1,
+            zoneCategoryRank: sMeta.zoneCategoryRank,
+            zoneCategoryTotal: 1,
+            zoneShiftCategoryRank: sMeta.zoneShiftCategoryRank,
+            zoneShiftCategoryTotal: 1
+          },
+          pushedToTestId: data.pushed_test_id || undefined,
+          evaluatedAt: data.created_at || new Date().toISOString()
+        };
+
+        localSubmissionsCache.set(id, subResult);
+        return subResult;
+      }
+    } catch (e) {
+      console.warn('Could not fetch submission by ID from Supabase:', e);
+    }
+  }
+
+  return undefined;
 }
 
 export async function getSubmissionByRollNumber(rollNumber: string): Promise<EvaluationResult | undefined> {

@@ -104,7 +104,7 @@ export function BorderlandDrawer({ isOpen, onClose }: BorderlandDrawerProps) {
               <div className="space-y-0.5">
                 <div className="text-xs font-black text-cyan-300">ExamInformer Portal</div>
                 <p className="text-[11px] text-slate-400 leading-snug">
-                  Official 2025 PYQ papers, shift-wise sectional tests &amp; live Eduquity CBT.
+                  Official 2025 PYQ papers, shift-wise sectional tests &amp; live TCS iON &amp; Eduquity CBT.
                 </p>
               </div>
             </div>

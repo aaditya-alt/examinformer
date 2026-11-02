@@ -239,8 +239,8 @@ export default function ScoreCalculatorPage() {
         <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
           Evaluate Official Answer Key
         </h1>
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto leading-relaxed">
-          Paste your official TCS iON DigiALM (Railway / SSC) or SSC cbexams answer key link to get your verified section-wise marks, negative penalty, and portal rank.
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          Paste your official <strong>TCS iON</strong> (Railways &amp; SSC) or <strong>Eduquity</strong> (SSC CGL, CHSL, MTS) answer key link to get your verified section-wise marks, negative penalty, RRB Zone standing, and normalized ranks.
         </p>
       </div>
 
@@ -357,7 +357,7 @@ export default function ScoreCalculatorPage() {
           </div>
 
           {/* Exam & Profile Configuration Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
             {/* Exam Selection */}
             <div className="space-y-1.5">
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
@@ -388,6 +388,22 @@ export default function ScoreCalculatorPage() {
               >
                 {CATEGORIES.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Gender Selection */}
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                Gender
+              </label>
+              <select
+                value={selectedGender}
+                onChange={(e) => setSelectedGender(e.target.value)}
+                className="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-600"
+              >
+                {GENDERS.map(g => (
+                  <option key={g} value={g}>{g}</option>
                 ))}
               </select>
             </div>

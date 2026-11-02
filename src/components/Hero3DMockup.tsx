@@ -57,7 +57,7 @@ export default function Hero3DMockup() {
       <div className="hidden sm:flex absolute -top-3 -left-2 z-20 items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-md text-xs font-bold text-slate-800 dark:text-slate-100">
         <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-ping" />
         <ShieldCheck className="w-4 h-4 text-blue-600" />
-        <span>Official Eduquity SSC Simulator</span>
+        <span>Official TCS iON &amp; Eduquity Simulator</span>
       </div>
 
       {/* Floating 3D Badge 2: Top Right */}

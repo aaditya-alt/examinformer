@@ -234,6 +234,15 @@ export default function CBTResultPage({
   });
 
   // Real Topper & Aggregate metrics from database
+  const isRailway =
+    test?.category === 'rrb' ||
+    test?.category === 'railway' ||
+    test?.title?.toLowerCase().includes('rrb') ||
+    test?.title?.toLowerCase().includes('ntpc') ||
+    test?.title?.toLowerCase().includes('alp') ||
+    test?.title?.toLowerCase().includes('group d');
+  const agencyName = isRailway ? 'TCS iON' : 'Eduquity';
+
   const topperScore =
     portalAnalytics?.topper?.score !== undefined
       ? Math.max(portalAnalytics.topper.score, Number(resultData.finalScore))
@@ -299,17 +308,17 @@ export default function CBTResultPage({
           </p>
         </div>
 
-        {/* ── Prominent Eduquity Solution & Reattempt Terminal Launcher ── */}
+        {/* ── Prominent CBT Solution & Reattempt Terminal Launcher ── */}
         <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-blue-700 via-sky-700 to-indigo-800 text-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg text-left">
           <div className="space-y-1 text-center sm:text-left">
             <div className="flex items-center justify-center sm:justify-start gap-2">
               <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-amber-400 text-slate-950">
-                Eduquity Interactive Terminal
+                {agencyName} Interactive Terminal
               </span>
               <span className="text-xs font-bold text-sky-200">Reattempt &amp; Solutions Engine</span>
             </div>
             <h3 className="text-lg font-black tracking-tight text-white">
-              Launch Eduquity CBT Solution &amp; Reattempt Console
+              Launch {agencyName} CBT Solution &amp; Reattempt Console
             </h3>
             <p className="text-xs text-sky-100 max-w-xl">
               Open the authentic examination screen with question palette on the right. Toggle <strong>Reattempt Mode ON</strong> to solve questions without seeing spoilers, or <strong>OFF</strong> to reveal step-by-step mathematical proofs!

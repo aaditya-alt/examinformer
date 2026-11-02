@@ -125,6 +125,8 @@ function ScorecardContent() {
   const { meta, summary, sections } = data.parsed;
   const { analytics } = data;
   const isSSC = meta.examFamily === 'ssc';
+  const isRailway = meta.examFamily === 'rrb' || Boolean(data.candidate.zone);
+  const agencyName = isSSC ? 'Eduquity' : 'TCS iON';
 
   // Flatten all questions for review tab
   const allQuestions = sections.flatMap(sec => sec.questions);
@@ -177,7 +179,7 @@ function ScorecardContent() {
         <div className="max-w-2xl mx-auto border-[2.5px] border-red-700 bg-white dark:bg-slate-900 rounded-sm overflow-hidden shadow-lg">
           {/* Header Banner */}
           <div className="py-2.5 px-4 text-center font-bold text-slate-900 dark:text-white border-b-[2px] border-red-700 text-sm sm:text-base tracking-wide bg-slate-50 dark:bg-slate-800/80">
-            {isSSC ? 'SSC Exam Response Sheet' : 'Railway Exam Response Sheet'}
+            {isSSC ? 'Eduquity SSC Assessment Response Sheet' : 'TCS iON Railway Assessment Response Sheet'}
           </div>
 
           {/* Candidate Particulars Table */}
@@ -204,7 +206,24 @@ function ScorecardContent() {
                   Subject
                 </td>
                 <td className="py-2 px-3.5 text-slate-800 dark:text-slate-200">
-                  {meta.examTitle || 'Graduate Level'}
+                  {meta.examTitle || (isSSC ? 'SSC Graduate Level' : 'RRB NTPC')}
+                </td>
+              </tr>
+              <tr className="border-b border-slate-300 dark:border-slate-700">
+                <td className="py-2 px-3.5 font-bold text-slate-900 dark:text-white border-r border-slate-300 dark:border-slate-700">
+                  Category &amp; Gender
+                </td>
+                <td className="py-2 px-3.5 text-slate-800 dark:text-slate-200 font-semibold">
+                  <span className="text-blue-700 dark:text-blue-400 font-bold">{data.candidate.category || meta.category || 'UR'}</span>
+                  {data.candidate.gender && <span> &bull; {data.candidate.gender}</span>}
+                </td>
+              </tr>
+              <tr className="border-b border-slate-300 dark:border-slate-700">
+                <td className="py-2 px-3.5 font-bold text-slate-900 dark:text-white border-r border-slate-300 dark:border-slate-700">
+                  {isRailway ? 'Applied RRB Zone' : 'Candidate State'}
+                </td>
+                <td className="py-2 px-3.5 text-slate-800 dark:text-slate-200 font-bold">
+                  {data.candidate.zone || data.candidate.state || meta.stateZone || (isRailway ? 'RRB Prayagraj' : 'All India')}
                 </td>
               </tr>
               <tr className="border-b border-slate-300 dark:border-slate-700">
@@ -288,9 +307,40 @@ function ScorecardContent() {
           </table>
         </div>
 
+        {/* Dual Score Banner: Raw Score + Normalised Score */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto pt-1">
+          <div className="p-3.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-between">
+            <div>
+              <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Actual Raw Score</div>
+              <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-0.5">
+                {summary.finalScore.toFixed(2)}
+                <span className="text-xs text-slate-400 font-normal ml-1">/ {data.ruleUsed.marksPerCorrect * summary.totalQuestions}</span>
+              </div>
+            </div>
+            <span className="text-[10px] font-extrabold px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200">
+              Exam Raw
+            </span>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/30 border border-emerald-300 dark:border-emerald-700 flex items-center justify-between shadow-xs">
+            <div>
+              <div className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1">
+                <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Normalised Marks</span>
+              </div>
+              <div className="text-xl sm:text-2xl font-black text-emerald-700 dark:text-emerald-400 mt-0.5">
+                {(analytics.normalizedScore || summary.finalScore).toFixed(2)}
+              </div>
+            </div>
+            <span className="text-[10px] font-black px-2 py-0.5 rounded bg-emerald-600 text-white uppercase tracking-wider">
+              Commission Formula
+            </span>
+          </div>
+        </div>
+
         {/* Footnote */}
         <div className="text-center text-xs text-slate-600 dark:text-slate-400 font-medium pt-1">
-          ⓘ Marking Scheme: +{data.ruleUsed.marksPerCorrect} for Correct, -{Number(data.ruleUsed.negativePerWrong.toFixed(2))} for Incorrect.
+          ⓘ Marking Scheme: +{data.ruleUsed.marksPerCorrect} for Correct, -{Number(data.ruleUsed.negativePerWrong.toFixed(2))} for Incorrect. Normalisation modeled after official commission multi-shift formula.
         </div>
       </div>
 
@@ -303,20 +353,30 @@ function ScorecardContent() {
               <span>Portal Rank &amp; Shift Analytics</span>
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Live ranking based on all candidates who have evaluated on MockYoddha by ExamInformerNitesh.
+              Live ranking and standing based on all verified candidate submissions on MockYoddha.
             </p>
           </div>
-          <span className="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 self-start sm:self-auto">
-            {meta.category || 'UR'} &bull; {meta.stateZone || 'All India'}
-          </span>
+          <div className="flex flex-wrap items-center gap-1.5 self-start sm:self-auto">
+            <span className="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300">
+              {data.candidate.category || meta.category || 'UR'}
+            </span>
+            <span className="text-xs font-bold px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300">
+              {data.candidate.zone || data.candidate.state || meta.stateZone || 'All India'}
+            </span>
+            {data.candidate.gender && (
+              <span className="text-xs font-bold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                {data.candidate.gender}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Analytics Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {/* Portal Rank */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {/* Portal Rank (Raw) */}
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
             <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center justify-between">
-              <span>Portal Rank</span>
+              <span>Overall Rank (Raw)</span>
               <Award className="w-4 h-4 text-amber-500" />
             </div>
             <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-2">
@@ -326,6 +386,21 @@ function ScorecardContent() {
             <div className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 mt-1 flex items-center gap-1">
               <TrendingUp className="w-3 h-3" />
               <span>Top {(100 - analytics.percentile).toFixed(1)}%</span>
+            </div>
+          </div>
+
+          {/* Normalised Rank */}
+          <div className="p-4 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-300 dark:border-emerald-700/60">
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 flex items-center justify-between">
+              <span>Normalised Rank</span>
+              <Sparkles className="w-4 h-4 text-emerald-600" />
+            </div>
+            <div className="text-2xl sm:text-3xl font-black text-emerald-900 dark:text-emerald-100 mt-2">
+              #{analytics.normalizedRank || analytics.allIndiaRank}
+              <span className="text-xs font-normal text-slate-400 ml-1">/ {analytics.totalSubmissions}</span>
+            </div>
+            <div className="text-[11px] text-emerald-700 dark:text-emerald-300 mt-1 font-semibold">
+              Score: <strong>{(analytics.normalizedScore || summary.finalScore).toFixed(2)}</strong>
             </div>
           </div>
 
@@ -352,11 +427,50 @@ function ScorecardContent() {
             </div>
             <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-2">
               #{analytics.categoryRank}
+              {analytics.categoryTotal ? (
+                <span className="text-xs font-normal text-slate-400 ml-1">/ {analytics.categoryTotal}</span>
+              ) : null}
             </div>
             <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
-              In Category: <strong className="text-slate-700 dark:text-slate-300">{meta.category || 'UR'}</strong>
+              Category: <strong className="text-slate-700 dark:text-slate-300">{data.candidate.category || meta.category || 'UR'}</strong>
             </div>
           </div>
+
+          {/* Category-Shift Combined Rank */}
+          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center justify-between">
+              <span>Category &bull; Shift Rank</span>
+              <Layers className="w-4 h-4 text-indigo-500" />
+            </div>
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-2">
+              #{analytics.categoryShiftRank || 1}
+              {analytics.categoryShiftTotal ? (
+                <span className="text-xs font-normal text-slate-400 ml-1">/ {analytics.categoryShiftTotal}</span>
+              ) : null}
+            </div>
+            <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+              In same Category &amp; Shift
+            </div>
+          </div>
+
+          {/* Gender Rank */}
+          {data.candidate.gender && (
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center justify-between">
+                <span>Gender Rank</span>
+                <Award className="w-4 h-4 text-rose-500" />
+              </div>
+              <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-2">
+                #{analytics.genderRank || 1}
+                {analytics.genderTotal ? (
+                  <span className="text-xs font-normal text-slate-400 ml-1">/ {analytics.genderTotal}</span>
+                ) : null}
+              </div>
+              <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                Among <strong>{data.candidate.gender}</strong>
+              </div>
+            </div>
+          )}
 
           {/* Accuracy */}
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
@@ -372,6 +486,79 @@ function ScorecardContent() {
             </div>
           </div>
         </div>
+
+        {/* RRB Railway Zone Rankings (Exclusively shown for Railway Exams or when Zone selected) */}
+        {(isRailway || data.candidate.zone) && (
+          <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-950 border border-blue-700/70 text-white space-y-4 shadow-md">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-blue-800/80 pb-3">
+              <div>
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-200 text-[10px] font-extrabold uppercase tracking-wider border border-blue-400/30">
+                  <span>🚆 Official Railway Recruitment Board Standings</span>
+                </div>
+                <h3 className="text-base sm:text-lg font-black tracking-tight text-white mt-1">
+                  {data.candidate.zone || 'Applied RRB Zone'} Standings
+                </h3>
+              </div>
+              <span className="text-[11px] text-slate-300">
+                Railway competition is strictly Zone-Wise
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {/* Zone Overall Rank */}
+              <div className="p-3.5 rounded-xl bg-white/10 backdrop-blur-xs border border-white/10">
+                <div className="text-[10px] uppercase font-bold text-sky-200 tracking-wider">
+                  Zone Overall Rank
+                </div>
+                <div className="text-2xl font-black text-white mt-1">
+                  #{analytics.zoneRank || 1}
+                  {analytics.zoneTotal ? (
+                    <span className="text-xs font-normal text-slate-300 ml-1">/ {analytics.zoneTotal}</span>
+                  ) : null}
+                </div>
+                <div className="text-[10px] text-slate-300 mt-0.5">
+                  Across all shifts in {data.candidate.zone || 'Zone'}
+                </div>
+              </div>
+
+              {/* Zone Category Rank */}
+              <div className="p-3.5 rounded-xl bg-white/10 backdrop-blur-xs border border-white/10">
+                <div className="text-[10px] uppercase font-bold text-purple-200 tracking-wider">
+                  Zone Category Rank
+                </div>
+                <div className="text-2xl font-black text-white mt-1">
+                  #{analytics.zoneCategoryRank || 1}
+                  {analytics.zoneCategoryTotal ? (
+                    <span className="text-xs font-normal text-slate-300 ml-1">/ {analytics.zoneCategoryTotal}</span>
+                  ) : null}
+                </div>
+                <div className="text-[10px] text-slate-300 mt-0.5">
+                  In {data.candidate.category || 'UR'} &bull; {data.candidate.zone || 'Zone'}
+                </div>
+              </div>
+
+              {/* Zone Shift-Category Rank */}
+              <div className="p-3.5 rounded-xl bg-white/10 backdrop-blur-xs border border-white/10">
+                <div className="text-[10px] uppercase font-bold text-emerald-200 tracking-wider">
+                  Zone Shift &bull; Category Rank
+                </div>
+                <div className="text-2xl font-black text-white mt-1">
+                  #{analytics.zoneShiftCategoryRank || 1}
+                  {analytics.zoneShiftCategoryTotal ? (
+                    <span className="text-xs font-normal text-slate-300 ml-1">/ {analytics.zoneShiftCategoryTotal}</span>
+                  ) : null}
+                </div>
+                <div className="text-[10px] text-slate-300 mt-0.5">
+                  Same Shift + Category + Zone
+                </div>
+              </div>
+            </div>
+
+            <div className="text-[11px] text-sky-100/90 leading-relaxed bg-blue-950/60 p-2.5 rounded-lg border border-blue-800/60">
+              📌 <strong>Railway Zone Notice:</strong> Unlike SSC where all-India cutoffs exist for non-clerical posts, Railway merit lists and final document verification cutoffs are formed exclusively within your registered RRB Zone. Your <strong>Zone Rank</strong> is your true benchmark for selection.
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Full Question Paper Review Module (Hidden in print when downloading Scorecard only) */}

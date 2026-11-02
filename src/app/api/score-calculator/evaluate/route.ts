@@ -1,10 +1,24 @@
 import { NextResponse } from 'next/server';
 import { evaluateAnswerKey } from '@/lib/scoreService';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { url, htmlContent, examFamily, examTitle, category, zone, customRule } = body;
+    const {
+      url,
+      htmlContent,
+      examFamily,
+      examTitle,
+      category,
+      gender,
+      state,
+      preferredLanguage,
+      zone,
+      customRule
+    } = body;
 
     if (!url && !htmlContent) {
       return NextResponse.json(
@@ -19,6 +33,9 @@ export async function POST(req: Request) {
       examFamily,
       examTitle,
       category,
+      gender,
+      state,
+      preferredLanguage,
       zone,
       customRule
     });

@@ -491,7 +491,7 @@ function TestsExplorerContent() {
                 Government Exam Test Series
               </h1>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
-                Attempt authentic previous-year test series for SSC and Railways with official Eduquity right-palette CBT simulator, sectional timers, and instant performance analysis.
+                Attempt authentic previous-year test series for SSC and Railways with official Eduquity &amp; TCS iON right-palette CBT simulator, sectional timers, and instant performance analysis.
               </p>
             </div>
 
@@ -660,7 +660,7 @@ function TestsExplorerContent() {
                   {selectedSeries.badge}
                 </span>
                 <span className="text-[11px] font-bold text-slate-500">
-                  English, Hindi &bull; Eduquity CBT Simulation
+                  English, Hindi &bull; {selectedSeries.category === 'rrb' ? 'TCS iON' : 'Eduquity'} CBT Simulation
                 </span>
               </div>
             </div>
@@ -913,7 +913,7 @@ function TestsExplorerContent() {
                               </span>
                             ) : (
                               <span className="text-[#d97706] dark:text-amber-500">
-                                Ready to attempt &bull; Eduquity right-palette CBT simulator
+                                Ready to attempt &bull; {isRailway ? 'TCS iON' : 'Eduquity'} right-palette CBT simulator
                               </span>
                             )}
                           </div>
@@ -1027,7 +1027,7 @@ function TestsExplorerContent() {
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 text-xs text-blue-900 dark:text-blue-200">
-                  ⚡ <strong>{activeCategoryTab === 'pyst_tier2' ? (isRailway ? 'CBT 2 Sectional Speed Mocks (+1, -0.33 Marking):' : 'Tier 2 Mains Sectional Speed Mocks (+3, -1 Marking):') : (isRailway ? 'Official Railway Sectional Practice (+1, -0.33 Marking):' : 'Eduquity Sectional Speed Mocks (+2, -0.5 Marking):')}</strong> Organized shift-wise. Select any shift to drill individual sections!
+                  ⚡ <strong>{activeCategoryTab === 'pyst_tier2' ? (isRailway ? 'CBT 2 Sectional Speed Mocks (+1, -0.33 Marking):' : 'Tier 2 Mains Sectional Speed Mocks (+3, -1 Marking):') : (isRailway ? 'TCS iON Railway Sectional Practice (+1, -0.33 Marking):' : 'Eduquity Sectional Speed Mocks (+2, -0.5 Marking):')}</strong> Organized shift-wise. Select any shift to drill individual sections!
                 </div>
 
                 {loading ? (
@@ -1430,7 +1430,7 @@ function TestsExplorerContent() {
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Eduquity right-palette CBT controls</span>
+                  <span>{isRailway ? 'TCS iON' : 'Eduquity'} right-palette CBT controls</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0" />
