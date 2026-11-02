@@ -11,7 +11,7 @@ import {
   TOPIC_PRACTICE_LIST,
   TopicItem
 } from '@/lib/types/taxonomy';
-import { getExamBlueprint } from '@/lib/examBlueprintRegistry';
+import { getExamBlueprint, getDynamicStandardSections } from '@/lib/examBlueprintRegistry';
 import {
   Search,
   Plus,
@@ -76,6 +76,16 @@ const MASTER_SERIES_CATALOG: ExamSeriesItem[] = [
     logoType: 'ssc',
     tierSupport: ['tier1'],
     markingScheme: { correct: 3, negative: 1, duration: 90, questions: 90 }
+  },
+  {
+    id: 'ssc-selection-post-series',
+    examCode: 'ssc-selection-post',
+    name: 'SSC Selection Post Phase 14 (2026) Mock Test Series',
+    badge: 'Graduation, Higher Secondary & Matriculation',
+    category: 'ssc',
+    logoType: 'ssc',
+    tierSupport: ['tier1'],
+    markingScheme: { correct: 2, negative: 0.5, duration: 60, questions: 100 }
   },
   {
     id: 'rrb-ntpc-ug-series',
@@ -246,6 +256,9 @@ function TestsExplorerContent() {
   // Year Filter Pill inside Series: 'all' or real years only
   const [selectedYear, setSelectedYear] = useState<string>('all');
 
+  // Educational Level for SSC Selection Post: 'all' | 'grad' | '12th' | '10th'
+  const [selectionPostLevel, setSelectionPostLevel] = useState<'all' | 'grad' | '12th' | '10th'>('all');
+
   // Whenever activeCategoryTab changes (e.g. Tier 1 to Tier 2 Sectional), reset year filter to 'all' so shifts are immediately visible
   useEffect(() => {
     setSelectedYear('all');
@@ -363,6 +376,7 @@ function TestsExplorerContent() {
   const handleOpenSeries = (series: ExamSeriesItem) => {
     setActiveCategoryTab('pyq_tier1');
     setSelectedYear('all');
+    setSelectionPostLevel('all');
     router.push(`/tests?series=${series.examCode}`);
   };
 
@@ -401,6 +415,16 @@ function TestsExplorerContent() {
 
       if (!matchesExam) return false;
 
+      // Filter by educational level for SSC Selection Post
+      if (codePattern === 'ssc-selection-post' && selectionPostLevel !== 'all') {
+        const isGrad = id.includes('grad') || title.includes('graduate');
+        const is12th = id.includes('12th') || id.includes('ug') || title.includes('12th') || title.includes('higher secondary');
+        const is10th = id.includes('10th') || id.includes('matric') || title.includes('10th') || title.includes('matriculation');
+        if (selectionPostLevel === 'grad' && !isGrad) return false;
+        if (selectionPostLevel === '12th' && !is12th) return false;
+        if (selectionPostLevel === '10th' && !is10th) return false;
+      }
+
       if (activeCategoryTab === 'pyq_tier2' || activeCategoryTab === 'pyst_tier2') {
         return code.includes('tier2') || code.includes('cbt2') || id.includes('cbt2') || id.includes('tier2');
       } else if (activeCategoryTab === 'pyq_tier1' || activeCategoryTab === 'pyst_tier1') {
@@ -409,7 +433,7 @@ function TestsExplorerContent() {
       }
       return true;
     });
-  }, [allTests, selectedSeries, activeCategoryTab]);
+  }, [allTests, selectedSeries, activeCategoryTab, selectionPostLevel]);
 
   // Compute ONLY the REAL years that actually exist in baseCategoryTests (extracting true exam shift year)
   const realAvailableYears = useMemo(() => {
@@ -790,6 +814,57 @@ function TestsExplorerContent() {
                 )}
               </button>
             </div>
+
+            {/* SSC Selection Post Educational Level Switcher */}
+            {selectedSeries.examCode === 'ssc-selection-post' && (
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
+                <span className="text-[11px] font-black uppercase text-slate-500 tracking-wider">Level:</span>
+                <button
+                  type="button"
+                  onClick={() => setSelectionPostLevel('all')}
+                  className={`px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap cursor-pointer text-xs ${
+                    selectionPostLevel === 'all'
+                      ? 'bg-blue-600 text-white shadow-xs'
+                      : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50'
+                  }`}
+                >
+                  All Levels
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectionPostLevel('grad')}
+                  className={`px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap cursor-pointer text-xs ${
+                    selectionPostLevel === 'grad'
+                      ? 'bg-blue-600 text-white shadow-xs'
+                      : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50'
+                  }`}
+                >
+                  🎓 Graduation Level
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectionPostLevel('12th')}
+                  className={`px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap cursor-pointer text-xs ${
+                    selectionPostLevel === '12th'
+                      ? 'bg-blue-600 text-white shadow-xs'
+                      : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50'
+                  }`}
+                >
+                  🏫 Higher Secondary (12th)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectionPostLevel('10th')}
+                  className={`px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap cursor-pointer text-xs ${
+                    selectionPostLevel === '10th'
+                      ? 'bg-blue-600 text-white shadow-xs'
+                      : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50'
+                  }`}
+                >
+                  🎒 Matriculation (10th)
+                </button>
+              </div>
+            )}
 
             {/* Year Filter Pills: Strictly real available years */}
             {activeCategoryTab !== 'topic_practice' && realAvailableYears.length > 0 && (
@@ -1240,7 +1315,7 @@ function TestsExplorerContent() {
                     // Standard Individual Sections (NTPC UG, SSC Tier 1, MTS, Tier 2 Subject-Wise)
                     const sectionsList = (shiftTest.sections && shiftTest.sections.length > 0)
                       ? shiftTest.sections
-                      : getStandardSections(shiftTest.examCode, shiftTest.title);
+                      : getDynamicStandardSections(shiftTest.examCode, shiftTest.title);
 
                     return (
                       <div
@@ -1262,7 +1337,7 @@ function TestsExplorerContent() {
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
-                          {sectionsList.map((sec, secIdx) => {
+                          {sectionsList.map((sec: any, secIdx: number) => {
                             const secTestId = `sec-${shiftTest.id}-sec-${secIdx}`;
                             const isSecAttempted = !!attemptedMap[secTestId];
                             const qCount = getShiftSectionQCount(sec.name, shiftTest.examCode, shiftTest.title, sec.questions?.length);

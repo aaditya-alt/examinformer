@@ -256,8 +256,8 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
         };
 
         const duration = bpSec.durationMinutes || (isTier2 ? (targetSec.name.toLowerCase().includes('computer') ? 15 : 30) : (isRailway ? 25 : 15));
-        const marksPerQ = isTier2 ? 3 : (isRailway ? 1 : (bpSec.positiveMarks ?? bp.positiveMarks ?? 2));
-        const negMarks = isTier2 ? 1 : (isRailway ? Number((1 / 3).toFixed(2)) : (bpSec.negativeMarks ?? bp.negativeMarks ?? 0.5));
+        const marksPerQ = isTier2 ? 3 : (isRailway ? 1 : (bpSec.positiveMarks ?? (bp as any).positiveMarks ?? 2));
+        const negMarks = isTier2 ? 1 : (isRailway ? Number((1 / 3).toFixed(2)) : (bpSec.negativeMarks ?? (bp as any).negativeMarks ?? 0.5));
         const questionsList = targetSec.questions || [];
         const count = questionsList.length || bpSec.questionCount || (isTier2 ? 30 : 25);
 

@@ -282,9 +282,9 @@ export default function SavedQuestionsPage() {
                   </div>
 
                   {/* Question Images if any */}
-                  {item.questionImages && item.questionImages.length > 0 && (
+                  {(item as any).questionImages && (item as any).questionImages.length > 0 && (
                     <div className="flex flex-wrap gap-2 my-2">
-                      {item.questionImages.map((imgUrl, i) => (
+                      {(item as any).questionImages.map((imgUrl: string, i: number) => (
                         <img key={i} src={imgUrl} alt={`Question Diagram ${i + 1}`} className="max-h-48 border rounded-lg object-contain bg-white" />
                       ))}
                     </div>
@@ -316,8 +316,8 @@ export default function SavedQuestionsPage() {
                           </span>
                           <div className="flex-1">
                             <MathRenderer content={optText} />
-                            {opt.imageUrl && (
-                              <img src={opt.imageUrl} alt={`Option ${opt.id}`} className="mt-2 max-h-36 border rounded object-contain bg-white" />
+                            {(opt as any).imageUrl && (
+                              <img src={(opt as any).imageUrl} alt={`Option ${opt.id}`} className="mt-2 max-h-36 border rounded object-contain bg-white" />
                             )}
                           </div>
                           {isCorrect && (

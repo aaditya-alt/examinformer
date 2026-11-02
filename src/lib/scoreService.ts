@@ -1,5 +1,5 @@
 import { UniversalResponseSheet, ParsedQuestion, ParsedSection, parseResponseSheet } from './parsers/universalParser';
-import { supabase, isSupabaseConfigured } from './supabase';
+import { supabase, isSupabaseConfigured, supabaseAdmin } from './supabase';
 import type { CBTTest } from '@/lib/types/cbt';
 import { registerNewTest } from './testStore';
 import https from 'https';
@@ -753,7 +753,7 @@ export async function pushAnswerKeyToMockTest(
           id: dbSub.id,
           metrics: dbSub.metrics || {},
           parsed: dbSub.parsed || {}
-        };
+        } as any;
       }
     } catch (e) {
       console.warn('Could not load submission from Supabase:', e);
@@ -1327,7 +1327,7 @@ export async function getSubmissionByRollNumber(rollNumber: string): Promise<Eva
             shiftAverageScore: 54.2,
             shiftTopperScore: 89.0,
             categoryRank: 12
-          },
+          } as any,
           evaluatedAt: data.created_at || new Date().toISOString()
         };
       }

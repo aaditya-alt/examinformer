@@ -235,8 +235,9 @@ export default function CBTResultPage({
 
   // Real Topper & Aggregate metrics from database
   const isRailway =
-    test?.category === 'rrb' ||
-    test?.category === 'railway' ||
+    test?.examFamily === 'rrb' ||
+    (test as any)?.category === 'rrb' ||
+    (test as any)?.category === 'railway' ||
     test?.title?.toLowerCase().includes('rrb') ||
     test?.title?.toLowerCase().includes('ntpc') ||
     test?.title?.toLowerCase().includes('alp') ||

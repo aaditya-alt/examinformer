@@ -31,8 +31,11 @@ export interface ExamBlueprint {
   totalQuestions: number;
   hasSectionalTiming: boolean;
   defaultSectionMinutes?: number;
+  positiveMarks?: number;
+  negativeMarks?: number;
   sections: ExamBlueprintSection[];
   combinedSections?: ExamBlueprintCombined[];
+  combinedModules?: ExamBlueprintCombined[];
 }
 
 export const OFFICIAL_EXAM_BLUEPRINTS: Record<string, ExamBlueprint> = {
@@ -385,6 +388,72 @@ export const OFFICIAL_EXAM_BLUEPRINTS: Record<string, ExamBlueprint> = {
       { id: 'sec_3', name: 'Elementary Mathematics', questionCount: 20, durationMinutes: 18, positiveMarks: 2, negativeMarks: 0.25 },
       { id: 'sec_4', name: 'English / Hindi', questionCount: 20, durationMinutes: 15, positiveMarks: 2, negativeMarks: 0.25 }
     ]
+  },
+
+  // ── SSC Selection Post (Phase 14 & Previous Phases) ──
+  'ssc-selection-post': {
+    examCode: 'ssc-selection-post',
+    name: 'SSC Selection Post Phase 14',
+    family: 'ssc',
+    durationMinutes: 60,
+    totalMarks: 200,
+    totalQuestions: 100,
+    hasSectionalTiming: true,
+    defaultSectionMinutes: 15,
+    sections: [
+      { id: 'sec_1', name: 'General Intelligence & Reasoning', questionCount: 25, durationMinutes: 15, positiveMarks: 2, negativeMarks: 0.5 },
+      { id: 'sec_2', name: 'General Awareness', questionCount: 25, durationMinutes: 15, positiveMarks: 2, negativeMarks: 0.5 },
+      { id: 'sec_3', name: 'Quantitative Aptitude', questionCount: 25, durationMinutes: 15, positiveMarks: 2, negativeMarks: 0.5 },
+      { id: 'sec_4', name: 'English Language', questionCount: 25, durationMinutes: 15, positiveMarks: 2, negativeMarks: 0.5 }
+    ]
+  },
+  'ssc-selection-post-grad': {
+    examCode: 'ssc-selection-post-grad',
+    name: 'SSC Selection Post (Graduation Level)',
+    family: 'ssc',
+    durationMinutes: 60,
+    totalMarks: 200,
+    totalQuestions: 100,
+    hasSectionalTiming: true,
+    defaultSectionMinutes: 15,
+    sections: [
+      { id: 'sec_1', name: 'General Intelligence & Reasoning', questionCount: 25, durationMinutes: 15, positiveMarks: 2, negativeMarks: 0.5 },
+      { id: 'sec_2', name: 'General Awareness', questionCount: 25, durationMinutes: 15, positiveMarks: 2, negativeMarks: 0.5 },
+      { id: 'sec_3', name: 'Quantitative Aptitude', questionCount: 25, durationMinutes: 15, positiveMarks: 2, negativeMarks: 0.5 },
+      { id: 'sec_4', name: 'English Language', questionCount: 25, durationMinutes: 15, positiveMarks: 2, negativeMarks: 0.5 }
+    ]
+  },
+  'ssc-selection-post-ug': {
+    examCode: 'ssc-selection-post-ug',
+    name: 'SSC Selection Post (Higher Secondary Level)',
+    family: 'ssc',
+    durationMinutes: 60,
+    totalMarks: 200,
+    totalQuestions: 100,
+    hasSectionalTiming: true,
+    defaultSectionMinutes: 15,
+    sections: [
+      { id: 'sec_1', name: 'General Intelligence & Reasoning', questionCount: 25, durationMinutes: 15, positiveMarks: 2, negativeMarks: 0.5 },
+      { id: 'sec_2', name: 'General Awareness', questionCount: 25, durationMinutes: 15, positiveMarks: 2, negativeMarks: 0.5 },
+      { id: 'sec_3', name: 'Quantitative Aptitude', questionCount: 25, durationMinutes: 15, positiveMarks: 2, negativeMarks: 0.5 },
+      { id: 'sec_4', name: 'English Language', questionCount: 25, durationMinutes: 15, positiveMarks: 2, negativeMarks: 0.5 }
+    ]
+  },
+  'ssc-selection-post-matric': {
+    examCode: 'ssc-selection-post-matric',
+    name: 'SSC Selection Post (Matriculation Level)',
+    family: 'ssc',
+    durationMinutes: 60,
+    totalMarks: 200,
+    totalQuestions: 100,
+    hasSectionalTiming: true,
+    defaultSectionMinutes: 15,
+    sections: [
+      { id: 'sec_1', name: 'General Intelligence & Reasoning', questionCount: 25, durationMinutes: 15, positiveMarks: 2, negativeMarks: 0.5 },
+      { id: 'sec_2', name: 'General Awareness', questionCount: 25, durationMinutes: 15, positiveMarks: 2, negativeMarks: 0.5 },
+      { id: 'sec_3', name: 'Quantitative Aptitude', questionCount: 25, durationMinutes: 15, positiveMarks: 2, negativeMarks: 0.5 },
+      { id: 'sec_4', name: 'English Language', questionCount: 25, durationMinutes: 15, positiveMarks: 2, negativeMarks: 0.5 }
+    ]
   }
 };
 
@@ -431,6 +500,12 @@ export function getExamBlueprint(examCode?: string, title?: string): ExamBluepri
   }
 
   // 4. SSC exams
+  if (code.includes('selection-post') || t.includes('selection post')) {
+    if (code.includes('grad') || t.includes('grad')) return OFFICIAL_EXAM_BLUEPRINTS['ssc-selection-post-grad'];
+    if (code.includes('ug') || code.includes('12th') || t.includes('higher secondary') || t.includes('12th')) return OFFICIAL_EXAM_BLUEPRINTS['ssc-selection-post-ug'];
+    if (code.includes('matric') || code.includes('10th') || t.includes('matric')) return OFFICIAL_EXAM_BLUEPRINTS['ssc-selection-post-matric'];
+    return OFFICIAL_EXAM_BLUEPRINTS['ssc-selection-post'];
+  }
   if (code.includes('cpo') || t.includes('cpo') || t.includes('delhi police si')) {
     return OFFICIAL_EXAM_BLUEPRINTS['ssc-cpo'];
   }
