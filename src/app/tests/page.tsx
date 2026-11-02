@@ -130,13 +130,7 @@ const MASTER_SERIES_CATALOG: ExamSeriesItem[] = [
 ];
 
 function extractTestExamYear(title: string, examCode?: string, testId?: string): string {
-  // 1. Look for exam notification cycle year first (e.g. "RRB NTPC (UG) 2025 CBT-1" -> 2025)
-  const examCycleMatch = title.match(/(?:SSC|RRB|NTPC|CGL|CHSL|MTS|ALP|Group\s*D)[^—\-]*(202\d)/i);
-  if (examCycleMatch) {
-    return examCycleMatch[1];
-  }
-
-  // 2. Delimiter match for shift date year
+  // 1. Primary: Shift examination date year after delimiter (e.g. "— 25 Mar, 2026 Shift 1" -> 2026, "— 16 Jun, 2025" -> 2025)
   if (title.includes('—') || title.includes(' - ')) {
     const delimiter = title.includes('—') ? '—' : ' - ';
     const parts = title.split(delimiter);
@@ -145,13 +139,20 @@ function extractTestExamYear(title: string, examCode?: string, testId?: string):
     if (dateYear) return dateYear[1];
   }
 
+  // 2. Secondary: Notification cycle match from title
+  const examCycleMatch = title.match(/(?:SSC|RRB|NTPC|CGL|CHSL|MTS|ALP|Group\s*D)[^—\-]*(202\d)/i);
+  if (examCycleMatch) {
+    return examCycleMatch[1];
+  }
+
+  // 3. ID or exam code fallback
   const idMatch = (testId || '').match(/(202\d)/);
   if (idMatch) return idMatch[1];
   const codeMatch = (examCode || '').match(/(202\d)/);
   if (codeMatch) return codeMatch[1];
   const matches = title.match(/(202\d)/g);
   if (matches && matches.length > 0) {
-    return matches[0];
+    return matches[matches.length - 1];
   }
   return '';
 }
@@ -996,8 +997,8 @@ function TestsExplorerContent() {
                     </div>
                   )}
 
-                  {/* Tier 2 SSC Section Mode Toggle: Combined Modules vs Subject-Wise */}
-                  {activeCategoryTab === 'pyst_tier2' && !isRailway && (
+                  {/* Tier 2 / CBT 2 Section Mode Toggle: Combined Modules vs Subject-Wise */}
+                  {activeCategoryTab === 'pyst_tier2' && (
                     <div className="flex items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-900 rounded-2xl w-fit border border-slate-200 dark:border-slate-800">
                       <button
                         type="button"
@@ -1008,7 +1009,7 @@ function TestsExplorerContent() {
                             : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                         }`}
                       >
-                        Official Section-Wise (Sec 1, 2, 3)
+                        {isRailway ? 'Official Part-Wise (Part A / Part B Trade)' : 'Official Section-Wise (Sec 1, 2, 3)'}
                       </button>
                       <button
                         type="button"
@@ -1019,7 +1020,7 @@ function TestsExplorerContent() {
                             : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                         }`}
                       >
-                        Subject-Wise (5 Subjects)
+                        {isRailway ? 'Subject-Wise (4 Subjects + Trade)' : 'Subject-Wise (5 Subjects)'}
                       </button>
                     </div>
                   )}
@@ -1057,13 +1058,31 @@ function TestsExplorerContent() {
                 ) : (
                   currentSeriesTests.map((shiftTest) => {
                     const isRailwayShift = isRailway || shiftTest.examFamily === 'rrb' || (shiftTest.examCode || '').includes('rrb') || shiftTest.title.toLowerCase().includes('rrb');
-                    const isTier2Test = !isRailwayShift && ((shiftTest.examCode || '').includes('tier2') || shiftTest.title.toLowerCase().includes('tier 2') || shiftTest.title.toLowerCase().includes('tier-2') || activeCategoryTab === 'pyst_tier2');
+                    const isAlpCbt2 = isRailwayShift && (((shiftTest.examCode || '').includes('alp') || shiftTest.title.toLowerCase().includes('alp')) && ((shiftTest.examCode || '').includes('cbt2') || shiftTest.title.toLowerCase().includes('cbt-2') || shiftTest.title.toLowerCase().includes('cbt 2') || shiftTest.title.toLowerCase().includes('trade') || shiftTest.totalQuestions === 175));
+                    const isTier2Test = (!isRailwayShift && ((shiftTest.examCode || '').includes('tier2') || shiftTest.title.toLowerCase().includes('tier 2') || shiftTest.title.toLowerCase().includes('tier-2') || activeCategoryTab === 'pyst_tier2')) || isAlpCbt2;
                     const isGradMixed = isRailwayShift && (shiftTest.id.includes('grad') || shiftTest.title.toLowerCase().includes('graduate') || selectedSeries.examCode === 'rrb-ntpc-grad');
-                    const isChslTier2 = isTier2Test && ((shiftTest.examCode || '').includes('chsl') || shiftTest.title.toLowerCase().includes('chsl'));
+                    const isChslTier2 = !isRailwayShift && ((shiftTest.examCode || '').includes('chsl') || shiftTest.title.toLowerCase().includes('chsl'));
 
-                    // Tier 2 Combined Sections
+                    // Tier 2 / CBT 2 Combined Sections
                     if (isTier2Test && tier2SectionMode === 'combined') {
-                      const combinedSections = [
+                      const combinedSections = isAlpCbt2 ? [
+                        {
+                          id: `sec-${shiftTest.id}-combined-1`,
+                          name: 'Part A: General Aptitude & Basic Science (Merit Scoring)',
+                          qCount: 100,
+                          duration: '90 Mins',
+                          marks: 100,
+                          marking: '+1, -0.33'
+                        },
+                        {
+                          id: `sec-${shiftTest.id}-combined-2`,
+                          name: 'Part B: Technical Trade Test (Qualifying - 35% Required)',
+                          qCount: 75,
+                          duration: '60 Mins',
+                          marks: 75,
+                          marking: '+1, -0.33 (Qualifying)'
+                        }
+                      ] : [
                         {
                           id: `sec-${shiftTest.id}-combined-1`,
                           name: 'Section I: Mathematical Abilities & Reasoning',
@@ -1098,18 +1117,18 @@ function TestsExplorerContent() {
                           <div className="flex items-center justify-between">
                             <div className="space-y-0.5">
                               <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">
-                                Tier 2 Official Combined Modules
+                                {isAlpCbt2 ? 'ALP CBT 2 Official Parts' : 'Tier 2 Official Combined Modules'}
                               </span>
                               <h4 className="font-black text-sm text-slate-900 dark:text-white">
                                 {shiftTest.title}
                               </h4>
                             </div>
                             <span className="text-[11px] font-bold text-slate-500">
-                              3 Official Sections
+                              {combinedSections.length} Official Parts
                             </span>
                           </div>
 
-                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+                          <div className={`grid grid-cols-1 ${combinedSections.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-3'} gap-2.5 pt-1`}>
                             {combinedSections.map((sec) => {
                               const isSecAttempted = !!attemptedMap[sec.id];
                               return (

@@ -92,6 +92,7 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
         const pTitle = (parent.title || '').toLowerCase();
         const isChsl = pCode.includes('chsl') || pTitle.includes('chsl');
         const isMts = pCode.includes('mts') || pTitle.includes('mts');
+        const isAlpCbt2 = (pCode.includes('alp') && (pCode.includes('cbt2') || pCode.includes('cbt-2') || pTitle.includes('cbt-2') || pTitle.includes('cbt 2') || pTitle.includes('trade'))) || parent.totalQuestions === 175;
 
         let combTitle = '';
         let duration = 60;
@@ -100,7 +101,38 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
         let combinedQuestions: CBTQuestion[] = [];
         let combinedSections: CBTSection[] = [];
 
-        if (isMts) {
+        if (isAlpCbt2) {
+          marksPerQ = 1;
+          negMarks = Number((1 / 3).toFixed(2));
+          if (combIdx === 1) {
+            combTitle = `Part A: General Aptitude & Basic Science (Merit Scoring)`;
+            duration = 90;
+            const secMath = parent.sections.find(s => s.name.toLowerCase().includes('math'));
+            const secReas = parent.sections.find(s => s.name.toLowerCase().includes('reasoning'));
+            const secSci = parent.sections.find(s => s.name.toLowerCase().includes('science'));
+            const secGA = parent.sections.find(s => s.name.toLowerCase().includes('awareness') || s.name.toLowerCase().includes('current'));
+            const qMath = (secMath?.questions || []).map(q => ({ ...q, marks: 1, negativeMarks: negMarks }));
+            const qReas = (secReas?.questions || []).map(q => ({ ...q, marks: 1, negativeMarks: negMarks }));
+            const qSci = (secSci?.questions || []).map(q => ({ ...q, marks: 1, negativeMarks: negMarks }));
+            const qGA = (secGA?.questions || []).map(q => ({ ...q, marks: 1, negativeMarks: negMarks }));
+            combinedSections = [
+              { id: 'sec_1', name: 'Mathematics', questions: qMath },
+              { id: 'sec_2', name: 'General Intelligence & Reasoning', questions: qReas },
+              { id: 'sec_3', name: 'Basic Science and Engineering', questions: qSci },
+              { id: 'sec_4', name: 'General Awareness on Current Affairs', questions: qGA }
+            ];
+            combinedQuestions = [...qMath, ...qReas, ...qSci, ...qGA];
+          } else {
+            combTitle = `Part B: Technical Trade Test (Qualifying - 35% Required)`;
+            duration = 60;
+            const secTrade = parent.sections.find(s => s.name.toLowerCase().includes('trade') || s.name.toLowerCase().includes('part b')) || parent.sections[4];
+            const qTrade = (secTrade?.questions || []).map(q => ({ ...q, marks: 1, negativeMarks: negMarks }));
+            combinedSections = [
+              { id: 'sec_5', name: secTrade?.name || 'Part B: Technical Trade Test', questions: qTrade }
+            ];
+            combinedQuestions = [...qTrade];
+          }
+        } else if (isMts) {
           if (combIdx === 1) {
             combTitle = `Session I (Maths & Reasoning — Purely Qualifying)`;
             duration = 45;

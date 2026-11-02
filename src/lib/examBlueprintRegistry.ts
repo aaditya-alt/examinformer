@@ -83,10 +83,10 @@ export const OFFICIAL_EXAM_BLUEPRINTS: Record<string, ExamBlueprint> = {
     ]
   },
 
-  // ── RRB ALP (Assistant Loco Pilot) ──
+  // ── RRB ALP CBT 1 (Assistant Loco Pilot Stage-1) ──
   'rrb-alp': {
     examCode: 'rrb-alp',
-    name: 'RRB ALP (Assistant Loco Pilot)',
+    name: 'RRB ALP CBT 1 (Assistant Loco Pilot Stage-1)',
     family: 'rrb',
     durationMinutes: 60,
     totalMarks: 75,
@@ -97,6 +97,47 @@ export const OFFICIAL_EXAM_BLUEPRINTS: Record<string, ExamBlueprint> = {
       { id: 'sec_2', name: 'General Intelligence & Reasoning', questionCount: 25, durationMinutes: 20, positiveMarks: 1, negativeMarks: 0.33 },
       { id: 'sec_3', name: 'General Science', questionCount: 20, durationMinutes: 15, positiveMarks: 1, negativeMarks: 0.33 },
       { id: 'sec_4', name: 'General Awareness & Current Affairs', questionCount: 10, durationMinutes: 10, positiveMarks: 1, negativeMarks: 0.33 }
+    ]
+  },
+
+  // ── RRB ALP CBT 2 (Assistant Loco Pilot Stage-2: Part A & Part B Technical Trade) ──
+  'rrb-alp-cbt2': {
+    examCode: 'rrb-alp-cbt2',
+    name: 'RRB ALP CBT 2 (Part A & Part B Technical Trade)',
+    family: 'rrb',
+    durationMinutes: 150,
+    totalMarks: 175,
+    totalQuestions: 175,
+    hasSectionalTiming: true,
+    sections: [
+      { id: 'sec_1', name: 'Mathematics', questionCount: 25, durationMinutes: 25, positiveMarks: 1, negativeMarks: 0.33 },
+      { id: 'sec_2', name: 'General Intelligence & Reasoning', questionCount: 25, durationMinutes: 25, positiveMarks: 1, negativeMarks: 0.33 },
+      { id: 'sec_3', name: 'Basic Science and Engineering', questionCount: 40, durationMinutes: 30, positiveMarks: 1, negativeMarks: 0.33 },
+      { id: 'sec_4', name: 'General Awareness on Current Affairs', questionCount: 10, durationMinutes: 10, positiveMarks: 1, negativeMarks: 0.33 },
+      { id: 'sec_5', name: 'Part B: Relevant Technical Trade Test', questionCount: 75, durationMinutes: 60, positiveMarks: 1, negativeMarks: 0.33, isQualifying: true }
+    ],
+    combinedModules: [
+      {
+        id: 'comb_1',
+        name: 'Part A: General Aptitude & Basic Science (Merit Scoring)',
+        sectionIds: ['sec_1', 'sec_2', 'sec_3', 'sec_4'],
+        questionCount: 100,
+        durationMinutes: 90,
+        totalMarks: 100,
+        positiveMarks: 1,
+        negativeMarks: 0.33
+      },
+      {
+        id: 'comb_2',
+        name: 'Part B: Technical Trade Test (Qualifying - 35% Required)',
+        sectionIds: ['sec_5'],
+        questionCount: 75,
+        durationMinutes: 60,
+        totalMarks: 75,
+        positiveMarks: 1,
+        negativeMarks: 0.33,
+        isQualifying: true
+      }
     ]
   },
 
@@ -380,6 +421,9 @@ export function getExamBlueprint(examCode?: string, title?: string): ExamBluepri
     return OFFICIAL_EXAM_BLUEPRINTS['rrb-ntpc-grad'];
   }
   if (code.includes('alp') || t.includes('alp')) {
+    if (code.includes('cbt2') || code.includes('cbt-2') || t.includes('cbt 2') || t.includes('cbt-2') || t.includes('cbt2') || t.includes('trade')) {
+      return OFFICIAL_EXAM_BLUEPRINTS['rrb-alp-cbt2'];
+    }
     return OFFICIAL_EXAM_BLUEPRINTS['rrb-alp'];
   }
   if (code.includes('group-d') || t.includes('group d') || t.includes('level-1')) {
