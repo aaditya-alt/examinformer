@@ -69,6 +69,24 @@ function renderMathAndMarkdownToHtml(content: string): string {
   // Strip stray unescaped short tokens like $s, $3, $2e when not in math formula
   str = str.replace(/\$([a-zA-Z0-9]{1,4})(?![^$]*\$)/g, '$1');
 
+  // Extract images (both Markdown ![alt](url) and HTML <img ...>) into placeholders
+  const imagePlaceholders: string[] = [];
+  str = str.replace(/!\[([^\]]*)\]\((https?:\/\/[^\s\)]+)\)/g, (match, alt, url) => {
+    const token = `__IMG_PLACEHOLDER_${imagePlaceholders.length}__`;
+    imagePlaceholders.push(
+      `<span class="block my-2 text-center"><img src="${url}" alt="${alt || 'Diagram'}" class="max-h-72 max-w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white object-contain inline-block p-1.5 shadow-2xs" loading="lazy" /></span>`
+    );
+    return token;
+  });
+
+  str = str.replace(/<img\s+[^>]*?src=["'](https?:\/\/[^"']+)["'][^>]*?\/?>/gi, (match, url) => {
+    const token = `__IMG_PLACEHOLDER_${imagePlaceholders.length}__`;
+    imagePlaceholders.push(
+      `<span class="block my-2 text-center"><img src="${url}" alt="Diagram" class="max-h-72 max-w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white object-contain inline-block p-1.5 shadow-2xs" loading="lazy" /></span>`
+    );
+    return token;
+  });
+
   // Extract KaTeX mathematical formulas into placeholders:
   // Supports \(...\), $$, and inline $...$
   const mathPlaceholders: string[] = [];
@@ -128,6 +146,11 @@ function renderMathAndMarkdownToHtml(content: string): string {
   // Re-inject rendered KaTeX blocks
   for (let i = 0; i < mathPlaceholders.length; i++) {
     str = str.replace(`__MATH_PLACEHOLDER_${i}__`, mathPlaceholders[i]);
+  }
+
+  // Re-inject rendered image blocks
+  for (let i = 0; i < imagePlaceholders.length; i++) {
+    str = str.replace(`__IMG_PLACEHOLDER_${i}__`, imagePlaceholders[i]);
   }
 
   return str;

@@ -420,12 +420,15 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
             }
 
             const rawOptions = Array.isArray(q.options) ? q.options : [];
-            const mappedOptions = rawOptions.map((o: any, idx: number) => ({
-              id: o.id || idx + 1,
-              text: o.text_en || o.text || `Option ${o.id || idx + 1}`,
-              textHi: o.text_hi || o.text_en || o.text || `Option ${o.id || idx + 1}`,
-              imageUrl: o.imageUrl
-            }));
+            const mappedOptions = rawOptions.map((o: any, idx: number) => {
+              const optImg = o.imageUrl || o.image_url || o.image || undefined;
+              return {
+                id: o.id || idx + 1,
+                text: o.text_en || o.text || (optImg ? '' : `Option ${o.id || idx + 1}`),
+                textHi: o.text_hi || o.text_en || o.text || (optImg ? '' : `Option ${o.id || idx + 1}`),
+                imageUrl: optImg
+              };
+            });
 
             sectionMap.get(secName)!.push({
               id: q.id,
@@ -639,12 +642,15 @@ export async function getTestById(id: string, excludeIds: string[] = []): Promis
 
           const finalQuestions: CBTQuestion[] = chosenList.map((q, idx) => {
             const rawOptions = Array.isArray(q.options) ? q.options : [];
-            const mappedOptions = rawOptions.map((o: any, oIdx: number) => ({
-              id: o.id || oIdx + 1,
-              text: o.text_en || o.text || `Option ${o.id || oIdx + 1}`,
-              textHi: o.text_hi || o.text_en || o.text || `Option ${o.id || oIdx + 1}`,
-              imageUrl: o.imageUrl
-            }));
+            const mappedOptions = rawOptions.map((o: any, oIdx: number) => {
+              const optImg = o.imageUrl || o.image_url || o.image || undefined;
+              return {
+                id: o.id || oIdx + 1,
+                text: o.text_en || o.text || (optImg ? '' : `Option ${o.id || oIdx + 1}`),
+                textHi: o.text_hi || o.text_en || o.text || (optImg ? '' : `Option ${o.id || oIdx + 1}`),
+                imageUrl: optImg
+              };
+            });
             return {
               id: q.id,
               qno: idx + 1,
