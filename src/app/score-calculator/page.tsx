@@ -223,7 +223,11 @@ export default function ScoreCalculatorPage() {
       router.push(`/score-calculator/result?id=${json.data.submissionId}`);
     } catch (err: any) {
       console.error(err);
-      setErrorMessage(err.message || 'An unexpected error occurred during evaluation.');
+      const msg = err.message || 'An unexpected error occurred during evaluation.';
+      setErrorMessage(msg);
+      if (msg.includes('403') || msg.includes('firewall') || msg.includes('HTML') || msg.includes('session') || msg.includes('400')) {
+        setShowHtmlPaste(true);
+      }
       setLoading(false);
     }
   };
@@ -285,12 +289,49 @@ export default function ScoreCalculatorPage() {
       <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 sm:p-8 space-y-6 shadow-sm">
         {/* Error Alert */}
         {errorMessage && (
-          <div className="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-rose-700 dark:text-rose-300 text-xs sm:text-sm flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-rose-600" />
-            <div>
-              <strong className="font-bold">Evaluation Notice: </strong>
-              <span>{errorMessage}</span>
+          <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/90 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 space-y-3">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />
+              <div className="space-y-1">
+                <strong className="font-bold text-amber-950 dark:text-amber-200 text-sm">
+                  {errorMessage.includes('403') || errorMessage.includes('firewall')
+                    ? 'SSC Portal Cloud Firewall Notice (HTTP 403)'
+                    : 'Evaluation Notice'}
+                </strong>
+                <p className="text-xs text-amber-900/90 dark:text-amber-300 leading-relaxed">
+                  {errorMessage}
+                </p>
+              </div>
             </div>
+
+            {(errorMessage.includes('403') || errorMessage.includes('firewall') || errorMessage.includes('HTML') || errorMessage.includes('400')) && (
+              <div className="p-3.5 bg-white dark:bg-slate-900/90 rounded-xl border border-amber-200 dark:border-amber-800/80 text-xs space-y-2.5">
+                <div className="font-bold text-blue-700 dark:text-blue-400 flex items-center gap-1.5">
+                  <span>⚡ Instant 10-Second Solution (100% Guaranteed):</span>
+                </div>
+                <ol className="list-decimal list-inside space-y-1.5 text-slate-700 dark:text-slate-300">
+                  <li>
+                    Open your answer key link in your browser:{' '}
+                    {answerKeyUrl ? (
+                      <a
+                        href={answerKeyUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="font-mono text-blue-600 dark:text-blue-400 underline inline-flex items-center gap-0.5 break-all font-semibold"
+                      >
+                        Open Answer Sheet <ExternalLink className="w-3 h-3 inline" />
+                      </a>
+                    ) : (
+                      <span>(your official examination response link)</span>
+                    )}
+                  </li>
+                  <li>
+                    On the opened page, press <kbd className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 font-mono font-bold">Ctrl + U</kbd> (View Source), then <kbd className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 font-mono font-bold">Ctrl + A</kbd> (Select All) &amp; <kbd className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 font-mono font-bold">Ctrl + C</kbd> (Copy).
+                  </li>
+                  <li>Paste the copied HTML into the box below and click Calculate!</li>
+                </ol>
+              </div>
+            )}
           </div>
         )}
 
@@ -322,7 +363,7 @@ export default function ScoreCalculatorPage() {
                 }}
                 placeholder="https://sscexams.cbexams.com/... or https://rrb.digialm.com/... or https://ssc.digialm.com/..."
                 className="w-full px-4 py-3 text-xs sm:text-sm font-mono rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 pr-10"
-                required
+                required={!pastedHtml.trim()}
               />
               {answerKeyUrl && (
                 <button
@@ -361,9 +402,24 @@ export default function ScoreCalculatorPage() {
                     rows={4}
                     className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
                   />
-                  <div className="text-[10px] text-slate-500">
-                    Bypasses government portal session expiries, timeouts, and network firewalls.
+                  <div className="flex items-center justify-between text-[10px] text-slate-500">
+                    <span>Bypasses government portal session expiries, timeouts, and cloud firewalls.</span>
+                    {pastedHtml.trim() && (
+                      <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                        ✓ HTML Ready ({pastedHtml.length.toLocaleString()} characters)
+                      </span>
+                    )}
                   </div>
+                  {pastedHtml.trim() && (
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs cursor-pointer shadow transition flex items-center justify-center gap-1.5"
+                    >
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>Calculate Score Now from Pasted HTML</span>
+                    </button>
+                  )}
                 </div>
               )}
             </div>

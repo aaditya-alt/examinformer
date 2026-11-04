@@ -205,14 +205,33 @@ export async function fetchUrlDetailed(url: string, maxRedirects = 5): Promise<D
     }
   }
 
+  let origin = 'https://sscexams.cbexams.com';
+  let referer = 'https://sscexams.cbexams.com/';
+  try {
+    const u = new URL(cleanUrl);
+    origin = u.origin;
+    referer = `${u.origin}/`;
+  } catch {}
+
   const standardHeaders: Record<string, string> = {
     'User-Agent':
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
     'Accept':
-      'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-    'Accept-Language': 'en-US,en;q=0.9,hi;q=0.8',
-    'Connection': 'keep-alive',
-    'Upgrade-Insecure-Requests': '1'
+      'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'Accept-Language': 'en-IN,en-GB;q=0.9,en-US;q=0.8,en;q=0.7,hi;q=0.6',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Cache-Control': 'max-age=0',
+    'Sec-Ch-Ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+    'Sec-Ch-Ua-Mobile': '?0',
+    'Sec-Ch-Ua-Platform': '"Windows"',
+    'Sec-Fetch-Dest': 'document',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-Site': 'none',
+    'Sec-Fetch-User': '?1',
+    'Upgrade-Insecure-Requests': '1',
+    'Referer': referer,
+    'Origin': origin,
+    'Connection': 'keep-alive'
   };
 
   const candidateUrls = [cleanUrl];
@@ -258,7 +277,12 @@ export async function fetchUrlDetailed(url: string, maxRedirects = 5): Promise<D
           await new Promise((r) => setTimeout(r, 1200 * attempt));
           continue;
         } else {
-          lastError = new Error(`Government portal returned HTTP ${res.status}`);
+          const is403 = res.status === 403;
+          lastError = new Error(
+            is403
+              ? 'Government portal returned HTTP 403. The examination server has a cloud firewall restriction. Please copy and paste your response sheet HTML directly below to calculate your score instantly!'
+              : `Government portal returned HTTP ${res.status}`
+          );
           break;
         }
       } catch (err: any) {
@@ -269,6 +293,19 @@ export async function fetchUrlDetailed(url: string, maxRedirects = 5): Promise<D
       }
     }
   }
+
+  // Chrome TLS cipher suite matching
+  const chromeCiphers = [
+    'TLS_AES_128_GCM_SHA256',
+    'TLS_AES_256_GCM_SHA384',
+    'TLS_CHACHA20_POLY1305_SHA256',
+    'ECDHE-ECDSA-AES128-GCM-SHA256',
+    'ECDHE-RSA-AES128-GCM-SHA256',
+    'ECDHE-ECDSA-AES256-GCM-SHA384',
+    'ECDHE-RSA-AES256-GCM-SHA384',
+    'ECDHE-ECDSA-CHACHA20-POLY1305',
+    'ECDHE-RSA-CHACHA20-POLY1305'
+  ].join(':');
 
   // 2. Stream fallback via https/http module
   const fetchStream = (targetUrl: string, redirectsLeft: number): Promise<DetailedFetchResult> => {
@@ -286,6 +323,7 @@ export async function fetchUrlDetailed(url: string, maxRedirects = 5): Promise<D
         targetUrl,
         {
           rejectUnauthorized: false,
+          ciphers: chromeCiphers,
           headers: standardHeaders
         },
         (res) => {
@@ -294,6 +332,13 @@ export async function fetchUrlDetailed(url: string, maxRedirects = 5): Promise<D
             return resolve(fetchStream(nextUrl, redirectsLeft - 1));
           }
           if (res.statusCode && res.statusCode !== 200) {
+            if (res.statusCode === 403) {
+              return reject(
+                new Error(
+                  'Government portal returned HTTP 403. The examination server has a cloud firewall restriction. Please copy and paste your response sheet HTML directly below to calculate your score instantly!'
+                )
+              );
+            }
             return reject(new Error(`Government portal returned HTTP ${res.statusCode}. Please verify your link is valid and active.`));
           }
 
