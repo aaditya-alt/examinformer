@@ -10,5 +10,19 @@
     "finalScore": 74,
     "rawScore": 78,
     "evaluatedAt": "2026-11-01T09:39:10.585Z"
+  },
+  {
+    "id": "sub_1793811134742_dkgpl",
+    "rollNumber": "226120164925",
+    "candidateName": "AADITYA RANJAN",
+    "examFamily": "ssc",
+    "examTitle": "Combined Graduate Level Examination, 2026",
+    "shiftKey": "10 Oct 2026_05:00 PM (Shift-3)",
+    "category": "UR",
+    "gender": "Male",
+    "finalScore": 140.5,
+    "rawScore": 150,
+    "normalizedScore": 140.5,
+    "evaluatedAt": "2026-11-04T16:52:15.777Z"
   }
 ]

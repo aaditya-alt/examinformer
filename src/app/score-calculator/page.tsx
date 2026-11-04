@@ -306,8 +306,21 @@ export default function ScoreCalculatorPage() {
               <input
                 type="url"
                 value={answerKeyUrl}
-                onChange={(e) => setAnswerKeyUrl(e.target.value)}
-                placeholder="https://rrb.digialm.com/... or https://ssc.digialm.com/... or https://ssc.cbexams.com/..."
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setAnswerKeyUrl(val);
+                  const low = val.toLowerCase();
+                  if (low.includes('cgl') || low.includes('cgle') || low.includes('cbexams')) {
+                    setSelectedExamId('ssc-cgl');
+                  } else if (low.includes('chsl')) {
+                    setSelectedExamId('ssc-chsl');
+                  } else if (low.includes('mts')) {
+                    setSelectedExamId('ssc-mts');
+                  } else if (low.includes('rrb') || low.includes('ntpc')) {
+                    setSelectedExamId('rrb-ntpc-grad');
+                  }
+                }}
+                placeholder="https://sscexams.cbexams.com/... or https://rrb.digialm.com/... or https://ssc.digialm.com/..."
                 className="w-full px-4 py-3 text-xs sm:text-sm font-mono rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 pr-10"
                 required
               />

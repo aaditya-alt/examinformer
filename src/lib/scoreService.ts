@@ -173,9 +173,20 @@ function savePortalSubmission(record: StoredPortalSubmission) {
  * Robust government portal URL fetcher with SSL verification bypass, Gzip/Brotli decompression & multiple fallback attempts
  */
 export async function fetchUrlContent(url: string, maxRedirects = 5): Promise<string> {
+  const result = await fetchUrlDetailed(url, maxRedirects);
+  return result.html;
+}
+
+export interface DetailedFetchResult {
+  html: string;
+  cookies: string;
+  finalUrl: string;
+}
+
+export async function fetchUrlDetailed(url: string, maxRedirects = 5): Promise<DetailedFetchResult> {
   let cleanUrl = url.trim();
-  // Strip surrounding quotes, angle brackets, markdown wrappers, trailing punctuation
-  cleanUrl = cleanUrl.replace(/^[<"'s]+|[>"'s\.,;]+$/g, '');
+  // Strip surrounding quotes, angle brackets, markdown wrappers, trailing punctuation - preserves legitimate characters
+  cleanUrl = cleanUrl.replace(/^[<"'\s]+|[>"'\s\.,;]+$/g, '');
   cleanUrl = cleanUrl.replace(/[\r\n\t]/g, '');
 
   if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
@@ -194,7 +205,7 @@ export async function fetchUrlContent(url: string, maxRedirects = 5): Promise<st
     }
   }
 
-  const standardHeaders = {
+  const standardHeaders: Record<string, string> = {
     'User-Agent':
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
     'Accept':
@@ -204,7 +215,6 @@ export async function fetchUrlContent(url: string, maxRedirects = 5): Promise<st
     'Upgrade-Insecure-Requests': '1'
   };
 
-  // URL candidates: original URL, then normalized path without double slashes
   const candidateUrls = [cleanUrl];
   try {
     const u = new URL(cleanUrl);
@@ -218,34 +228,50 @@ export async function fetchUrlContent(url: string, maxRedirects = 5): Promise<st
 
   let lastError: any = null;
 
-  // 1. Try modern native fetch across candidate URLs
+  // 1. Try modern native fetch across candidate URLs with retries for high server traffic
   for (const candidate of candidateUrls) {
-    try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 20000);
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 25000);
 
-      const res = await fetch(candidate, {
-        signal: controller.signal,
-        headers: standardHeaders,
-        redirect: 'follow'
-      });
-      clearTimeout(timeout);
+        const res = await fetch(candidate, {
+          signal: controller.signal,
+          headers: standardHeaders,
+          redirect: 'follow'
+        });
+        clearTimeout(timeout);
 
-      if (res.ok) {
-        const text = await res.text();
-        if (text && text.trim().length > 100) {
-          return text;
+        if (res.ok) {
+          const text = await res.text();
+          if (text && text.trim().length > 100) {
+            const rawCookies = res.headers.get('set-cookie') || '';
+            return {
+              html: text,
+              cookies: rawCookies,
+              finalUrl: res.url || candidate
+            };
+          }
+        } else if (res.status >= 500 || res.status === 429) {
+          lastError = new Error(`Government portal server busy (HTTP ${res.status}). Retrying...`);
+          // Wait briefly before retrying under heavy traffic
+          await new Promise((r) => setTimeout(r, 1200 * attempt));
+          continue;
+        } else {
+          lastError = new Error(`Government portal returned HTTP ${res.status}`);
+          break;
         }
-      } else {
-        lastError = new Error(`Government portal returned HTTP ${res.status}`);
+      } catch (err: any) {
+        lastError = err;
+        if (attempt < 3) {
+          await new Promise((r) => setTimeout(r, 1000 * attempt));
+        }
       }
-    } catch (err: any) {
-      lastError = err;
     }
   }
 
-  // Helper for stream fallback
-  const fetchStream = (targetUrl: string, redirectsLeft: number): Promise<string> => {
+  // 2. Stream fallback via https/http module
+  const fetchStream = (targetUrl: string, redirectsLeft: number): Promise<DetailedFetchResult> => {
     return new Promise((resolve, reject) => {
       if (redirectsLeft <= 0) return reject(new Error('Too many redirects while accessing response sheet'));
       let urlObj: URL;
@@ -262,7 +288,7 @@ export async function fetchUrlContent(url: string, maxRedirects = 5): Promise<st
           rejectUnauthorized: false,
           headers: standardHeaders
         },
-        res => {
+        (res) => {
           if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
             const nextUrl = new URL(res.headers.location, targetUrl).toString();
             return resolve(fetchStream(nextUrl, redirectsLeft - 1));
@@ -271,6 +297,7 @@ export async function fetchUrlContent(url: string, maxRedirects = 5): Promise<st
             return reject(new Error(`Government portal returned HTTP ${res.statusCode}. Please verify your link is valid and active.`));
           }
 
+          const rawCookies = (res.headers['set-cookie'] || []).join('; ');
           const encoding = (res.headers['content-encoding'] || '').toLowerCase();
           let stream: any = res;
 
@@ -285,28 +312,33 @@ export async function fetchUrlContent(url: string, maxRedirects = 5): Promise<st
           let data = '';
           stream.setEncoding('utf8');
           stream.on('data', (chunk: string) => (data += chunk));
-          stream.on('end', () => resolve(data));
+          stream.on('end', () =>
+            resolve({
+              html: data,
+              cookies: rawCookies,
+              finalUrl: targetUrl
+            })
+          );
           stream.on('error', (err: any) => reject(new Error(`Failed to decompress response: ${err.message}`)));
         }
       );
 
-      req.on('error', err => {
+      req.on('error', (err) => {
         reject(new Error(`Failed to connect to answer key portal: ${err.message}`));
       });
 
-      req.setTimeout(25000, () => {
+      req.setTimeout(30000, () => {
         req.destroy();
-        reject(new Error('Connection to examination portal timed out after 25 seconds.'));
+        reject(new Error('Connection to examination portal timed out after 30 seconds. The server might be experiencing high traffic.'));
       });
     });
   };
 
-  // 2. Try stream fallback across candidate URLs
   for (const candidate of candidateUrls) {
     try {
-      const text = await fetchStream(candidate, maxRedirects);
-      if (text && text.trim().length > 100) {
-        return text;
+      const res = await fetchStream(candidate, maxRedirects);
+      if (res.html && res.html.trim().length > 100) {
+        return res;
       }
     } catch (err: any) {
       lastError = err;
@@ -315,17 +347,99 @@ export async function fetchUrlContent(url: string, maxRedirects = 5): Promise<st
 
   throw new Error(
     lastError?.message ||
-    'Could not load answer key from URL. The examination challenge session may have closed on the commission portal, or the server returned HTTP 400. You can paste the HTML response sheet directly to calculate your score!'
+    'Could not load answer key from URL. The examination challenge session may have closed on the commission portal, or the server is busy. You can paste the HTML response sheet directly to calculate your score!'
   );
 }
 
 export async function evaluateAnswerKey(input: EvaluationInput): Promise<EvaluationResult> {
   let html = input.htmlContent || '';
+  let cookies = '';
+  let resolvedUrl = input.url || '';
+
   if (!html && input.url) {
     try {
-      html = await fetchUrlContent(input.url);
+      const fetchResult = await fetchUrlDetailed(input.url);
+      html = fetchResult.html;
+      cookies = fetchResult.cookies;
+      resolvedUrl = fetchResult.finalUrl || input.url;
 
-      // Auto-detect modern SSC multi-part response sheets and fetch all parts
+      // Check for multi-part SSC ASP.NET WebForms response sheets (e.g. cbexams with P1, P2, P3, P4 submit buttons)
+      const hasPartSubmitButtons = /name=["'](P[1-9])["']/i.test(html) || /Click Here for PART-[B-Z]/i.test(html);
+
+      if (hasPartSubmitButtons) {
+        const $ = cheerio.load(html);
+        const viewstate = $('input[name="__VIEWSTATE"]').val() || '';
+        const viewstateGen = $('input[name="__VIEWSTATEGENERATOR"]').val() || '';
+        const eventValidation = $('input[name="__EVENTVALIDATION"]').val() || '';
+        const ddltest = $('select[name="ddltest"]').val() || '1';
+
+        // Find all other part buttons (e.g. P2 for PART-B, P3 for PART-C, P4 for PART-D)
+        const partButtons: { name: string; value: string }[] = [];
+        $('input[type="submit"]').each((_, btn) => {
+          const name = $(btn).attr('name');
+          const val = $(btn).attr('value') || '';
+          if (name && /PART-[B-Z]/i.test(val)) {
+            partButtons.push({ name, value: val });
+          }
+        });
+
+        // Fetch each part sequentially via POST with session persistence & retries
+        for (const part of partButtons) {
+          for (let attempt = 1; attempt <= 3; attempt++) {
+            try {
+              const body = new URLSearchParams();
+              if (viewstate) body.append('__VIEWSTATE', viewstate);
+              if (viewstateGen) body.append('__VIEWSTATEGENERATOR', viewstateGen);
+              if (eventValidation) body.append('__EVENTVALIDATION', eventValidation);
+              if (ddltest) body.append('ddltest', ddltest);
+              body.append(part.name, part.value);
+
+              const postHeaders: Record<string, string> = {
+                'User-Agent':
+                  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.9,hi;q=0.8',
+                'Connection': 'keep-alive'
+              };
+
+              if (cookies) {
+                const cookieVal = cookies.split(';')[0];
+                if (cookieVal) postHeaders['Cookie'] = cookieVal;
+              }
+
+              const controller = new AbortController();
+              const timeout = setTimeout(() => controller.abort(), 25000);
+
+              const pRes = await fetch(resolvedUrl, {
+                method: 'POST',
+                headers: postHeaders,
+                body: body.toString(),
+                signal: controller.signal
+              });
+              clearTimeout(timeout);
+
+              if (pRes.ok) {
+                const pHtml = await pRes.text();
+                if (pHtml && pHtml.length > 500) {
+                  html += '\n<div class="appended-ssc-part">\n' + pHtml + '\n</div>';
+                  break;
+                }
+              } else if (attempt < 3) {
+                await new Promise((r) => setTimeout(r, 1200 * attempt));
+              }
+            } catch (err) {
+              if (attempt < 3) {
+                await new Promise((r) => setTimeout(r, 1000 * attempt));
+              } else {
+                console.warn(`Could not fetch SSC part ${part.name} after 3 attempts:`, err);
+              }
+            }
+          }
+        }
+      }
+
+      // Also check for anchor links (Click Here for PART-B/C/D)
       if (html.includes('Click Here for PART-') || html.includes('PART-A') || html.includes('lblsubject')) {
         const $ = cheerio.load(html);
         const partLinks: string[] = [];
@@ -334,7 +448,7 @@ export async function evaluateAnswerKey(input: EvaluationInput): Promise<Evaluat
           const href = $(a).attr('href');
           if (/Click Here for PART-[B-D]/i.test(text) && href && !href.startsWith('#') && !href.startsWith('javascript:')) {
             try {
-              const absUrl = new URL(href, input.url).toString();
+              const absUrl = new URL(href, resolvedUrl).toString();
               if (!partLinks.includes(absUrl)) partLinks.push(absUrl);
             } catch {}
           }
@@ -345,7 +459,7 @@ export async function evaluateAnswerKey(input: EvaluationInput): Promise<Evaluat
             const partHtml = await fetchUrlContent(pUrl);
             html += '\n<div class="appended-ssc-part">\n' + partHtml + '\n</div>';
           } catch (e) {
-            console.warn('Could not fetch additional SSC part:', pUrl, e);
+            console.warn('Could not fetch additional SSC part link:', pUrl, e);
           }
         }
       }
@@ -358,20 +472,40 @@ export async function evaluateAnswerKey(input: EvaluationInput): Promise<Evaluat
     throw new Error('No answer key content provided to evaluate.');
   }
 
-  const detectedFamily = input.examFamily || (
-    input.url?.toLowerCase().includes('rrb') || html.includes('rrb') || html.includes('NTPC') || html.includes('ALP')
-      ? 'rrb'
-      : 'ssc'
+  const urlLower = (input.url || resolvedUrl || '').toLowerCase();
+  const isSSC = Boolean(
+    urlLower.includes('cgl') ||
+    urlLower.includes('cgle') ||
+    urlLower.includes('ssc') ||
+    urlLower.includes('cbexams') ||
+    html.includes('Combined Graduate Level') ||
+    html.includes('SSC ONLINE EXAMINATION') ||
+    html.includes('PART-A (General Intelligence')
   );
+
+  const detectedFamily: 'ssc' | 'rrb' | 'other' = isSSC
+    ? 'ssc'
+    : (
+      urlLower.includes('rrb') || html.includes('rrb') || html.includes('NTPC') || html.includes('ALP')
+        ? 'rrb'
+        : (input.examFamily || 'ssc')
+    );
+
+  let finalExamTitle = input.examTitle;
+  if (html.includes('Combined Graduate Level Examination, 2026') || urlLower.includes('cgle2026')) {
+    finalExamTitle = 'Combined Graduate Level Examination, 2026';
+  } else if (!finalExamTitle) {
+    finalExamTitle = detectedFamily === 'ssc' ? 'SSC CGL (Tier 1)' : 'RRB NTPC (CBT-1)';
+  }
 
   const rule: ScoreRule = input.customRule || {
     marksPerCorrect: detectedFamily === 'ssc' ? 2.0 : 1.0,
     negativePerWrong: detectedFamily === 'ssc' ? 0.5 : (1 / 3)
   };
 
-  const parsedSheet = parseResponseSheet(html, input.url, {
+  const parsedSheet = parseResponseSheet(html, resolvedUrl || input.url, {
     examFamily: detectedFamily,
-    examTitle: input.examTitle,
+    examTitle: finalExamTitle,
     category: input.category,
     zone: input.zone,
     customRule: rule

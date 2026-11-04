@@ -141,8 +141,9 @@ export class UniversalAnswerKeyParser {
 
     const parsePair = (rawLabel: string, rawVal: string) => {
       const label = rawLabel.trim().toLowerCase();
+      if (!rawVal || rawVal.length > 120) return;
       const value = rawVal.replace(/^[:\s\u00a0]+/, '').trim();
-      if (!value) return;
+      if (!value || value.length > 80 || value.includes('\n')) return;
 
       if (label.includes('roll') || label.includes('participant id') || label.includes('candidate id')) {
         if (!info.rollNo) info.rollNo = value;
@@ -165,7 +166,7 @@ export class UniversalAnswerKeyParser {
 
     // 1. Check DigiALM / TCS .main-info-pnl or table td cells
     $('table tr').each((_, tr) => {
-      const tds = $(tr).find('td');
+      const tds = $(tr).children('td');
       if (tds.length === 2) {
         parsePair($(tds[0]).text(), $(tds[1]).text());
       } else if (tds.length === 3) {
@@ -544,12 +545,12 @@ export class UniversalAnswerKeyParser {
     const sectionNamesMap: { [key: string]: string } = {
       A: 'PART-A (General Intelligence and Reasoning)',
       B: 'PART-B (General Awareness)',
-      C: 'PART-C (Quantitative Aptitude (Basic Arithmetic Skill))',
-      D: 'PART-D (English Language (Basic Knowledge))'
+      C: 'PART-C (Quantitative Aptitude)',
+      D: 'PART-D (English Comprehension)'
     };
 
     // Scan for actual headers in the HTML
-    $('b, strong, h2, h3, h4, span, div').each((_, el) => {
+    $('b, strong, h2, h3, h4, span, div, p').each((_, el) => {
       const t = $(el).text().trim();
       const m = t.match(/^PART\s*[-:]?\s*([A-D])\s*(?:\(([^)]+)\)|[^\n\r]*)/i);
       if (m) {
@@ -566,11 +567,14 @@ export class UniversalAnswerKeyParser {
       return sectionNamesMap['D'];
     };
 
-    // Strategy 1: Table-based question parsing (Standard SSC CBExams)
+    // Strategy 1: Table-based question parsing (Standard SSC CBExams Leaf Tables)
     const seenQnos = new Set<number>();
 
     $('table').each((_, tbl) => {
       const tableEl = $(tbl);
+      // Skip non-leaf wrapper tables to avoid duplicate row processing
+      if (tableEl.find('table').length > 0) return;
+
       const tableText = tableEl.text();
       const match = tableText.match(/Q\.?\s*No\.?\s*[:.]?\s*(\d+)/i);
       if (!match) return;
@@ -579,18 +583,24 @@ export class UniversalAnswerKeyParser {
       if (seenQnos.has(qno)) return;
       seenQnos.add(qno);
 
-      const rows = tableEl.find('tr');
+      const rows = tableEl.find('> tbody > tr, > tr');
       const options: ExtractedOption[] = [];
       let correctOptNum: number | undefined;
       let chosenOptNum: number | undefined;
+      let isNotAnswered = false;
       let quesText = '';
       const questionImages: string[] = [];
 
       rows.each((_, tr) => {
         const row = $(tr);
         const rowText = row.text().trim();
+
+        // Skip language toggle and challenge button rows
+        if (row.find('.language-switch, .switch-btn').length > 0 || /Hindi\s*version/i.test(rowText)) return;
+        if (row.find('a[href*="Challenge_Item"]').length > 0 || /Click Here to Challenge/i.test(rowText)) return;
+
         if (/Q\.?\s*No\.?\s*[:.]?\s*\d+/i.test(rowText)) {
-          quesText = cleanTextAndMath(rowText.replace(/Q\.?\s*No\.?\s*[:.]?\s*\d+/i, '').replace(/^[:\s]+/, ''));
+          quesText = cleanTextAndMath(rowText.replace(/Q\.?\s*No\.?\s*[:.]?\s*\d+/i, '').replace(/^[:\s\u00a0]+/, ''));
           row.find('img').each((__, img) => {
             const src = $(img).attr('src');
             if (src && !src.includes('tick') && !src.includes('cross') && !src.includes('dot')) {
@@ -599,14 +609,20 @@ export class UniversalAnswerKeyParser {
           });
           return;
         }
-        if (rowText.toLowerCase() === 'not answered') return;
 
-        let color = 'none';
-        row.find('td, div, span').each((__, cell) => {
+        if (/Not\s*Answered/i.test(rowText) || row.find('td[bgcolor="gray"], td[style*="gray"]').length > 0) {
+          isNotAnswered = true;
+          return;
+        }
+
+        // Skip empty separator rows
+        if (!rowText && row.find('img').length === 0) return;
+
+        let color = detectColor(row);
+        row.find('td, div, span, font').each((__, cell) => {
           const c = detectColor($(cell));
           if (c !== 'none') color = c;
         });
-        if (color === 'none') color = detectColor(row);
 
         const optNum = options.length + 1;
         let optImg: string | undefined;
@@ -635,10 +651,16 @@ export class UniversalAnswerKeyParser {
         });
       });
 
+      if (isNotAnswered) {
+        chosenOptNum = undefined;
+      }
+
       let status: 'correct' | 'wrong' | 'skipped' | 'bonus' = 'skipped';
-      if (tableText.includes('dropped') || tableText.includes('taken up for challenge')) {
+      if (tableText.toLowerCase().includes('dropped') || tableText.toLowerCase().includes('taken up for challenge') || tableText.toLowerCase().includes('benefit to all')) {
         status = 'bonus';
-      } else if (chosenOptNum && correctOptNum && chosenOptNum === correctOptNum) {
+      } else if (!chosenOptNum) {
+        status = 'skipped';
+      } else if (correctOptNum && chosenOptNum === correctOptNum) {
         status = 'correct';
       } else if (chosenOptNum) {
         status = 'wrong';
@@ -803,18 +825,41 @@ export class UniversalAnswerKeyParser {
     if (options.category) candidateInfo.category = options.category;
     if (options.zone) candidateInfo.stateZone = options.zone;
 
-    // Detect family: from option, or URL, or candidate examName
-    let family = options.examFamily;
-    if (!family) {
-      const examNameLow = (candidateInfo.examName || '').toLowerCase();
-      const urlLow = (options.sourceUrl || '').toLowerCase();
-      if (examNameLow.includes('rrb') || examNameLow.includes('railway') || examNameLow.includes('ntpc') || examNameLow.includes('alp') || urlLow.includes('rrb')) {
-        family = 'rrb';
-      } else if (examNameLow.includes('ssc') || examNameLow.includes('cgl') || examNameLow.includes('chsl') || examNameLow.includes('mts') || urlLow.includes('ssc') || vendor === 'ssc_cbexams') {
-        family = 'ssc';
-      } else {
-        family = 'rrb';
-      }
+    // Auto-detect exam family from sheet contents, candidate exam name, and URL
+    const examNameLow = (candidateInfo.examName || '').toLowerCase();
+    const urlLow = (options.sourceUrl || '').toLowerCase();
+    const isSSCContent = Boolean(
+      examNameLow.includes('cgl') ||
+      examNameLow.includes('combined graduate level') ||
+      examNameLow.includes('chsl') ||
+      examNameLow.includes('mts') ||
+      examNameLow.includes('ssc') ||
+      urlLow.includes('cgle') ||
+      urlLow.includes('cgl') ||
+      urlLow.includes('sscexams') ||
+      vendor === 'ssc_cbexams' ||
+      html.includes('Combined Graduate Level') ||
+      html.includes('SSC ONLINE EXAMINATION')
+    );
+
+    const isRRBContent = Boolean(
+      examNameLow.includes('rrb') ||
+      examNameLow.includes('railway') ||
+      examNameLow.includes('ntpc') ||
+      examNameLow.includes('alp') ||
+      urlLow.includes('rrb')
+    );
+
+    let family: 'ssc' | 'rrb' | 'other' = isSSCContent ? 'ssc' : (isRRBContent ? 'rrb' : (options.examFamily || 'ssc'));
+
+    if (!candidateInfo.rollNo && options.sourceUrl) {
+      try {
+        const u = new URL(options.sourceUrl);
+        const enc = u.searchParams.get('EncKey');
+        if (enc) {
+          candidateInfo.rollNo = `ENC_${enc.substring(0, 12)}`;
+        }
+      } catch {}
     }
 
     const defaultRule: ExamRule = family === 'ssc'
