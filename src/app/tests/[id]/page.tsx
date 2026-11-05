@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, use, useRef, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { CBTTest, CBTQuestion } from '@/lib/types/cbt';
@@ -351,38 +351,63 @@ function EduquityCBTContent({ testId }: { testId: string }) {
   useEffect(() => {
     if (!test?.sections || typeof window === 'undefined') return;
 
-    const preloadedSet = new Set<string>();
-    const preloadUrl = (url?: string) => {
-      if (!url || !url.startsWith('http') || preloadedSet.has(url)) return;
-      preloadedSet.add(url);
-      const img = new Image();
-      img.src = url;
-    };
+    try {
+      const preloadedSet = new Set<string>();
+      const preloadUrl = (url?: string) => {
+        if (!url || typeof url !== 'string' || !url.startsWith('http') || preloadedSet.has(url)) return;
+        preloadedSet.add(url);
+        try {
+          const img = new (window as any).Image();
+          img.src = url;
+        } catch (e) {}
+      };
 
-    // 1. High Priority: Immediately preload the active question + next 8 upcoming questions
-    const currentSec = test.sections[activeSectionIdx] || test.sections[0];
-    if (currentSec?.questions) {
-      const windowQuestions = currentSec.questions.slice(
-        Math.max(0, activeQuestionIdx - 2),
-        activeQuestionIdx + 9
-      );
-      windowQuestions.forEach((q) => {
-        q.questionImages?.forEach(preloadUrl);
-        q.options?.forEach((opt) => preloadUrl(opt.imageUrl));
-      });
-    }
-
-    // 2. Background Task: Preload all remaining questions and options in the entire test
-    const bgTimer = setTimeout(() => {
-      test.sections.forEach((sec) => {
-        sec.questions?.forEach((q) => {
-          q.questionImages?.forEach(preloadUrl);
-          q.options?.forEach((opt) => preloadUrl(opt.imageUrl));
+      // 1. High Priority: Immediately preload the active question + next 8 upcoming questions
+      const currentSec = test.sections[activeSectionIdx] || test.sections[0];
+      if (currentSec?.questions && Array.isArray(currentSec.questions)) {
+        const windowQuestions = currentSec.questions.slice(
+          Math.max(0, activeQuestionIdx - 2),
+          activeQuestionIdx + 9
+        );
+        windowQuestions.forEach((q) => {
+          if (!q) return;
+          if (Array.isArray(q.questionImages)) {
+            q.questionImages.forEach(preloadUrl);
+          }
+          if (Array.isArray(q.options)) {
+            q.options.forEach((opt: any) => {
+              if (opt && typeof opt === 'object' && opt.imageUrl) {
+                preloadUrl(opt.imageUrl);
+              }
+            });
+          }
         });
-      });
-    }, 200);
+      }
 
-    return () => clearTimeout(bgTimer);
+      // 2. Background Task: Preload all remaining questions and options in the entire test
+      const bgTimer = setTimeout(() => {
+        try {
+          test.sections.forEach((sec) => {
+            if (!sec || !Array.isArray(sec.questions)) return;
+            sec.questions.forEach((q) => {
+              if (!q) return;
+              if (Array.isArray(q.questionImages)) {
+                q.questionImages.forEach(preloadUrl);
+              }
+              if (Array.isArray(q.options)) {
+                q.options.forEach((opt: any) => {
+                  if (opt && typeof opt === 'object' && opt.imageUrl) {
+                    preloadUrl(opt.imageUrl);
+                  }
+                });
+              }
+            });
+          });
+        } catch (e) {}
+      }, 250);
+
+      return () => clearTimeout(bgTimer);
+    } catch (e) {}
   }, [test, activeSectionIdx, activeQuestionIdx]);
 
   // 2. Fullscreen event listener
@@ -1458,7 +1483,7 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                 📌 Official Exam Origin
               </span>
               <span className="font-mono text-slate-700">
-                {currentQuestion.examOrigin || test.title}
+                {currentQuestion?.examOrigin || test?.title || 'Mock Examination'}
               </span>
             </div>
 
@@ -1466,15 +1491,15 @@ function EduquityCBTContent({ testId }: { testId: string }) {
             <div className="text-sm sm:text-base font-normal text-slate-900 leading-relaxed max-w-4xl">
               <MathRenderer
                 content={
-                  language === 'hi' && currentQuestion.questionTextHi
+                  language === 'hi' && currentQuestion?.questionTextHi
                     ? currentQuestion.questionTextHi
-                    : currentQuestion.questionText
+                    : currentQuestion?.questionText || ''
                 }
               />
             </div>
 
             {/* Question Images if any */}
-            {currentQuestion.questionImages && currentQuestion.questionImages.length > 0 && (
+            {currentQuestion?.questionImages && currentQuestion.questionImages.length > 0 && (
               <div className="space-y-2">
                 {currentQuestion.questionImages.map((img, i) => (
                   <img
@@ -2122,9 +2147,21 @@ function EduquityCBTContent({ testId }: { testId: string }) {
 export default function CBTTestInterfacePage({
   params
 }: {
-  params: Promise<{ id: string }>;
+  params?: Promise<{ id: string }> | { id: string };
 }) {
-  const { id } = use(params);
+  const routeParams = useParams();
+  let resolvedId = (routeParams?.id as string) || '';
+
+  if (!resolvedId && params) {
+    if (typeof (params as any).then === 'function') {
+      try {
+        const resolved = use(params as Promise<{ id: string }>);
+        resolvedId = resolved?.id || '';
+      } catch (e) {}
+    } else {
+      resolvedId = (params as any)?.id || '';
+    }
+  }
 
   return (
     <Suspense
@@ -2135,7 +2172,7 @@ export default function CBTTestInterfacePage({
         </div>
       }
     >
-      <EduquityCBTContent testId={id} />
+      <EduquityCBTContent testId={resolvedId} />
     </Suspense>
   );
 }

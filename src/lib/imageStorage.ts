@@ -131,14 +131,21 @@ export async function uploadImageToBestProvider(
     const cloudApiSecret = process.env.CLOUDINARY_API_SECRET;
     if (cloudName && cloudApiKey && cloudApiSecret) {
       try {
+        const crypto = await import('crypto');
         const timestamp = Math.floor(Date.now() / 1000);
-        // Simple unsigned or signed upload to Cloudinary
+        const cleanPublicId = targetPath.replace(/[^a-zA-Z0-9_\-\/]/g, '_');
+        
+        // Generate official SHA-1 signature for Cloudinary API
+        const toSign = `public_id=${cleanPublicId}&timestamp=${timestamp}${cloudApiSecret}`;
+        const signature = crypto.createHash('sha1').update(toSign).digest('hex');
+
         const formData = new FormData();
         const base64Data = `data:${mimeType};base64,${imageBuffer.toString('base64')}`;
         formData.append('file', base64Data);
-        formData.append('public_id', targetPath.replace(/[^a-zA-Z0-9_\-\/]/g, '_'));
+        formData.append('public_id', cleanPublicId);
         formData.append('api_key', cloudApiKey);
         formData.append('timestamp', String(timestamp));
+        formData.append('signature', signature);
 
         const cldRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
           method: 'POST',
@@ -148,6 +155,8 @@ export async function uploadImageToBestProvider(
         const cldJson = await cldRes.json();
         if (cldJson?.secure_url) {
           return cldJson.secure_url;
+        } else if (cldJson?.error?.message) {
+          console.warn('Cloudinary upload warning:', cldJson.error.message);
         }
       } catch (err: any) {
         console.warn('Cloudinary upload error, falling back:', err.message);

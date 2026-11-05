@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, use, useMemo } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import type { CBTTest } from '@/lib/types/cbt';
 import { MathRenderer } from '@/components/MathRenderer';
 import {
@@ -33,9 +33,22 @@ import confetti from 'canvas-confetti';
 export default function CBTResultPage({
   params
 }: {
-  params: Promise<{ id: string }>;
+  params?: Promise<{ id: string }> | { id: string };
 }) {
-  const { id } = use(params);
+  const routeParams = useParams();
+  let id = (routeParams?.id as string) || '';
+
+  if (!id && params) {
+    if (typeof (params as any).then === 'function') {
+      try {
+        const resolved = use(params as Promise<{ id: string }>);
+        id = resolved?.id || '';
+      } catch (e) {}
+    } else {
+      id = (params as any)?.id || '';
+    }
+  }
+
   const router = useRouter();
 
   const [test, setTest] = useState<CBTTest | null>(null);
