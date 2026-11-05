@@ -244,7 +244,7 @@ export default function ScoreCalculatorPage() {
           Evaluate Official Answer Key
         </h1>
         <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-          Paste your official <strong>TCS iON</strong> (Railways &amp; SSC) or <strong>Eduquity</strong> (SSC CGL, CHSL, MTS) answer key link to get your verified section-wise marks, negative penalty, RRB Zone standing, and normalized ranks.
+          Paste your official <strong>TCS iON</strong> (Railways &amp; SSC) or <strong>Eduquity</strong> (SSC CGL, CHSL, MTS) answer key link to get your verified section-wise marks, negative penalty, RRB Zone standing, and live shift ranks.
         </p>
       </div>
 

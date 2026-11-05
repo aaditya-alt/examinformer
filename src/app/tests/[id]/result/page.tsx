@@ -796,7 +796,7 @@ export default function CBTResultPage({
                   {q.questionImages && q.questionImages.length > 0 && (
                     <div className="flex flex-wrap gap-2 my-2">
                       {q.questionImages.map((imgUrl, i) => (
-                        <img key={i} src={imgUrl} alt={`Question Diagram ${i + 1}`} className="max-h-48 border rounded-lg object-contain bg-white" />
+                        <img key={i} src={imgUrl} alt={`Question Diagram ${i + 1}`} loading="eager" decoding="async" className="max-h-48 border rounded-lg object-contain bg-white min-h-[40px]" />
                       ))}
                     </div>
                   )}
@@ -829,7 +829,7 @@ export default function CBTResultPage({
                             <div className="flex-1">
                               <MathRenderer content={solutionsLanguage === 'hi' && (opt.textHi || (opt as any).text_hi) ? (opt.textHi || (opt as any).text_hi) : (opt.text || (opt as any).text_en || '')} as="div" />
                               {opt.imageUrl && (
-                                <img src={opt.imageUrl} alt={`Option ${opt.id}`} className="mt-2 max-h-36 border rounded object-contain bg-white" />
+                                <img src={opt.imageUrl} alt={`Option ${opt.id}`} loading="eager" decoding="async" className="mt-2 max-h-36 border rounded object-contain bg-white min-h-[30px]" />
                               )}
                             </div>
                           </div>

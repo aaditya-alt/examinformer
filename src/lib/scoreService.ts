@@ -1,5 +1,6 @@
 import { UniversalResponseSheet, ParsedQuestion, ParsedSection, parseResponseSheet } from './parsers/universalParser';
 import { supabase, isSupabaseConfigured, supabaseAdmin } from './supabase';
+import { uploadImageToBestProvider } from './imageStorage';
 import type { CBTTest } from '@/lib/types/cbt';
 import { registerNewTest } from './testStore';
 import https from 'https';
@@ -676,48 +677,11 @@ export async function resolveExamUuid(examFamily?: string, examCodeOrTitle?: str
 }
 
 /**
- * Uploads an image to Supabase Storage question-images bucket for permanent CDN availability
+ * Uploads an image to CDN / public storage provider for permanent availability
  */
 export async function uploadImageToCdn(imageUrl: string, storagePath: string): Promise<string> {
   if (!imageUrl || !imageUrl.startsWith('http')) return imageUrl;
-  if (imageUrl.includes('supabase.co/storage/v1/object/public/question-images')) return imageUrl;
-  if (!supabaseAdmin) return imageUrl;
-
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 6000);
-    const res = await fetch(imageUrl, {
-      signal: controller.signal,
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-      }
-    });
-    clearTimeout(timeout);
-
-    if (res.ok) {
-      const buf = await res.arrayBuffer();
-      const contentType = res.headers.get('content-type') || 'image/jpeg';
-      const ext = contentType.includes('png') ? 'png' : contentType.includes('webp') ? 'webp' : 'jpg';
-      const cleanPath = `${storagePath}.${ext}`;
-
-      const { data, error } = await supabaseAdmin.storage
-        .from('question-images')
-        .upload(cleanPath, Buffer.from(buf), {
-          contentType,
-          upsert: true
-        });
-
-      if (!error && data) {
-        const { data: pubData } = supabaseAdmin.storage
-          .from('question-images')
-          .getPublicUrl(cleanPath);
-        if (pubData?.publicUrl) return pubData.publicUrl;
-      }
-    }
-  } catch {
-    // Fall back to original image URL on network timeout
-  }
-  return imageUrl;
+  return await uploadImageToBestProvider(imageUrl, storagePath);
 }
 
 /**
@@ -929,17 +893,13 @@ export async function evaluateResponseSheet(
   const globalVariance = allScores.reduce((sum, score) => sum + Math.pow(score - globalMean, 2), 0) / allScores.length;
   const globalStdDev = Math.max(Math.sqrt(globalVariance), 5.0);
 
-  // 3. Official Commission Linear Z-Score Normalization
-  // Formula: Normalized = ((globalStdDev / shiftStdDev) * (finalScore - shiftMean)) + globalMean
-  const normalizedRaw = shiftScores.length <= 1
-    ? finalScore
-    : ((globalStdDev / shiftStdDev) * (finalScore - shiftMean)) + globalMean;
-  const normalizedScore = Math.round(normalizedRaw * 100) / 100;
+  // 3. Score & Standard Ranking (Normalised distortion removed as requested)
+  const normalizedScore = finalScore;
 
-  // 4. Overall & Normalized Rankings
+  // 4. Overall Rankings
   const portalRank = allPortalForFamily.filter((s) => s.finalScore > finalScore).length + 1;
   const portalTotal = Math.max(allPortalForFamily.length + 1, 1);
-  const normalizedRank = allPortalForFamily.filter((s) => (s.normalizedScore ?? s.finalScore) > normalizedScore).length + 1;
+  const normalizedRank = portalRank;
   const percentile = Math.min(99.9, Math.max(5, Math.round(((portalTotal - (portalRank - 1)) / portalTotal) * 1000) / 10));
 
   // 5. Shift Ranking
@@ -950,7 +910,7 @@ export async function evaluateResponseSheet(
   const catPortal = allPortalForFamily.filter((s) => s.category?.toUpperCase() === candCategory.toUpperCase());
   const categoryRank = catPortal.filter((s) => s.finalScore > finalScore).length + 1;
   const categoryTotal = Math.max(catPortal.length + 1, 1);
-  const normalizedCategoryRank = catPortal.filter((s) => (s.normalizedScore ?? s.finalScore) > normalizedScore).length + 1;
+  const normalizedCategoryRank = categoryRank;
 
   // 7. Category-Shift Combined Ranking (Within SAME Category & SAME Shift)
   const catShiftPortal = shiftPortal.filter((s) => s.category?.toUpperCase() === candCategory.toUpperCase());

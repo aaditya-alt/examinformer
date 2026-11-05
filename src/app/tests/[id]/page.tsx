@@ -347,6 +347,44 @@ function EduquityCBTContent({ testId }: { testId: string }) {
       .finally(() => setLoading(false));
   }, [testId, isSolutionMode, user?.id]);
 
+  // Intelligent Eager Image Preloader: Cache all diagrams & option figures in browser memory
+  useEffect(() => {
+    if (!test?.sections || typeof window === 'undefined') return;
+
+    const preloadedSet = new Set<string>();
+    const preloadUrl = (url?: string) => {
+      if (!url || !url.startsWith('http') || preloadedSet.has(url)) return;
+      preloadedSet.add(url);
+      const img = new Image();
+      img.src = url;
+    };
+
+    // 1. High Priority: Immediately preload the active question + next 8 upcoming questions
+    const currentSec = test.sections[activeSectionIdx] || test.sections[0];
+    if (currentSec?.questions) {
+      const windowQuestions = currentSec.questions.slice(
+        Math.max(0, activeQuestionIdx - 2),
+        activeQuestionIdx + 9
+      );
+      windowQuestions.forEach((q) => {
+        q.questionImages?.forEach(preloadUrl);
+        q.options?.forEach((opt) => preloadUrl(opt.imageUrl));
+      });
+    }
+
+    // 2. Background Task: Preload all remaining questions and options in the entire test
+    const bgTimer = setTimeout(() => {
+      test.sections.forEach((sec) => {
+        sec.questions?.forEach((q) => {
+          q.questionImages?.forEach(preloadUrl);
+          q.options?.forEach((opt) => preloadUrl(opt.imageUrl));
+        });
+      });
+    }, 200);
+
+    return () => clearTimeout(bgTimer);
+  }, [test, activeSectionIdx, activeQuestionIdx]);
+
   // 2. Fullscreen event listener
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -1443,7 +1481,9 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                     key={i}
                     src={img}
                     alt="Diagram"
-                    className="max-h-72 rounded border border-slate-300 bg-white p-2"
+                    loading="eager"
+                    decoding="async"
+                    className="max-h-72 rounded border border-slate-300 bg-white p-2 min-h-[50px]"
                   />
                 ))}
               </div>
@@ -1510,7 +1550,13 @@ function EduquityCBTContent({ testId }: { testId: string }) {
                         <div className="flex-1">
                           <MathRenderer content={optText} />
                           {opt.imageUrl && (
-                            <img src={opt.imageUrl} alt={`Option ${opt.id}`} className="mt-2 max-h-36 border rounded" />
+                            <img
+                              src={opt.imageUrl}
+                              alt={`Option ${opt.id}`}
+                              loading="eager"
+                              decoding="async"
+                              className="mt-2 max-h-36 border rounded min-h-[40px] bg-white"
+                            />
                           )}
                         </div>
                       </div>

@@ -19,6 +19,7 @@ import {
   Check,
   TrendingUp,
   Percent,
+  Target,
   Share2,
   RotateCcw,
   Flag,
@@ -307,40 +308,41 @@ function ScorecardContent() {
           </table>
         </div>
 
-        {/* Dual Score Banner: Raw Score + Normalised Score */}
+        {/* Performance Metric Cards: Raw Score + Attempt Rate & Accuracy */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto pt-1">
           <div className="p-3.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-between">
             <div>
-              <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Actual Raw Score</div>
+              <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Final Raw Marks</div>
               <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-0.5">
                 {summary.finalScore.toFixed(2)}
                 <span className="text-xs text-slate-400 font-normal ml-1">/ {data.ruleUsed.marksPerCorrect * summary.totalQuestions}</span>
               </div>
             </div>
-            <span className="text-[10px] font-extrabold px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200">
-              Exam Raw
+            <span className="text-[10px] font-extrabold px-2 py-0.5 rounded bg-blue-600 text-white uppercase tracking-wider">
+              Scorecard
             </span>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/30 border border-emerald-300 dark:border-emerald-700 flex items-center justify-between shadow-xs">
+          <div className="p-3.5 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/40 dark:to-indigo-950/30 border border-blue-200 dark:border-blue-800/60 flex items-center justify-between shadow-xs">
             <div>
-              <div className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Normalised Marks</span>
+              <div className="text-[11px] font-bold text-blue-800 dark:text-blue-300 uppercase tracking-wider flex items-center gap-1">
+                <Target className="w-3.5 h-3.5 text-blue-600" />
+                <span>Accuracy &bull; Attempt Rate</span>
               </div>
-              <div className="text-xl sm:text-2xl font-black text-emerald-700 dark:text-emerald-400 mt-0.5">
-                {(analytics.normalizedScore || summary.finalScore).toFixed(2)}
+              <div className="text-xl sm:text-2xl font-black text-blue-700 dark:text-blue-300 mt-0.5">
+                {data.metrics.accuracyPercentage}%
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-normal ml-2">({data.metrics.attemptRatePercentage}% Attempted)</span>
               </div>
             </div>
-            <span className="text-[10px] font-black px-2 py-0.5 rounded bg-emerald-600 text-white uppercase tracking-wider">
-              Commission Formula
+            <span className="text-[10px] font-black px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 uppercase tracking-wider">
+              {summary.attempted}/{summary.totalQuestions} Qs
             </span>
           </div>
         </div>
 
         {/* Footnote */}
         <div className="text-center text-xs text-slate-600 dark:text-slate-400 font-medium pt-1">
-          ⓘ Marking Scheme: +{data.ruleUsed.marksPerCorrect} for Correct, -{Number(data.ruleUsed.negativePerWrong.toFixed(2))} for Incorrect. Normalisation modeled after official commission multi-shift formula.
+          ⓘ Marking Scheme: +{data.ruleUsed.marksPerCorrect} for Correct, -{Number(data.ruleUsed.negativePerWrong.toFixed(2))} for Incorrect.
         </div>
       </div>
 
@@ -386,21 +388,6 @@ function ScorecardContent() {
             <div className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 mt-1 flex items-center gap-1">
               <TrendingUp className="w-3 h-3" />
               <span>Top {(100 - analytics.percentile).toFixed(1)}%</span>
-            </div>
-          </div>
-
-          {/* Normalised Rank */}
-          <div className="p-4 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-300 dark:border-emerald-700/60">
-            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 flex items-center justify-between">
-              <span>Normalised Rank</span>
-              <Sparkles className="w-4 h-4 text-emerald-600" />
-            </div>
-            <div className="text-2xl sm:text-3xl font-black text-emerald-900 dark:text-emerald-100 mt-2">
-              #{analytics.normalizedRank || analytics.allIndiaRank}
-              <span className="text-xs font-normal text-slate-400 ml-1">/ {analytics.totalSubmissions}</span>
-            </div>
-            <div className="text-[11px] text-emerald-700 dark:text-emerald-300 mt-1 font-semibold">
-              Score: <strong>{(analytics.normalizedScore || summary.finalScore).toFixed(2)}</strong>
             </div>
           </div>
 
